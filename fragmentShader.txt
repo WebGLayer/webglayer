@@ -1,0 +1,18 @@
+<script id="pointFragmentShader" type="x-shader/x-fragment">
+      precision mediump float;  
+ 		
+	  varying mat3 attributes;
+
+ 
+
+      void main() {
+        //float dist = length(gl_PointCoord.xy - vec2(.5,.5));
+	    //vec4 alpha =  (dist > .5)? vec4(0.,0.,0.,0.) : v_color;
+        //set pixels in points to green      
+      ////  vec4 c = v_color;  
+
+		vec4 col;				
+		col = vec4(1.-attributes[0][0]/180.,attributes[0][0]/180.,0.,0.8); 		
+		gl_FragColor = col;
+      }
+    </script>

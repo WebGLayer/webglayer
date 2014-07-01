@@ -1,0 +1,35 @@
+<script id="pointVertexShader" type="x-shader/x-vertex">
+      attribute vec4 worldCoord;
+      attribute mat3 attr;    
+ 
+      varying mat3 attributes;
+      uniform mat3 leftFilter;
+      uniform mat3 rightFilter;
+      //uniform integer num_ats;;
+         
+      uniform mat4 mapMatrix;
+
+      void main() {
+		
+  		float p_size = 6.;
+  		
+		for (int i =0; i<3; i++) {
+			for (int j =0; j<3; j++) {
+				//if (i*4+j*4 > numparams){break;}
+
+				float par = attr[i][j];	
+				float min = leftFilter[i][j];
+				float max = rightFilter[i][j];
+
+				if ((min > par) || (par > max)){p_size = 0.;}				
+   				
+  			}   			
+  		}
+  		
+        gl_Position =  mapMatrix * worldCoord;    	
+		gl_PointSize = p_size; //1.0+ (attr[0][0])/100.+leftFilter[0][0]/10.+rightFilter[0][0]/10.;
+		//v_color = colors;
+		attributes = attr;
+ 		
+      }
+    </script>
