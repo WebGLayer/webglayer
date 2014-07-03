@@ -21,6 +21,9 @@
 
 
 function WebglLayer(canvasid, parentdiv, points, attributes) {
+
+
+
 	
 	this.canvas = document.getElementById(canvasid);
 	this.map = parentdiv;
@@ -105,7 +108,7 @@ WebglLayer.prototype.resetfilter = function(){
 
 WebglLayer.prototype.filter = function(filter) {
 	/* var start = Date.now() ;*/
-	console.time("webgl") ; 
+	console.time("filter") ; 
 	
 	for (i=0; i<filter.length;i++){
 		this.leftFilter[i]=  filter[i][0];
@@ -118,19 +121,13 @@ WebglLayer.prototype.filter = function(filter) {
 	this._gl.uniformMatrix3fv(matrixLoc, false, this.rightFilter);
 	
 	this.render();
-	console.timeEnd("webgl");
-//	console.log(colo);
-	/*var end = Date.now();
-	updates++;		
-	if (updates >0) {
-	sumtime = sumtime+end - start;
-	console.log(updates+" "+(sumtime/updates))
-	}*/
+	console.timeEnd("filter");
 	
 }
 
 
 WebglLayer.prototype.resize = function() {
+
 	this.canvas.setAttribute("width", this.map.offsetWidth);
 	this.canvas.setAttribute("height", this.map.offsetHeight);
 
@@ -142,10 +139,11 @@ WebglLayer.prototype.resize = function() {
 	// matrix which maps pixel coordinates to WebGL coordinates
 	this._pixelsToWebGLMatrix.set([ 2 / width, 0, 0, 0, 0, -2 / height, 0, 0,
 			0, 0, 0, 0, -1, 1, 0, 1 ]);
+ 
 }
 
 
-WebglLayer.prototype.move = function(zoom, offset) {
+WebglLayer.prototype.move = function(zoom, offset) {	
 	mapMatrix = this._mapMatrix
 	mapMatrix.set(this._pixelsToWebGLMatrix);
 
@@ -173,10 +171,9 @@ WebglLayer.prototype.move = function(zoom, offset) {
 
 	function translateMatrix(matrix, tx, ty) {
 		// translation is in last column of matrix
-		matrix[12] += matrix[0] * tx + matrix[4] * ty;
-		matrix[13] += matrix[1] * tx + matrix[5] * ty;
-		matrix[14] += matrix[2] * tx + matrix[6] * ty;
-		matrix[15] += matrix[3] * tx + matrix[7] * ty;
+		matrix[12] += matrix[0] * tx ;
+		matrix[13] += matrix[5] * ty;
+
 	}
 }
 
