@@ -1,4 +1,4 @@
-WebglLayer
+WebGLayer
 ==========
 
 WebglLayer adds a webgl canvas overlay on to of general map div. 
