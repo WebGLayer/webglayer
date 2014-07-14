@@ -7,9 +7,9 @@ It is tested with Leaflet and it should work similarly also with other Javascrip
 Usage
 -----
 
-Initialization:
 
-WebglLayer("test", map.getContainer(), points, attributes);
+Contructor:
+#### WebglLayer(canvasid, mapcanvasid, points, attributes);
   
   
 #### .move()
