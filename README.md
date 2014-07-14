@@ -19,3 +19,6 @@ Contructor:
 
 
 #### .filter()
+
+
+#### .render()
