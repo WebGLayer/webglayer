@@ -31,11 +31,27 @@
         <h3>
 <a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
+<h3>Exmaples</h3>
+<ul>
+<li><a href="example/index.html"> Leaflet demo </a></li>
+<li><a href="example/index_gm.html"> Google Maps API demo </a></li>
+<li><a href="example/index_ol.html"> OpenLayers demo </a></li>
+</ul>
 
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
+
+<p> Code example:</p>
+
+<pre><code>
+    map = L.map('map-div',{
+	    center: [50, 14],	  
+	});
+	
+	gllayer = new WebglLayer("test", map.getContainer(), dl.points, dl.attributes);
+	
+	map.on('resize', function(){gllayer.resize();gllayer.render();});
+	map.on('move', gllayer.onMove);
+	map.on('zoomstart', gllayer.onMove);
+	
 </code></pre>
 
 <p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
