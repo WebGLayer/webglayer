@@ -185,7 +185,7 @@ WebglLayer.prototype.render = function() {
 	 
 	this._gl.clear(this._gl.COLOR_BUFFER_BIT);
 	
-	this._gl.drawArrays(this._gl.LINE_STRIP, 0, this._num_pts);
+	//this._gl.drawArrays(this._gl.LINE_STRIP, 0, this._num_pts);
 	
 	
 	this._gl.drawArrays(this._gl.POINTS, 0, this._num_pts);
