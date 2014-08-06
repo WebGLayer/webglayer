@@ -29,7 +29,7 @@
   		}
   		
         gl_Position =  mapMatrix * p;    	
-		gl_PointSize = 7.0; //1.0+ (attr[0][0])/100.+leftFilter[0][0]/10.+rightFilter[0][0]/10.;
+		gl_PointSize = 8.0; //1.0+ (attr[0][0])/100.+leftFilter[0][0]/10.+rightFilter[0][0]/10.;
 		//v_color = colors;
 		attributes = attr;
  		

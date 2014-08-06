@@ -12,7 +12,7 @@
       ////  vec4 c = v_color;  
 
 		vec4 col;				
-		col = vec4(1.-attributes[0][0]/130.,attributes[0][0]/130.,0.,0.7); 		
+		col = vec4(1.-attributes[0][0]/130.,attributes[0][0]/130.,0.,0.8); 		
 		gl_FragColor = col;
       }
     </script>
