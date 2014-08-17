@@ -1,0 +1,21 @@
+<script id="map_vShader" type="x-shader/x-vertex">
+      attribute vec4 wPoint;
+      attribute float speed;
+      
+      uniform mat4 mapMatrix;
+      varying vec4 aPos;
+      varying float aSpeed;
+       
+      void main() {
+		
+  		float p_size = 10.+speed*10.;
+  	    	   
+  		
+        gl_Position =  mapMatrix*wPoint;    	
+		gl_PointSize = p_size;
+		
+		aPos = wPoint;
+		aSpeed = speed;
+ 		
+      }
+    </script>

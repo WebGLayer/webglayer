@@ -1,0 +1,16 @@
+<script id="pointVertexShader2" type="x-shader/x-vertex"> 
+      attribute vec4 wLine;
+      uniform mat4 mapMatrix;
+    
+    
+
+      void main() {
+		
+  		float p_size = 15.;
+  	 
+  		
+        gl_Position = mapMatrix*wLine;    	
+		gl_PointSize = p_size;
+ 		
+      }
+    </script>

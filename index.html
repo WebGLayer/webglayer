@@ -1,0 +1,108 @@
+
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>MOV - moving object visualisation</title>
+<link rel="stylesheet"
+	href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+<style>
+#canvasContainer {
+	position: absolute;
+	border: 1px;
+	padding: 0;
+	height: 400px;
+	width: 800px;
+}
+</style>
+
+<script src="../javascripts/jquery-1.9.1.min.js"></script>
+<script src="js/Dimension.js"></script>
+<script src="js/Manager.js"></script>
+<script src="js/SpeedConf.js"></script>
+<script src="js/MapConf.js"></script>
+
+
+<script>
+	document.addEventListener('DOMContentLoaded', init, false);	
+	function init() {
+		/*bind the shader to dom*/
+		getShader();
+		
+		var manager = new Manager("test");		
+		/**init geo buffer*/
+		manager.addData(generateData(1000, 2, 2),2, 'wPoint');
+		/*init first attribute buffer*/
+		manager.addData(generateData(1000, 1, 150),1, 'speed');
+		
+
+		/*setup map*/
+		var dimMap = new Dimension();
+		dimMap.name = "map";
+		dimMap.glSetup = setupMap;	
+		/*set the shaders*/
+		dimMap.setProgram('map_vShader', 'map_fShader');
+	
+		
+		
+		
+		/*Setup histogram*/
+		var dimSpeed = new Dimension();
+		dimSpeed.name = "speed";
+		dimSpeed.glSetup = setupSpeed;	
+		/*set the shaders*/
+		dimSpeed.setProgram('speed_vShader', 'speed_fShader');
+		
+		manager.dimensions = [ dimSpeed];
+		/*Render*/
+		
+		manager.render();
+		manager.render();	
+		console.time("drawing")
+		manager.render();		
+		console.timeEnd("drawing")
+	
+	}
+
+	/* generate data */
+	generateData = function(imax, dim, size) {
+		atr = new Float32Array(imax*dim);
+		for (var i = 0; i < (imax*dim); i++) {
+			atr[i] = Math.random() * size - (size/2);
+		}
+		return atr;
+	}
+	
+	getShader = function() {
+		$.ajaxSetup({
+			async : false
+		});
+
+		$.get('shaders/map_vShader.txt', function(data) {
+			$("head").append(data);
+		});
+
+		$.get('shaders/map_fShader.txt', function(data) {
+			$("head").append(data);
+		});
+		
+		$.get('shaders/speed_vShader.txt', function(data) {
+			$("head").append(data);
+		});
+
+		$.get('shaders/speed_fShader.txt', function(data) {
+			$("head").append(data);
+		});
+		$.ajaxSetup({
+			async : true
+		});
+	}
+</script>
+</head>
+<body>
+	<div id="canvasContainer">
+		<canvas id="test">Your browser does not support HTML5</canvas>
+	</div>
+
+</body>
+</html>

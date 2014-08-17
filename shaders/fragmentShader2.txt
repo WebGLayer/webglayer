@@ -1,0 +1,13 @@
+<script id="pointFragmentShader2" type="x-shader/x-fragment">
+      precision mediump float;  
+ 		
+	
+ 
+
+      void main() {
+
+		vec4 col;				
+		col = vec4(0.1, 0.5, 0.5,0.6); 		
+		gl_FragColor = col;
+      }
+    </script>
