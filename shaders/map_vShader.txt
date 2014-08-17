@@ -8,7 +8,7 @@
        
       void main() {
 		
-  		float p_size = 10.+speed*10.;
+  		float p_size = 5.+speed/10.;
   	    	   
   		
         gl_Position =  mapMatrix*wPoint;    	

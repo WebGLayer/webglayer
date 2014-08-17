@@ -29,11 +29,12 @@
 		/*bind the shader to dom*/
 		getShader();
 		
+		r_count =2;
 		var manager = new Manager("test");		
 		/**init geo buffer*/
-		manager.addData(generateData(1000, 2, 2),2, 'wPoint');
+		manager.addData(generateData(r_count, 2, 2),2, 'wPoint');
 		/*init first attribute buffer*/
-		manager.addData(generateData(1000, 1, 150),1, 'speed');
+		manager.addData(generatePositiveData(r_count, 1, 1),1, 'speed');
 		
 
 		/*setup map*/
@@ -53,22 +54,32 @@
 		/*set the shaders*/
 		dimSpeed.setProgram('speed_vShader', 'speed_fShader');
 		
-		manager.dimensions = [ dimSpeed];
+		manager.dimensions = [dimSpeed];
 		/*Render*/
-		
-		manager.render();
-		manager.render();	
+				
 		console.time("drawing")
 		manager.render();		
 		console.timeEnd("drawing")
+		readPixels();
+	
 	
 	}
-
+	
+	
 	/* generate data */
 	generateData = function(imax, dim, size) {
 		atr = new Float32Array(imax*dim);
 		for (var i = 0; i < (imax*dim); i++) {
 			atr[i] = Math.random() * size - (size/2);
+		}
+		return atr;
+	}
+	
+	generatePositiveData = function(count, dim, maxvalue) {
+		atr = new Float32Array(count*dim);
+		for (var i = 0; i < (count*dim); i++) {
+		  //atr[i] = Math.round(Math.random() * maxvalue)+5;	
+		  atr[i] = 1;
 		}
 		return atr;
 	}

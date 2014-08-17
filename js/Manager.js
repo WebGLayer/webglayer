@@ -12,7 +12,9 @@ function Manager(canvasid) {
 	function setGL(canvasid){
 		canvas = document.getElementById(canvasid);
 		div = canvas.parentElement;	
-		gl = canvas.getContext('webgl');	
+		gl = canvas.getContext('webgl', {
+			antialias : false
+		});
 		return gl;
 	}	
 }
@@ -35,7 +37,7 @@ Manager.prototype.render = function(){
 		d = this.dimensions[i];	
 		d.glSetup();
 		d.enableBuffers(this.databuffers);
-		d.render(this.databuffers[0].numItems/this.databuffers[0].itemSize);
+		d.render(this.databuffers[0].numItems);
 	}
 	
 	for (dim in this.dimensions) {		
