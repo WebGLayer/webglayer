@@ -41,14 +41,14 @@ Dimension.prototype.setProgram = function(vs, fs){
 	this.glProgram = pointProgram;	
 }
 Dimension.prototype.enableBuffers = function(buffers){
-	for (i in buffers){
-		name = buffers[i].name;
-		gl.bindBuffer(gl.ARRAY_BUFFER, buffers[i]);
+	for (m in buffers){
+		name = buffers[m].name;
+		gl.bindBuffer(gl.ARRAY_BUFFER, buffers[m]);
 		
 		if (gl.getAttribLocation(this.glProgram, name)>=0){
 		loc = gl.getAttribLocation(this.glProgram, name);		
         gl.enableVertexAttribArray(loc);
-		gl.vertexAttribPointer(loc,  buffers[i].itemSize, gl.FLOAT, false, 0, 0);	
+		gl.vertexAttribPointer(loc,  buffers[m].itemSize, gl.FLOAT, false, 0, 0);	
 		} else {
 			console.log("Error: attribute "+name+" does not exist.");
 		}
@@ -59,6 +59,7 @@ Dimension.prototype.render = function(num){
 	gl.useProgram(this.glProgram);	
 	gl.drawArrays(gl.POINTS, 0, num);
 	gl.useProgram(null);
+	
 }
 
 

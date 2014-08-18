@@ -1,0 +1,208 @@
+
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>MOV - moving object visualisation</title>
+<link rel="stylesheet"
+	href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+<style>
+#canvasContainer {
+	position: absolute;
+	border: 1px;
+	padding: 0;
+	height: 400px;
+	width: 800px;
+}
+</style>
+
+<script src="../javascripts/jquery-1.9.1.min.js"></script>
+<script src="js/Manager.js"></script>
+
+
+
+<script>
+	document.addEventListener('DOMContentLoaded', init, false);	
+	
+	function init() {
+		/*bind the shader to dom*/
+		getShader();
+		var manager = new Manager("test");
+		prog = setProgram("raster_vShader","raster_fShader");
+		/**init geo buffer*/
+		manager.addData(generateData(10, 2, 2),2, 'wPoint');
+	
+		/*init first attribute buffer*/
+		//manager.addData(generatePositiveData(r_count, 1, 1),1, 'speed');			
+		canvas.setAttribute("width", 100);
+		canvas.setAttribute("height",100);
+	
+		gl.viewport(0, 0, 100, 100);
+		gl.clearColor(0.0, 0.0, 0.0, 0.0);
+		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+		matrix = new Float32Array(16);
+		matrix.set([ 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 ]);
+
+		gl.useProgram(prog);
+		enableBuffers(manager.databuffers);
+		var matrixLoc = gl.getUniformLocation(prog, 'mapMatrix');
+		gl.uniformMatrix4fv(matrixLoc, false, matrix);
+		
+		create2DTexture();
+		
+		
+		gl.enable(gl.BLEND);
+		gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);	
+		
+				
+		console.time("drawing")
+		gl.useProgram(prog);	
+	    gl.drawArrays(gl.POINTS, 0, 10);
+	    gl.useProgram(null);
+		console.timeEnd("drawing")
+		readPixels();
+	
+	
+	}
+	enableBuffers = function(buffers){
+		for (i in buffers){
+			name = buffers[i].name;
+			gl.bindBuffer(gl.ARRAY_BUFFER, buffers[i]);
+			
+			if (gl.getAttribLocation(prog , name)>=0){
+			loc = gl.getAttribLocation(prog , name);		
+	        gl.enableVertexAttribArray(loc);
+			gl.vertexAttribPointer(loc,  buffers[i].itemSize, gl.FLOAT, false, 0, 0);	
+			} else {
+				console.log("Error: attribute "+name+" does not exist.");
+			}
+		}
+	}
+	setProgram = function(vs, fs){
+		
+		var vertexSrc = document.getElementById(vs).text;
+		var vertexShader = gl.createShader(gl.VERTEX_SHADER);
+		gl.shaderSource(vertexShader, vertexSrc);
+		gl.compileShader(vertexShader);
+		
+		
+		if (!gl.getShaderParameter(vertexShader, gl.COMPILE_STATUS)) {
+			alert("An error occurred compiling the shaders: "
+					+ gl.getShaderInfoLog(vertexShader));
+			return null;
+		}
+		// create fragment shader
+		var fragmentSrc = document.getElementById(fs).text;
+		var fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
+		gl.shaderSource(fragmentShader, fragmentSrc);
+		gl.compileShader(fragmentShader);
+
+		if (!gl.getShaderParameter(fragmentShader, gl.COMPILE_STATUS)) {
+			alert("An error occurred compiling the shaders: "
+					+ gl.getShaderInfoLog(vertexShader));
+			return null;
+		}
+		// link shaders to create our program
+		var pointProgram = gl.createProgram();
+		gl.attachShader(pointProgram, vertexShader);
+		gl.attachShader(pointProgram, fragmentShader);
+		gl.linkProgram(pointProgram);
+		return pointProgram;	
+	}
+	/* generate data */
+	generateData = function(imax, dim, size) {
+		atr = new Float32Array(imax*dim);
+		for (var i = 0; i < (imax*dim); i++) {
+			atr[i] = Math.random() * size - (size/2);
+		}
+		return atr;
+	}
+	
+	generatePositiveData = function(count, dim, maxvalue) {
+		atr = new Float32Array(count*dim);
+		for (var i = 0; i < (count*dim); i++) {
+		  //atr[i] = Math.round(Math.random() * maxvalue)+5;	
+		  atr[i] = 0.5;
+		}
+		return atr;
+	}
+	
+	getShader = function() {
+		$.ajaxSetup({
+			async : false
+		});
+
+		$.get('shaders/raster_vShader.txt', function(data) {
+			$("head").append(data);
+		});
+
+		$.get('shaders/raster_fShader.txt', function(data) {
+			$("head").append(data);
+		});
+			
+		$.ajaxSetup({
+			async : true
+		});
+	}
+	readPixels = function(){	
+		var readout = new Uint8Array(10 * 10 * 1*4);
+		console.time("reading");
+		//gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
+		gl.readPixels(0, 0, 10 ,10, gl.RGBA, gl.UNSIGNED_BYTE, readout);
+		console.timeEnd("reading");
+
+		sum = 0;
+		for(i=1;i< readout.length; i++){
+			sum=sum+readout[i];
+		}
+		console.log(sum);
+		console.log(readout);
+	}
+	
+	create2DTexture = function() {
+	    var data = new Uint8Array(10*10*4);
+	    kk=0;
+		for (o = 0 ; o<10 ; o++){
+			for (p = 0 ; p<10 ; p++){
+				data[kk++]=20*p;
+				data[kk++]=25;
+				data[kk++]=50;
+				data[kk++]=255;
+			
+			}
+		
+		}
+	   
+	    var texture = gl.createTexture();		
+	    gl.bindTexture(gl.TEXTURE_2D, texture);
+	    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 8, 8, 0, gl.RGBA, gl.UNSIGNED_BYTE, data);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+		gl.bindTexture(gl.TEXTURE_2D, null);
+	  
+	  
+
+	    i = gl.getUniformLocation(prog, "uSampler") 
+	    if (i!= null){
+	    	gl.uniform1i(i , 0);
+	    } else {
+	    	console.log("Error... uniform uSampler does not exist.");
+	    	return;
+	    }
+	    gl.activeTexture(gl.TEXTURE0);
+	    gl.bindTexture(gl.TEXTURE_2D, texture);
+	    gl.uniform1i(i, 0);
+	   
+	
+		
+	}
+	
+</script>
+</head>
+<body>
+	<div id="canvasContainer">
+		<canvas id="test">Your browser does not support HTML5</canvas>
+	</div>
+
+</body>
+</html>

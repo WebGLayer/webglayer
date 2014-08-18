@@ -3,16 +3,11 @@
  	  varying vec4 aPos;
       varying float aSpeed;
 	
-	   uniform sampler2D uSampler;
+	   
  
 
       void main() {
-		vec4 col;	
-		vec2 pos = vec2(0, 0);
-		vec4 fdata = texture2D(uSampler, pos);
-		col = vec4(1./(256.),0., 0., 0.); 	
-		//col = fdata; 			
-				
-		gl_FragColor = col;
+	 			
+		gl_FragColor = vec4(1., 0. , 0., 0.); 
       }
     </script>
