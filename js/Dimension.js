@@ -4,6 +4,7 @@ var Dimension = function(manager){
 	var canvas = manager.getCanvas();
 	var div = manager.getDiv();
 
+	manager.addDimension(this);
 	var glProgram;
 
 	
@@ -66,11 +67,13 @@ var Dimension = function(manager){
 		gl.useProgram(this.glProgram);	
 		gl.drawArrays(gl.POINTS, 0, num);
 		gl.useProgram(null);
-		
+		this.readPixels();
 	}
 };
 
-
+Dimension.prototype.readPixels = function(){
+	console.log("readPixels function should be implemneted by subclass");
+}
 
 
 

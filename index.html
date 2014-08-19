@@ -29,7 +29,7 @@
 		/*bind the shader to DOM*/
 		getShader();
 		
-		r_count =3 * Math.pow(10,6);
+		r_count =3 * Math.pow(10,2);
 		var manager = new Manager("test");	
 		
 		/**init geo buffer*/
@@ -39,11 +39,9 @@
 		
 
 		/*setup map*/
-		var dimMap = new MapDimension(manager);
-		dimMap.name = "map";
-		//dimMap.glSetup = setupMap;	
-		/*set the shaders*/
-		dimMap.setProgram('map_vShader', 'map_fShader');
+	/*	var dimMap = new MapDimension(manager);
+		dimMap.name = "map";	
+		dimMap.setProgram('map_vShader', 'map_fShader');*/
 	
 		
 		
@@ -51,17 +49,26 @@
 		/*Setup histogram*/
 		var dimSpeed = new OneDDimension(manager);
 		dimSpeed.name = "speed";
-	//	dimSpeed.glSetup = setupSpeed;	
-		/*set the shaders*/
 		dimSpeed.setProgram('speed_vShader', 'speed_fShader');
+		dimSpeed.bin_count = 5;
+		dimSpeed.max = 200		
 		
-		manager.dimensions = [dimMap, dimSpeed];
+		/*serup time*/
+		var dimTime = new OneDDimension(manager);
+		dimTime.name = "time";
+		dimTime.setProgram('speed_vShader', 'speed_fShader');
+		dimTime.bin_count = 3;
+		dimTime.max = 100	
+	
 		/*Render*/
 				
 		console.time("drawing")
 		manager.render();		
 		console.timeEnd("drawing")
-		dimSpeed.readFloatPixels();
+		
+		//dimSpeed.readFloatPixels();
+		//dimTime.readFloatPixels();
+		
 	
 	
 	}
@@ -80,7 +87,7 @@
 		atr = new Float32Array(count*dim);
 		for (var i = 0; i < (count*dim); i++) {
 		  //atr[i] = (Math.random() * maxvalue)+0.5;	
-		  atr[i] = 1;
+		  atr[i] = 100;
 		}
 		return atr;
 	}

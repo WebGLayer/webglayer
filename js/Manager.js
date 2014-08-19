@@ -17,6 +17,10 @@ function Manager(canvasid) {
 		return div;
 	}
 	
+	this.addDimension = function(d){
+		this.dimensions.push(d);
+	}
+	
 	/**
 	 * Creates a data buffer object. itemSize is a dimension of the data
 	 */

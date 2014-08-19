@@ -5,8 +5,14 @@ function OneDDimension(manager) {
 	var canvas = manager.getCanvas();
 	var div = manager.getDiv();
 
+	
+	this.bin_count = 10;
+	this.max = 100;
+	this.renderbuffer;
+	
+	
 	this.setup = function() {
-		bin_count = 4;
+		
 
 		if (!gl.getExtension("OES_texture_float")) {
 			console.log("OES_texture_float not availble -- this is legal");
@@ -16,10 +22,10 @@ function OneDDimension(manager) {
 		// canvas.setAttribute("height",1);
 		// var w = canvas.width;
 		// var h = canvas.height;
-		gl.viewport(0, 0, bin_count, 1);
+		gl.viewport(0, 0, this.bin_count, 1);
 
 		matrix = new Float32Array(16);
-		matrix.set([ 4 / bin_count, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, -1, 0, 0,
+		matrix.set([ 2 / this.max, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, -1, 0, 0,
 				1 ]);
 
 		gl.useProgram(this.glProgram);
@@ -43,7 +49,7 @@ function OneDDimension(manager) {
 	this.initOfscreenBuffer = function() {
 		rttFramebuffer = gl.createFramebuffer();
 		gl.bindFramebuffer(gl.FRAMEBUFFER, rttFramebuffer);
-		rttFramebuffer.width = 4;
+		rttFramebuffer.width = this.bin_count;
 		rttFramebuffer.height = 1;
 
 		rttTexture = gl.createTexture();
@@ -54,15 +60,15 @@ function OneDDimension(manager) {
 		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, rttFramebuffer.width,
 				rttFramebuffer.height, 0, gl.RGBA, gl.FLOAT, null);
 
-		var renderbuffer = gl.createRenderbuffer();
-		gl.bindRenderbuffer(gl.RENDERBUFFER, renderbuffer);
+		this.renderbuffer = gl.createRenderbuffer();
+		gl.bindRenderbuffer(gl.RENDERBUFFER, this.renderbuffer);
 		gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT16,
 				rttFramebuffer.width, rttFramebuffer.height);
 
 		gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0,
 				gl.TEXTURE_2D, rttTexture, 0);
 		gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT,
-				gl.RENDERBUFFER, renderbuffer);
+				gl.RENDERBUFFER, this.renderbuffer);
 
 	}
 }
@@ -73,11 +79,13 @@ OneDDimension.prototype = Object.create(Dimension.prototype);
 OneDDimension.prototype.constructor = Dimension;
 
 
-OneDDimension.prototype.readFloatPixels = function() {
+OneDDimension.prototype.readPixels = function() {
+	
 	console.time("reading");
 	var gl = this.manager.getGL();
-	var readout = new Float32Array(4 * 1 * 1 * 4);
-	gl.readPixels(0, 0, 4, 1, gl.RGBA, gl.FLOAT, readout);
+	gl.bindRenderbuffer(gl.RENDERBUFFER, this.renderbuffer);
+	var readout = new Float32Array(this.bin_count * 4);
+	gl.readPixels(0, 0, this.bin_count, 1, gl.RGBA, gl.FLOAT, readout);
 	console.timeEnd("reading");
 
 	sum = 0;
