@@ -1,9 +1,12 @@
 
-
-
-
-
-setupMap = function() {
+function MapDimension(manager){
+	Dimension.call(this, manager);
+	var gl = manager.getGL();
+	var canvas = manager.getCanvas();
+	var div = manager.getDiv();
+	
+	
+	this.setup = function() {
 		canvas.setAttribute("width", div.offsetWidth);
 		canvas.setAttribute("height", div.offsetHeight);
 		var w = canvas.width;
@@ -22,4 +25,9 @@ setupMap = function() {
 		gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);	
 						
 	}
+}
+
+MapDimension.prototype = Object.create(Dimension.prototype);
+
+MapDimension.prototype.constructor = Dimension;
 	

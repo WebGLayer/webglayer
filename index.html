@@ -19,28 +19,29 @@
 <script src="../javascripts/jquery-1.9.1.min.js"></script>
 <script src="js/Dimension.js"></script>
 <script src="js/Manager.js"></script>
-<script src="js/SpeedConf.js"></script>
-<script src="js/MapConf.js"></script>
+<script src="js/OneDDimension.js"></script>
+<script src="js/MapDimension.js"></script>
 
 
 <script>
-	document.addEventListener('DOMContentLoaded', init, false);	
+	document.addEventListener('DOMContentLoaded', init, false);		
 	function init() {
-		/*bind the shader to dom*/
+		/*bind the shader to DOM*/
 		getShader();
 		
-		r_count =200;
-		var manager = new Manager("test");		
+		r_count =3 * Math.pow(10,6);
+		var manager = new Manager("test");	
+		
 		/**init geo buffer*/
 		manager.addData(generateData(r_count, 2, 2),2, 'wPoint');
 		/*init first attribute buffer*/
-		manager.addData(generatePositiveData(r_count, 1, 3),1, 'speed');
+		manager.addData(generatePositiveData(r_count, 1, 3),1, 'speed');	
 		
 
 		/*setup map*/
-		var dimMap = new Dimension();
+		var dimMap = new MapDimension(manager);
 		dimMap.name = "map";
-		dimMap.glSetup = setupMap;	
+		//dimMap.glSetup = setupMap;	
 		/*set the shaders*/
 		dimMap.setProgram('map_vShader', 'map_fShader');
 	
@@ -48,9 +49,9 @@
 		
 		
 		/*Setup histogram*/
-		var dimSpeed = new Dimension();
+		var dimSpeed = new OneDDimension(manager);
 		dimSpeed.name = "speed";
-		dimSpeed.glSetup = setupSpeed;	
+	//	dimSpeed.glSetup = setupSpeed;	
 		/*set the shaders*/
 		dimSpeed.setProgram('speed_vShader', 'speed_fShader');
 		
@@ -60,7 +61,7 @@
 		console.time("drawing")
 		manager.render();		
 		console.timeEnd("drawing")
-		readFloatPixels();
+		dimSpeed.readFloatPixels();
 	
 	
 	}
