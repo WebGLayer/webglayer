@@ -8,7 +8,7 @@
 	href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
 <style>
 #canvasContainer {
-	position: absolute;
+	position: relative;
 	border: 1px;
 	padding: 0;
 	height: 400px;
@@ -21,6 +21,9 @@
 <script src="js/Manager.js"></script>
 <script src="js/OneDDimension.js"></script>
 <script src="js/MapDimension.js"></script>
+<script src="js/FilterUtility.js"></script>
+<!-- <script src="js/Charts.js"></script> -->
+
 
 
 <script>
@@ -39,9 +42,9 @@
 		
 
 		/*setup map*/
-	/*	var dimMap = new MapDimension(manager);
+		var dimMap = new MapDimension(manager);
 		dimMap.name = "map";	
-		dimMap.setProgram('map_vShader', 'map_fShader');*/
+		dimMap.setProgram('map_vShader', 'map_fShader');
 	
 		
 		
@@ -53,24 +56,30 @@
 		dimSpeed.bin_count = 5;
 		dimSpeed.max = 200		
 		
-		/*serup time*/
-		var dimTime = new OneDDimension(manager);
+		/*Setup time*/
+		/*var dimTime = new OneDDimension(manager);
 		dimTime.name = "time";
 		dimTime.setProgram('speed_vShader', 'speed_fShader');
 		dimTime.bin_count = 3;
-		dimTime.max = 100	
+		dimTime.max = 100*/
+		
+		/*Setup map filter*/
+		
+		var util = new FilterUtility(manager);
+		util.setProgram();
+		
 	
 		/*Render*/
 				
-		console.time("drawing")
+		
 		manager.render();		
 		console.timeEnd("drawing")
+	
+		util.setup();		
+		util.renderFilter(generatePolygon(2,18));
 		
 		//dimSpeed.readFloatPixels();
 		//dimTime.readFloatPixels();
-		
-	
-	
 	}
 	
 	
@@ -82,6 +91,15 @@
 		}
 		return atr;
 	}
+	
+	generatePolygon = function(imax, size) {
+		atr = new Float32Array(imax*size);
+		for (var i = 0; i < (imax*size); i++) {
+			atr[i] = Math.random() * size - (size/2);
+		}
+		return atr;
+	}
+	
 	
 	generatePositiveData = function(count, dim, maxvalue) {
 		atr = new Float32Array(count*dim);
@@ -97,13 +115,10 @@
 			async : false
 		});
 
-		$.get('shaders/map_vShader.txt', function(data) {
+		$.get('shaders/map_shaders.txt', function(data) {
 			$("head").append(data);
 		});
 
-		$.get('shaders/map_fShader.txt', function(data) {
-			$("head").append(data);
-		});
 		
 		$.get('shaders/speed_vShader.txt', function(data) {
 			$("head").append(data);
@@ -112,6 +127,11 @@
 		$.get('shaders/speed_fShader.txt', function(data) {
 			$("head").append(data);
 		});
+		
+		$.get('shaders/mapFilter_shaders.txt', function(data) {
+			$("head").append(data);
+		});
+		
 		$.ajaxSetup({
 			async : true
 		});
@@ -122,6 +142,8 @@
 	<div id="canvasContainer">
 		<canvas id="test">Your browser does not support HTML5</canvas>
 	</div>
+	<div class='chart_1'>Chart 1</div>
+	
 
 </body>
 </html>

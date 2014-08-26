@@ -23,14 +23,21 @@
 
 <script>
 	document.addEventListener('DOMContentLoaded', init, false);	
-	
+	var gl;
+	var canvas;
+	var div;
 	function init() {
 		/*bind the shader to dom*/
-		getShader();
 		var manager = new Manager("test");
+		gl = manager.getGL();
+		canvas = manager.getCanvas();
+		 
+		getShader();
+	
+		var num_p = 10000;
 		prog = setProgram("raster_vShader","raster_fShader");
 		/**init geo buffer*/
-		manager.addData(generateData(10, 2, 2),2, 'wPoint');
+		manager.addData(generateData(num_p, 2, 10),2, 'wPoint');
 	
 		/*init first attribute buffer*/
 		//manager.addData(generatePositiveData(r_count, 1, 1),1, 'speed');			
@@ -41,12 +48,25 @@
 		gl.clearColor(0.0, 0.0, 0.0, 0.0);
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 		matrix = new Float32Array(16);
-		matrix.set([ 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 ]);
+		matrix.set([ 2/10, 0, 0, 0, 
+		             0, 2/10, 0, 0, 
+		             0, 0,    0, 0,
+		             -1, -1, 0, 1 ]);
 
+		rmatrix = new Float32Array(16);
+		rmatrix.set([ 0.5, 0, 0, 0, 
+		             0, 0.5, 0, 0, 
+		             0, 0,    0, 0,
+		             0.5, 0.5, 0, 1 ]);
 		gl.useProgram(prog);
+		
 		enableBuffers(manager.databuffers);
 		var matrixLoc = gl.getUniformLocation(prog, 'mapMatrix');
 		gl.uniformMatrix4fv(matrixLoc, false, matrix);
+		
+		var rMat = gl.getUniformLocation(prog, 'rasterMatrix');
+		gl.uniformMatrix4fv(rMat, false, rmatrix);
+		
 		
 		create2DTexture();
 		
@@ -57,7 +77,7 @@
 				
 		console.time("drawing")
 		gl.useProgram(prog);	
-	    gl.drawArrays(gl.POINTS, 0, 10);
+	    gl.drawArrays(gl.POINTS, 0, num_p);
 	    gl.useProgram(null);
 		console.timeEnd("drawing")
 		readPixels();
@@ -113,7 +133,7 @@
 	generateData = function(imax, dim, size) {
 		atr = new Float32Array(imax*dim);
 		for (var i = 0; i < (imax*dim); i++) {
-			atr[i] = Math.random() * size - (size/2);
+			atr[i] = Math.random() * size ;
 		}
 		return atr;
 	}

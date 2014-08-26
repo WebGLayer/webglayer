@@ -5,6 +5,8 @@ function MapDimension(manager){
 	var canvas = manager.getCanvas();
 	var div = manager.getDiv();
 	
+	var filterBuffer;
+	
 	
 	this.setup = function() {
 		canvas.setAttribute("width", div.offsetWidth);
@@ -23,9 +25,22 @@ function MapDimension(manager){
 				
 		gl.enable(gl.BLEND);
 		gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);	
+		
+		
 						
 	}
+	
 }
+
+MapDimension.prototype.filter = function(raster) {
+	/*rendertriangel*/
+	
+	/*use result as uniform*/
+	
+}
+
+
+
 
 MapDimension.prototype = Object.create(Dimension.prototype);
 

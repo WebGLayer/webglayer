@@ -5,6 +5,10 @@ function Manager(canvasid) {
 	var gl = canvas.getContext('webgl', {});
 
 	this.dimensions = [];
+	
+	/**
+	 * Common databuffers for all dimensions
+	 */
 	this.databuffers = [];
 
 	this.getGL = function(){
