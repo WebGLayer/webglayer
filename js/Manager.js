@@ -1,9 +1,13 @@
 function Manager(canvasid) {
 
-	var canvas = document.getElementById(canvasid);
-	var div = canvas.parentElement;
-	var gl = canvas.getContext('webgl', {});
+	/**
+	 * Global variables
+	 */
+	canvas = document.getElementById(canvasid);
+	div = canvas.parentElement;
+	gl = canvas.getContext('webgl', {});
 
+	
 	this.dimensions = [];
 	
 	/**

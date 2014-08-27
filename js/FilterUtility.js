@@ -3,12 +3,22 @@ function FilterUtility(manager){
 	var gl = manager.getGL();
 	var canvas = manager.getCanvas();
 	var div = manager.getDiv();
-	var posBuffer = gl.createBuffer();
+	
+	var pointsSize = 0;
 	
 	this.filterProgram = null;
-
+	/***
+	 * Buffers
+	 */
+	var posBuffer = gl.createBuffer();
+	var framebuffer = gl.createFramebuffer();	
+		
+	var renderbuffer = gl.createRenderbuffer();
+	this.filterTexture = gl.createTexture();
 	
-	this.setProgram = function(){
+	
+	
+	this.init = function(){
 		var vs = "mapFilter_vShader";
 		var fs = "mapFilter_fShader";
 		var vertexSrc = document.getElementById(vs).text;
@@ -38,43 +48,102 @@ function FilterUtility(manager){
 		gl.attachShader(pointProgram, fragmentShader);
 		gl.linkProgram(pointProgram);
 		this.filterProgram =  pointProgram;
+		
+		this.initOfscreenBuffer();
 	}
-	this.setup = function() {
-		canvas.setAttribute("width", div.offsetWidth);
-		canvas.setAttribute("height", div.offsetHeight);
-		var w = canvas.width;
-		var h = canvas.height;
-		gl.viewport(0, 0, w, h);
+	
+		
+		
+	
+	this.initOfscreenBuffer = function() {
+		
+		/** Framebuffer */
+		gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
+
+		/** Texture*/
+		gl.bindTexture(gl.TEXTURE_2D, this.filterTexture);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+
+		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA,this.width,
+				this.height, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+		
+		
+		/** Render buffer*/
+		gl.bindRenderbuffer(gl.RENDERBUFFER, renderbuffer);
+		gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT16,
+				this.width, this.height);
+
+		gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0,
+				gl.TEXTURE_2D, this.filterTexture, 0);
+		gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT,
+				gl.RENDERBUFFER, renderbuffer);
+		
+		
+		gl.bindRenderbuffer(gl.RENDERBUFFER, null);
+		gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+		gl.bindTexture(gl.TEXTURE_2D, null);
+	}
+	
+	this.setup = function() {	
+		//this.initOfscreenBuffer();
+		gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
+		gl.viewport(0, 0, this.width, this.height);
 		gl.clearColor(0.0, 0.0, 0.0, 1.0);
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-		matrix = new Float32Array(16);
-		matrix.set([ 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 ]);
-
+		
 		gl.useProgram(this.filterProgram);
 		var matrixLoc = gl.getUniformLocation(this.filterProgram, 'mapMatrix');
-		gl.uniformMatrix4fv(matrixLoc, false, matrix);
+		gl.uniformMatrix4fv(matrixLoc, false, this.matrix);
 				
 		gl.enable(gl.BLEND);
 		gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);	
-		
-		
-						
+		//gl.bindFramebuffer(gl.FRAMEBUFFER, null);				
+				
+	}	
+	
+	
+	this.createFilteringData = function(points){		
+		gl.bindBuffer(gl.ARRAY_BUFFER, posBuffer);
+		gl.bufferData(gl.ARRAY_BUFFER, points, gl.STATIC_DRAW);	
+		gl.bindBuffer(gl.ARRAY_BUFFER, null);
+		pointsSize = points.length/2;
 	}
 	
-	this.renderFilter = function(points){		
-		gl.useProgram(this.filterProgram);
+	
+	
+	this.renderFilter = function(){		
+		gl.bindBuffer(gl.ARRAY_BUFFER, posBuffer);
 		var attributeLoc = gl.getAttribLocation(this.filterProgram, 'poly');	
 		gl.enableVertexAttribArray(attributeLoc);
+		gl.vertexAttribPointer(attributeLoc, 2, gl.FLOAT, false, 0, 0);
 		
-		var itemSize = 2;
-		var numItems = points.length / itemSize;
-				
-		gl.bindBuffer(gl.ARRAY_BUFFER, posBuffer);
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(points), gl.STATIC_DRAW);	
-		gl.vertexAttribPointer(attributeLoc, itemSize, gl.FLOAT, false, 0, 0);
-		
-		gl.drawArrays(gl.TRIANGLES, 0, numItems);
+		gl.drawArrays(gl.TRIANGLES, 0, pointsSize);
 		gl.bindBuffer(gl.ARRAY_BUFFER, null);
+		gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+		
 	}
 	
+	
+	
+	this.readPixels = function() {
+		
+		console.time("reading filter");
+		
+		gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
+		var readout = new Uint8Array(this.width * this.height * 4);
+		gl.readPixels(0, 0, this.width, this.height, gl.RGBA, gl.UNSIGNED_BYTE, readout);
+		console.timeEnd("reading");
+
+		sum = 0;
+		for (i = 0; i < readout.length; i++) {
+			sum = sum + readout[i];
+		}
+		console.log(sum);
+		console.log(readout);
+		gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+	}
+	
+	
 }
+

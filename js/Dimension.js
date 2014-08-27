@@ -63,12 +63,18 @@ var Dimension = function(manager) {
 	 * 
 	 */
 	this.render = function(num) {
+		this.setFrameBuffer();
 		gl.useProgram(this.glProgram);
 		gl.drawArrays(gl.POINTS, 0, num);
 		gl.useProgram(null);
 		this.readPixels();
 	}
 };
+
+Dimension.prototype.setFrameBuffer = function() {
+	console.log("setFrameBuffer function should be implemneted by subclass");
+}
+
 
 Dimension.prototype.readPixels = function() {
 	console.log("readPixels function should be implemneted by subclass");
