@@ -5,7 +5,7 @@ function Manager(canvasid) {
 	 */
 	canvas = document.getElementById(canvasid);
 	div = canvas.parentElement;
-	gl = canvas.getContext('webgl', {});
+	gl = canvas.getContext('webgl', {preserveDrawingBuffer: true});
 
 	
 	this.dimensions = [];
@@ -43,19 +43,52 @@ function Manager(canvasid) {
 		this.databuffers.push(buffer);
 	}
 	
+
+	
 	/**
 	 * traverse all dimensions and renders them
 	 */
+
 	this.render = function() {
 		/* bind array buffers */
-
+		var now = Date.now() / 1000;
+		 
 		for (var i = 0; i < this.dimensions.length; i++) {
 			d = this.dimensions[i];
 			d.setup();
 			d.enableBuffers(this.databuffers);
-			d.render(this.databuffers[0].numItems);
+			gl.clearColor(0.0, 0.0, 0.0, 0.0);
+			gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+			
+			d.render(this.databuffers[0].numItems, function(){});
+			d.tearDown();
 		}
-		gl.bindBuffer(gl.ARRAY_BUFFER, null);
+		
+	}
+	this.setup = function() {
+		for (var i = 0; i < this.dimensions.length; i++) {
+			d = this.dimensions[i];
+			//d.setup();
+			d.setup();
+			
+		}
 	}
 }
 
+var readPixels = function(framebuffer) {
+	
+	
+	var readout= new Float32Array(8*4);
+//	console.time("reading_pix");
+//	gl.readPixels(0, 0, 8, 1, gl.RGBA, gl.FLOAT, readout);
+ 	
+//	console.timeEnd("reading_pix");
+	
+  /* var sum = 0;
+	for (i = 0; i < readout.length; i++) {
+		sum = sum + readout[i];
+	}
+	console.log(sum);
+	console.log(readout);*/
+	
+}

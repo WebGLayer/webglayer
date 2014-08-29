@@ -28,115 +28,159 @@
 
 
 <script>
-	document.addEventListener('DOMContentLoaded', init, false);		
-	function init() {		
+	document.addEventListener('DOMContentLoaded', init, false);
+	function init() {
 		/*bind the shader to DOM*/
 		getShader();
-		
-		r_count =1 * Math.pow(10,3);
-		var manager = new Manager("test");	
+
+		r_count = 1 * Math.pow(10, 6);
+		var manager = new Manager("test");
 		var mcontroller = new MapController();
-		
+
 		canvas.setAttribute("width", div.offsetWidth);
 		canvas.setAttribute("height", div.offsetHeight);
-		
-		/**init geo buffer*/
-		manager.addData(generateData(r_count, 2, 2),2, 'wPoint');
-		/*init first attribute buffer*/
-		manager.addData(generatePositiveData(r_count, 1, 3),1, 'speed');	
-		
 
-		/*setup map*/
-		var dimMap = new MapDimension(manager);
-		dimMap.name = "map";	
-		dimMap.setProgram('map_vShader', 'map_fShader');
-	
-		mcontroller.layers.push(dimMap);
-		
-		
+		/**init geo buffer*/
+		manager.addData(generateData(r_count, 2, 2), 2, 'wPoint');
+		/*init first attribute buffer*/
+		manager.addData(generatePositiveData(r_count, 1, 3), 1, 'speed');
+
 		/*Setup histogram*/
 		var dimSpeed = new OneDDimension(manager);
 		dimSpeed.name = "speed";
 		dimSpeed.setProgram('speed_vShader', 'speed_fShader');
-		dimSpeed.bin_count = 5;
+		dimSpeed.bin_count = 8;
 		dimSpeed.max = 200;
-		
+
 		/*Setup time*/
-		/*var dimTime = new OneDDimension(manager);
+		var dimTime = new OneDDimension(manager);
 		dimTime.name = "time";
 		dimTime.setProgram('speed_vShader', 'speed_fShader');
-		dimTime.bin_count = 3;
-		dimTime.max = 100*/
-		
+		dimTime.bin_count = 8;
+		dimTime.max = 100;
+
+		/*setup map*/
+		var dimMap = new MapDimension(manager);
+		dimMap.name = "map";
+		dimMap.setProgram('map_vShader', 'map_fShader');
+
+		mcontroller.layers.push(dimMap);
+
 		/*Setup map filter*/
-		
+
 		var util = new FilterUtility(manager);
-		
+
 		mcontroller.layers.push(util);
-		
-		mcontroller.resize(div.offsetWidth,div.offsetHeight);
-	
+		mcontroller.resize(div.offsetWidth, div.offsetHeight);
+		mcontroller.zoommove(0,{x: 0, y : 0});
+		util.init();
+		util.createFilteringData(generateOneTriangle());
 		/*Render*/
 		
-				
-		util.init();
-		util.createFilteringData(generateOneTriangle());		
-		util.setup();	
-		util.renderFilter();
-		dimMap.texture = util.filterTexture;
-		//util.readPixels();
+		manager.setup();
 		
-		manager.render();		
+		console.time("full");
 		
-	//	util.createFilteringData(generatePolygon(2,3));
-	//	util.renderFilter();
-	//	util.addDataToFilter(generatePolygon(2,3));
-	//	util.renderFilter();
+
+		var fpsElement = document.getElementById("fps");
+		var then = Date.now() / 1000;  // get time in seconds
 		
+		(function animloop(){		
+			var now = Date.now() / 1000;  // get time in seconds
+		    // compute time since last frame
+		    var elapsedTime = now - then;
+		    then = now;
+		    // compute fps
+		    var fps = 1 / elapsedTime;
+		    fpsElement.innerText = fps.toFixed(2);  
+			  window.requestAnimFrame(animloop);
+			  render();				
+		})();
 		
+		(function readloop(){			
+			  window.requestAnimFrame(readloop);
+			 read();							 
+		})();
+
 		
+		function render(){
+			//console.time(i + " rendering_all");			
+			util.setup();
+			util.createFilteringData(generateOneTriangle());
+			util.renderFilter();
+			dimMap.texture = util.filterTexture;	
+			manager.setup();		
+			mcontroller.zoommove(0,{x: (Math.random()-0.5)*5, y : 0});
+			manager.render();
+			gl.flush();
+			//console.timeEnd(i + " rendering_all");			
+		}
+		
+		function read(){
+			dimSpeed.readPixels();
+			dimTime.readPixels();
+		}
+	
+		console.timeEnd("full");
+		//	util.createFilteringData(generatePolygon(2,3));
+		//	util.renderFilter();
+		//	util.addDataToFilter(generatePolygon(2,3));
+		//	util.renderFilter();
+
 		//dimSpeed.readFloatPixels();
 		//dimTime.readFloatPixels();
 	}
+
+	window.requestAnimFrame = (function(){
+		  return  window.requestAnimationFrame       ||
+		          window.webkitRequestAnimationFrame ||
+		          window.mozRequestAnimationFrame    ||
+		          function( callback ){
+		            window.setTimeout(callback, 1000 / 60);
+		          };
+		})();
+	
+	var timer = function(callback){
+        window.setTimeout(callback, 1000 / 60);
+      };
 	
 	generateOneTriangle = function() {
-		atr = new Float32Array([0 ,0, 800, 400, 0, 400]);		
+		atr = new Float32Array([ 0, 0, Math.random() *800, Math.random() *400, 0, 400 ]);
 		return atr;
 	}
 	generateTwoTriangle = function() {
-		atr = new Float32Array([-1 ,-1, 1, -1, 1, 1,     1,1, -1,-1, -1,1]);		
+		atr = new Float32Array([ -1, -1, 1, -1, 1, 1, 1, 1, -1, -1, -1, 1 ]);
 		return atr;
 	}
-	
+
 	/* generate data */
 	generateData = function(imax, dim, size) {
-		atr = new Float32Array(imax*dim);
-		for (var i = 0; i < (imax*dim); i=i+2) {
+		atr = new Float32Array(imax * dim);
+		for (var i = 0; i < (imax * dim); i = i + 2) {
 			atr[i] = Math.random() * div.offsetWidth;
-			atr[i+1] = Math.random() * div.offsetHeight;
-			
+			atr[i + 1] = Math.random() * div.offsetHeight;
+
 		}
 		return atr;
 	}
-	
+
 	generatePolygon = function(imax, size) {
-		atr = new Float32Array(imax*size);
-		for (var i = 0; i < (imax*size); i++) {
-			atr[i] = Math.random() * size - (size/2);
+		atr = new Float32Array(imax * size);
+		for (var i = 0; i < (imax * size); i++) {
+			atr[i] = Math.random() * size - (size / 2);
 		}
 		return atr;
 	}
-	
-	
+
 	generatePositiveData = function(count, dim, maxvalue) {
-		atr = new Float32Array(count*dim);
-		for (var i = 0; i < (count*dim); i++) {
-		  //atr[i] = (Math.random() * maxvalue)+0.5;	
-		  atr[i] = 100;
+		atr = new Float32Array(count * dim);
+		for (var i = 0; i < (count * dim); i++) {
+			//atr[i] = (Math.random() * maxvalue)+0.5;	
+			atr[i] = 100;
 		}
 		return atr;
 	}
-	
+
 	getShader = function() {
 		$.ajaxSetup({
 			async : false
@@ -146,7 +190,6 @@
 			$("head").append(data);
 		});
 
-		
 		$.get('shaders/speed_vShader.txt', function(data) {
 			$("head").append(data);
 		});
@@ -154,11 +197,11 @@
 		$.get('shaders/speed_fShader.txt', function(data) {
 			$("head").append(data);
 		});
-		
+
 		$.get('shaders/mapFilter_shaders.txt', function(data) {
 			$("head").append(data);
 		});
-		
+
 		$.ajaxSetup({
 			async : true
 		});
@@ -169,8 +212,9 @@
 	<div id="canvasContainer">
 		<canvas id="test">Your browser does not support HTML5</canvas>
 	</div>
-	<div class='chart_1'>Chart 1</div>
-	
+	<div id="fps"> fps		
+	</div>	
+
 
 </body>
 </html>

@@ -89,6 +89,7 @@ function FilterUtility(manager){
 	
 	this.setup = function() {	
 		//this.initOfscreenBuffer();
+		gl.bindTexture(gl.TEXTURE_2D, this.filterTexture);
 		gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
 		gl.viewport(0, 0, this.width, this.height);
 		gl.clearColor(0.0, 0.0, 0.0, 1.0);
@@ -98,19 +99,14 @@ function FilterUtility(manager){
 		var matrixLoc = gl.getUniformLocation(this.filterProgram, 'mapMatrix');
 		gl.uniformMatrix4fv(matrixLoc, false, this.matrix);
 				
-		gl.enable(gl.BLEND);
-		gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);	
+		gl.disable(gl.BLEND);
+		gl.disable(gl.DEPTH_TEST);
+		
 		//gl.bindFramebuffer(gl.FRAMEBUFFER, null);				
 				
 	}	
 	
-	
-	this.createFilteringData = function(points){		
-		gl.bindBuffer(gl.ARRAY_BUFFER, posBuffer);
-		gl.bufferData(gl.ARRAY_BUFFER, points, gl.STATIC_DRAW);	
-		gl.bindBuffer(gl.ARRAY_BUFFER, null);
-		pointsSize = points.length/2;
-	}
+
 	
 	
 	
@@ -123,10 +119,18 @@ function FilterUtility(manager){
 		gl.drawArrays(gl.TRIANGLES, 0, pointsSize);
 		gl.bindBuffer(gl.ARRAY_BUFFER, null);
 		gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+		gl.bindTexture(gl.TEXTURE_2D, null);
 		
 	}
 	
 	
+	
+	this.createFilteringData = function(points){		
+		gl.bindBuffer(gl.ARRAY_BUFFER, posBuffer);
+		gl.bufferData(gl.ARRAY_BUFFER, points, gl.STATIC_DRAW);	
+		gl.bindBuffer(gl.ARRAY_BUFFER, null);
+		pointsSize = points.length/2;
+	}
 	
 	this.readPixels = function() {
 		

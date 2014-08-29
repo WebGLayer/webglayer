@@ -62,22 +62,29 @@ var Dimension = function(manager) {
 	/**
 	 * 
 	 */
-	this.render = function(num) {
+	this.render = function(num, callback) {
+		
 		this.setFrameBuffer();
 		gl.useProgram(this.glProgram);
 		gl.drawArrays(gl.POINTS, 0, num);
-		gl.useProgram(null);
-		this.readPixels();
+		callback.call();
+	    gl.useProgram(null);
+	    gl.finish();
+		
 	}
 };
 
 Dimension.prototype.setFrameBuffer = function() {
-	console.log("setFrameBuffer function should be implemneted by subclass");
+	//console.log("setFrameBuffer function should be implemneted by subclass");
 }
 
 
 Dimension.prototype.readPixels = function() {
-	console.log("readPixels function should be implemneted by subclass");
+	//console.log("readPixels function should be implemneted by subclass");
+}
+
+Dimension.prototype.tearDown = function() {
+	//console.log("tearDown function should be implemneted by subclass");
 }
 
 Dimension.prototype.setMapMatrix = function(m) {

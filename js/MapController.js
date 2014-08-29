@@ -42,6 +42,7 @@ var MapController = function() {
 			matrix[12] += matrix[0] * tx ;
 			matrix[13] += matrix[5] * ty;
 		}
+				
 	}
 	
 	this.updateLayers = function(){		

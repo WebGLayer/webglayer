@@ -6,12 +6,12 @@ function OneDDimension(manager) {
 	var div = manager.getDiv();
 
 	
-	this.bin_count = 10;
+	this.bin_count = 8;
 	this.max = 100;
 	
 	
 	var framebuffer = gl.createFramebuffer();
-	framebuffer.width = this.bin_count;
+	framebuffer.width =  this.bin_count;
 	framebuffer.height = 1;
 	
 	var renderbuffer = gl.createRenderbuffer();
@@ -54,8 +54,8 @@ function OneDDimension(manager) {
 	
 		/** Texture*/
 		gl.bindTexture(gl.TEXTURE_2D, restexture);
-		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); //Prevents s-coordinate wrapping (repeating).
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 
@@ -72,7 +72,7 @@ function OneDDimension(manager) {
 				gl.TEXTURE_2D, restexture, 0);
 		gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT,
 				gl.RENDERBUFFER, renderbuffer);
-	
+		
 		
 
 	}
@@ -82,21 +82,21 @@ function OneDDimension(manager) {
 	}
 	
 	this.readPixels = function() {
-		
-		console.time("reading");
-		var gl = this.manager.getGL();
+				
 		gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
-		var readout = new Float32Array(this.bin_count * 4);
+	//	console.time("reading_pix");
+		var readout= new Float32Array(8*4);
 		gl.readPixels(0, 0, this.bin_count, 1, gl.RGBA, gl.FLOAT, readout);
-		console.timeEnd("reading");
-
-		var sum = 0;
+	//	console.timeEnd("reading_pix");
+		//gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+	
+	    var sum = 0;
 		for (i = 0; i < readout.length; i++) {
 			sum = sum + readout[i];
 		}
 		console.log(sum);
 		console.log(readout);
-		gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+		
 	}
 }
 OneDDimension.prototype.setFrameBuffer = function(){
