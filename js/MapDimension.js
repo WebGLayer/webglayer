@@ -18,7 +18,7 @@ function MapDimension(manager){
 		var matrixLoc = gl.getUniformLocation(this.glProgram, 'mapMatrix');
 		gl.uniformMatrix4fv(matrixLoc, false, this.matrix);
 		
-		matrixLoc = gl.getUniformLocation(this.glProgram, 'rMatrix');
+		matrixLoc = gl.getUniformLocation(this.glProgram, 'rasterMatrix');
 		gl.uniformMatrix4fv(matrixLoc, false, this.rmatrix);
 		
 		/** Bind texture*/
@@ -37,43 +37,7 @@ function MapDimension(manager){
 		gl.useProgram(null);
 	}
 	
-	this.create2DTexture = function() {
-	    /*var data = new Uint8Array(10*10*4);
-	    kk=0;
-		for (o = 0 ; o<10 ; o++){
-			for (p = 0 ; p<10 ; p++){
-				data[kk++]=20*p;
-				data[kk++]=25;
-				data[kk++]=50;
-				data[kk++]=255;
-			
-			}
-		
-		}
-	   
-	    var texture = gl.createTexture();		
-	    gl.bindTexture(gl.TEXTURE_2D, texture);
-	    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 8, 8, 0, gl.RGBA, gl.UNSIGNED_BYTE, data);
-		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-		gl.bindTexture(gl.TEXTURE_2D, null);
-	  
-	    */
 
-	    i = gl.getUniformLocation(this.glProgram, "uSampler") 
-	    if (i!= null){
-	    	gl.uniform1i(i , 0);
-	    } else {
-	    	console.log("Error... uniform uSampler does not exist.");
-	    	return;
-	    }
-	    gl.activeTexture(gl.TEXTURE0);
-	    gl.bindTexture(gl.TEXTURE_2D, this.texture);
-	  //  gl.uniform1i(i, 0);
-	   
-	
-		
-	}
 
 	this.readPixels = function() {
 		

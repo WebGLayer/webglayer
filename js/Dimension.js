@@ -40,6 +40,19 @@ var Dimension = function(manager) {
 		gl.linkProgram(pointProgram);
 		this.glProgram = pointProgram;
 	}
+	
+	this.create2DTexture = function() {	  
+	    var i = gl.getUniformLocation(this.glProgram, "uSampler") 
+	    if (i!= null){
+	    	gl.uniform1i(i , 0);
+	    } else {
+	    	console.log("Error... uniform uSampler does not exist.");
+	    	return;
+	    }
+	    gl.activeTexture(gl.TEXTURE0);
+	    gl.bindTexture(gl.TEXTURE_2D, this.texture);	
+	}
+	
 	/**
 	 * 
 	 */

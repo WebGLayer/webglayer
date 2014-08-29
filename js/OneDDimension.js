@@ -1,13 +1,19 @@
 function OneDDimension(manager) {
 	Dimension.call(this, manager);
-	this.manager=manager;
-	var gl = manager.getGL();
-	var canvas = manager.getCanvas();
-	var div = manager.getDiv();
-
+	
+	this.rmatrix = new Float32Array(16);
+	this.rmatrix.set([ 0.5, 0, 0, 0, 
+	             0, 0.5, 0, 0, 
+	             0, 0,    0, 0,
+	             0.5, 0.5, 0, 1 ]);
+	
+	
 	
 	this.bin_count = 8;
 	this.max = 100;
+	
+	
+	
 	
 	
 	var framebuffer = gl.createFramebuffer();
@@ -19,21 +25,34 @@ function OneDDimension(manager) {
 	
 	
 	this.setMatrix = function(){
-		
-		matrix = new Float32Array(16);
-		matrix.set([ 2 / this.max, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, -1, 0, 0,
-				1 ]);
+	
 		gl.useProgram(this.glProgram);
-		var matrixLoc = gl.getUniformLocation(this.glProgram, 'mapMatrix');
-		gl.uniformMatrix4fv(matrixLoc, false, matrix);
-		
+		this.create2DTexture();
 
 	}
 	
 	
 	this.setup = function() {
-		gl.viewport(0, 0, this.bin_count, 1);
-		this.setMatrix();
+		gl.viewport(0, 0, this.bin_count, 1);				
+		gl.useProgram(this.glProgram);
+		
+		this.attmatrix = new Float32Array(16);
+		this.attmatrix.set([ 2 / this.max, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, -1, 0, 0,
+				1 ]);
+		
+	
+		
+		var matrixLoc = gl.getUniformLocation(this.glProgram, 'attMatrix');
+		gl.uniformMatrix4fv(matrixLoc, false, this.attmatrix);
+		
+		matrixLoc = gl.getUniformLocation(this.glProgram, 'mapMatrix');
+		gl.uniformMatrix4fv(matrixLoc, false, this.matrix);
+		
+		matrixLoc = gl.getUniformLocation(this.glProgram, 'rasterMatrix');
+		gl.uniformMatrix4fv(matrixLoc, false, this.rmatrix);
+		
+		
+		
 		if (!gl.getExtension("OES_texture_float")) {
 			console.log("OES_texture_float not availble -- this is legal");
 		}
@@ -41,9 +60,12 @@ function OneDDimension(manager) {
 		gl.enable(gl.BLEND);
 
 		gl.blendFunc(gl.ONE, gl.ONE);
+		
+		
+		
 		this.initOfscreenBuffer();
 
-
+		this.create2DTexture();
 	}
 
 	this.initOfscreenBuffer = function() {		
@@ -72,7 +94,8 @@ function OneDDimension(manager) {
 				gl.TEXTURE_2D, restexture, 0);
 		gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT,
 				gl.RENDERBUFFER, renderbuffer);
-		
+	
+		gl.bindTexture(gl.TEXTURE_2D, null);
 		
 
 	}
@@ -90,7 +113,7 @@ function OneDDimension(manager) {
 	//	console.timeEnd("reading_pix");
 		//gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 	
-	    var sum = 0;
+	  var sum = 0;
 		for (i = 0; i < readout.length; i++) {
 			sum = sum + readout[i];
 		}

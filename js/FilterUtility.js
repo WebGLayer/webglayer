@@ -15,7 +15,7 @@ function FilterUtility(manager){
 		
 	var renderbuffer = gl.createRenderbuffer();
 	this.filterTexture = gl.createTexture();
-	
+	this.filterTexture.name = "filter texture";
 	
 	
 	this.init = function(){
