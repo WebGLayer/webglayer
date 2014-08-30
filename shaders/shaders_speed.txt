@@ -1,0 +1,45 @@
+<script id="speed_vShader" type="x-shader/x-vertex">
+
+	attribute vec4 wPoint;
+	attribute float speed;
+	
+	uniform mat4 attMatrix;
+	uniform mat4 mapMatrix;
+	uniform mat4 rasterMatrix;
+	
+	uniform sampler2D uSampler;
+	varying vec4 col; 
+
+	void main() {
+			
+
+		vec4 p =  mapMatrix * wPoint;
+  		vec4 rp = rasterMatrix * p;
+  		vec4 fdata = texture2D(uSampler, vec2(rp[0],rp[1]));
+  		
+  		if (fdata[1]>0.){
+  			gl_Position = attMatrix*vec4(speed, 0., 0., 1.);;
+			gl_PointSize = 1.;
+			col = vec4(1., 0. , 0., 0.);
+  		} else {  		   
+  		   	gl_Position = attMatrix*vec4(speed, 0., 0., 1.);;			
+			gl_PointSize = 1.;
+			col = vec4(0., 0. , 0., 0.);
+  		}
+		
+			//gl_Position = vec4(1, 0., 0., 1.);;	
+			//col =rp;//vec4(1., 0. , 0., 0.);
+	
+		
+	}
+</script>
+    
+<script id="speed_fShader" type="x-shader/x-fragment">
+      precision mediump float;  
+	  varying vec4 col; 
+ 	 
+      void main() {
+	 			
+		gl_FragColor = col;
+      }
+</script>
