@@ -76,19 +76,5 @@ function Manager(canvasid) {
 }
 
 var readPixels = function(framebuffer) {
-	
-	
-	var readout= new Float32Array(8*4);
-//	console.time("reading_pix");
-//	gl.readPixels(0, 0, 8, 1, gl.RGBA, gl.FLOAT, readout);
- 	
-//	console.timeEnd("reading_pix");
-	
-  /* var sum = 0;
-	for (i = 0; i < readout.length; i++) {
-		sum = sum + readout[i];
-	}
-	console.log(sum);
-	console.log(readout);*/
-	
+	var readout= new Float32Array(8*4);	
 }

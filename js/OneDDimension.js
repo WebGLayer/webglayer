@@ -13,26 +13,13 @@ function OneDDimension(manager) {
 	
 	this.bin_count = 8;
 
-	
-	
-	
-	
-	
 	var framebuffer = gl.createFramebuffer();
 	framebuffer.width =  this.bin_count;
 	framebuffer.height = 1;
 	
 	var renderbuffer = gl.createRenderbuffer();
 	var restexture = gl.createTexture();
-	
-	
-	this.setMatrix = function(){
-	
-		gl.useProgram(this.glProgram);
-		this.create2DTexture();
 
-	}
-	
 	
 	this.setup = function() {
 		gl.viewport(0, 0, this.bin_count, 1);				

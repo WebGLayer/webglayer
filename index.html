@@ -11,8 +11,8 @@
 	position: relative;
 	border: 1px;
 	padding: 0;
-	height: 800px;
-	width: 1200px;
+	height: 400px;
+	width: 800px;
 }
 </style>
 
@@ -23,6 +23,7 @@
 <script src="js/MapDimension.js"></script>
 <script src="js/FilterUtility.js"></script>
 <script src="js/MapController.js"></script>
+<script src="js/Utils.js"></script>
 <!-- <script src="js/Charts.js"></script> -->
 
 
@@ -33,6 +34,7 @@
 		/*bind the shader to DOM*/
 		should_render = true;
 		getShader();
+		utils = new Utils();
 
 		r_count = 5 * Math.pow(10, 5);
 		manager = new Manager("test");
@@ -101,9 +103,18 @@
 			request =  window.requestAnimFrame(animloop);
 		};
 
+		
+		function dataupdateloop(){		
+			util.createFilteringData(generateOneTriangle());
+			mcontroller.zoommove((Math.random()-0.5) * 0.4, {x: (Math.random()-0.5)*5, y : 0});
+			
+			request =  window.requestAnimFrame(dataupdateloop);
+		};
+		
 		function start() {
 		    if (!request) {
 		    	animloop();
+		    	dataupdateloop();
 		    }
 		}
 	
@@ -118,16 +129,14 @@
 	
 		
 		function render(){
-			//console.time(i + " rendering_all");			
-			util.setup();
-			util.createFilteringData(generateOneTriangle());
+			
 			util.renderFilter();
 			dimMap.texture = util.filterTexture;	
 			dimSpeed.texture = util.filterTexture;	
 			
 			manager.setup();		
-			//mcontroller.zoommove(0,{x: (Math.random()-0.5)*5, y : 0});
-			mcontroller.zoommove(0,{x: 0, y : 0});
+		
+			//mcontroller.zoommove(0,{x: 0, y : 0});
 			manager.render();
 			read();
 			//gl.flush();
