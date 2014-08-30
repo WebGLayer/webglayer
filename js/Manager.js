@@ -60,7 +60,7 @@ function Manager(canvasid) {
 			gl.clearColor(0.0, 0.0, 0.0, 0.0);
 			gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 			
-			d.render(this.databuffers[0].numItems, function(){});
+			d.render(this.databuffers[0].numItems);
 			d.tearDown();
 		}
 		

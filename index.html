@@ -11,8 +11,8 @@
 	position: relative;
 	border: 1px;
 	padding: 0;
-	height: 400px;
-	width: 800px;
+	height: 800px;
+	width: 1200px;
 }
 </style>
 
@@ -31,12 +31,12 @@
 	document.addEventListener('DOMContentLoaded', init, false);
 	function init() {
 		/*bind the shader to DOM*/
-		 should_render = true;
+		should_render = true;
 		getShader();
 
-		r_count = 1 * Math.pow(10, 5);
-		var manager = new Manager("test");
-		var mcontroller = new MapController();
+		r_count = 5 * Math.pow(10, 5);
+		manager = new Manager("test");
+		mcontroller = new MapController();
 
 		canvas.setAttribute("width", div.offsetWidth);
 		canvas.setAttribute("height", div.offsetHeight);
@@ -87,6 +87,7 @@
 		var then = Date.now() / 1000;  // get time in seconds
 		
 		request = false;
+	
 		
 		function animloop(){		
 			var now = Date.now() / 1000;  // get time in seconds
@@ -114,6 +115,7 @@
 		}
 		
 		$("#stop").click(function() {if(!request){start()} else {stop()}});
+	
 		
 		function render(){
 			//console.time(i + " rendering_all");			
@@ -132,12 +134,14 @@
 			//console.timeEnd(i + " rendering_all");			
 		}
 		
+		var datael = $("#data");		
 		function read(){
-			dimSpeed.readPixels();
-			//dimTime.readPixels();
+			
+			var readout = dimSpeed.readPixels();
+		 	datael.html(readout[0],readout[1]);
+		   //dimTime.readPixels();
 		}
-	
-		console.timeEnd("full");
+		
 		//	util.createFilteringData(generatePolygon(2,3));
 		//	util.renderFilter();
 		//	util.addDataToFilter(generatePolygon(2,3));
@@ -191,8 +195,8 @@
 	generatePositiveData = function(count, dim, maxvalue) {
 		atr = new Float32Array(count * dim);
 		for (var i = 0; i < (count * dim); i++) {
-			//atr[i] = (Math.random() * maxvalue)+0.5;	
-			atr[i] = 150;
+			atr[i] = (Math.random() * maxvalue)+0.5;	
+			//atr[i] = 150;
 		}
 		return atr;
 	}
@@ -230,6 +234,8 @@
 	</div>	
 
 	<div id="stop"> start/stop		
+	</div>	
+	<div id="data"> data	
 	</div>	
 
 </body>

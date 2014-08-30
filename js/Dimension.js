@@ -1,9 +1,5 @@
 var Dimension = function(manager) {
-	var manager = manager;
-	var gl = manager.getGL();
-	var canvas = manager.getCanvas();
-	var div = manager.getDiv();
-
+	
 	manager.addDimension(this);
 	
 	this.glProgram = null;
@@ -53,6 +49,19 @@ var Dimension = function(manager) {
 	    gl.bindTexture(gl.TEXTURE_2D, this.texture);	
 	}
 	
+	this.bindUniforms = function(){		
+		gl.useProgram(this.glProgram);
+		var matrixLoc = gl.getUniformLocation(this.glProgram, 'attMatrix');
+		gl.uniformMatrix4fv(matrixLoc, false, this.attmatrix);
+		
+		matrixLoc = gl.getUniformLocation(this.glProgram, 'mapMatrix');
+		gl.uniformMatrix4fv(matrixLoc, false, this.matrix);
+		
+		matrixLoc = gl.getUniformLocation(this.glProgram, 'rasterMatrix');
+		gl.uniformMatrix4fv(matrixLoc, false, this.rmatrix);
+	}
+	
+	
 	/**
 	 * 
 	 */
@@ -75,12 +84,12 @@ var Dimension = function(manager) {
 	/**
 	 * 
 	 */
-	this.render = function(num, callback) {
+	this.render = function(num) {
 		
 		this.setFrameBuffer();
+		this.bindUniforms();
 		gl.useProgram(this.glProgram);
-		gl.drawArrays(gl.POINTS, 0, num);
-		callback.call();
+		gl.drawArrays(gl.POINTS, 0, num);	
 	    gl.useProgram(null);
 	    gl.finish();
 		

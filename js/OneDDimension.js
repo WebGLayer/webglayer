@@ -6,11 +6,13 @@ function OneDDimension(manager) {
 	             0, 0.5, 0, 0, 
 	             0, 0,    0, 0,
 	             0.5, 0.5, 0, 1 ]);
-	
-	
+	this.max = 100;
+	this.attmatrix = new Float32Array(16);
+	this.attmatrix.set([ 2 / this.max, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, -1, 0, 0,
+			1 ]);
 	
 	this.bin_count = 8;
-	this.max = 100;
+
 	
 	
 	
@@ -35,24 +37,7 @@ function OneDDimension(manager) {
 	this.setup = function() {
 		gl.viewport(0, 0, this.bin_count, 1);				
 		gl.useProgram(this.glProgram);
-		
-		this.attmatrix = new Float32Array(16);
-		this.attmatrix.set([ 2 / this.max, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, -1, 0, 0,
-				1 ]);
-		
-	
-		
-		var matrixLoc = gl.getUniformLocation(this.glProgram, 'attMatrix');
-		gl.uniformMatrix4fv(matrixLoc, false, this.attmatrix);
-		
-		matrixLoc = gl.getUniformLocation(this.glProgram, 'mapMatrix');
-		gl.uniformMatrix4fv(matrixLoc, false, this.matrix);
-		
-		matrixLoc = gl.getUniformLocation(this.glProgram, 'rasterMatrix');
-		gl.uniformMatrix4fv(matrixLoc, false, this.rmatrix);
-		
-		
-		
+
 		if (!gl.getExtension("OES_texture_float")) {
 			console.log("OES_texture_float not availble -- this is legal");
 		}
@@ -112,14 +97,14 @@ function OneDDimension(manager) {
 		gl.readPixels(0, 0, this.bin_count, 1, gl.RGBA, gl.FLOAT, readout);
 	//	console.timeEnd("reading_pix");
 		//gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-	
+	 
 	  var sum = 0;
 		for (i = 0; i < readout.length; i++) {
 			sum = sum + readout[i];
 		}
 		console.log(sum);
 		console.log(readout);
-		
+		return  readout;
 	}
 }
 OneDDimension.prototype.setFrameBuffer = function(){

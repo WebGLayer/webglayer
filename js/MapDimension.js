@@ -7,7 +7,10 @@ function MapDimension(manager){
 	             0, 0.5, 0, 0, 
 	             0, 0,    0, 0,
 	             0.5, 0.5, 0, 1 ]);
-	
+	this.max = 100;
+	this.attmatrix = new Float32Array(16);
+	this.attmatrix.set([ 2 / this.max, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, -1, 0, 0,
+			1 ]);
 	
 	this.setup = function() {		
 		gl.viewport(0, 0, this.width, this.height);
