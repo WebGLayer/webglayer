@@ -3,7 +3,7 @@
 	attribute vec4 wPoint;
 	attribute float speed;
 	
-	uniform mat4 attMatrix;
+	uniform mat4 speed_attMatrix;
 	uniform mat4 mapMatrix;
 	uniform mat4 rasterMatrix;
 	
@@ -17,14 +17,13 @@
   		vec4 rp = rasterMatrix * p;
   		vec4 fdata = texture2D(mapFilter, vec2(rp[0],rp[1]));
   		
-  		if (fdata[1]>0.){
-  			gl_Position = attMatrix*vec4(speed, 0., 0., 1.);;
+  		gl_Position = speed_attMatrix*vec4(speed, 0., 0., 1.);;
+  		if (fdata[1]>0.){  			
 			gl_PointSize = 1.;
 			col = vec4(1., 0. , 0., 0.);
-  		} else {  		   
-  		   	gl_Position = attMatrix*vec4(speed, 0., 0., 1.);;			
+  		} else {  		     		   		
 			gl_PointSize = 1.;
-			col = vec4(0., 0. , 0., 0.);
+			col = vec4(0., 1. , 0., 0.);
   		}
 		
 			//gl_Position = vec4(1, 0., 0., 1.);;	

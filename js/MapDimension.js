@@ -9,7 +9,7 @@ function MapDimension(manager){
 		//gl.useProgram(this.glProgram);
 		gl.bindFramebuffer(gl.FRAMEBUFFER, null);	
 		gl.viewport(0, 0, manager.width, manager.height);
-		gl.clearColor(0.0, 0.0, 0.0, 1.0);
+		gl.clearColor(0.0, 0.0, 0.0, 0.2);
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 	
 		gl.disable(gl.DEPTH_TEST);

@@ -1,20 +1,18 @@
-function OneDDimension(manager) {
+function OneDDimension(manager, bin_count, max, name) {
 	Dimension.call(this, manager);
-	
 
-	
-	this.max = 100;
+	this.name = name;
+	this.max = max;
 	var attmatrix = new Float32Array(16);
 	attmatrix.set([ 2 / this.max, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, -1, 0, 0,
 			1 ]);
 	
-	attmatrix.name = "attMatrix";
+	attmatrix.name = this.name+"_attMatrix";
 	manager.matrices.push(attmatrix);
 	
 	
-	this.bin_count = 8;
+	this.bin_count = bin_count;
 	
-
 	var framebuffer = gl.createFramebuffer();
 	framebuffer.width =  this.bin_count;
 	framebuffer.height = 1;
@@ -38,7 +36,6 @@ function OneDDimension(manager) {
 		gl.enable(gl.BLEND);
 		gl.blendFunc(gl.ONE, gl.ONE);
 	
-	
 	}
 
 	this.tearDown = function() {
@@ -49,7 +46,7 @@ function OneDDimension(manager) {
 				
 		gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
 	//	console.time("reading_pix");
-		var readout= new Float32Array(8*4);
+		var readout= new Float32Array(this.bin_count*4);
 		gl.readPixels(0, 0, this.bin_count, 1, gl.RGBA, gl.FLOAT, readout);
 	//	console.timeEnd("reading_pix");
 		//gl.bindFramebuffer(gl.FRAMEBUFFER, null);
@@ -63,13 +60,8 @@ function OneDDimension(manager) {
 		return  readout;
 	}
 }
-OneDDimension.prototype.setFrameBuffer = function(){
-	gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-}
-
 
 OneDDimension.prototype = Object.create(Dimension.prototype);
-
 
 OneDDimension.prototype.constructor = Dimension;
 

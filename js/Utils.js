@@ -67,6 +67,7 @@ Utils.prototype.bindTexture = function(prog, name, texture) {
 	    
 	}
 	
+
 	
 
 }

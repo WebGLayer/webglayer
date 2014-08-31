@@ -2,25 +2,27 @@ var MapController = function(manager) {
 	this.manager = manager;
 	this.layers = [];
 	
-	var matrix;
-	var width;
-	var height;
+	this.matrix;
+	this.width;
+	this.height;
 	
 	this.resize = function(w, h){
 		canvas.setAttribute("width", w);
 		canvas.setAttribute("height", h);
-		width = w;
-		height = h;
-
-		matrix = new Float32Array([ 2 / w, 0, 0, 0, 0, -2 / h, 0, 0,
-		                			0, 0, 0, 0, -1, 1, 0, 1 ]);
-		matrix.name="mapMatrix";
+		this.width = w;
+		this.height = h;
+		
+		this.initMatrix();
 			
 		this.updateMatrix();
 	}
-	
+	this.initMatrix = function(){
+		matrix = new Float32Array([ 2 / this.width, 0, 0, 0, 0, -2 / this.height, 0, 0,
+		                			0, 0, 0, 0, -1, 1, 0, 1 ]);
+		matrix.name="mapMatrix";
+	}
 	this.zoommove = function(zoom, offset){		
-
+		this.initMatrix();
 		// Scale to current zoom (worldCoords * 2^zoom)
 		var scale = Math.pow(2, zoom);
 		scaleMatrix(matrix, scale, scale);
@@ -47,8 +49,8 @@ var MapController = function(manager) {
 	}
 	
 	this.updateMatrix = function(){	
-		manager.width=width;
-		manager.height=height;
+		manager.width=this.width;
+		manager.height=this.height;
 		manager.setMapMatrix(matrix);
 	}
 }

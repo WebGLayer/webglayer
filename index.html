@@ -53,7 +53,7 @@
 <script src="js/Utils.js"></script>
 <script src="js/BarChart.js"></script>
 
-<script src="js/BarChart.js"></script>
+
 
 <!-- <script src="js/Charts.js"></script> -->
 
@@ -77,14 +77,12 @@
 		/**init geo buffer*/
 		manager.addDataBuffer(generateData(r_count, 2, 2), 2, 'wPoint');
 		/*init first attribute buffer*/
-		manager.addDataBuffer(generatePositiveData(r_count, 1, 150), 1, 'speed');
+		manager.addDataBuffer(generatePositiveData(r_count, 1, 200), 1, 'speed');
 
 		/*Setup histogram*/
-		var dimSpeed = new OneDDimension(manager);
-		dimSpeed.name = "speed";
+		var dimSpeed = new OneDDimension(manager, 10, 200, "speed");	
 		dimSpeed.setProgram('speed_vShader', 'speed_fShader','speed');
-		dimSpeed.bin_count = 4;
-		dimSpeed.max = 200;
+
 		
 		
 		/*Setup time*/
