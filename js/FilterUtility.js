@@ -20,10 +20,7 @@ function FilterUtility(manager){
 		
 	
 	this.init = function(){		
-		this.initOfscreenBuffer();
-	}
-	
-	this.initOfscreenBuffer = function() {
+		/*Initialise offscreen buffer*/
 		
 		/** Framebuffer */
 		gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
@@ -54,11 +51,15 @@ function FilterUtility(manager){
 		gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 		gl.bindTexture(gl.TEXTURE_2D, null);
 	}
+	
+
 		
 
 	this.setUniforms = function(){		
 		utils.bindUniform(this.filterProgram, 'mapMatrix', this.matrix);
 	}
+	
+	
 	
 	this.renderFilter = function(){		
 		gl.bindTexture(gl.TEXTURE_2D, this.filterTexture);

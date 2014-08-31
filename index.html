@@ -14,9 +14,36 @@
 	height: 400px;
 	width: 800px;
 }
+
+.bar {
+  fill: steelblue;
+}
+
+.bar:hover {
+  fill: brown;
+}
+
+.axis {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
+}
+
+
 </style>
 
 <script src="../javascripts/jquery-1.9.1.min.js"></script>
+<script src="../javascripts/d3.js"></script>
+
 <script src="js/Dimension.js"></script>
 <script src="js/Manager.js"></script>
 <script src="js/OneDDimension.js"></script>
@@ -24,6 +51,10 @@
 <script src="js/FilterUtility.js"></script>
 <script src="js/MapController.js"></script>
 <script src="js/Utils.js"></script>
+<script src="js/BarChart.js"></script>
+
+<script src="js/BarChart.js"></script>
+
 <!-- <script src="js/Charts.js"></script> -->
 
 
@@ -36,7 +67,7 @@
 		getShader();
 		utils = new Utils();
 
-		r_count = 5 * Math.pow(10, 5);
+		r_count = 1 * Math.pow(10, 4);
 		manager = new Manager("test");
 		mcontroller = new MapController();
 
@@ -146,7 +177,7 @@
 		var datael = $("#data");		
 		function read(){
 			
-			var readout = dimSpeed.readPixels();
+			readout = dimSpeed.readPixels();
 		 	datael.html(readout[0],readout[1]);
 		   //dimTime.readPixels();
 		}
@@ -246,6 +277,7 @@
 	</div>	
 	<div id="data"> data	
 	</div>	
+	<svg class="chart"></svg>
 
 </body>
 </html>

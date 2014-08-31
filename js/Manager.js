@@ -59,7 +59,6 @@ function Manager(canvasid) {
 			d.enableBuffers(this.databuffers);
 			gl.clearColor(0.0, 0.0, 0.0, 0.0);
 			gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-			
 			d.render(this.databuffers[0].numItems);
 			d.tearDown();
 		}
@@ -67,10 +66,8 @@ function Manager(canvasid) {
 	}
 	this.setup = function() {
 		for (var i = 0; i < this.dimensions.length; i++) {
-			d = this.dimensions[i];
-			//d.setup();
-			d.setup();
-			
+			d = this.dimensions[i];			
+			d.setup();			
 		}
 	}
 }
