@@ -7,7 +7,7 @@
 	uniform mat4 mapMatrix;
 	uniform mat4 rasterMatrix;
 	
-	uniform sampler2D uSampler;
+	uniform sampler2D mapFilter;
 	varying vec4 col; 
 
 	void main() {
@@ -15,7 +15,7 @@
 
 		vec4 p =  mapMatrix * wPoint;
   		vec4 rp = rasterMatrix * p;
-  		vec4 fdata = texture2D(uSampler, vec2(rp[0],rp[1]));
+  		vec4 fdata = texture2D(mapFilter, vec2(rp[0],rp[1]));
   		
   		if (fdata[1]>0.){
   			gl_Position = attMatrix*vec4(speed, 0., 0., 1.);;

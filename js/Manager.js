@@ -56,9 +56,7 @@ function Manager(canvasid) {
 		for (var i = 0; i < this.dimensions.length; i++) {
 			d = this.dimensions[i];
 			d.setup();
-			d.enableBuffers(this.databuffers);
-			gl.clearColor(0.0, 0.0, 0.0, 0.0);
-			gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+			d.enableBuffersAndCommonUniforms(this.databuffers);
 			d.render(this.databuffers[0].numItems);
 			d.tearDown();
 		}
@@ -70,6 +68,14 @@ function Manager(canvasid) {
 			d.setup();			
 		}
 	}
+	
+	this.init = function() {
+		for (var i = 0; i < this.dimensions.length; i++) {
+			d = this.dimensions[i];			
+			d.init();			
+		}
+	}
+	
 }
 
 var readPixels = function(framebuffer) {

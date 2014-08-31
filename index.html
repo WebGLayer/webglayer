@@ -67,7 +67,7 @@
 		getShader();
 		utils = new Utils();
 
-		r_count = 1 * Math.pow(10, 4);
+		r_count = 1 * Math.pow(10, 7);
 		manager = new Manager("test");
 		mcontroller = new MapController();
 
@@ -82,7 +82,7 @@
 		/*Setup histogram*/
 		var dimSpeed = new OneDDimension(manager);
 		dimSpeed.name = "speed";
-		dimSpeed.setProgram('speed_vShader', 'speed_fShader');
+		dimSpeed.setProgram('speed_vShader', 'speed_fShader','speed');
 		dimSpeed.bin_count = 8;
 		dimSpeed.max = 200;
 		mcontroller.layers.push(dimSpeed);
@@ -94,10 +94,11 @@
 		dimTime.bin_count = 8;
 		dimTime.max = 200;
 	*/
+	
 		/*setup map*/
 		var dimMap = new MapDimension(manager);
 		dimMap.name = "map";
-		dimMap.setProgram('map_vShader', 'map_fShader');
+		dimMap.setProgram('map_vShader', 'map_fShader', 'map');
 
 		mcontroller.layers.push(dimMap);
 
@@ -108,11 +109,13 @@
 		mcontroller.layers.push(util);
 		mcontroller.resize(div.offsetWidth, div.offsetHeight);
 		mcontroller.zoommove(0,{x: 0, y : 0});
+		
 		util.init();
 		util.createFilteringData(generateOneTriangle());
 		/*Render*/
 		
-		manager.setup();
+		/*initialise befor rendering*/
+		//manager.init();
 		
 		console.time("full");
 		
@@ -163,11 +166,7 @@
 			
 			util.renderFilter();
 			dimMap.texture = util.filterTexture;	
-			dimSpeed.texture = util.filterTexture;	
-			
-			manager.setup();		
-		
-			//mcontroller.zoommove(0,{x: 0, y : 0});
+			dimSpeed.texture = util.filterTexture;		
 			manager.render();
 			read();
 			//gl.flush();

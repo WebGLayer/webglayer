@@ -6,7 +6,7 @@ var Dimension = function(manager) {
 	/**
 	 * 
 	 */
-	this.setProgram = function(vs, fs) {
+	this.setProgram = function(vs, fs, name) {
 
 		var vertexSrc = document.getElementById(vs).text;
 		var vertexShader = gl.createShader(gl.VERTEX_SHADER);
@@ -35,37 +35,36 @@ var Dimension = function(manager) {
 		gl.attachShader(pointProgram, fragmentShader);
 		gl.linkProgram(pointProgram);
 		this.glProgram = pointProgram;
+		this.glProgram.name = name;
 	}
 	
-	this.create2DTexture = function() {	  
-	    var i = gl.getUniformLocation(this.glProgram, "uSampler") 
-	    if (i!= null){
-	    	gl.uniform1i(i , 0);
-	    } else {
-	    	console.log("Error... uniform uSampler does not exist.");
-	    	return;
-	    }
-	    gl.activeTexture(gl.TEXTURE0);
-	    gl.bindTexture(gl.TEXTURE_2D, this.texture);	
+
+	this.bindCommonUniforms = function(){		
+		
+	
 	}
 	
-	this.bindUniforms = function(){		
-		gl.useProgram(this.glProgram);
-		var matrixLoc = gl.getUniformLocation(this.glProgram, 'attMatrix');
-		gl.uniformMatrix4fv(matrixLoc, false, this.attmatrix);
-		
-		matrixLoc = gl.getUniformLocation(this.glProgram, 'mapMatrix');
-		gl.uniformMatrix4fv(matrixLoc, false, this.matrix);
-		
-		matrixLoc = gl.getUniformLocation(this.glProgram, 'rasterMatrix');
-		gl.uniformMatrix4fv(matrixLoc, false, this.rmatrix);
-	}
 	
 	
 	/**
 	 * 
 	 */
-	this.enableBuffers = function(buffers) {
+	this.enableBuffersAndCommonUniforms = function(buffers) {
+	
+		var matrixLoc = this.getUniformLoc('attMatrix');		
+		gl.uniformMatrix4fv(matrixLoc, false, this.attmatrix);
+		
+		matrixLoc = this.getUniformLoc('mapMatrix');
+		gl.uniformMatrix4fv(matrixLoc, false, this.matrix);
+		
+		matrixLoc = this.getUniformLoc('rasterMatrix');
+		gl.uniformMatrix4fv(matrixLoc, false, this.rmatrix);
+		
+		var rasterLoc = this.getUniformLoc('mapFilter'); 		 
+		gl.uniform1i(rasterLoc , 0);		   
+		gl.activeTexture(gl.TEXTURE0);
+		gl.bindTexture(gl.TEXTURE_2D, this.texture);
+		
 		for ( var i in buffers) {
 			name = buffers[i].name;
 			gl.bindBuffer(gl.ARRAY_BUFFER, buffers[i]);
@@ -85,14 +84,20 @@ var Dimension = function(manager) {
 	 * 
 	 */
 	this.render = function(num) {
-		
-		this.setFrameBuffer();
-		this.bindUniforms();
-		gl.useProgram(this.glProgram);
+		gl.useProgram(this.glProgram);		
 		gl.drawArrays(gl.POINTS, 0, num);	
 	    gl.useProgram(null);
 	    gl.finish();
 		
+	}
+	
+	this.getUniformLoc = function(name){
+		var loc = gl.getUniformLocation(this.glProgram, name)
+		if (loc==null){
+			console.error("Error setting common uniform "+name+" for program "+this.glProgram.name);
+		} else {
+			return loc;
+		}			
 	}
 };
 

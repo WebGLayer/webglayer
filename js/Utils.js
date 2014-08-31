@@ -36,6 +36,7 @@ Utils.prototype.bindUniform = function(prog, u_name, value){
 		gl.uniformMatrix4fv(matrixLoc, false, value);
 	} else {
 		console.error("Uniform set failed, uniform: "+u_name + " value "+value);
+		return;
 	}
 	gl.useProgram(null);
 }
@@ -48,7 +49,24 @@ Utils.prototype.enableAttribute = function(prog, buf){
 		gl.vertexAttribPointer(attributeLoc, 2, gl.FLOAT, false, 0, 0);
 	} else {
 		console.error("Error binding buffer: "+buf);
+		return;
 	}
+	
+Utils.prototype.bindTexture = function(prog, name, texture) {	  
+		gl.useProgram(prog);
+	    var i = gl.getUniformLocation(prog, name); 
+	    if (i!= null){
+	    	gl.uniform1i(i , 0);
+	    } else {
+	    	console.error("Error uniform "+ name+ " uSampler does not exist.");
+	    	gl.useProgram(null);
+	    	return;
+	    }
+	    gl.activeTexture(gl.TEXTURE0);
+	    gl.bindTexture(gl.TEXTURE_2D, texture);	
+	    
+	}
+	
 	
 
 }

@@ -22,22 +22,19 @@ function OneDDimension(manager) {
 
 	
 	this.setup = function() {
-		gl.viewport(0, 0, this.bin_count, 1);				
 		gl.useProgram(this.glProgram);
-
+		gl.viewport(0, 0, this.bin_count, 1);				
+		
 		if (!gl.getExtension("OES_texture_float")) {
 			console.log("OES_texture_float not availble -- this is legal");
 		}
 		gl.disable(gl.DEPTH_TEST);
 		gl.enable(gl.BLEND);
-
 		gl.blendFunc(gl.ONE, gl.ONE);
-		
-		
 		
 		this.initOfscreenBuffer();
 
-		this.create2DTexture();
+		//utils.bindTexture(this.glProgram, "uSampler",this.texture);
 	}
 
 	this.initOfscreenBuffer = function() {		
