@@ -1,5 +1,5 @@
-var MapController = function() {
-	
+var MapController = function(manager) {
+	this.manager = manager;
 	this.layers = [];
 	
 	var matrix;
@@ -14,8 +14,9 @@ var MapController = function() {
 
 		matrix = new Float32Array([ 2 / w, 0, 0, 0, 0, -2 / h, 0, 0,
 		                			0, 0, 0, 0, -1, 1, 0, 1 ]);
+		matrix.name="mapMatrix";
 			
-		this.updateLayers();
+		this.updateMatrix();
 	}
 	
 	this.zoommove = function(zoom, offset){		
@@ -27,7 +28,7 @@ var MapController = function() {
 		// translate to current view (vector from topLeft to 0,0)
 		translateMatrix(matrix, -offset.x, -offset.y);			
 
-		this.updateLayers();
+		this.updateMatrix();
 		
 		
 		function scaleMatrix(matrix, scaleX, scaleY) {
@@ -45,11 +46,9 @@ var MapController = function() {
 				
 	}
 	
-	this.updateLayers = function(){		
-		for (i = 0; i < this.layers.length; i++) {
-			this.layers[i].width=width;
-			this.layers[i].height=height;
-			this.layers[i].matrix=matrix;	
-		}
+	this.updateMatrix = function(){	
+		manager.width=width;
+		manager.height=height;
+		manager.setMapMatrix(matrix);
 	}
 }

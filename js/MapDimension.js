@@ -1,31 +1,20 @@
 
 function MapDimension(manager){
+	this.manager = manager;
 	Dimension.call(this, manager);
 	
-	this.rmatrix = new Float32Array(16);
-	this.rmatrix.set([ 0.5, 0, 0, 0, 
-	             0, 0.5, 0, 0, 
-	             0, 0,    0, 0,
-	             0.5, 0.5, 0, 1 ]);
-	this.max = 100;
-	this.attmatrix = new Float32Array(16);
-	this.attmatrix.set([ 2 / this.max, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, -1, 0, 0,
-			1 ]);
-	
-	
-	
+
 	this.setup = function() {
-		gl.useProgram(this.glProgram);
-		gl.viewport(0, 0, this.width, this.height);
+		
+		//gl.useProgram(this.glProgram);
+		gl.bindFramebuffer(gl.FRAMEBUFFER, null);	
+		gl.viewport(0, 0, manager.width, manager.height);
 		gl.clearColor(0.0, 0.0, 0.0, 1.0);
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 	
-		/** Bind texture*/
-	
-		
 		gl.disable(gl.DEPTH_TEST);
 		gl.disable(gl.BLEND);
-		gl.bindFramebuffer(gl.FRAMEBUFFER, null);				
+				
 	}	
 	
 	this.tearDown = function(){
@@ -35,6 +24,10 @@ function MapDimension(manager){
 	}
 	
 
+	this.setMatrix = function(matrix){
+		manager.matrices.push(matrix);	
+		manager.mapMatrix=matrix;
+	}
 
 	this.readPixels = function() {
 		

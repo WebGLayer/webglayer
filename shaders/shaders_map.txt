@@ -15,7 +15,7 @@
        
       void main() {
 		
-  		float p_size = 0.3;
+  		float p_size = 1.;
   	    	   
   		vec4 p =  mapMatrix * wPoint;
   		vec4 rp = rasterMatrix * p;

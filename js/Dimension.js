@@ -2,6 +2,7 @@ var Dimension = function(manager) {
 	
 	manager.addDimension(this);
 	
+
 	this.glProgram = null;
 	/**
 	 * 
@@ -38,47 +39,8 @@ var Dimension = function(manager) {
 		this.glProgram.name = name;
 	}
 	
-
-	this.bindCommonUniforms = function(){		
-		
-	
-	}
 	
 	
-	
-	/**
-	 * 
-	 */
-	this.enableBuffersAndCommonUniforms = function(buffers) {
-	
-		var matrixLoc = this.getUniformLoc('attMatrix');		
-		gl.uniformMatrix4fv(matrixLoc, false, this.attmatrix);
-		
-		matrixLoc = this.getUniformLoc('mapMatrix');
-		gl.uniformMatrix4fv(matrixLoc, false, this.matrix);
-		
-		matrixLoc = this.getUniformLoc('rasterMatrix');
-		gl.uniformMatrix4fv(matrixLoc, false, this.rmatrix);
-		
-		var rasterLoc = this.getUniformLoc('mapFilter'); 		 
-		gl.uniform1i(rasterLoc , 0);		   
-		gl.activeTexture(gl.TEXTURE0);
-		gl.bindTexture(gl.TEXTURE_2D, this.texture);
-		
-		for ( var i in buffers) {
-			name = buffers[i].name;
-			gl.bindBuffer(gl.ARRAY_BUFFER, buffers[i]);
-
-			if (gl.getAttribLocation(this.glProgram, name) >= 0) {
-				var loc = gl.getAttribLocation(this.glProgram, name);
-				gl.enableVertexAttribArray(loc);
-				gl.vertexAttribPointer(loc, buffers[i].itemSize, gl.FLOAT,
-						false, 0, 0);
-			} else {
-				console.log("Error: attribute " + name + " does not exist.");
-			}
-		}
-	}
 
 	/**
 	 * 
@@ -91,14 +53,7 @@ var Dimension = function(manager) {
 		
 	}
 	
-	this.getUniformLoc = function(name){
-		var loc = gl.getUniformLocation(this.glProgram, name)
-		if (loc==null){
-			console.error("Error setting common uniform "+name+" for program "+this.glProgram.name);
-		} else {
-			return loc;
-		}			
-	}
+
 };
 
 Dimension.prototype.setFrameBuffer = function() {
