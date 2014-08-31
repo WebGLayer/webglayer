@@ -6,7 +6,7 @@
 		  	
   		vec4 p = poly;		  		
         gl_Position =  mapMatrix * p;    	
-		gl_PointSize = 8.0;
+		gl_PointSize = 1.0;
 		
  		
       }
