@@ -1,36 +1,57 @@
-var width = 960,
-    height = 500;
+Chart = function(data) {
 
-var y = d3.scale.linear()
-    .range([height, 0]);
+	// Width and height
+	var w = 600;
+	var h = 250;
 
-var chart = d3.select(".chart")
-    .attr("width", width)
-    .attr("height", height);
+	var dataset = data;
 
-d3.tsv("data.tsv", type, function(error, data) {
-  y.domain([0, d3.max(data, function(d) { return d.value; })]);
+	var xScale = d3.scale.ordinal().domain(d3.range(dataset.length))
+			.rangeRoundBands([ 0, w ], 0.05);
 
-  var barWidth = width / data.length;
+	var yScale = d3.scale.linear().domain([ 0, d3.max(dataset) ]).range(
+			[ 0, h ]);
 
-  var bar = chart.selectAll("g")
-      .data(data)
-    .enter().append("g")
-      .attr("transform", function(d, i) { return "translate(" + i * barWidth + ",0)"; });
+	// Create SVG element
+	var svg = d3.select("#chart_container").append("svg").attr("width", w)
+			.attr("height", h);
 
-  bar.append("rect")
-      .attr("y", function(d) { return y(d.value); })
-      .attr("height", function(d) { return height - y(d.value); })
-      .attr("width", barWidth - 1);
+	// Create bars
+	svg.selectAll("rect").data(dataset).enter().append("rect").attr("x",
+			function(d, i) {
+				return xScale(i);
+			}).attr("y", function(d) {
+		return h - yScale(d);
+	}).attr("width", xScale.rangeBand()).attr("height", function(d) {
+		return yScale(d);
+	}).attr("fill", function(d) {
+		return "rgb(0, 0,  250)";
+	});
 
-  bar.append("text")
-      .attr("x", barWidth / 2)
-      .attr("y", function(d) { return y(d.value) + 3; })
-      .attr("dy", ".75em")
-      .text(function(d) { return d.value; });
-});
+	// Create labels
+	svg.selectAll("text").data(dataset).enter().append("text").text(
+			function(d) {
+				return d;
+			}).attr("text-anchor", "middle").attr("x", function(d, i) {
+		return xScale(i) + xScale.rangeBand() / 2;
+	}).attr("y", function(d) {
+		return h - yScale(d) + 14;
+	}).attr("font-family", "sans-serif").attr("font-size", "11px").attr("fill",
+			"white");
 
-function type(d) {
-  d.value = +d.value; // coerce to number
-  return d;
+	this.update = function(data) {
+		// On click, update with new data
+
+		// New values for dataset
+		dataset = data;
+
+		// Update all rects
+		svg.selectAll("rect").data(dataset).transition().duration(10).attr("y", function(d) {
+			return h - yScale(d);
+		}).attr("height", function(d) {
+			return yScale(d);
+		});
+
+	}
+
 }

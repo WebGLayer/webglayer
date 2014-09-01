@@ -85,8 +85,8 @@ function FilterUtility(manager){
 	
 	
 	this.createFilteringData = function(points){	
-		console.log(points);
-		console.log("...........")
+		//console.log(points);
+		//console.log("...........")
 		gl.bindBuffer(gl.ARRAY_BUFFER, posBuffer);
 		gl.bufferData(gl.ARRAY_BUFFER, points, gl.STATIC_DRAW);	
 		gl.bindBuffer(gl.ARRAY_BUFFER, null);

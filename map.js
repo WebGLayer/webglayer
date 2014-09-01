@@ -22,7 +22,10 @@ initMap = function() {
 		// console.log(event.type, event.feature ? event.feature.id :
 		// event.components);
 		// console.log(event.feature.geometry.components[0].components);
-		if (event.feature.geometry.components[0].components.length > 4) {
+		/**
+		 * Trianglution goes on here..........
+		 */
+		if (event.feature.geometry.components[0].components.length > 3) {
 			var points = event.feature.geometry.components[0].components;
 
 			var res = [];
@@ -33,7 +36,7 @@ initMap = function() {
 				res.push(pp);
 
 			}
-			console.log(res.length);
+			//console.log(res.length);
 			try {
 				var ts = new poly2tri.SweepContext(res);
 				ts.triangulate();

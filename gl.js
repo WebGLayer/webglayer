@@ -49,8 +49,14 @@ function render() {
 
 function read() {
 
-	//readout = dimSpeed.readPixels();
-	//datael.html(readout[0], readout[1]);
+	readout = dimSpeed.readPixels();
+	if(readout!=null){
+		chart.update(readout);
+	}
+
+	$("#data").text("in:"+readout[0] + "out: "+ readout[1]);
+	//console.log(readout[0], readout[1]);
+	
 	// dimTime.readPixels();
 }
 

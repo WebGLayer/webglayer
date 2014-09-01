@@ -1,186 +1,228 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Modify Feature</title>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Modify Feature</title>
 
-    <style type="text/css">
-     	#map {
-            width: 800px;
-            height: 400px;
-            border: 1px solid #ccc;
-        }
-        
-        #controls {
-            width: 512px;
-        }
-        #controlToggle {
-            padding-left: 1em;
-        }
-        #controlToggle li {
-            list-style: none;
-        }
-        #test{
-			top: 0;
-			opacity:1;
- 			z-index:1000;
-			pointer-events:none;
- 			position:fixed;
-		}
-    </style>
-    <script src="../javascripts/ol/lib/OpenLayers.js"></script>
-    <script src="../javascripts/jquery-1.9.1.min.js"></script>
-    <script src="../javascripts/poly2tri.js"></script>
-    
-    
-    <script src="map.js"></script>
-    <script src="gl.js"></script>
-    
-    <script src="js/Dimension.js"></script>
-	<script src="js/Manager.js"></script>
-	<script src="js/OneDDimension.js"></script>
-	<script src="js/MapDimension.js"></script>
-	<script src="js/FilterUtility.js"></script>
-	<script src="js/MapController.js"></script>
-	<script src="js/DataLoader.js"></script>
-	<script src="js/Utils.js"></script>
-	
-    
-    <script type="text/javascript">
-        var map, vectors, controls;
-        function init(){     	
-        	initMap();   	
-        	getShader();
-        	utils = new Utils();
-    		r_count = 1 * Math.pow(10, 5);
-    		manager = new Manager("test");
-    		mcontroller = new MapController(manager);
-    		
-    		canvas.setAttribute("width", div.offsetWidth);
-    		canvas.setAttribute("height", div.offsetHeight);
+<style type="text/css">
+#view {
+	position: relative;
+}
 
-    		wgs = new OpenLayers.Projection("EPSG:4326");   // Transform from WGS 1984
-    		merc   = new OpenLayers.Projection("EPSG:900913"); 
-    		tl = getTopLeftTC();
-    		var data = new DataLoader();
-    		data.loadData(transform);
-    		
-    		/**init geo buffer*/
-    		manager.addDataBuffer(data.points, 2, 'wPoint');
-    		/*init first attribute buffer*/
-    		manager.addDataBuffer(data.attributes, 1, 'speed');
+#map {
+	width: 800px;
+	height: 400px;
+	border: 1px solid #ccc;
+}
 
-    		dimMap = new MapDimension(manager);
-    		dimMap.name = "map";
-    		dimMap.setProgram('map_vShader', 'map_fShader', 'map');
-    		
-    		util = new FilterUtility(manager);
-    		
-    		mcontroller.resize(div.offsetWidth, div.offsetHeight);
-    		mcontroller.zoommove(map.zoom,tl);
-    		
-    		util.init();
-    		util.createFilteringData(generateOneTriangle());
-    		
-    		fpsElement = document.getElementById("fps");
-    		then = Date.now() / 1000;  // get time in seconds
-    		request = false;
-    		var datael = $("#data");
-    		$("#stop").click(function() {if(!request){start()} else {stop()}});
+#controls {
+	width: 512px;
+}
 
-    		map.events.register("move", map, onMove);
-    		map.events.register("zoomstart", map,onMove);
-    		
-        }
+#controlToggle {
+	padding-left: 1em;
+}
 
-        onMove = function(){	
-        	mcontroller.zoommove(map.getZoom(), getTopLeftTC());        	
-        }
-        
-    	generateOneTriangle = function() {
-    		atr = new Float32Array([ 10, 51, 18 , 51, 15, 45 ]);
-    		return atr;
-    	}
-    	
-    	
-    	getShader = function() {
-    		$.ajaxSetup({
-    			async : false
-    		});
+#controlToggle li {
+	list-style: none;
+}
 
-    		$.get('shaders/shaders_filtermap.txt', function(data) {
-    			$("head").append(data);
-    		});
+#test {
+	top: 0;
+	opacity: 1;
+	z-index: 1000;
+	pointer-events: none;
+	position: absolute;
+	top: 0px;
+}
 
-    		$.get('shaders/shaders_map.txt', function(data) {
-    			$("head").append(data);
-    		});
+#chart_container {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+}
+.chart rect {
+  fill: steelblue;
+}
 
-    		$.get('shaders/shaders_speed.txt', function(data) {
-    			$("head").append(data);
-    		});
-    	
-    		$.ajaxSetup({
-    			async : true
-    		});
-    		
-    		
-    	}
-    </script>
-  </head>
-  <body onload="init()">
+.chart text {
+  fill: white;
+  font: 10px sans-serif;
+  text-anchor: end;
+}
+.bar {
+  fill: steelblue;
+}
 
-    <div id="map">  <canvas id="test">Your browser does not support HTML5</canvas> </div>
-    <div id="controls">
-        <ul id="controlToggle">
-           
-                <input type="radio" name="type" value="polygon" id="polygonToggle" onclick="toggleControl(this);" />
-                <label for="polygonToggle">draw polygon</label>
-            </li>
-          
-            <li>
-                <input type="radio" name="type" value="modify" id="modifyToggle"
-                       onclick="toggleControl(this);" />
-                <label for="modifyToggle">modify feature</label>
-                <ul>
-                    <li>
-                        <input id="createVertices" type="checkbox" checked
-                               name="createVertices" onchange="update()" />
-                        <label for="createVertices">allow vertices creation</label>
-                    </li>
-                    <li>
-                        <input id="rotate" type="checkbox"
-                               name="rotate" onchange="update()" />
-                        <label for="rotate">allow rotation</label>
-                    </li>
-                    <li>
-                        <input id="resize" type="checkbox"
-                               name="resize" onchange="update()" />
-                        <label for="resize">allow resizing</label>
-                        (<input id="keepAspectRatio" type="checkbox"
-                               name="keepAspectRatio" onchange="update()" checked="checked" />
-                        <label for="keepAspectRatio">keep aspect ratio</label>)
-                    </li>
-                    <li>
-                        <input id="drag" type="checkbox"
-                               name="drag" onchange="update()" />
-                        <label for="drag">allow dragging</label>
-                    </li>
-                     <li>
-                        <input id="dragEvent" type="checkbox"
-                               name="dragEvent" onchange="update()" />
-                        <label for="dragEvent">allow dragging Event</label>
-                    </li>
-                </ul>
-            </li>
-        </ul>
-      <div id="fps"> fps		
-	</div>	
+.axis text {
+  font: 10px sans-serif;
+}
 
-	<div id="stop"> start/stop		
-	</div>	
-    </div>
-  </body>
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
+}
+</style>
+<script src="../javascripts/ol/lib/OpenLayers.js"></script>
+<script src="../javascripts/jquery-1.9.1.min.js"></script>
+<script src="../javascripts/poly2tri.js"></script>
+<script src="../javascripts/d3.js"></script>
+
+
+<script src="map.js"></script>
+<script src="gl.js"></script>
+
+<script src="js/Dimension.js"></script>
+<script src="js/Manager.js"></script>
+<script src="js/OneDDimension.js"></script>
+<script src="js/MapDimension.js"></script>
+<script src="js/FilterUtility.js"></script>
+<script src="js/MapController.js"></script>
+<script src="js/DataLoader.js"></script>
+<script src="js/Utils.js"></script>
+<script src="js/BarChart.js"></script>
+
+<script type="text/javascript">
+	var map, vectors, controls;
+	function init() {
+		//createChart();
+		chart = new Chart([1, 1, 1, 1,1,1,1,1,1, 1,1, 1, 1, 1,1,1,1,1,1, 1,1, 1, 1, 1,1,1,1,1,1, 1,1, 1, 1, 1,1,1,1,1,1, 2000]);
+		initMap();
+		getShader();
+		utils = new Utils();
+		//r_count = 1 * Math.pow(10, 5);
+		manager = new Manager("test");
+		mcontroller = new MapController(manager);
+
+		canvas.setAttribute("width", div.offsetWidth);
+		canvas.setAttribute("height", div.offsetHeight);
+
+		wgs = new OpenLayers.Projection("EPSG:4326"); // Transform from WGS 1984
+		merc = new OpenLayers.Projection("EPSG:900913");
+		tl = getTopLeftTC();
+		var data = new DataLoader();
+		data.loadData(transform);
+
+		/**init geo buffer*/
+		manager.addDataBuffer(data.points, 2, 'wPoint');
+		/*init first attribute buffer*/
+		manager.addDataBuffer(data.attributes, 1, 'speed');
+
+		dimMap = new MapDimension(manager);
+		dimMap.name = "map";
+		dimMap.setProgram('map_vShader', 'map_fShader', 'map');
+
+		dimSpeed = new OneDDimension(manager, 10, 180, "speed");
+		dimSpeed.setProgram('speed_vShader', 'speed_fShader', 'speed');
+
+		util = new FilterUtility(manager);
+
+		mcontroller.resize(div.offsetWidth, div.offsetHeight);
+		mcontroller.zoommove(map.zoom, tl);
+
+		util.init();
+		util.createFilteringData(generateOneTriangle());
+
+		fpsElement = document.getElementById("fps");
+		then = Date.now() / 1000; // get time in seconds
+		request = false;
+		var datael = $("#data");
+		$("#stop").click(function() {
+			if (!request) {
+				start()
+			} else {
+				stop()
+			}
+		});
+
+		map.events.register("move", map, onMove);
+		map.events.register("zoomstart", map, onMove);
+
+	}
+
+	onMove = function() {
+		mcontroller.zoommove(map.getZoom(), getTopLeftTC());
+	}
+
+	generateOneTriangle = function() {
+		atr = new Float32Array([ 10, 51, 18, 51, 15, 45 ]);
+		return atr;
+	}
+
+	getShader = function() {
+		$.ajaxSetup({
+			async : false
+		});
+
+		$.get('shaders/shaders_filtermap.txt', function(data) {
+			$("head").append(data);
+		});
+
+		$.get('shaders/shaders_map.txt', function(data) {
+			$("head").append(data);
+		});
+
+		$.get('shaders/shaders_speed.txt', function(data) {
+			$("head").append(data);
+		});
+
+		$.ajaxSetup({
+			async : true
+		});
+
+	}
+</script>
+</head>
+<body onload="init()">
+	<div id="view">
+
+		<div id="map">
+			<canvas id="test">Your browser does not support HTML5</canvas>
+		</div>
+		<div id="chart_container"></div>
+	</div>
+	<div id="controls">
+		<ul id="controlToggle">
+
+			<input type="radio" name="type" value="polygon" id="polygonToggle"
+				onclick="toggleControl(this);" />
+			<label for="polygonToggle">draw polygon</label>
+			</li>
+
+			<li><input type="radio" name="type" value="modify"
+				id="modifyToggle" onclick="toggleControl(this);" /> <label
+				for="modifyToggle">modify feature</label>
+				<ul>
+					<li><input id="createVertices" type="checkbox" checked
+						name="createVertices" onchange="update()" /> <label
+						for="createVertices">allow vertices creation</label></li>
+					<li><input id="rotate" type="checkbox" name="rotate"
+						onchange="update()" /> <label for="rotate">allow rotation</label>
+					</li>
+					<li><input id="resize" type="checkbox" name="resize"
+						onchange="update()" /> <label for="resize">allow resizing</label>
+						(<input id="keepAspectRatio" type="checkbox"
+						name="keepAspectRatio" onchange="update()" checked="checked" /> <label
+						for="keepAspectRatio">keep aspect ratio</label>)</li>
+					<li><input id="drag" type="checkbox" name="drag"
+						onchange="update()" /> <label for="drag">allow dragging</label></li>
+					<li><input id="dragEvent" type="checkbox" name="dragEvent"
+						onchange="update()" /> <label for="dragEvent">allow
+							dragging Event</label></li>
+				</ul></li>
+		</ul>
+		<div id="fps">fps</div>
+		<div id="data"> </div>	
+		<div id="stop">start/stop</div>
+	</div>
+</body>
 </html>

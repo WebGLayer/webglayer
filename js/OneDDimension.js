@@ -55,8 +55,8 @@ function OneDDimension(manager, bin_count, max, name) {
 		for (i = 0; i < readout.length; i++) {
 			sum = sum + readout[i];
 		}
-		console.log(sum);
-		console.log(readout);
+		//console.log(sum);
+		//console.log(readout);
 		return  readout;
 	}
 }
