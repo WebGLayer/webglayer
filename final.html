@@ -13,7 +13,7 @@
 }
 
 #map {
-	width: 800px;
+	width: 600px;
 	height: 400px;
 	border: 1px solid #ccc;
 }
@@ -89,13 +89,18 @@
 <script src="js/MapController.js"></script>
 <script src="js/DataLoader.js"></script>
 <script src="js/Utils.js"></script>
+<script src="js/StackedBarChart.js"></script>
 <script src="js/BarChart.js"></script>
+<script src="js/FloatRasterReader.js"></script>
+
 
 <script type="text/javascript">
 	var map, vectors, controls;
 	function init() {
 		//createChart();
-		chart = new Chart([1, 1, 1, 1,1,1,1,1,1, 1,1, 1, 1, 1,1,1,1,1,1, 1,1, 1, 1, 1,1,1,1,1,1, 1,1, 1, 1, 1,1,1,1,1,1, 2000]);
+		//chart = new StackedBarChart();
+		//chart.update([1, 1, 1, 1,1,1,1,1,1, 1,1, 1, 1, 1,1,1,1,1,1, 1,1, 1, 1, 1,1,1,1,1,1, 1,1, 1, 1, 1,1,1,1,1,1, 10000]);
+		chart = new Chart([1, 1, 1, 1,1,1,1,1,1, 1,1, 1, 1, 1,1,1,1,1,1, 1,1, 1, 1, 1,1,1,1,1,1, 1,1, 1, 1, 1,1,1,1,1,1, 50000]);
 		initMap();
 		getShader();
 		utils = new Utils();
@@ -109,7 +114,7 @@
 		wgs = new OpenLayers.Projection("EPSG:4326"); // Transform from WGS 1984
 		merc = new OpenLayers.Projection("EPSG:900913");
 		tl = getTopLeftTC();
-		var data = new DataLoader();
+		var data = new DataLoader('../data/osm10k.js');
 		data.loadData(transform);
 
 		/**init geo buffer*/
@@ -130,7 +135,7 @@
 		mcontroller.zoommove(map.zoom, tl);
 
 		util.init();
-		util.createFilteringData(generateOneTriangle());
+		//util.createFilteringData(generateOneTriangle());
 
 		fpsElement = document.getElementById("fps");
 		then = Date.now() / 1000; // get time in seconds
@@ -174,6 +179,10 @@
 		$.get('shaders/shaders_speed.txt', function(data) {
 			$("head").append(data);
 		});
+		
+		$.get('shaders/shaders_float.txt', function(data) {
+			$("head").append(data);
+		});
 
 		$.ajaxSetup({
 			async : true
@@ -183,6 +192,7 @@
 </script>
 </head>
 <body onload="init()">
+<div id="stop">start/stop</div>
 	<div id="view">
 
 		<div id="map">
@@ -222,7 +232,7 @@
 		</ul>
 		<div id="fps">fps</div>
 		<div id="data"> </div>	
-		<div id="stop">start/stop</div>
+		
 	</div>
 </body>
 </html>

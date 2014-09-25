@@ -39,7 +39,7 @@ function Manager(canvasid) {
 	 * Creates a data buffer object. itemSize is a dimension of the data
 	 */
 	this.addDataBuffer = function(data, itemSize, name) {
-		buffer = gl.createBuffer();
+		var buffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
 		gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW);
 		buffer.itemSize = itemSize;

@@ -18,13 +18,18 @@ function OneDDimension(manager, bin_count, max, name) {
 	framebuffer.height = 1;
 	
 	var renderbuffer = gl.createRenderbuffer();
-	var restexture = gl.createTexture();
+	this.restexture = gl.createTexture();
 	
 	if (!gl.getExtension("OES_texture_float")) {
 		console.log("OES_texture_float not availble -- this is legal");
 	}
-	this.initOfscreenBuffer(framebuffer, renderbuffer, restexture );
+	this.initOfscreenBuffer(framebuffer, renderbuffer, this.restexture );
 	
+	this.floatReader = new  FloatRasterReader(this.restexture, bin_count);
+	
+	/**
+	 * this goes on every time in rendering cicle
+	 */
 	this.setup = function() {
 		//gl.useProgram(this.glProgram);
 		gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
@@ -43,7 +48,9 @@ function OneDDimension(manager, bin_count, max, name) {
 	}
 	
 	this.readPixels = function() {
-				
+		/**
+		 * bind restexture as uniform, render, and read
+		 */		
 		gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
 	//	console.time("reading_pix");
 		var readout= new Float32Array(this.bin_count*4);
@@ -51,6 +58,12 @@ function OneDDimension(manager, bin_count, max, name) {
 	//	console.timeEnd("reading_pix");
 		//gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 	 
+		this.floatReader.setup()
+		this.floatReader.render();
+		this.floatReader.readPixels();
+		
+		
+		
 	  var sum = 0;
 		for (i = 0; i < readout.length; i++) {
 			sum = sum + readout[i];

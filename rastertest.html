@@ -29,16 +29,14 @@
 	function init() {
 		/*bind the shader to dom*/
 		var manager = new Manager("test");
-		gl = manager.getGL();
-		canvas = manager.getCanvas();
+		
 		 
 		getShader();
 	
 		var num_p = 10000;
 		prog = setProgram("raster_vShader","raster_fShader");
-		/**init geo buffer*/
-		manager.addData(generateData(num_p, 2, 10),2, 'wPoint');
-	
+		/**init geo buffer*/		
+		manager.addDataBuffer(generateData(num_p, 2, 10), 2, 'wPoint');
 		/*init first attribute buffer*/
 		//manager.addData(generatePositiveData(r_count, 1, 1),1, 'speed');			
 		canvas.setAttribute("width", 100);
@@ -152,13 +150,10 @@
 			async : false
 		});
 
-		$.get('shaders/raster_vShader.txt', function(data) {
+		$.get('shaders/test_raser_shaders.txt', function(data) {
 			$("head").append(data);
 		});
-
-		$.get('shaders/raster_fShader.txt', function(data) {
-			$("head").append(data);
-		});
+		
 			
 		$.ajaxSetup({
 			async : true

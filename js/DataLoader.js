@@ -1,7 +1,8 @@
-function DataLoader() {
+function DataLoader(fname) {
 	this.points;
 	this.attributes;
 	this.cf;
+	this.fname = fname;
 	var that = this;
 
 	DataLoader.prototype.loadData = function(transform) {
@@ -17,7 +18,7 @@ function DataLoader() {
 		// $.getJSON('../data/osm150k.js', function(data) {
 		// $.getJSON('http://localhost:8181/move/rest/pos_osm?num=200000',
 		// function(data) {
-		$.getJSON('../data/osm10k.js', function(data) {
+		$.getJSON(this.fname, function(data) {
 			$.each(data, function(i, val) {
 				// var v = map.options.crs.latLngToPoint(L.latLng(val.y,
 				// val.x),0);

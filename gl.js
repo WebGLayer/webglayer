@@ -7,7 +7,7 @@ function animloop() {
 	then = now;
 	// compute fps
 	var fps = 1 / elapsedTime;
-	fpsElement.innerText = fps.toFixed(2);
+	fpsElement.textContent = fps.toFixed(2);
 	render();
 	request = window.requestAnimFrame(animloop);
 };
