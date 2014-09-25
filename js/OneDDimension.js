@@ -25,7 +25,7 @@ function OneDDimension(manager, bin_count, max, name) {
 	}
 	this.initOfscreenBuffer(framebuffer, renderbuffer, this.restexture );
 	
-	this.floatReader = new  FloatRasterReader(this.restexture, bin_count);
+	this.floatReader = new  FloatRasterReader(this.restexture, this.bin_count);
 	
 	/**
 	 * this goes on every time in rendering cicle

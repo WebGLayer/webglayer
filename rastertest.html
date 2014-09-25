@@ -36,7 +36,14 @@
 		var num_p = 10000;
 		prog = setProgram("raster_vShader","raster_fShader");
 		/**init geo buffer*/		
-		manager.addDataBuffer(generateData(num_p, 2, 10), 2, 'wPoint');
+		var buffer = gl.createBuffer();
+		data = generateData(num_p, 2, 10);
+		gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+		gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW);
+		buffer.itemSize = 2;
+		buffer.numItems = data.length / buffer.itemSize;
+		buffer.name = 'wPoint';
+		gl.bindBuffer(gl.ARRAY_BUFFER, null);
 		/*init first attribute buffer*/
 		//manager.addData(generatePositiveData(r_count, 1, 1),1, 'speed');			
 		canvas.setAttribute("width", 100);
@@ -58,7 +65,7 @@
 		             0.5, 0.5, 0, 1 ]);
 		gl.useProgram(prog);
 		
-		enableBuffers(manager.databuffers);
+		enableBuffers(buffer);
 		var matrixLoc = gl.getUniformLocation(prog, 'mapMatrix');
 		gl.uniformMatrix4fv(matrixLoc, false, matrix);
 		
@@ -82,19 +89,19 @@
 	
 	
 	}
-	enableBuffers = function(buffers){
-		for (i in buffers){
-			name = buffers[i].name;
-			gl.bindBuffer(gl.ARRAY_BUFFER, buffers[i]);
+	enableBuffers = function(buffer){
+		
+			name = buffer.name;
+			gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
 			
 			if (gl.getAttribLocation(prog , name)>=0){
 			loc = gl.getAttribLocation(prog , name);		
 	        gl.enableVertexAttribArray(loc);
-			gl.vertexAttribPointer(loc,  buffers[i].itemSize, gl.FLOAT, false, 0, 0);	
+			gl.vertexAttribPointer(loc,  buffer.itemSize, gl.FLOAT, false, 0, 0);	
 			} else {
 				console.log("Error: attribute "+name+" does not exist.");
 			}
-		}
+		
 	}
 	setProgram = function(vs, fs){
 		
