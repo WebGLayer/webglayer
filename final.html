@@ -98,9 +98,13 @@
 	var map, vectors, controls;
 	function init() {
 		//createChart();
-		//chart = new StackedBarChart();
+		
+		/* New stacked chart */
+		chart = new StackedBarChart();
 		//chart.update([1, 1, 1, 1,1,1,1,1,1, 1,1, 1, 1, 1,1,1,1,1,1, 1,1, 1, 1, 1,1,1,1,1,1, 1,1, 1, 1, 1,1,1,1,1,1, 10000]);
-		chart = new Chart([1, 1, 1, 1,1,1,1,1,1, 1,1, 1, 1, 1,1,1,1,1,1, 1,1, 1, 1, 1,1,1,1,1,1, 1,1, 1, 1, 1,1,1,1,1,1, 50000]);
+		
+		/* Old chart */
+	//	chart = new Chart([1, 1, 1, 1,1,1,1,1,1, 1,1, 1, 1, 1,1,1,1,1,1, 1,1, 1, 1, 1,1,1,1,1,1, 1,1, 1, 1, 1,1,1,1,1,1, 50000]);
 		initMap();
 		getShader();
 		utils = new Utils();
@@ -143,9 +147,9 @@
 		var datael = $("#data");
 		$("#stop").click(function() {
 			if (!request) {
-				start()
+				start();
 			} else {
-				stop()
+				stop();
 			}
 		});
 

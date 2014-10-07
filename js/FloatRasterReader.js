@@ -143,9 +143,10 @@ function FloatRasterReader(raster, bin_count) {
 		for (i = 0; i < readout.length; i++) {
 			sum = sum + readout[i];
 		}
-		console.log(sum);
-		console.log(readout);
+		//console.log(sum);
+		//console.log(readout);
 		gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+		return readout;
 	}
 	
 	
