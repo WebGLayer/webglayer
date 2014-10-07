@@ -2,7 +2,7 @@ function FloatRasterReader(raster, bin_count) {
 	
 	this.raster = raster;
 	this.bin_count=bin_count;
-	this.name = name;
+	this.name = name;	
     /*Initialise offscreen buffer*/
 		
 	this.floatProgram = utils.loadShaders("float_vShader",  "float_fShader", this);
@@ -114,7 +114,8 @@ function FloatRasterReader(raster, bin_count) {
 		gl.uniform1i(rasterLoc , 0);		   
 		gl.activeTexture(gl.TEXTURE0);		
 		gl.bindTexture(gl.TEXTURE_2D, this.raster);
-				
+		
+		
 		
 		gl.disable(gl.BLEND);
 		gl.disable(gl.DEPTH_TEST);

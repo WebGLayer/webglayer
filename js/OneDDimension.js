@@ -61,9 +61,7 @@ function OneDDimension(manager, bin_count, max, name) {
 		this.floatReader.setup()
 		this.floatReader.render();
 		readout = this.floatReader.readPixels();
-		
-		
-		
+
 	  var sum = 0;
 		for (i = 0; i < readout.length; i++) {
 			sum = sum + readout[i];

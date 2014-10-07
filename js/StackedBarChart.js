@@ -63,8 +63,7 @@ StackedBarChart = function() {
 			this.init();
 		}
 		this.dataset = Array.prototype.slice.call(data);
-		yScale = d3.scale.linear().domain([ 0, d3.max(this.dataset) ]).range([height, 0]);
-		console.log(this.dataset);
+		yScale = d3.scale.linear().domain([ 0, d3.max(this.dataset) ]).range([height, 0]);		
 	
 		svg.selectAll("rect").data(this.dataset).transition().duration(15)
 		.attr("x", function(d, i) {

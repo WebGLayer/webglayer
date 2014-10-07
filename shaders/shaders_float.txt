@@ -3,35 +3,36 @@
 	
 	attribute vec2 ras_vert;
 	
-	uniform sampler2D floatRaster;	
-	varying vec4 col; 
+	uniform sampler2D floatRaster;	  
+	varying float col1;
+	varying float col2;
 	
 
 	void main() {
-	
-			
 			
 			vec4 fdata = texture2D(floatRaster, vec2(ras_vert[0],ras_vert[1]));
 		
 			gl_Position = vec4(ras_vert[0]*2.-1., 0., 0., 1.);	
 			gl_PointSize = 1.0;
 			//col =fdata;
-			col= fdata;;	
-	
+			col1 = fdata[0];
+			col2 = fdata[1];					
 		
 	}
 </script>
     
 <script id="float_fShader" type="x-shader/x-fragment">
       precision highp float;   
-	  varying vec4 col; 
- 	 
-      
-      
+    
+	  varying float col1;
+	  varying float col2;
+ 	
+            
        float shift_right(float v, float amt) {
           v = floor(v) + 0.5;
           return floor(v / exp2(amt));
         }
+        
         float shift_left(float v, float amt) {
           return floor(v * exp2(amt) + 0.5);
         }
@@ -39,11 +40,13 @@
         float mask_last(float v, float bits) {
           return mod(v, shift_left(1.0, bits));
         }
+        
         float extract_bits(float num, float from, float to) {
           from = floor(from + 0.5);
           to = floor(to + 0.5);
           return mask_last(shift_right(num, from), to - from);
         }
+        
         vec4 encode_float(float val) {
           if (val == 0.0)
             return vec4(0, 0, 0, 0);
@@ -65,6 +68,6 @@
         }
         
         void main() {	 		
-			gl_FragColor = encode_float(col[1]);
+			gl_FragColor = encode_float(col1);
      	}
 </script>
