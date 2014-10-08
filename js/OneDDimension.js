@@ -62,15 +62,24 @@ function OneDDimension(manager, bin_count, max, name) {
 		this.floatReader.render();
 		readout = this.floatReader.readPixels();
 		
-		
+		var res = new Array(this.bin_count);
+		for (var i = 0; i < this.bin_count; i++) {
+				var d = {
+				min : i*this.max/this.bin_count,
+				max:  (i+1)*this.max/this.bin_count,
+				selected : readout[i],
+				unselected : readout[i+1*this.bin_count],
+				out : readout[i+2*this.bin_count]};
+				res[i]=d;
+        }
 		
 	/*  var sum = 0;
-		for (i = 0; i < readout.length; i++) {
+		for (var i = 0; i < readout.length; i++) {
 			sum = sum + readout[i];
         }
 		console.log(sum);
 		console.log(readout);*/
-		return  readout;
+		return  res;//readout;
 	}
 }
 
