@@ -15,7 +15,7 @@
        
       void main() {
 		
-  		float p_size = 3.;
+  		float p_size = 1.;
   	    	   
   		vec4 p =  mapMatrix * wPoint;
   		vec4 rp = rasterMatrix * p;
@@ -28,7 +28,7 @@
   		} else {  	
   		   // If not selected then use blue color	   
   		//   col = vec4(31./256., 119./256., 180./256., 0.7); 	
-  		   col = vec4(1.,0.,0.,0.7);
+  		   col = vec4(0.5,0.,0.,0.7);
   		}
   		
         gl_Position = p;    	

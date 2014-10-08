@@ -53,21 +53,23 @@ function OneDDimension(manager, bin_count, max, name) {
 		 */		
 		gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
 	//	console.time("reading_pix");
-	//	var readout= new Float32Array(this.bin_count*4);
-	//	gl.readPixels(0, 0, this.bin_count, 1, gl.RGBA, gl.FLOAT, readout);
+		var readout= new Float32Array(this.bin_count*4);
+		gl.readPixels(0, 0, this.bin_count, 1, gl.RGBA, gl.FLOAT, readout);
 	//	console.timeEnd("reading_pix");
-		//gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+		gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 	 
 		this.floatReader.setup()
 		this.floatReader.render();
 		readout = this.floatReader.readPixels();
-
+		
+		
+		
 	  var sum = 0;
 		for (i = 0; i < readout.length; i++) {
 			sum = sum + readout[i];
-		}
-		//console.log(sum);
-		//console.log(readout);
+        }
+		console.log(sum);
+		console.log(readout);
 		return  readout;
 	}
 }

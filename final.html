@@ -118,7 +118,7 @@
 		wgs = new OpenLayers.Projection("EPSG:4326"); // Transform from WGS 1984
 		merc = new OpenLayers.Projection("EPSG:900913");
 		tl = getTopLeftTC();
-		var data = new DataLoader('../data/osm10k.js');
+		var data = new DataLoader('../data/osm200k.js');
 		data.loadData(transform);
 
 		/**init geo buffer*/

@@ -21,7 +21,9 @@ StackedBarChart = function() {
 
 
 	this.init = function(){
-		xScale = d3.scale.ordinal().domain([0,1,2,3,4,5,6,7,8,9,10 ]).rangeRoundBands([ 0, width  ], 0.05);
+		xScale = d3.scale.ordinal().domain([0,1,2,3,4,5,6,7,8,9,10,
+		                                    11,12,13,14,15,16,17,18,19,20,
+		                                    21,22,23,24,25,26,27,28,29,30]).rangeRoundBands([ 0, width  ], 0.05);
 		
 		yScale = d3.scale.linear().domain([ 0, d3.max(this.dataset) ]).range([height, 0]);
 

@@ -3,11 +3,13 @@ function FloatRasterReader(raster, bin_count) {
 	this.raster = raster;
 	this.bin_count=bin_count;
 	this.name = name;	
+		
+	var rows = 3;
     /*Initialise offscreen buffer*/
 		
 	this.floatProgram = utils.loadShaders("float_vShader",  "float_fShader", this);
 	var framebuffer = gl.createFramebuffer();	
-	framebuffer.name = "float framBuffer";
+	framebuffer.name = "float frameBuffer";
 	var renderbuffer = gl.createRenderbuffer();
 	
 	this.floatTexture = gl.createTexture();
@@ -23,13 +25,13 @@ function FloatRasterReader(raster, bin_count) {
 	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); 
 	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, this.bin_count,
-		1, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+			rows, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
 		
 		
 	/** Render buffer*/
 	gl.bindRenderbuffer(gl.RENDERBUFFER, renderbuffer);
 	gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT16,
-			this.bin_count, 1);
+			this.bin_count, rows);
 
 	gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0,
 			gl.TEXTURE_2D, this.floatTexture, 0);
@@ -43,12 +45,15 @@ function FloatRasterReader(raster, bin_count) {
     gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
     
     
-    this.vertices = new Float32Array(this.bin_count*2);	
-    
-    for (var i = 0; i <= (this.vertices.length); i=i+2) {		  	
-    	this.vertices[i] = i/this.vertices.length+1/this.vertices.length;
-    	this.vertices[i+1] = 0.5; 
-		}		
+    this.vertices = new Float32Array(this.bin_count*2*rows);	
+    var m=0;
+    for (var i = 0; i <this.bin_count; i++) {
+    	for (var j =0; j<rows;j++){
+    		this.vertices[m++] = i/this.bin_count + 0.5/this.bin_count;
+        	this.vertices[m++] = j; 
+    	}
+    	
+	}		
     
     
     this.buffer.itemSize =2;
@@ -59,6 +64,7 @@ function FloatRasterReader(raster, bin_count) {
 	gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 	gl.bindTexture(gl.TEXTURE_2D, null);		
     gl.bindBuffer(gl.ARRAY_BUFFER, null);
+    
 	/** this goes before every rendering **/
     
 	this.setup = function() {
@@ -66,18 +72,13 @@ function FloatRasterReader(raster, bin_count) {
 		gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
 		
 		this.enableBuffer(this.buffer);
-		gl.viewport(0, 0, this.bin_count, 1);				
+		gl.viewport(0, 0, this.bin_count, rows);				
 		gl.clearColor(0.0, 0.0, 0.0, 0.0);
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 	
 		gl.disable(gl.DEPTH_TEST);
 		gl.enable(gl.BLEND);
 		gl.blendFunc(gl.ONE, gl.ONE);
-	   
-		
-
-		
-
 	}
 
 	this.enableBuffer = function(buffer){
@@ -121,7 +122,7 @@ function FloatRasterReader(raster, bin_count) {
 		gl.disable(gl.DEPTH_TEST);
 		
 			
-		gl.drawArrays(gl.POINTS, 0, this.bin_count);		
+		gl.drawArrays(gl.POINTS, 0, this.bin_count*rows);		
 		
 		gl.bindBuffer(gl.ARRAY_BUFFER, null);
 		gl.bindFramebuffer(gl.FRAMEBUFFER, null);
@@ -136,16 +137,16 @@ function FloatRasterReader(raster, bin_count) {
 		console.time("reading filter");
 		
 		gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
-		var readout_eight = new Uint8Array(this.bin_count * 4);
-		gl.readPixels(0, 0, this.bin_count, 1, gl.RGBA, gl.UNSIGNED_BYTE, readout_eight);		
+		var readout_eight = new Uint8Array(this.bin_count * 4 * rows);
+		gl.readPixels(0, 0, this.bin_count, rows, gl.RGBA, gl.UNSIGNED_BYTE, readout_eight);		
 
 		var readout = new Float32Array(readout_eight.buffer);
 		sum = 0;
 		for (i = 0; i < readout.length; i++) {
 			sum = sum + readout[i];
 		}
-		//console.log(sum);
-		//console.log(readout);
+		console.log(sum);
+		console.log(readout);
 		gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 		return readout;
 	}
