@@ -142,11 +142,11 @@ function FloatRasterReader(raster, bin_count) {
 
 		var readout = new Float32Array(readout_eight.buffer);
 		sum = 0;
-		for (i = 0; i < readout.length; i++) {
+		/*for (i = 0; i < readout.length; i++) {
 			sum = sum + readout[i];
 		}
 		console.log(sum);
-		console.log(readout);
+		console.log(readout);*/
 		gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 		return readout;
 	}

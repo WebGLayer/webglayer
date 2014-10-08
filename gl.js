@@ -76,8 +76,7 @@ window.requestAnimFrame = (function() {
 })();
 
 function getTopLeftTC() {
-	var tlwgs = new OpenLayers.LonLat(-180, 90);
-	tlwgs.transform(wgs, merc);
+		
 	s = Math.pow(2, map.getZoom());
 	tlpixel = map.getViewPortPxFromLonLat(tlwgs);
 	res = {
@@ -87,16 +86,6 @@ function getTopLeftTC() {
 	return res;
 }
 
-function onMove() {
-	gllayer.move(map.getZoom(), getTopLeftTC());
-	filters = cf.filters;
-	gllayer.render();
-
-	ex = map.getExtent().transform(merc, wgs);
-	cf.latDimension.filter([ ex.bottom, ex.top ]);
-	cf.lonDimension.filter([ ex.left, ex.right ]);
-	dc.redrawAll();
-}
 
 /**
  * Transfares the coordinates to zoom level 0 in pixel coordiantes

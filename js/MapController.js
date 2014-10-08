@@ -22,6 +22,7 @@ var MapController = function(manager) {
 		matrix.name="mapMatrix";
 	}
 	this.zoommove = function(zoom, offset){		
+		
 		this.initMatrix();
 		// Scale to current zoom (worldCoords * 2^zoom)
 		var scale = Math.pow(2, zoom);

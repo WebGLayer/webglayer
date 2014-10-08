@@ -64,12 +64,12 @@ function OneDDimension(manager, bin_count, max, name) {
 		
 		
 		
-	  var sum = 0;
+	/*  var sum = 0;
 		for (i = 0; i < readout.length; i++) {
 			sum = sum + readout[i];
         }
 		console.log(sum);
-		console.log(readout);
+		console.log(readout);*/
 		return  readout;
 	}
 }

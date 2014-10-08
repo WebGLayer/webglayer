@@ -2,7 +2,8 @@ initMap = function() {
 
 	var options = {
 		units : 'm',
-		projection : "EPSG:900913"
+		projection : "EPSG:900913",
+		zoomMethod: null
 	};
 	map = new OpenLayers.Map('map', options);
 	map.addLayer(new OpenLayers.Layer.OSM());
