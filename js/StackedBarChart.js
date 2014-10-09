@@ -23,21 +23,22 @@ StackedBarChart = function() {
 
 
 	this.init = function(){
-		xScale = d3.scale.ordinal().rangeRoundBands([0, width], .1);
-		
+		 //xScale = d3.scale.ordinal().rangeRoundBands([0, width], .1);
+		//xScale = d3.scale.ordinal().rangeRoundBands([0, width], .1);
+		xScale = d3.scale.linear().domain([ 0, 180 ]).range([0, width]);		
 	
 		
 		colorScale =  d3.scale.ordinal().range(["#98abc5", "#7b6888", "#ff8c00"]);
 
-		yScale = d3.scale.linear().domain([ 0, 2000 ]).range([height, 0]);		
+		yScale = d3.scale.linear().domain([ 0, 600 ]).range([height, 0]);		
 				
 	    colorScale.domain(["selected","unselected","out"]) ; 
 		xAxis = d3.svg.axis().scale(xScale).orient("bottom");
 
 		yAxis = d3.svg.axis().scale(yScale).orient("left");
 		
-		xScale.domain(this.dataset.map(function(d) { 
-			return d.max-(d.max-d.min)/2; }));
+		//xScale.domain(this.dataset.map(function(d) { 
+			//return d.max-(d.max-d.min)/2; }));
 
 		svg = d3.select("#chart_container").append("svg").attr("width",
 				width + margin.left + margin.right).attr("height",
@@ -76,7 +77,7 @@ StackedBarChart = function() {
 			.enter().append("rect")
 			.attr("y", function(d) {
 				return yScale(d.y1);})
-			.attr("width", xScale.rangeBand())
+			.attr("width", 5)
 			.attr("height",	function(d) {
 						return yScale(d.y0) - yScale(d.y1);
 					}).attr("fill", function(d) {
@@ -102,23 +103,21 @@ StackedBarChart = function() {
 			d.total = 0;
 		});
 		
-				 
+			 
 		 speeds.data(this.dataset).transition().duration(15);	
 			
 		speeds.selectAll("rect").data(function(m){
 			return m.levels;})
 		.transition().duration(15)
 		.attr("y", function(d) {
-			return yScale(d.y1);})
-		.attr("width", xScale.rangeBand())
+			return yScale(d.y1);})		
 		.attr("height",	function(d) {
 					return yScale(d.y0) - yScale(d.y1);
-				}).attr("fill", function(d) {
-					return colorScale(d.name);});
+				});
 		
 		
-		 yAxis = d3.svg.axis().scale(yScale).orient("left");
-		 svg.selectAll('.y.axis').transition().duration(15).call(yAxis);
+	/*	 yAxis = d3.svg.axis().scale(yScale).orient("left");
+		 svg.selectAll('.y.axis').transition().duration(15).call(yAxis);*/
 	}
 
 }
