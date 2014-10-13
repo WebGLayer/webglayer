@@ -44,13 +44,18 @@ initMap = function() {
 				var pol = trianglesToArray(ts.getTriangles());
 				util.createFilteringData(pol);
 			} catch (e) {
-				//console.log(e);
+				console.log(e);
 			}
 
 		}
 
 	}
 
+	function triangulate(){
+		
+	}
+	
+	
 	vectors.events.on({
 		"beforefeaturemodified" : report,
 		"featuremodified" : report,
@@ -67,7 +72,7 @@ initMap = function() {
 
 	var dragControl = new OpenLayers.Control.DragFeature(vectors);
 	dragControl.onDrag = function(a, b) {
-		console.log(a);
+		console.log(b);
 	};
 
 	controls = {
@@ -102,7 +107,7 @@ function trianglesToArray(trig) {
 function update() {
 	// reset modification mode
 	controls.modify.mode = OpenLayers.Control.ModifyFeature.RESHAPE;
-	var rotate = document.getElementById("rotate").checked;
+/*	var rotate = document.getElementById("rotate").checked;
 	if (rotate) {
 		controls.modify.mode |= OpenLayers.Control.ModifyFeature.ROTATE;
 	}
@@ -120,7 +125,7 @@ function update() {
 	}
 	if (rotate || drag) {
 		controls.modify.mode &= ~OpenLayers.Control.ModifyFeature.RESHAPE;
-	}
+	}*/
 	var dragEvent = document.getElementById("dragEvent").checked;
 	if (dragEvent) {
 		controls.modify.deactivate();

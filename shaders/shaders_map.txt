@@ -15,7 +15,7 @@
        
       void main() {
 		
-  		float p_size = 1.;
+  		float p_size = 2.;
   	    	   
   		vec4 p =  mapMatrix * wPoint;
   		vec4 rp = rasterMatrix * p;
@@ -24,11 +24,13 @@
   		
   		// if data are selected  (TODO for other dimensions)
   		if (fdata[0]>0. && atr1[0] >= -10.){
+  			p_size = 3.;
   			col =  fdata;
   		} else {  	
   		   // If not selected then use blue color	   
-  		//   col = vec4(31./256., 119./256., 180./256., 0.7); 	
-  		   col = vec4(0.5,0.,0.,0.7);
+  		 //  col = vec4(31./256., 119./256., 180./256., 0.7); 	
+  		   p_size = 2.;
+  		   col = vec4(0.5,0.,0.,0.5);
   		}
   		
         gl_Position = p;    	

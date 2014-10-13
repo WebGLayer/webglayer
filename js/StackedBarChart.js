@@ -21,7 +21,8 @@ StackedBarChart = function() {
 	var height = h - margin.top - margin.bottom;
 	this.dataset = null;
 
-
+	
+	
 	this.init = function(){
 		 //xScale = d3.scale.ordinal().rangeRoundBands([0, width], .1);
 		//xScale = d3.scale.ordinal().rangeRoundBands([0, width], .1);
@@ -30,7 +31,9 @@ StackedBarChart = function() {
 		
 		colorScale =  d3.scale.ordinal().range(["#98abc5", "#7b6888", "#ff8c00"]);
 
-		yScale = d3.scale.linear().domain([ 0, 600 ]).range([height, 0]);		
+		yScale = d3.scale.linear().domain([ 0, 600 ]).range([height, 0]);	
+		
+		
 				
 	    colorScale.domain(["selected","unselected","out"]) ; 
 		xAxis = d3.svg.axis().scale(xScale).orient("bottom");
@@ -82,6 +85,29 @@ StackedBarChart = function() {
 						return yScale(d.y0) - yScale(d.y1);
 					}).attr("fill", function(d) {
 						return colorScale(d.name);});
+			
+	
+
+	    brush1 = d3.svg.multibrush()	    
+	          .x(xScale).extentAdaption(resizeExtent).on("brush", brush) ;        
+	       
+		var brushNode = svg.append("g")
+	    .attr("class", "brush")
+	    .call(brush1)		    
+	    .selectAll("rect")
+	    .attr("height", height);
+		
+		
+		function resizeExtent(selection){
+			selection			
+			.attr("height", height);
+		}
+
+		function brush(){
+			console.log(brush1.extent());
+		}
+
+			
 	}
 	
 	// Create bars
@@ -108,7 +134,7 @@ StackedBarChart = function() {
 			
 		speeds.selectAll("rect").data(function(m){
 			return m.levels;})
-		.transition().duration(15)
+		.transition().duration(0)
 		.attr("y", function(d) {
 			return yScale(d.y1);})		
 		.attr("height",	function(d) {

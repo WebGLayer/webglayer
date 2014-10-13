@@ -71,6 +71,25 @@
 .x.axis path {
   display: none;
 }
+
+
+.grid-background {
+  fill: #ddd;
+}
+
+.grid line,
+.grid path {
+  fill: none;
+  stroke: #fff;
+  shape-rendering: crispEdges;
+}
+
+
+.brush .extent {
+  
+  fill-opacity: .125;
+  shape-rendering: crispEdges;
+}
 </style>
 <script src="../javascripts/ol/lib/OpenLayers.js"></script>
 <script src="../javascripts/jquery-1.9.1.min.js"></script>
@@ -92,6 +111,7 @@
 <script src="js/StackedBarChart.js"></script>
 <script src="js/BarChart.js"></script>
 <script src="js/FloatRasterReader.js"></script>
+<script src="js/d3.svg.multibrush.js"></script>
 
 
 <script type="text/javascript">
@@ -159,6 +179,7 @@
 
 		map.events.register("move", map, onMove);
 		map.events.register("zoomstart", map, onMove);
+		start();
 
 	}
 
@@ -213,8 +234,16 @@
 
 			<input type="radio" name="type" value="polygon" id="polygonToggle"
 				onclick="toggleControl(this);" />
-			<label for="polygonToggle">draw polygon</label>
-			</li>
+				<label for="polygonToggle">draw polygon</label>
+			
+			<input type="radio" name="type" value="modify" id="createVertices"
+				onclick="toggleControl(this);" />
+				<label for="createVertices">modify vertices</label>
+			
+		<!--	<input type="radio" name="type" value="drag" id="dragEvent"
+				onclick="toggleControl(this);" />
+			<label for="dragEvent">drag polygon</label>
+				</li>
 
 			<li><input type="radio" name="type" value="modify"
 				id="modifyToggle" onclick="toggleControl(this);" /> <label
@@ -223,7 +252,7 @@
 					<li><input id="createVertices" type="checkbox" checked
 						name="createVertices" onchange="update()" /> <label
 						for="createVertices">allow vertices creation</label></li>
-					<li><input id="rotate" type="checkbox" name="rotate"
+			 	<li><input id="rotate" type="checkbox" name="rotate"
 						onchange="update()" /> <label for="rotate">allow rotation</label>
 					</li>
 					<li><input id="resize" type="checkbox" name="resize"
@@ -232,14 +261,13 @@
 						name="keepAspectRatio" onchange="update()" checked="checked" /> <label
 						for="keepAspectRatio">keep aspect ratio</label>)</li>
 					<li><input id="drag" type="checkbox" name="drag"
-						onchange="update()" /> <label for="drag">allow dragging</label></li>
+						onchange="update()" /> <label for="drag">allow dragging</label></li> 
 					<li><input id="dragEvent" type="checkbox" name="dragEvent"
 						onchange="update()" /> <label for="dragEvent">allow
 							dragging Event</label></li>
-				</ul></li>
+				</ul></li>-->
 		</ul>
-		<div id="fps">fps</div>
-		<div id="data"> </div>	
+		fps: <div id="fps">fps</div>	
 		
 	</div>
 </body>
