@@ -107,7 +107,7 @@ function Manager(canvasid) {
 				gl.vertexAttribPointer(loc, buf.itemSize, gl.FLOAT,
 						false, 0, 0);
 			} else {
-				console.log("Error: attribute " + name + " does not exist.");
+				console.log("Error: attribute " +  buf.name + " does not exist.");
 			}
 		}
 	}

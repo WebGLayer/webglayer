@@ -13,8 +13,33 @@ initMap = function() {
 	renderer = (renderer) ? [ renderer ]
 			: OpenLayers.Layer.Vector.prototype.renderers;
 
+		
+		var defaultStyle = new OpenLayers.Style({
+		  'fillColor': "green",
+		  'pointRadius': 10,
+		  'externalGraphic': '${thumbnail}'
+		});
+
+		var selectStyle = new OpenLayers.Style({
+		  'pointRadius': 20
+		});
+		
+		var temporary = new OpenLayers.Style({
+			  'pointRadius': 7,
+			  'fillColor': "#ff8c00",
+			  'fillOpacity':0.4,
+			  'strokeColor': "#ff8c00", 
+              'strokeOpacity': 1, 
+              'strokeWidth': 1, 
+			});
+
+	var styleMap = new OpenLayers.StyleMap({'default': temporary,
+											'select': selectStyle,
+											'temporary':temporary});
+		
 	vectors = new OpenLayers.Layer.Vector("Vector Layer", {
-		renderers : renderer
+		renderers : renderer,
+		styleMap: styleMap
 	});
 
 	map.addLayers([ vectors ]);

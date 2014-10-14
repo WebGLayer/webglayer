@@ -104,7 +104,7 @@
 <script src="js/Manager.js"></script>
 <script src="js/OneDDimension.js"></script>
 <script src="js/MapDimension.js"></script>
-<script src="js/FilterUtility.js"></script>
+<script src="js/MapFilterUtility.js"></script>
 <script src="js/MapController.js"></script>
 <script src="js/DataLoader.js"></script>
 <script src="js/Utils.js"></script>
@@ -143,13 +143,15 @@
 		
 		
 		var data = new DataLoader('../data/osm10k.js');
-		data.loadData(transform);
+		data.loadData();
 
 		/**init geo buffer*/
 		manager.addDataBuffer(data.points, 2, 'wPoint');
 		/*init first attribute buffer*/
 		manager.addDataBuffer(data.attributes, 1, 'speed');
-
+		/* init index buffer*/
+		manager.addDataBuffer(data.index, 1, 'index');
+		
 		dimMap = new MapDimension(manager);
 		dimMap.name = "map";
 		dimMap.setProgram('map_vShader', 'map_fShader', 'map');
@@ -157,7 +159,7 @@
 		dimSpeed = new OneDDimension(manager, 75, 150, "speed");
 		dimSpeed.setProgram('speed_vShader', 'speed_fShader', 'speed');
 
-		util = new FilterUtility(manager);
+		util = new MapFilterUtility(manager);
 
 		mcontroller.resize(div.offsetWidth, div.offsetHeight);
 		mcontroller.zoommove(map.zoom, tl);

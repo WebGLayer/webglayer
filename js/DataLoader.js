@@ -1,14 +1,16 @@
 function DataLoader(fname) {
 	this.points;
 	this.attributes;
+	this.index;
 	this.cf;
 	this.fname = fname;
 	var that = this;
 
-	DataLoader.prototype.loadData = function(transform) {
+	DataLoader.prototype.loadData = function() {
 
 		var pts = [];
 		var attr = [];
+		var index = [];
 		var j = 0;
 		var jj = 0;
 		console.time("parsing")
@@ -32,12 +34,14 @@ function DataLoader(fname) {
 				val.speed = Math.round(val.speed);
 				val.unit_id = val.unit_id % 100000;
 				attr[jj++] = val.speed;
-				
+				index[i] = i;
+
 			});
 			
 		});
 		this.points = array2TA(pts);
 		this.attributes = array2TA(attr);
+		this.index = array2TA(index);
 		
 	};
 

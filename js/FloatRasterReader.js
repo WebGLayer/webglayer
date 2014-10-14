@@ -1,8 +1,7 @@
 function FloatRasterReader(raster, bin_count) {	
 	
 	this.raster = raster;
-	this.bin_count=bin_count;
-	this.name = name;	
+	this.bin_count=bin_count;	
 		
 	var rows = 3;
     /*Initialise offscreen buffer*/
@@ -39,13 +38,13 @@ function FloatRasterReader(raster, bin_count) {
 			gl.RENDERBUFFER, renderbuffer);
 		
 	
-	/**create vertex buffer*/		
+	/**create vertex buffer*/	
 	this.buffer = gl.createBuffer();
 	this.buffer.name="ras_vert";
     gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
     
     
-    this.vertices = new Float32Array(this.bin_count*2*rows);	
+    this.vertices = new Float32Array(this.bin_count*2*rows);
     var m=0;
     for (var i = 0; i <this.bin_count; i++) {
     	for (var j =0; j<rows;j++){
@@ -83,7 +82,7 @@ function FloatRasterReader(raster, bin_count) {
 
 	this.enableBuffer = function(buffer){
 		
-		name = buffer.name;
+		var name = buffer.name;
 		gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
 		
 		if (gl.getAttribLocation(this.floatProgram , name)>=0){
