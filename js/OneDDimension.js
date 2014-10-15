@@ -3,12 +3,7 @@ function OneDDimension(manager, bin_count, max, name) {
 
 	this.name = name;
 	this.max = max;
-	var attmatrix = new Float32Array(16);
-	attmatrix.set([ 2 / this.max, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, -1, 0, 0,
-			1 ]);
-	
-	attmatrix.name = this.name+"_attMatrix";
-	manager.matrices.push(attmatrix);
+
 	
 	
 	this.bin_count = bin_count;

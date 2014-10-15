@@ -1,4 +1,5 @@
-
+var fps_loop=1;
+var fps_sum=0;
 
 function animloop() {
 	var now = Date.now() / 1000; // get time in seconds
@@ -7,7 +8,9 @@ function animloop() {
 	then = now;
 	// compute fps
 	var fps = 1 / elapsedTime;
-	fpsElement.textContent = fps.toFixed(2);
+	fps_sum = fps_sum+fps; 
+	
+	fpsElement.textContent =  (fps_sum/fps_loop++).toFixed(2);
 	render();
 	request = window.requestAnimFrame(animloop);
 };
@@ -37,11 +40,29 @@ function stop() {
 }
 
 
+/**
+ * MAIN RENDERING LOOP
+ */
 function render() {
+	
+	
+	
 
-	util.renderFilter();
-	manager.texture = util.filterTexture;
+	mapFilterRender.renderFilter();
+	
+	manager.texture = mapFilterRender.filterTexture;
+		
+	allDataFilter.render();
+	//allDataFilter.readPixels(); 
+	//manager.histTecture = util.histTexture;
+	
+//	util.filterData();
+//	manger.filterIndex() = 
+	
+	
 	manager.render();
+
+
 	read();
 	// gl.flush();
 	// console.timeEnd(i + " rendering_all");

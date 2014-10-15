@@ -33,8 +33,8 @@ function DataLoader(fname) {
 				val.hours = (new Date(val.time * 1000)).getHours()
 				val.speed = Math.round(val.speed);
 				val.unit_id = val.unit_id % 100000;
-				attr[jj++] = val.speed;
-				index[i] = i;
+				attr[jj++] = normalise(val.speed, 180);
+				index[i] =  normalise(i,data.length);
 
 			});
 			
@@ -42,9 +42,16 @@ function DataLoader(fname) {
 		this.points = array2TA(pts);
 		this.attributes = array2TA(attr);
 		this.index = array2TA(index);
+		return this.index.length;
 		
 	};
 
+	/**
+	 * calculates the value to max pixels between -1 -1;
+	 */
+	function normalise(value,max){
+		return value/max*2 -1 +(2/(max*2))
+	}
 	function array2TA(pts) {
 		pts_ar = new Float32Array(pts.length);
 		i = 0;

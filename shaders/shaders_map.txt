@@ -1,6 +1,7 @@
 <script id="map_vShader" type="x-shader/x-vertex">
       attribute vec4 wPoint;
       attribute float speed;
+      attribute float index;
       
       uniform mat4 speed_attMatrix;
       uniform mat4 mapMatrix;

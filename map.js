@@ -67,7 +67,7 @@ initMap = function() {
 				var ts = new poly2tri.SweepContext(res);
 				ts.triangulate();
 				var pol = trianglesToArray(ts.getTriangles());
-				util.createFilteringData(pol);
+				mapFilterRender.createFilteringData(pol);
 			} catch (e) {
 				console.log(e);
 			}

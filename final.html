@@ -104,7 +104,10 @@
 <script src="js/Manager.js"></script>
 <script src="js/OneDDimension.js"></script>
 <script src="js/MapDimension.js"></script>
-<script src="js/MapFilterUtility.js"></script>
+
+<script src="js/MapFilterRender.js"></script>
+<script src="js/Filter.js"></script>
+
 <script src="js/MapController.js"></script>
 <script src="js/DataLoader.js"></script>
 <script src="js/Utils.js"></script>
@@ -142,9 +145,8 @@
 		tl = getTopLeftTC();
 		
 		
-		var data = new DataLoader('../data/osm10k.js');
-		data.loadData();
-
+		var data = new DataLoader('../data/osm20.js');
+		var datasize = data.loadData();
 		/**init geo buffer*/
 		manager.addDataBuffer(data.points, 2, 'wPoint');
 		/*init first attribute buffer*/
@@ -159,12 +161,13 @@
 		dimSpeed = new OneDDimension(manager, 75, 150, "speed");
 		dimSpeed.setProgram('speed_vShader', 'speed_fShader', 'speed');
 
-		util = new MapFilterUtility(manager);
+		mapFilterRender = new MapFilterRender(manager);
+		allDataFilter = new Filter(datasize, manager); 
 
 		mcontroller.resize(div.offsetWidth, div.offsetHeight);
 		mcontroller.zoommove(map.zoom, tl);
 
-		util.init();
+		mapFilterRender.init();
 		//util.createFilteringData(generateOneTriangle());
 
 		fpsElement = document.getElementById("fps");
@@ -200,6 +203,10 @@
 		});
 
 		$.get('shaders/shaders_filtermap.txt', function(data) {
+			$("head").append(data);
+		});
+		
+		$.get('shaders/shaders_filter.txt', function(data) {
 			$("head").append(data);
 		});
 

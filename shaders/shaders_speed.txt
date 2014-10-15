@@ -3,7 +3,6 @@
 	attribute vec4 wPoint;
 	attribute float speed;
 	
-	uniform mat4 speed_attMatrix;
 	uniform mat4 mapMatrix;
 	uniform mat4 rasterMatrix;
 	
@@ -14,7 +13,7 @@
 			
 
 		vec4 p =  mapMatrix * wPoint;
-			gl_Position = speed_attMatrix*vec4(speed, 0., 0., 1.);
+			gl_Position = vec4(speed, 0., 0., 1.);
   			gl_PointSize = 1.;
   			
   			
