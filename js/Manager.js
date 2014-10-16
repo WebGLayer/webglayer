@@ -8,12 +8,13 @@ function Manager(canvasid) {
 	gl = canvas.getContext('webgl', {preserveDrawingBuffer: true});
 
 	
+	
 	this.dimensions = [];
 	
 	/**
 	 * Common databuffers for all dimensions
 	 */
-	this.databuffers =[];
+	this.databuffers = [];
 	this.matrices = [];
 	
 	this.filters = [];
@@ -28,7 +29,7 @@ function Manager(canvasid) {
 	             0, 0,    0, 0,
 	             0.5, 0.5, 0, 1 ]);
 	this.rMatrix.name = "rasterMatrix";
-	this.matrices.push(this.rMatrix);
+	this.matrices[this.rMatrix.name]= this.rMatrix;
 
 	
 	this.addDimension = function(d){
@@ -46,7 +47,7 @@ function Manager(canvasid) {
 		buffer.numItems = data.length / itemSize;
 		buffer.name = name;
 		gl.bindBuffer(gl.ARRAY_BUFFER, null);
-		this.databuffers.push(buffer);
+		this.databuffers[name] = buffer;		
 	}
 	
 
@@ -62,8 +63,8 @@ function Manager(canvasid) {
 			d = this.dimensions[i];
 			d.setup();
 			this.enableBuffersAndCommonUniforms(d.glProgram);
-			
-			d.render(this.databuffers[0].numItems);
+			this.enableFilterTexture(d.glProgram);			
+			d.render(this.num_rec);
 			d.tearDown();
 		}
 		
@@ -91,27 +92,38 @@ function Manager(canvasid) {
 			gl.uniformMatrix4fv(matrixLoc, false, m);			
 		}
 		
+		this.enableBuffer(prog, "index");
+					
+	}
+
+	this.bindMapMatrix = function(prog){
+		gl.useProgram(prog);
 		var matrixLoc = this.getUniformLoc(prog, this.mapMatrix.name);		
 		gl.uniformMatrix4fv(matrixLoc, false,  this.mapMatrix);		
+	}
+	
+	this.enableBuffer = function(prog, name){
+		gl.useProgram(prog);
+		var buf = this.databuffers[name];
+		gl.bindBuffer(gl.ARRAY_BUFFER, buf);
 
-		
-		
-		
-		for ( var i in this.databuffers) {
-			var buf = this.databuffers[i];
-			gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-
-			if (gl.getAttribLocation(prog, buf.name) >= 0) {
-				var loc = gl.getAttribLocation(prog, buf.name);
-				gl.enableVertexAttribArray(loc);
-				gl.vertexAttribPointer(loc, buf.itemSize, gl.FLOAT,
-						false, 0, 0);
-			} else {
-				console.log("Error: attribute " +  buf.name + " does not exist in program "+prog.name);
-			}
+		if (gl.getAttribLocation(prog, buf.name) >= 0) {
+			var loc = gl.getAttribLocation(prog, buf.name);
+			gl.enableVertexAttribArray(loc);
+			gl.vertexAttribPointer(loc, buf.itemSize, gl.FLOAT,
+					false, 0, 0);
+		} else {
+			console.log("Error: attribute " +  buf.name + " does not exist in program "+prog.name);
 		}
 	}
 	
+	this.enableFilterTexture = function(prog){
+		gl.useProgram(prog);
+		var rasterLoc = this.getUniformLoc(prog, 'filter'); 		 
+		gl.uniform1i(rasterLoc , 0);		   
+		gl.activeTexture(gl.TEXTURE0);
+		gl.bindTexture(gl.TEXTURE_2D, this.filterTexture);
+	}
 	
 	this.getUniformLoc = function(prog, name){
 		var loc = gl.getUniformLocation(prog, name)

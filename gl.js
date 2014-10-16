@@ -53,7 +53,8 @@ function render() {
 	manager.texture = mapFilterRender.filterTexture;
 	allDataFilter.texture =  mapFilterRender.filterTexture;	
 	allDataFilter.render();
-	allDataFilter.readPixels(); 
+	manager.filterTexture = allDataFilter.fitlerTexture;	
+//	allDataFilter.readPixels(); 
 	//manager.histTecture = util.histTexture;
 	
 //	util.filterData();

@@ -147,6 +147,7 @@
 		
 		var data = new DataLoader('../data/osm20.js');
 		var rastersize = data.loadData();
+		manager.num_rec = data.num_rec;
 		/**init geo buffer*/
 		manager.addDataBuffer(data.points, 2, 'wPoint');
 		/*init first attribute buffer*/

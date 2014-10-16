@@ -7,6 +7,10 @@ function MapDimension(manager){
 	this.setup = function() {
 		
 		//gl.useProgram(this.glProgram);
+		/** add specific buffer and uniforms */
+		
+		this.manager.bindMapMatrix(this.glProgram);
+		this.manager.enableBuffer(this.glProgram, "wPoint");
 		gl.bindFramebuffer(gl.FRAMEBUFFER, null);	
 		gl.viewport(0, 0, manager.width, manager.height);
 		gl.clearColor(0.0, 0.0, 0.0, 0.0);

@@ -35,6 +35,8 @@ function OneDDimension(manager, bin_count, max, name) {
 		gl.disable(gl.DEPTH_TEST);
 		gl.enable(gl.BLEND);
 		gl.blendFunc(gl.ONE, gl.ONE);
+		
+		manager.enableBuffer(this.glProgram, "speed");
 	
 	}
 
