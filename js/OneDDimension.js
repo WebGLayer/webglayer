@@ -26,7 +26,7 @@ function OneDDimension(manager, bin_count, max, name) {
 	 * this goes on every time in rendering cicle
 	 */
 	this.setup = function() {
-		//gl.useProgram(this.glProgram);
+		gl.useProgram(this.glProgram);
 		gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
 		gl.viewport(0, 0, this.bin_count, 1);				
 		gl.clearColor(0.0, 0.0, 0.0, 0.0);

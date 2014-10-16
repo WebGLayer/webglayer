@@ -8,7 +8,7 @@ function MapDimension(manager){
 		
 		//gl.useProgram(this.glProgram);
 		/** add specific buffer and uniforms */
-		
+		gl.useProgram(this.glProgram);
 		this.manager.bindMapMatrix(this.glProgram);
 		this.manager.enableBuffer(this.glProgram, "wPoint");
 		gl.bindFramebuffer(gl.FRAMEBUFFER, null);	

@@ -74,22 +74,18 @@ function Manager(canvasid) {
 	 * 
 	 */
 	this.enableBuffersAndCommonUniforms = function(prog) {
-	
-		gl.useProgram(prog);
-		
-		/*Fiteres, hardocodeed*/
-	/*	var rasterLoc = this.getUniformLoc(prog, 'mapFilter'); 		 
-		gl.uniform1i(rasterLoc , 0);		   
-		gl.activeTexture(gl.TEXTURE0);
-		gl.bindTexture(gl.TEXTURE_2D, this.texture);*/
 		
 		/**
 		 * Bind matrices
 		 */
 		for (var i in this.matrices){
 			var m = this.matrices[i];
-			var matrixLoc = this.getUniformLoc(prog, m.name);		
-			gl.uniformMatrix4fv(matrixLoc, false, m);			
+			if (prog[m.name]== null){
+				var matrixLoc = this.getUniformLoc(prog, m.name);	
+				prog[m.name] = matrixLoc;
+			}
+		
+			gl.uniformMatrix4fv(prog[m.name], false, m);			
 		}
 		
 		this.enableBuffer(prog, "index");
@@ -97,28 +93,32 @@ function Manager(canvasid) {
 	}
 
 	this.bindMapMatrix = function(prog){
-		gl.useProgram(prog);
+	//	gl.useProgram(prog);
 		var matrixLoc = this.getUniformLoc(prog, this.mapMatrix.name);		
 		gl.uniformMatrix4fv(matrixLoc, false,  this.mapMatrix);		
 	}
 	
 	this.enableBuffer = function(prog, name){
-		gl.useProgram(prog);
+	//	gl.useProgram(prog);
 		var buf = this.databuffers[name];
 		gl.bindBuffer(gl.ARRAY_BUFFER, buf);
 
-		if (gl.getAttribLocation(prog, buf.name) >= 0) {
-			var loc = gl.getAttribLocation(prog, buf.name);
-			gl.enableVertexAttribArray(loc);
-			gl.vertexAttribPointer(loc, buf.itemSize, gl.FLOAT,
-					false, 0, 0);
-		} else {
-			console.log("Error: attribute " +  buf.name + " does not exist in program "+prog.name);
+		if (prog[name]==null){
+			if (gl.getAttribLocation(prog, buf.name) >= 0) {
+				prog[name] = gl.getAttribLocation(prog, buf.name);
+			} else {
+				console.log("Error: attribute " +  buf.name + " does not exist in program "+prog.name);
+			}
 		}
+				
+			gl.enableVertexAttribArray(prog[name]);
+			gl.vertexAttribPointer(prog[name], buf.itemSize, gl.FLOAT,
+					false, 0, 0);
+		
 	}
 	
 	this.enableFilterTexture = function(prog){
-		gl.useProgram(prog);
+	//	gl.useProgram(prog);
 		var rasterLoc = this.getUniformLoc(prog, 'filter'); 		 
 		gl.uniform1i(rasterLoc , 0);		   
 		gl.activeTexture(gl.TEXTURE0);
