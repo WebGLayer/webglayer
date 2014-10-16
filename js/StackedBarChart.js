@@ -31,7 +31,7 @@ StackedBarChart = function() {
 		
 		colorScale =  d3.scale.ordinal().range(["#ff8c00", "#98abc5", "#7b6888"]);
 
-		yScale = d3.scale.linear().domain([ 0, 10 ]).range([height, 0]);	
+		yScale = d3.scale.linear().domain([ 0, 5000 ]).range([height, 0]);	
 		
 		
 				
