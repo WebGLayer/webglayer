@@ -146,13 +146,13 @@
 		
 		
 		var data = new DataLoader('../data/osm20.js');
-		var datasize = data.loadData();
+		var rastersize = data.loadData();
 		/**init geo buffer*/
 		manager.addDataBuffer(data.points, 2, 'wPoint');
 		/*init first attribute buffer*/
 		manager.addDataBuffer(data.attributes, 1, 'speed');
 		/* init index buffer*/
-		manager.addDataBuffer(data.index, 1, 'index');
+		manager.addDataBuffer(data.index, 2, 'index');
 		
 		dimMap = new MapDimension(manager);
 		dimMap.name = "map";
@@ -162,7 +162,7 @@
 		dimSpeed.setProgram('speed_vShader', 'speed_fShader', 'speed');
 
 		mapFilterRender = new MapFilterRender(manager);
-		allDataFilter = new Filter(datasize, manager); 
+		allDataFilter = new Filter(data.num_rec, rastersize, manager); 
 
 		mcontroller.resize(div.offsetWidth, div.offsetHeight);
 		mcontroller.zoommove(map.zoom, tl);

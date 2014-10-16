@@ -51,9 +51,9 @@ function render() {
 	mapFilterRender.renderFilter();
 	
 	manager.texture = mapFilterRender.filterTexture;
-		
+	allDataFilter.texture =  mapFilterRender.filterTexture;	
 	allDataFilter.render();
-	//allDataFilter.readPixels(); 
+	allDataFilter.readPixels(); 
 	//manager.histTecture = util.histTexture;
 	
 //	util.filterData();

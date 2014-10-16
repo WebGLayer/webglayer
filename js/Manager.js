@@ -77,10 +77,10 @@ function Manager(canvasid) {
 		gl.useProgram(prog);
 		
 		/*Fiteres, hardocodeed*/
-		var rasterLoc = this.getUniformLoc(prog, 'mapFilter'); 		 
+	/*	var rasterLoc = this.getUniformLoc(prog, 'mapFilter'); 		 
 		gl.uniform1i(rasterLoc , 0);		   
 		gl.activeTexture(gl.TEXTURE0);
-		gl.bindTexture(gl.TEXTURE_2D, this.texture);
+		gl.bindTexture(gl.TEXTURE_2D, this.texture);*/
 		
 		/**
 		 * Bind matrices
