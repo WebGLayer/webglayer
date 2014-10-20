@@ -49,7 +49,7 @@ function render() {
 	manager.texture = mapFilterRender.filterTexture;
 	allDataFilter.texture =  mapFilterRender.filterTexture;	
 	allDataFilter.render();
-	manager.filterTexture = allDataFilter.fitlerTexture;	
+	manager.filterTexture = allDataFilter.filterTexture;	
 	
 	
 //	allDataFilter.readPixels(); 
@@ -72,7 +72,7 @@ function read() {
 	
 	readout = histDim.readPixels();
 	if(typeof readout!= 'undefined'){
-		//chart.update(readout);
+	//	chart.update(readout);
 	}
 
 	//$("#data").text("in:"+readout[0] + "out: "+ readout[1]);
