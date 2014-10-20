@@ -104,6 +104,7 @@
 <script src="js/Manager.js"></script>
 <script src="js/OneDDimension.js"></script>
 <script src="js/MapDimension.js"></script>
+<script src="js/HistogramDimension.js"></script>
 
 <script src="js/MapFilterRender.js"></script>
 <script src="js/Filter.js"></script>
@@ -119,11 +120,12 @@
 
 <script type="text/javascript">
 	var map, vectors, controls;
+
 	function init() {
 		//createChart();
-		
+			metadata = [];
 		/* New stacked chart */
-		chart = new StackedBarChart();
+		chart = new StackedBarChart(90);
 		//chart.update([1, 1, 1, 1,1,1,1,1,1, 1,1, 1, 1, 1,1,1,1,1,1, 1,1, 1, 1, 1,1,1,1,1,1, 1,1, 1, 1, 1,1,1,1,1,1, 10000]);
 		
 		/* Old chart */
@@ -145,26 +147,41 @@
 		tl = getTopLeftTC();
 		
 		
+		/*Configure speed dimension*/
+		metadata[0] = {max : 180, num_bins : 90, name: "speed"};		
+		/*Configure hour dimension*/	
+		metadata[1] = {max : 24, num_bins : 24, name: "hours"};
+		metadata.max_bins = 90;
+		
+		
+		
 		var data = new DataLoader('../data/osm20.js');
 		var rastersize = data.loadData();
 		manager.num_rec = data.num_rec;
 		/**init geo buffer*/
 		manager.addDataBuffer(data.points, 2, 'wPoint');
-		/*init first attribute buffer*/
-		manager.addDataBuffer(data.attributes, 1, 'speed');
+		/*init first attribute buffer*/				
+		for (var i = 0 ; i < metadata.length; i++){
+			manager.addDataBuffer(data.attributes[i], 1, metadata[i].name);
+		}
+				
 		/* init index buffer*/
 		manager.addDataBuffer(data.index, 2, 'index');
+		
 		
 		dimMap = new MapDimension(manager);
 		dimMap.name = "map";
 		dimMap.setProgram('map_vShader', 'map_fShader', 'map');
 
-		dimSpeed = new OneDDimension(manager, 75, 150, "speed");
+		dimSpeed = new OneDDimension(manager, 180, 180, "speed");
 		dimSpeed.setProgram('speed_vShader', 'speed_fShader', 'speed');
 
+		
+	  	histDim = new HistogramDimension(manager);
+	
 		mapFilterRender = new MapFilterRender(manager);
 		allDataFilter = new Filter(data.num_rec, rastersize, manager); 
-
+		data = null;
 		mcontroller.resize(div.offsetWidth, div.offsetHeight);
 		mcontroller.zoommove(map.zoom, tl);
 
@@ -220,6 +237,11 @@
 		});
 		
 		$.get('shaders/shaders_float.txt', function(data) {
+			$("head").append(data);
+		});
+
+		
+		$.get('shaders/shaders_hist.txt', function(data) {
 			$("head").append(data);
 		});
 

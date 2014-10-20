@@ -117,6 +117,27 @@ function Manager(canvasid) {
 		
 	}
 	
+	this.enableBufferForName = function(prog, buff, name){
+		//	gl.useProgram(prog);
+			var buf = this.databuffers[buff];
+			gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+
+			if (prog[name]==null){
+				if (gl.getAttribLocation(prog, name) >= 0) {
+					prog[name] = gl.getAttribLocation(prog, name);
+				} else {
+					console.log("Error: attribute " +  name + " does not exist in program "+prog.name);
+				}
+			}
+					
+				gl.enableVertexAttribArray(prog[name]);
+				gl.vertexAttribPointer(prog[name], buf.itemSize, gl.FLOAT,
+						false, 0, 0);
+			
+		}
+	
+	
+	
 	this.enableFilterTexture = function(prog){
 	//	gl.useProgram(prog);
 		var rasterLoc = this.getUniformLoc(prog, 'filter'); 		 

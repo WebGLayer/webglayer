@@ -1,4 +1,4 @@
-StackedBarChart = function() {
+StackedBarChart = function(d_max) {
 
 	var w = 600;
 	var h = 400;
@@ -24,12 +24,12 @@ StackedBarChart = function() {
 	this.init = function() {
 		// xScale = d3.scale.ordinal().rangeRoundBands([0, width], .1);
 		// xScale = d3.scale.ordinal().rangeRoundBands([0, width], .1);
-		xScale = d3.scale.linear().domain([ 0, 180 ]).range([ 0, width ]);
+		xScale = d3.scale.linear().domain([ 0, d_max ]).range([ 0, width ]);
 
 		colorScale = d3.scale.ordinal().range(
 				[ "#ff8c00", "#98abc5", "#7b6888" ]);
 
-		yScale = d3.scale.linear().domain([ 0, 10 ]).range([ height, 0 ]);
+		yScale = d3.scale.linear().domain([ 0, 15 ]).range([ height, 0 ]);
 
 		colorScale.domain([ "selected", "unselected", "out" ]);
 		xAxis = d3.svg.axis().scale(xScale).orient("bottom");

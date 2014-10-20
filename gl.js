@@ -44,26 +44,23 @@ function stop() {
  * MAIN RENDERING LOOP
  */
 function render() {
-	
-	
-	
-
 	mapFilterRender.renderFilter();
 	
 	manager.texture = mapFilterRender.filterTexture;
 	allDataFilter.texture =  mapFilterRender.filterTexture;	
 	allDataFilter.render();
 	manager.filterTexture = allDataFilter.fitlerTexture;	
+	
+	
 //	allDataFilter.readPixels(); 
 	//manager.histTecture = util.histTexture;
 	
 //	util.filterData();
 //	manger.filterIndex() = 
 	
+	histDim.render();
 	
 	manager.render();
-
-
 	read();
 	// gl.flush();
 	// console.timeEnd(i + " rendering_all");
@@ -72,11 +69,13 @@ function render() {
 function read() {
 
 	readout = dimSpeed.readPixels();
-	if(readout!=null){
-		chart.update(readout);
+	
+	readout = histDim.readPixels();
+	if(typeof readout!= 'undefined'){
+		//chart.update(readout);
 	}
 
-	$("#data").text("in:"+readout[0] + "out: "+ readout[1]);
+	//$("#data").text("in:"+readout[0] + "out: "+ readout[1]);
 	//console.log(readout[0], readout[1]);
 	
 	// dimTime.readPixels();

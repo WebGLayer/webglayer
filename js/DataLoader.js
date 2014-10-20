@@ -1,6 +1,7 @@
 function DataLoader(fname) {
 	this.points;
-	this.attributes;
+	this.attributes = [];
+
 	this.index;
 	this.cf;
 	this.fname = fname;
@@ -9,10 +10,22 @@ function DataLoader(fname) {
 	DataLoader.prototype.loadData = function() {
 		
 		var pts = [];
+		
+		/*Configure speed dimension*/
 		var attr = [];
+		
+		
+		
+		
+		
+		
 		var index = [];
+		
 		var j = 0;
 		var jj = 0;
+		
+		
+		
 		console.time("parsing")
 		$.ajaxSetup({
 			"async" : false
@@ -25,6 +38,11 @@ function DataLoader(fname) {
 			var rasterer = new Rasterer(data.length);
 			index.r_size = rasterer.size;
 			index.num_rec = data.length;
+			
+			for (var m =0; m< metadata.length; m++){
+				attr[m] =[];
+			}
+			
 			$.each(data, function(i, val) {
 				// var v = map.options.crs.latLngToPoint(L.latLng(val.y,
 				// val.x),0);
@@ -37,7 +55,18 @@ function DataLoader(fname) {
 				val.hours = (new Date(val.time * 1000)).getHours()
 				val.speed = Math.round(val.speed);
 				val.unit_id = val.unit_id % 100000;
-				attr[jj++] = normalise(val.speed, 180);
+		
+				
+			
+				for (var m =0; m< metadata.length; m++){
+					attr[m][i]= normaliseByMax(val[metadata[m].name], 
+							metadata.max_bins, 
+							metadata[m].max, 
+							metadata[m].num_bins);
+				}
+				
+			
+			//	attr_hours[m]  = normaliseByMax(val.hours, this.metadata.max_bins, attr_hours.max, attr_hours.num_bins);		
 				//index[i] =  normalise(i,data.length);
 				index[i] = rasterer.calc(i);
 				
@@ -45,8 +74,15 @@ function DataLoader(fname) {
 			});
 			
 		});
+		
+		
 		this.points = array2TA(pts);
-		this.attributes = array2TA(attr);
+		
+		for (var i =0 ; i< attr.length; i++){
+			this.attributes[i] = array2TA(attr[i]);
+		}	
+		
+		
 		this.index = array2TA2D(index);
 		this.num_rec = index.num_rec;
 		return index.r_size;
@@ -72,8 +108,21 @@ function DataLoader(fname) {
 	/**
 	 * calculates the value to max pixels between -1 -1;
 	 */
+	function normaliseByMax(value, max_all, this_max, this_num){
+		/*reduced value to 0-1*/
+		//var c = value/ this_max;
+		var c_size =  this_max / this_num;
+		var v =  (value / c_size)/max_all*2 -1 ;
+		
+		return v;
+		//return 0.5;
+	}
+	
+	/**
+	 * calculates the value to max pixels between -1 -1;
+	 */
 	function normalise(value,max){
-		return value/max*2 -1 +(2/(max*2))
+		return value/max*2 -1 +(2/(max*2));
 	}
 	function array2TA(pts) {
 		pts_ar = new Float32Array(pts.length);
@@ -82,7 +131,6 @@ function DataLoader(fname) {
 			pts_ar[i] = pts[i];
 			pts[i] = null;
 		}
-
 		return pts_ar;
 	}
 	function array2TA2D(pts) {
