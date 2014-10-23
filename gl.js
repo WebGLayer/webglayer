@@ -68,11 +68,11 @@ function render() {
 
 function read() {
 
-	readout = dimSpeed.readPixels();
+//	readout = dimSpeed.readPixels();
 	
 	readout = histDim.readPixels();
 	if(typeof readout!= 'undefined'){
-	//	chart.update(readout);
+		chart.update(readout);
 	}
 
 	//$("#data").text("in:"+readout[0] + "out: "+ readout[1]);

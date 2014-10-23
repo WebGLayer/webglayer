@@ -29,7 +29,7 @@ StackedBarChart = function(d_max) {
 		colorScale = d3.scale.ordinal().range(
 				[ "#ff8c00", "#98abc5", "#7b6888" ]);
 
-		yScale = d3.scale.linear().domain([ 0, 15 ]).range([ height, 0 ]);
+		yScale = d3.scale.linear().domain([ 0, 8000]).range([ height, 0 ]);
 
 		colorScale.domain([ "selected", "unselected", "out" ]);
 		xAxis = d3.svg.axis().scale(xScale).orient("bottom");

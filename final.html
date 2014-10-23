@@ -125,7 +125,7 @@
 		//createChart();
 			metadata = [];
 		/* New stacked chart */
-		chart = new StackedBarChart(90);
+		
 		//chart.update([1, 1, 1, 1,1,1,1,1,1, 1,1, 1, 1, 1,1,1,1,1,1, 1,1, 1, 1, 1,1,1,1,1,1, 1,1, 1, 1, 1,1,1,1,1,1, 10000]);
 		
 		/* Old chart */
@@ -148,14 +148,14 @@
 		
 		
 		/*Configure speed dimension*/
-		metadata[0] = {max : 180, num_bins : 90, name: "speed"};		
+		//metadata[0] = {max : 180, num_bins : 45, name: "speed"};		
 		/*Configure hour dimension*/	
-		metadata[1] = {max : 24, num_bins : 24, name: "hours"};
-		metadata.max_bins = 90;
+		metadata[0] = {max : 24, num_bins :24 , name: "hours"};
+		metadata.max_bins =metadata[0].num_bins;
 		
+		chart = new StackedBarChart(metadata[0].max);
 		
-		
-		var data = new DataLoader('../data/osm20.js');
+		var data = new DataLoader('../data/osm100k.js');
 		var rastersize = data.loadData();
 		manager.num_rec = data.num_rec;
 		/**init geo buffer*/
@@ -173,8 +173,8 @@
 		dimMap.name = "map";
 		dimMap.setProgram('map_vShader', 'map_fShader', 'map');
 
-		dimSpeed = new OneDDimension(manager, 180, 180, "speed");
-		dimSpeed.setProgram('speed_vShader', 'speed_fShader', 'speed');
+	/*	dimSpeed = new OneDDimension(manager, 3, 180, "speed");
+		dimSpeed.setProgram('speed_vShader', 'speed_fShader', 'speed');*/
 
 		
 	  	histDim = new HistogramDimension(manager);

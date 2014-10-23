@@ -1,9 +1,10 @@
-function FloatRasterReader(raster, bin_count) {	
+function FloatRasterReader(raster, width, height) {	
 	
 	this.raster = raster;
-	this.bin_count=bin_count;	
+	this.bin_count=width;
+	this.height = height
 		
-	var rows = 3;
+	var rows = 3 * height;
     /*Initialise offscreen buffer*/
 		
 	this.floatProgram = utils.loadShaders("float_vShader",  "float_fShader", this);
@@ -46,13 +47,15 @@ function FloatRasterReader(raster, bin_count) {
     
     this.vertices = new Float32Array(this.bin_count*2*rows);
     var m=0;
-    for (var i = 0; i <this.bin_count; i++) {
-    	for (var j =0; j<rows;j++){
-    		this.vertices[m++] = i/this.bin_count + 0.5/this.bin_count;
-        	this.vertices[m++] = j; 
+    for (var i = 0; i <rows; i++) {
+    	for (var j =0; j<this.bin_count;j++){
+    		this.vertices[m++] = j;//;/this.bin_count+(0.5/this.bin_count);
+        	this.vertices[m++] = i;///rows+ (0.5 / rows); 
     	}
     	
 	}		
+    
+	
     
     
     this.buffer.itemSize =2;
@@ -109,11 +112,19 @@ function FloatRasterReader(raster, bin_count) {
 		//gl.bindTexture(gl.TEXTURE_2D, this.floatTexture);
 		gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
 		
-		
+		/**
+		 * Enable source float raster
+		 */
 		var rasterLoc =  gl.getUniformLocation(this.floatProgram, 'floatRaster'); 		 
-		gl.uniform1i(rasterLoc , 0);		   
+		gl.uniform1i(rasterLoc , 0);	
 		gl.activeTexture(gl.TEXTURE0);		
 		gl.bindTexture(gl.TEXTURE_2D, this.raster);
+						
+		/**
+		 * Enable uniforms
+		 */
+		this.bindIntUniform("height", rows);
+		this.bindIntUniform("width", this.bin_count);
 		
 		
 		
@@ -130,6 +141,15 @@ function FloatRasterReader(raster, bin_count) {
 	}
 	
 
+	this.bindIntUniform = function(name, val){
+		var loc = gl.getUniformLocation(this.floatProgram, name);			
+		if (loc instanceof WebGLUniformLocation){
+			gl.uniform1f(loc, val);
+		} else {
+			console.error("Uniform set failed, uniform: "+name+ " value "+value );
+			return;
+		}
+	}
 	
 	this.readPixels = function() {
 		
@@ -140,8 +160,8 @@ function FloatRasterReader(raster, bin_count) {
 		gl.readPixels(0, 0, this.bin_count, rows, gl.RGBA, gl.UNSIGNED_BYTE, readout_eight);		
 
 		var readout = new Float32Array(readout_eight.buffer);
-		sum = 0;
-		/*for (i = 0; i < readout.length; i++) {
+	/*	sum = 0;
+		for (i = 0; i < readout.length; i++) {
 			sum = sum + readout[i];
 		}
 		console.log(sum);

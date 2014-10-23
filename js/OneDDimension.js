@@ -50,14 +50,14 @@ function OneDDimension(manager, bin_count, max, name) {
 		 */		
 		gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
 	//	console.time("reading_pix");
-	//	var readout= new Float32Array(this.bin_count*4);
-	//	gl.readPixels(0, 0, this.bin_count, 1, gl.RGBA, gl.FLOAT, readout);
-	//	console.timeEnd("reading_pix");
+		var readout= new Float32Array(this.bin_count*4);
+		gl.readPixels(0, 0, this.bin_count, 1, gl.RGBA, gl.FLOAT, readout);
+		console.log(readout);
 		gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 	 
 		this.floatReader.setup()
 		this.floatReader.render();
-		readout = this.floatReader.readPixels();
+		var readout = this.floatReader.readPixels();
 		
 		var res = new Array(this.bin_count);
 		for (var i = 0; i < this.bin_count; i++) {
