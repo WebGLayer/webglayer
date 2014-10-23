@@ -107,6 +107,7 @@
 <script src="js/HistogramDimension.js"></script>
 
 <script src="js/MapFilterRender.js"></script>
+<script src="js/HistFilterRender.js"></script>
 <script src="js/Filter.js"></script>
 
 <script src="js/MapController.js"></script>
@@ -148,14 +149,14 @@
 		
 		
 		/*Configure speed dimension*/
-		//metadata[0] = {max : 180, num_bins : 45, name: "speed"};		
+		metadata[0] = {max : 180, num_bins : 45, name: "speed"};		
 		/*Configure hour dimension*/	
-		metadata[0] = {max : 24, num_bins :24 , name: "hours"};
+		metadata[1] = {max : 24, num_bins :24 , name: "hours"};
 		metadata.max_bins =metadata[0].num_bins;
 		
-		chart = new StackedBarChart(metadata[0].max);
+		chart = new StackedBarChart(metadata[0].max, 0);
 		
-		var data = new DataLoader('../data/osm100k.js');
+		var data = new DataLoader('../data/osm200k.js');
 		var rastersize = data.loadData();
 		manager.num_rec = data.num_rec;
 		/**init geo buffer*/
@@ -179,13 +180,16 @@
 		
 	  	histDim = new HistogramDimension(manager);
 	
-		mapFilterRender = new MapFilterRender(manager);
+		mapFilterRender =  new MapFilterRender(manager);
+		histFilterRender = new HistFilterRender(manager);
+		
 		allDataFilter = new Filter(data.num_rec, rastersize, manager); 
 		data = null;
 		mcontroller.resize(div.offsetWidth, div.offsetHeight);
 		mcontroller.zoommove(map.zoom, tl);
 
 		mapFilterRender.init();
+		histFilterRender.init();
 		//util.createFilteringData(generateOneTriangle());
 
 		fpsElement = document.getElementById("fps");
@@ -224,15 +228,15 @@
 			$("head").append(data);
 		});
 		
+		$.get('shaders/shaders_filterhist.txt', function(data) {
+			$("head").append(data);
+		});
+		
 		$.get('shaders/shaders_filter.txt', function(data) {
 			$("head").append(data);
 		});
 
 		$.get('shaders/shaders_map.txt', function(data) {
-			$("head").append(data);
-		});
-
-		$.get('shaders/shaders_speed.txt', function(data) {
 			$("head").append(data);
 		});
 		

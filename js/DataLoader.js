@@ -108,7 +108,7 @@ function DataLoader(fname) {
 	/**
 	 * calculates the value to max pixels between -1 -1;
 	 */
-	function normaliseByMax(value, max_all, this_max, this_num){
+	normaliseByMax = function(value, max_all, this_max, this_num){
 		/*reduced value to 0-1*/
 		//var c = value/ this_max;
 		var c_size =  this_max / this_num;

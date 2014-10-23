@@ -2,13 +2,17 @@ var fps_loop=1;
 var fps_sum=0;
 
 function animloop() {
+	if (fps_loop>50){
+		fps_sum = 0;
+		fps_loop = 1;
+	}
 	var now = Date.now() / 1000; // get time in seconds
 	// compute time since last frame
 	var elapsedTime = now - then;
 	then = now;
 	// compute fps
 	var fps = 1 / elapsedTime;
-	fps_sum = fps_sum+fps; 
+	fps_sum = fps_sum+fps;
 	
 	fpsElement.textContent =  (fps_sum/fps_loop++).toFixed(2);
 	render();
@@ -45,6 +49,9 @@ function stop() {
  */
 function render() {
 	mapFilterRender.renderFilter();
+	histFilterRender.renderFilter();
+	
+	//histFilterRender.readPixels();
 	
 	manager.texture = mapFilterRender.filterTexture;
 	allDataFilter.texture =  mapFilterRender.filterTexture;	

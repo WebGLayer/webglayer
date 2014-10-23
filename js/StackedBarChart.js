@@ -1,5 +1,6 @@
-StackedBarChart = function(d_max) {
+StackedBarChart = function(d_max, ch_row) {
 
+	var ch_row = ch_row;
 	var w = 600;
 	var h = 400;
 	var dataset;
@@ -29,7 +30,7 @@ StackedBarChart = function(d_max) {
 		colorScale = d3.scale.ordinal().range(
 				[ "#ff8c00", "#98abc5", "#7b6888" ]);
 
-		yScale = d3.scale.linear().domain([ 0, 8000]).range([ height, 0 ]);
+		yScale = d3.scale.linear().domain([ 0, 15000 ]).range([ height, 0 ]);
 
 		colorScale.domain([ "selected", "unselected", "out" ]);
 		xAxis = d3.svg.axis().scale(xScale).orient("bottom");
@@ -81,7 +82,13 @@ StackedBarChart = function(d_max) {
 		});
 
 		brush1 = d3.svg.multibrush().x(xScale).extentAdaption(resizeExtent).on(
-				"brush", brush);
+				"brush", brush).on("brushend",function(d){
+					if (brush1.extent().length==0){
+						brush();
+					}
+					
+					});
+		
 
 		var brushNode = svg.append("g").attr("class", "brush").call(brush1)
 				.selectAll("rect").attr("height", height);
@@ -94,14 +101,27 @@ StackedBarChart = function(d_max) {
 			//console.log(brush1.extent());
 			
 			var f = brush1.extent();
-			var h_filter = new Float32Array(f.length*2);
+			var h_filter = new Float32Array(f.length*4);
+			//console.log(h_filter.length);
 			var j = 0;
 			for(var i in f){
-				h_filter[j++] = f[i][0];
-				h_filter[j++] = f[i][1];
+				var y = ((ch_row + 0.5) / metadata.length) *2 -1;				
+				
+				h_filter[j++] = normaliseByMax(f[i][0], 
+						metadata.max_bins, 
+						metadata[ch_row].max, 
+						metadata[ch_row].num_bins);
+				h_filter[j++] = y; 
+			
+				h_filter[j++] = normaliseByMax(f[i][1], 
+						metadata.max_bins, 
+						metadata[ch_row].max, 
+						metadata[ch_row].num_bins);
+				h_filter[j++] = y;
 			}
 			
-			console.log(h_filter);
+			histFilterRender.createFilteringData(h_filter);
+			//console.log(h_filter);
 		}
 
 	}
