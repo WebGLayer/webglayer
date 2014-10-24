@@ -51,10 +51,11 @@ function render() {
 	mapFilterRender.renderFilter();
 	histFilterRender.renderFilter();
 	
-	//histFilterRender.readPixels();
+	histFilterRender.readPixels();
+		
+	allDataFilter.mapFilter  =  mapFilterRender.filterTexture;
+	allDataFilter.histFilter =  histFilterRender.filterTexture;
 	
-	manager.texture = mapFilterRender.filterTexture;
-	allDataFilter.texture =  mapFilterRender.filterTexture;	
 	allDataFilter.render();
 	manager.filterTexture = allDataFilter.filterTexture;	
 	

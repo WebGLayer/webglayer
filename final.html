@@ -151,12 +151,12 @@
 		/*Configure speed dimension*/
 		metadata[0] = {max : 180, num_bins : 45, name: "speed"};		
 		/*Configure hour dimension*/	
-		metadata[1] = {max : 24, num_bins :24 , name: "hours"};
+	//	metadata[1] = {max : 24, num_bins :24 , name: "hours"};
 		metadata.max_bins =metadata[0].num_bins;
 		
 		chart = new StackedBarChart(metadata[0].max, 0);
 		
-		var data = new DataLoader('../data/osm200k.js');
+		var data = new DataLoader('../data/osm100k.js');
 		var rastersize = data.loadData();
 		manager.num_rec = data.num_rec;
 		/**init geo buffer*/
