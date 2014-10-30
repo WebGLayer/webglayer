@@ -151,10 +151,12 @@
 		/*Configure speed dimension*/
 		metadata[0] = {max : 180, num_bins : 45, name: "speed"};		
 		/*Configure hour dimension*/	
-	//	metadata[1] = {max : 24, num_bins :24 , name: "hours"};
+		metadata[1] = {max : 24, num_bins :24 , name: "hours"};
 		metadata.max_bins =metadata[0].num_bins;
 		
-		chart = new StackedBarChart(metadata[0].max, 0);
+		charts = [];
+		charts[0] = new StackedBarChart(metadata[0].max, 0, "#speed_chart");
+		charts[1] = new StackedBarChart(metadata[1].max, 1, "#hour_chart");
 		
 		var data = new DataLoader('../data/osm100k.js');
 		var rastersize = data.loadData();
@@ -263,7 +265,11 @@
 		<div id="map">
 			<canvas id="test">Your browser does not support HTML5</canvas>
 		</div>
-		<div id="chart_container"></div>
+		<div id="chart_container">
+			<div id = "speed_chart"></div>
+			<div id = "hour_chart"></div>
+		
+		</div>
 	</div>
 	<div id="controls">
 		<ul id="controlToggle">

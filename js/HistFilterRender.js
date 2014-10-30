@@ -88,7 +88,7 @@ HistFilterRender = function(manager){
 	
 	
 	this.createFilteringData = function(points){	
-		//console.log(points);
+		console.log(points);
 		//console.log("...........")
 		gl.bindBuffer(gl.ARRAY_BUFFER, posBuffer);
 		gl.bufferData(gl.ARRAY_BUFFER, points, gl.STATIC_DRAW);	
@@ -110,7 +110,7 @@ HistFilterRender = function(manager){
 			readout[i];
 		}**/
 		//console.log(sum);
-		console.log(readout);
+		//console.log(readout);
 		gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 	}
 	

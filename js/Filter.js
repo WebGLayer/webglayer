@@ -57,6 +57,10 @@ Filter = function(size, rastersize, manager) {
 
 		this.manager.enableBuffer(this.filterProgram, "wPoint");
 		this.manager.enableBuffer(this.filterProgram, "speed");
+		for(var i = 0; i < metadata.length; i++){
+			//this.manager.enableBuffer(this.filterProgram, metadata[i].name);
+		}
+		
 		this.manager.bindMapMatrix(this.filterProgram);
 		/*for (var i = 0; i < metadata.length; i++) {
 			

@@ -11,6 +11,7 @@ function MapDimension(manager){
 		gl.useProgram(this.glProgram);
 		this.manager.bindMapMatrix(this.glProgram);
 		this.manager.enableBuffer(this.glProgram, "wPoint");
+		this.manager.enableBuffer(this.glProgram, "speed");
 		gl.bindFramebuffer(gl.FRAMEBUFFER, null);	
 		gl.viewport(0, 0, manager.width, manager.height);
 		gl.clearColor(0.0, 0.0, 0.0, 0.0);

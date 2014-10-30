@@ -78,13 +78,16 @@ function read() {
 
 //	readout = dimSpeed.readPixels();
 	
-	readout = histDim.readPixels();
+	readout = histDim.readPixels();	
 	if(typeof readout!= 'undefined'){
-		chart.update(readout);
+		for (var i in charts){
+			charts[i].update(readout[i]);
+		}
+		
 	}
 
 	//$("#data").text("in:"+readout[0] + "out: "+ readout[1]);
-	//console.log(readout[0], readout[1]);
+	
 	
 	// dimTime.readPixels();
 }

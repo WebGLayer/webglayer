@@ -24,9 +24,9 @@ function HistogramDimension(manager) {
 	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
 	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
 	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); // Prevents
-																			// s-coordinate
-																			// wrapping
-																			// (repeating).
+	// s-coordinate
+	// wrapping
+	// (repeating).
 	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 
 	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, framebuffer.width,
@@ -95,14 +95,12 @@ function HistogramDimension(manager) {
 		/* console.time("reading filter"); */
 		/* gl.useProgram(this.program); */
 
-		
-	/*	 gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer); var readout = new
-		 Float32Array(framebuffer.width * framebuffer.height * 4);
-		 gl.readPixels(0, 0, framebuffer.width, framebuffer.height, gl.RGBA,
-		 gl.FLOAT, readout); 
-		 console.log("HistDim:"); 
-		 console.log(readout);*/
-		
+		/*
+		 * gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer); var readout = new
+		 * Float32Array(framebuffer.width * framebuffer.height * 4);
+		 * gl.readPixels(0, 0, framebuffer.width, framebuffer.height, gl.RGBA,
+		 * gl.FLOAT, readout); console.log("HistDim:"); console.log(readout);
+		 */
 
 		/*
 		 * sum = 0; for (i = 0; i < readout.length; i++) { sum = sum +
@@ -116,18 +114,22 @@ function HistogramDimension(manager) {
 		this.floatReader.render();
 		var readout = this.floatReader.readPixels();
 
-		var m = 0;
-		var res = new Array(metadata[m].num_bins);
-		for (var i = 0; i < metadata[m].num_bins; i++) {
-			var s = metadata[m].max / metadata[0].num_bins;
-			var d = {
-				min : i * s,
-				max : (i + 1) * s,
-				selected : readout[i],
-				unselected : readout[i + 1 * metadata[m].num_bins],
-				out : readout[i + 2 * metadata[m].num_bins]
-			};
-			res[i] = d;
+		var res =[];
+		for (var m = 0; m < metadata.length; m++) {
+			res[m] = new Array(metadata[m].num_bins);
+			for (var i = 0; i < metadata[m].num_bins; i++) {
+				var s = metadata[m].max / metadata[0].num_bins;
+				
+				var dimid = m * metadata.max_bins*3;
+				var d = {
+					min : i * s,
+					max : (i + 1) * s,
+					selected : readout[dimid+i],
+					unselected : readout[dimid+i + 1 * metadata.max_bins],
+					out : readout[dimid+i + 2 * metadata.max_bins]
+				};
+				res[m][i] = d;
+			}
 		}
 		return res;
 

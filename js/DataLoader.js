@@ -13,12 +13,7 @@ function DataLoader(fname) {
 		
 		/*Configure speed dimension*/
 		var attr = [];
-		
-		
-		
-		
-		
-		
+
 		var index = [];
 		
 		var j = 0;
@@ -53,7 +48,7 @@ function DataLoader(fname) {
 				//console.log(v.x + " " + v.y);
 
 				val.hours = (new Date(val.time * 1000)).getHours()
-				val.speed = Math.round(val.speed);
+				val.speed = val.speed;
 				val.unit_id = val.unit_id % 100000;
 		
 				
@@ -112,7 +107,7 @@ function DataLoader(fname) {
 		/*reduced value to 0-1*/
 		//var c = value/ this_max;
 		var c_size =  this_max / this_num;
-		var v =  (value / c_size)/max_all*2 -1 ;
+		var v =  (value / c_size)/max_all*2 - 1 ;
 		
 		return v;
 		//return 0.5;

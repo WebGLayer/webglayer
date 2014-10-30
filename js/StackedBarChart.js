@@ -1,8 +1,8 @@
-StackedBarChart = function(d_max, ch_row) {
-
+StackedBarChart = function(d_max, ch_row, div_id) {
+	var div_id;
 	var ch_row = ch_row;
-	var w = 600;
-	var h = 400;
+	var w = 500;
+	var h = 300;
 	var dataset;
 	var xScale;
 	var yScale;
@@ -30,7 +30,7 @@ StackedBarChart = function(d_max, ch_row) {
 		colorScale = d3.scale.ordinal().range(
 				[ "#ff8c00", "#7b6888", "#98abc5" ]);
 
-		yScale = d3.scale.linear().domain([ 0, 4000 ]).range([ height, 0 ]);
+		yScale = d3.scale.linear().domain([ 0, 8000 ]).range([ height, 0 ]);
 
 		colorScale.domain([ "selected", "unselected", "out" ]);
 		xAxis = d3.svg.axis().scale(xScale).orient("bottom");
@@ -40,7 +40,7 @@ StackedBarChart = function(d_max, ch_row) {
 		// xScale.domain(this.dataset.map(function(d) {
 		// return d.max-(d.max-d.min)/2; }));
 
-		svg = d3.select("#chart_container").append("svg").attr("width",
+		svg = d3.select(div_id).append("svg").attr("width",
 				width + margin.left + margin.right).attr("height",
 				height + margin.top + margin.bottom).append("g").attr(
 				"transform",
@@ -81,7 +81,7 @@ StackedBarChart = function(d_max, ch_row) {
 			return colorScale(d.name);
 		});
 
-		brush1 = d3.svg.multibrush().x(xScale).extentAdaption(resizeExtent).on(
+		var brush1 = d3.svg.multibrush().x(xScale).extentAdaption(resizeExtent).on(
 				"brush", brush).on("brushend",function(d){
 					if (brush1.extent().length==0){
 						brush();
