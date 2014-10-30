@@ -118,7 +118,7 @@ function HistogramDimension(manager) {
 		for (var m = 0; m < metadata.length; m++) {
 			res[m] = new Array(metadata[m].num_bins);
 			for (var i = 0; i < metadata[m].num_bins; i++) {
-				var s = metadata[m].max / metadata[0].num_bins;
+				var s = metadata[m].max / metadata[m].num_bins;
 				
 				var dimid = m * metadata.max_bins*3;
 				var d = {

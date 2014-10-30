@@ -9,7 +9,7 @@ StackedBarChart = function(d_max, ch_row, div_id) {
 	var colorScale;
 	var xAxis;
 	var yAxis;
-	var speeds;
+	var bars;
 	var svg;
 	var chart;
 	var margin = {
@@ -54,9 +54,9 @@ StackedBarChart = function(d_max, ch_row, div_id) {
 				.attr("transform", "rotate(90)").attr("y", 6).attr("dy",
 						".71em").style("text-anchor", "end").text("Population");
 
-		speeds = svg.selectAll(".speeds").data(this.dataset).enter()
+		bars = svg.selectAll(".bars").data(this.dataset).enter()
 				.append("g").attr("class", "g").attr("transform", function(d) {
-					return "translate(" + xScale(d.min) + ",0)";
+					return "translate(" + (xScale(d.min)+xScale(d.max))/2 + ",0)";
 				});
 
 		this.dataset.forEach(function(d) {
@@ -71,11 +71,12 @@ StackedBarChart = function(d_max, ch_row, div_id) {
 			d.total = 0;
 		});
 
-		speeds.selectAll("rect").data(function(m) {
+		var bw = Math.floor(width/this.dataset.length-1);
+		bars.selectAll("rect").data(function(m) {
 			return m.levels;
 		}).enter().append("rect").attr("y", function(d) {
 			return yScale(d.y1);
-		}).attr("width", 5).attr("height", function(d) {
+		}).attr("width", bw).attr("height", function(d) {
 			return yScale(d.y0) - yScale(d.y1);
 		}).attr("fill", function(d) {
 			return colorScale(d.name);
@@ -147,9 +148,9 @@ StackedBarChart = function(d_max, ch_row, div_id) {
 			d.total = 0;
 		});
 
-		speeds.data(this.dataset).transition().duration(15);
+		bars.data(this.dataset).transition().duration(15);
 
-		speeds.selectAll("rect").data(function(m) {
+		bars.selectAll("rect").data(function(m) {
 			return m.levels;
 		}).transition().duration(0).attr("y", function(d) {
 			return yScale(d.y1);
