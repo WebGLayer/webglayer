@@ -10,7 +10,8 @@ d3.svg.multibrush = function() {
   }
 
   // From d3
-  var d3_event_dragSelect = "onselectstart" in document ? null : d3_vendorSymbol(document.documentElement.style, "userSelect"), d3_event_dragId = 0;
+  var d3_event_dragSelect = null ;//"onselectstart" in document ? null : d3_vendorSymbol(document.documentElement.style, "userSelect");
+  var d3_event_dragId = 0;
   function d3_event_dragSuppress() {
     var name = ".dragsuppress-" + ++d3_event_dragId, click = "click" + name, w = d3.select(window).on("touchmove" + name, d3.event.preventDefault()).on("dragstart" + name, d3.event.preventDefault()).on("selectstart" + name, d3.event.preventDefault());
     if (d3_event_dragSelect) {
