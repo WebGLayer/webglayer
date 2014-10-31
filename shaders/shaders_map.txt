@@ -25,12 +25,12 @@
   		
   		// if data are selected  
   		if (fdata[0]>0. ){
-  			p_size = 4.;
-  			col =  vec4(n_speed , 0.,0.,0.5);
+  			p_size = 7.;
+  			col =  vec4(n_speed , 0.,0.,0.9);
   		} else {  	
   		   // If not selected then use blue color	   
-  		   col = vec4(31./256., 119./256., 180./256., 0.7); 	
-  		   p_size = 10.;
+  		   col = vec4(31./256., 119./256., 180./256., 0.9); 	
+  		   p_size = 4.;
   		   col = vec4(0.5,0.,0.,0.5);
   		}
   		

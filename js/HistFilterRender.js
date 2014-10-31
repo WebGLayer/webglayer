@@ -2,6 +2,7 @@ HistFilterRender = function(manager){
 	
 	this.manager = manager;
 	
+	var filters = [];
 	var pointsSize = 0;
 	var height = metadata.length;
 	var width = metadata.max_bins;
@@ -87,13 +88,26 @@ HistFilterRender = function(manager){
 	
 	
 	
-	this.createFilteringData = function(points){	
-		console.log(points);
+	this.createFilteringData = function(ch_row, points){
+		var allfilters = [];
+		filters[ch_row] = points;
+		
+		var m = 0;
+		for (var i = 0; i < filters.length; i++){
+			for(var j = 0; j < filters[i].length; j++){
+				allfilters[m++] = filters[i][j];
+			}
+		
+		}
+		
+		
+		var f = new Float32Array(allfilters);
+		console.log( f);
 		//console.log("...........")
-		gl.bindBuffer(gl.ARRAY_BUFFER, posBuffer);
-		gl.bufferData(gl.ARRAY_BUFFER, points, gl.STATIC_DRAW);	
+		gl.bindBuffer(gl.ARRAY_BUFFER, posBuffer );
+		gl.bufferData(gl.ARRAY_BUFFER, f, gl.STATIC_DRAW);	
 		gl.bindBuffer(gl.ARRAY_BUFFER, null);
-		pointsSize = points.length/2;
+		pointsSize = allfilters.length/2;
 	}
 	
 	this.readPixels = function() {

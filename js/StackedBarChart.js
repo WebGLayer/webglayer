@@ -30,7 +30,7 @@ StackedBarChart = function(d_max, ch_row, div_id) {
 		colorScale = d3.scale.ordinal().range(
 				[ "#ff8c00", "#7b6888", "#98abc5" ]);
 
-		yScale = d3.scale.linear().domain([ 0, 8000 ]).range([ height, 0 ]);
+		yScale = d3.scale.linear().domain([ 0, 1500 ]).range([ height, 0 ]);
 
 		colorScale.domain([ "selected", "unselected", "out" ]);
 		xAxis = d3.svg.axis().scale(xScale).orient("bottom");
@@ -121,7 +121,7 @@ StackedBarChart = function(d_max, ch_row, div_id) {
 				h_filter[j++] = y;
 			}
 			
-			histFilterRender.createFilteringData(h_filter);
+			histFilterRender.createFilteringData(ch_row, h_filter);
 			//console.log(h_filter);
 		}
 
