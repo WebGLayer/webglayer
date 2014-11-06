@@ -64,7 +64,12 @@ HistFilterRender = function(manager){
 		gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
 		
 		gl.viewport(0, 0, width, height);
-		gl.clearColor(0.0, 0.0, 0.0, 0.0);
+		if (pointsSize ==0) {
+			gl.clearColor(0.0, 0.0, 0.0, 1.0);
+		} else {
+			gl.clearColor(0.0, 0.0, 0.0, 0.0);
+		}
+		
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 	
 		// this.setUniforms();

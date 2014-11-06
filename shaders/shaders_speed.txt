@@ -1,4 +1,4 @@
-<script id="speed_vShader" type="x-shader/x-vertex">
+<script id="ssspeed_vShader" type="x-shader/x-vertex">
 
 	//attribute vec4 wPoint;
 	attribute float speed;

@@ -17,7 +17,7 @@
  			 
       void main() {     
 		vec4 col;				
-		col = vec4(1.,0.,0.,1); 		
+		col = vec4(1.,0.,0.,1.); 		
 		gl_FragColor = col;
       }
   </script>

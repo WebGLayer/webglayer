@@ -31,7 +31,7 @@
   			vec4 hoursData = texture2D(histFilter, vec2((hours+1.)/2., 0.6));
 		
 			// if data are selected
-  			if (fdata[0]> 0. || histData[0] > 0. ||  hoursData[0]>0.){  // && add other filters speed>-1.
+  			if (fdata[0]> 0. && histData[0] > 0. &&  hoursData[0]>0.){  // && add other filters speed>-1.
   				col = vec4(1./256., 0., 0., 0.);
   			} else {  	  		   
   		    	col = vec4(0., 1./256., 0., 0.); 	  		  

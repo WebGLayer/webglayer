@@ -30,7 +30,7 @@ StackedBarChart = function(d_max, ch_row, div_id) {
 		colorScale = d3.scale.ordinal().range(
 				[ "#ff8c00", "#7b6888", "#98abc5" ]);
 
-		yScale = d3.scale.linear().domain([ 0, 1500 ]).range([ height, 0 ]);
+		yScale = d3.scale.linear().domain([ 0, 8000 ]).range([ height, 0 ]);
 
 		colorScale.domain([ "selected", "unselected", "out" ]);
 		xAxis = d3.svg.axis().scale(xScale).orient("bottom");
@@ -52,7 +52,7 @@ StackedBarChart = function(d_max, ch_row, div_id) {
 
 		svg.append("g").attr("class", "y axis").call(yAxis).append("text")
 				.attr("transform", "rotate(90)").attr("y", 6).attr("dy",
-						".71em").style("text-anchor", "end").text("Population");
+						".71em").style("text-anchor", "end").text("");
 
 		bars = svg.selectAll(".bars").data(this.dataset).enter()
 				.append("g").attr("class", "g").attr("transform", function(d) {

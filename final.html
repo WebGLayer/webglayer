@@ -158,7 +158,7 @@
 		charts[0] = new StackedBarChart(metadata[0].max, 0, "#speed_chart");
 		charts[1] = new StackedBarChart(24, 1, "#hour_chart");
 		
-		var data = new DataLoader('../data/osm10k.js');
+		var data = new DataLoader('../data/osm100k.js');
 		var rastersize = data.loadData();
 		manager.num_rec = data.num_rec;
 		/**init geo buffer*/
