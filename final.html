@@ -13,8 +13,8 @@
 }
 
 #map {
-	width: 600px;
-	height: 400px;
+	width: 800px;
+	height: 600px;
 	border: 1px solid #ccc;
 }
 
@@ -60,6 +60,10 @@
 .axis text {
   font: 10px sans-serif;
 }
+.l text {
+  font: 10px sans-serif;
+}
+
 
 .axis path,
 .axis line {
@@ -72,7 +76,10 @@
   display: none;
 }
 
-
+.l {
+ cursor: pointer;
+ stroke: #000; 
+}
 .grid-background {
   fill: #ddd;
 }
@@ -155,8 +162,8 @@
 		metadata.max_bins =metadata[0].num_bins;
 		
 		charts = [];
-		charts[0] = new StackedBarChart(metadata[0].max, 0, "#speed_chart");
-		charts[1] = new StackedBarChart(24, 1, "#hour_chart");
+		charts[0] = new StackedBarChart(metadata[0].max, 0, "speed_chart");
+		charts[1] = new StackedBarChart(24, 1, "hour_chart");
 		
 		var data = new DataLoader('../data/osm100k.js');
 		var rastersize = data.loadData();
@@ -267,7 +274,7 @@
 		</div>
 		<div id="chart_container">
 			<div id = "speed_chart"></div>
-			<div id = "hour_chart"></div>
+	 		<div id = "hour_chart"></div> 
 		
 		</div>
 	</div>

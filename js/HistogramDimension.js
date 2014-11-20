@@ -115,19 +115,26 @@ function HistogramDimension(manager) {
 		var readout = this.floatReader.readPixels();
 
 		var res =[];
+
+		
 		for (var m = 0; m < metadata.length; m++) {
 			res[m] = new Array(metadata[m].num_bins);
+			res[m].max = {0:0,1:0,2:0,3:0};
 			for (var i = 0; i < metadata[m].num_bins; i++) {
 				var s = metadata[m].max / metadata[m].num_bins;
 				
 				var dimid = m * metadata.max_bins*3;
-				var d = {
+				var d = {					
 					min : i * s,
 					max : (i + 1) * s,
 					selected : readout[dimid+i],
 					unselected : readout[dimid+i + 1 * metadata.max_bins],
 					out : readout[dimid+i + 2 * metadata.max_bins]
 				};
+				
+				if (d.selected > res[m].max[0]){res[m].max[0] = d.selected};
+				if (d.unselected+d.selected > res[m].max[1]){res[m].max[1] = d.unselected+d.selected};
+				if (d.out+d.unselected+d.selected > res[m].max[2]){res[m].max[2] = d.out+d.unselected+d.selected};				
 				res[m][i] = d;
 			}
 		}
@@ -136,3 +143,4 @@ function HistogramDimension(manager) {
 	}
 
 }
+

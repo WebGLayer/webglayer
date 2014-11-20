@@ -19,8 +19,42 @@ function MapDimension(manager){
 	
 		gl.disable(gl.DEPTH_TEST);
 		gl.disable(gl.BLEND);
+		//gl.enable(gl.BLEND);
+		//gl.blendFunc(gl.ONE, gl.ONE);
+		var loc = gl.getUniformLocation(this.glProgram, "zoom");
+		if (loc instanceof WebGLUniformLocation) {
+			gl.uniform1f(loc, map.getZoom());
+		} else {
+			console.error("Uniform set failed, uniform: " + u_name
+					+ " value " + value);
+			return;
+		}
+		
 				
 	}	
+	this.render = function(num) {
+
+		//gl.useProgram(this.glProgram);		
+		var loc = gl.getUniformLocation(this.glProgram, "drawselect");
+		if (loc instanceof WebGLUniformLocation) {
+			gl.uniform1f(loc, 0);
+		} else {
+			console.error("Uniform set failed, uniform");
+			return;
+		}
+		gl.drawArrays(gl.POINTS, 0, num);	
+		
+		if (loc instanceof WebGLUniformLocation) {
+			gl.uniform1f(loc, 1);
+		} else {
+			console.error("Uniform set failed, uniform");
+			return;
+		}
+		gl.drawArrays(gl.POINTS, 0, num);	
+	    gl.useProgram(null);
+	    gl.finish();
+		
+	}
 	
 	this.tearDown = function(){
 		gl.bindFramebuffer(gl.FRAMEBUFFER, null);
