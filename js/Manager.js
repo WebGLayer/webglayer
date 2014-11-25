@@ -1,5 +1,4 @@
 function Manager(canvasid) {
-
 	/**
 	 * Global variables
 	 */
@@ -19,6 +18,18 @@ function Manager(canvasid) {
 	
 	this.filters = [];
 	
+	
+	this.update = function(){
+		/**
+		 * Global variables
+		 */
+		canvas = document.getElementById(canvasid);
+		div = canvas.parentElement;
+		gl = canvas.getContext('webgl', {preserveDrawingBuffer: true});
+
+	}
+	
+	
 	this.setMapMatrix = function(matrix){
 		this.mapMatrix = matrix;		
 	}
@@ -31,11 +42,12 @@ function Manager(canvasid) {
 	this.rMatrix.name = "rasterMatrix";
 	this.matrices[this.rMatrix.name]= this.rMatrix;
 
+
 	
 	this.addDimension = function(d){
 		this.dimensions.push(d);
 	}
-	
+
 	/**
 	 * Creates a data buffer object. itemSize is a dimension of the data
 	 */
@@ -49,6 +61,7 @@ function Manager(canvasid) {
 		gl.bindBuffer(gl.ARRAY_BUFFER, null);
 		this.databuffers[name] = buffer;		
 	}
+	
 	
 
 	

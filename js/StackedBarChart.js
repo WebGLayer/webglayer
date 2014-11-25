@@ -14,7 +14,7 @@ StackedBarChart = function(d_max, ch_row, div_id) {
 	var chart;
 	var active_group=2;
 	var margin = {
-		top : 0,
+		top : 20,
 		right : 20,
 		bottom : 30,
 		left : 40

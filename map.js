@@ -7,6 +7,13 @@ initMap = function() {
 	};
 	map = new OpenLayers.Map('map', options);
 //	map.addLayer(new OpenLayers.Layer.OSM());
+	 map.events.register('updatesize', map, 
+			  function(){
+		 		initGLDimensions();		 		
+		 		mcontroller.resize(div.offsetWidth, div.offsetHeight);
+		 		mcontroller.zoommove(map.zoom, getTopLeftTC());		 		
+		 		
+			  });
 	
     var layer = new OpenLayers.Layer.OSM('Simple OSM Map', null, {
         eventListeners: {

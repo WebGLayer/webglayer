@@ -1,0 +1,256 @@
+
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>MOV - moving object visualisation</title>
+<link rel="stylesheet"
+	href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+<style>
+#canvasContainer {
+	position: relative;
+	border: 1px;
+	padding: 0;
+	height: 400px;
+	width: 800px;
+}
+
+
+
+
+</style>
+
+<script src="../javascripts/jquery-1.9.1.min.js"></script>
+<script src="../javascripts/d3.js"></script>
+
+<script src="js/Dimension.js"></script>
+<script src="js/Manager.js"></script>
+<script src="js/OneDDimension.js"></script>
+<script src="js/MapDimension.js"></script>
+<script src="js/FilterUtility.js"></script>
+<script src="js/MapController.js"></script>
+<script src="js/Utils.js"></script>
+<script src="js/BarChart.js"></script>
+
+
+
+<!-- <script src="js/Charts.js"></script> -->
+
+
+
+<script>
+	document.addEventListener('DOMContentLoaded', init, false);
+	function init() {
+		/*bind the shader to DOM*/
+		should_render = true;
+		getShader();
+		utils = new Utils();
+
+		r_count = 5 * Math.pow(10, 6);
+		manager = new Manager("test");
+		mcontroller = new MapController(manager);
+
+		canvas.setAttribute("width", div.offsetWidth);
+		canvas.setAttribute("height", div.offsetHeight);
+
+		/**init geo buffer*/
+		manager.addDataBuffer(generateData(r_count, 2, 2), 2, 'wPoint');
+		/*init first attribute buffer*/
+		manager.addDataBuffer(generatePositiveData(r_count, 1, 200), 1, 'speed');
+
+		/*Setup histogram*/
+		var dimSpeed = new OneDDimension(manager, 10, 200, "speed");	
+		dimSpeed.setProgram('speed_vShader', 'speed_fShader','speed');
+
+		
+		
+		/*Setup time*/
+	/*	var dimTime = new OneDDimension(manager);
+		dimTime.name = "time";
+		dimTime.setProgram('speed_vShader', 'speed_fShader');
+		dimTime.bin_count = 8;
+		dimTime.max = 200;
+	*/
+	
+		/*setup map*/
+		var dimMap = new MapDimension(manager);
+		dimMap.name = "map";
+		dimMap.setProgram('map_vShader', 'map_fShader', 'map');
+	
+
+		/*Setup map filter*/
+
+		var util = new FilterUtility(manager);
+		
+		mcontroller.resize(div.offsetWidth, div.offsetHeight);
+		mcontroller.zoommove(0,{x: 0, y : 0});
+		
+		util.init();
+		util.createFilteringData(generateOneTriangle());
+		/*Render*/
+		
+		/*initialise befor rendering*/
+		//manager.init();
+		
+		console.time("full");
+		
+		var fpsElement = document.getElementById("fps");
+		var then = Date.now() / 1000;  // get time in seconds
+		
+		request = false;
+	
+		
+		function animloop(){		
+			var now = Date.now() / 1000;  // get time in seconds
+		    // compute time since last frame
+		    var elapsedTime = now - then;
+		    then = now;
+		    // compute fps
+		    var fps = 1 / elapsedTime;
+		    fpsElement.innerText = fps.toFixed(2);
+		    render();	
+			request =  window.requestAnimFrame(animloop);
+		};
+
+		
+		function dataupdateloop(){		
+			util.createFilteringData(generateOneTriangle());
+			mcontroller.zoommove((Math.random()-0.5) * 0.4, {x: (Math.random()-0.5)*5, y : 0});
+			
+			request =  window.requestAnimFrame(dataupdateloop);
+		};
+		
+		function start() {
+		    if (!request) {
+		    	animloop();
+		    	dataupdateloop();
+		    }
+		}
+	
+		function stop() {
+		    if (request) {
+		       window.cancelAnimationFrame(request);
+		       request = undefined;
+		    }
+		}
+		
+		$("#stop").click(function() {if(!request){start()} else {stop()}});
+	
+		
+		function render(){
+			
+			util.renderFilter();
+			manager.texture = util.filterTexture;				
+			manager.render();
+			read();
+			//gl.flush();
+			//console.timeEnd(i + " rendering_all");			
+		}
+		
+		var datael = $("#data");		
+		function read(){
+			
+			readout = dimSpeed.readPixels();
+		 	datael.html(readout[0],readout[1]);
+		   //dimTime.readPixels();
+		}
+		
+		//	util.createFilteringData(generatePolygon(2,3));
+		//	util.renderFilter();
+		//	util.addDataToFilter(generatePolygon(2,3));
+		//	util.renderFilter();
+
+		//dimSpeed.readFloatPixels();
+		//dimTime.readFloatPixels();
+	}
+
+	window.requestAnimFrame = (function(){
+		  return  window.requestAnimationFrame       ||
+		          window.webkitRequestAnimationFrame ||
+		          window.mozRequestAnimationFrame    ||
+		          function( callback ){
+		            window.setTimeout(callback, 1000 / 60);
+		          };
+		})();
+	
+	var timer = function(callback){
+        window.setTimeout(callback, 1000 / 60);
+      };
+	
+	generateOneTriangle = function() {
+		atr = new Float32Array([ 400, 0, Math.random() *800, Math.random() *400, 0, 400 ]);
+		return atr;
+	}
+	generateTwoTriangle = function() {
+		atr = new Float32Array([ 400, 800, Math.random() *800, Math.random() *400, 0, 400,0, 0, Math.random() *800, Math.random() *400, 0, 400 ]);
+		return atr;
+	}
+
+	/* generate data */
+	generateData = function(imax, dim, size) {
+		atr = new Float32Array(imax * dim);
+		for (var i = 0; i < (imax * dim); i = i + 2) {
+			atr[i] = Math.random() * div.offsetWidth;
+			atr[i + 1] = Math.random() * div.offsetHeight;
+
+		}
+		return atr;
+	}
+
+	generatePolygon = function(imax, size) {
+		atr = new Float32Array(imax * size);
+		for (var i = 0; i < (imax * size); i++) {
+			atr[i] = Math.random() * size - (size / 2);
+		}
+		return atr;
+	}
+
+	generatePositiveData = function(count, dim, maxvalue) {
+		atr = new Float32Array(count * dim);
+		for (var i = 0; i < (count * dim); i++) {
+			atr[i] = (Math.random() * maxvalue)+0.5;	
+			//atr[i] = 150;
+		}
+		return atr;
+	}
+
+	getShader = function() {
+		$.ajaxSetup({
+			async : false
+		});
+
+		$.get('shaders/shaders_filtermap.txt', function(data) {
+			$("head").append(data);
+		});
+
+		$.get('shaders/shaders_map.txt', function(data) {
+			$("head").append(data);
+		});
+
+		$.get('shaders/shaders_speed.txt', function(data) {
+			$("head").append(data);
+		});
+	
+		$.ajaxSetup({
+			async : true
+		});
+		
+		
+	}
+</script>
+</head>
+<body>
+	<div id="canvasContainer">
+		<canvas id="test">Your browser does not support HTML5</canvas>
+	</div>
+	<div id="fps"> fps		
+	</div>	
+
+	<div id="stop"> start/stop		
+	</div>	
+	<div id="data"> data	
+	</div>	
+	<svg class="chart"></svg>
+
+</body>
+</html>

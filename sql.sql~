@@ -15,17 +15,3 @@ select count(speed), round(speed) from
  'POLYGON((0 55,50 55, 40 10, 41 9, 55 0,0 0,0 55))',4326),
  the_geom) 
  group by round(speed);
-
-
-
-select count(speed), round(speed/5)*5 as s from 
-gpx100k 
-group by s;
-
-
-select count(the_hour), the_hour from 
-gpx100k where speed < 10
-group by the_hour;
-
-
-
