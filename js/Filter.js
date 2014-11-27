@@ -70,15 +70,21 @@ Filter = function(size, rastersize, manager) {
 		
 		
 		/*Filter texture*/
-		var rasterLoc = manager.getUniformLoc(this.filterProgram, 'mapFilter'); 		 
-		gl.uniform1i(rasterLoc , 0);		   
+		if (this.filterProgram.mapLoc == null){
+			this.filterProgram.mapLoc = manager.getUniformLoc(this.filterProgram, 'mapFilter'); 
+		}
+				 
+		gl.uniform1i(this.filterProgram.mapLoc , 0);		   
 		gl.activeTexture(gl.TEXTURE0);
 		gl.bindTexture(gl.TEXTURE_2D, this.mapFilter);
 		
 		
 		/*Filter texture*/
-		var rasterLoc = manager.getUniformLoc(this.filterProgram, 'histFilter'); 		 
-		gl.uniform1i(rasterLoc , 1);		   
+		if (this.filterProgram.histLoc == null){
+			this.filterProgram.histLoc = manager.getUniformLoc(this.filterProgram, 'histFilter'); 		
+		}	
+	 
+		gl.uniform1i(this.filterProgram.histLoc , 1);		   
 		gl.activeTexture(gl.TEXTURE1);
 		gl.bindTexture(gl.TEXTURE_2D, this.histFilter);
 		
@@ -86,7 +92,7 @@ Filter = function(size, rastersize, manager) {
 		
 		gl.drawArrays(gl.POINTS, 0, this.datasize);
 		gl.useProgram(null);
-		gl.finish();
+	//	gl.finish();
 	}
 
 	this.readPixels = function() {

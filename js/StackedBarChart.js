@@ -199,7 +199,7 @@ StackedBarChart = function(d_max, ch_row, div_id) {
 			dataset.max = data.max;
 			this.init();
 		}
-		dataset = Array.prototype.slice.call(data);
+	dataset = Array.prototype.slice.call(data);
 
 		dataset.forEach(function(d) {
 			var y0 = 0;

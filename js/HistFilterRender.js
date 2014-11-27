@@ -80,7 +80,7 @@ HistFilterRender = function(manager){
 	
 		utils.enableAttribute(this.filterProgram, posBuffer);
 		
-		gl.useProgram(this.filterProgram);
+		
 	
 		gl.drawArrays(gl.LINES, 0, pointsSize);		
 
@@ -107,7 +107,7 @@ HistFilterRender = function(manager){
 		
 		
 		var f = new Float32Array(allfilters);
-		console.log( f);
+	//	console.log( f);
 		//console.log("...........")
 		gl.bindBuffer(gl.ARRAY_BUFFER, posBuffer );
 		gl.bufferData(gl.ARRAY_BUFFER, f, gl.STATIC_DRAW);	
@@ -117,12 +117,12 @@ HistFilterRender = function(manager){
 	
 	this.readPixels = function() {
 		
-		console.time("reading filter");
+//		console.time("reading filter");
 		
 		gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
 		var readout = new Uint8Array(width * height * 4);
 		gl.readPixels(0, 0, width, height, gl.RGBA, gl.UNSIGNED_BYTE, readout);
-		console.timeEnd("reading");
+	//	console.timeEnd("reading");
 
 		sum = 0;
 	/*	for (var i = 0; i < readout.length; i++) {

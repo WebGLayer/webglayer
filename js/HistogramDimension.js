@@ -62,19 +62,25 @@ function HistogramDimension(manager) {
 		manager.enableBuffersAndCommonUniforms(this.program);
 		manager.enableFilterTexture(this.program);
 
-		gl.finish();
+		//gl.finish();
 
 		for (var i = 0; i < metadata.length; i++) {
 			/* set unifom */
 			var r = (i / metadata.length) * 2 - 1 + (1 / metadata.length);
-			var loc = gl.getUniformLocation(this.program, "attr_row");
-			if (loc instanceof WebGLUniformLocation) {
-				gl.uniform1f(loc, r);
+			
+			if (this.program.loc==null){
+				this.program.loc = gl.getUniformLocation(this.program, "attr_row");
+				if (this.program.loc instanceof WebGLUniformLocation) {
+					gl.uniform1f(this.program.loc, r);
+				} else {
+					console.error("Uniform set failed, uniform: " + u_name
+							+ " value " + value);
+					return;
+				}
 			} else {
-				console.error("Uniform set failed, uniform: " + u_name
-						+ " value " + value);
-				return;
+				gl.uniform1f(this.program.loc, r);
 			}
+			
 
 			manager.enableBufferForName(this.program, metadata[i].name, "attr");
 			/* bind proper buffer */
@@ -93,7 +99,7 @@ function HistogramDimension(manager) {
 	this.readPixels = function() {
 
 		/* console.time("reading filter"); */
-		/* gl.useProgram(this.program); */
+		//gl.useProgram(this.program);
 
 		/*
 		 * gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer); var readout = new
@@ -107,7 +113,7 @@ function HistogramDimension(manager) {
 		 * readout[i]; } console.log(sum);
 		 */
 
-		gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+		//gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 		// return readout;*/
 
 		this.floatReader.setup()

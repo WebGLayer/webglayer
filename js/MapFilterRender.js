@@ -78,8 +78,7 @@ function MapFilterRender(manager){
 		gl.disable(gl.DEPTH_TEST);
 		
 	
-		utils.enableAttribute(this.filterProgram, posBuffer);	
-		gl.useProgram(this.filterProgram);
+		utils.enableAttribute(this.filterProgram, posBuffer);			
 		
 		gl.drawArrays(gl.TRIANGLES, 0, pointsSize);		
 		
@@ -102,12 +101,12 @@ function MapFilterRender(manager){
 	
 	this.readPixels = function() {
 		
-		console.time("reading filter");
+	//	console.time("reading filter");
 		
 		gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
 		var readout = new Uint8Array(this.width * this.height * 4);
 		gl.readPixels(0, 0, this.width, this.height, gl.RGBA, gl.UNSIGNED_BYTE, readout);
-		console.timeEnd("reading");
+	//	console.timeEnd("reading");
 
 		sum = 0;
 		for (i = 0; i < readout.length; i++) {

@@ -8,14 +8,42 @@
 <title>Modify Feature</title>
 
 <style type="text/css">
+html,body {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	font-family: Verdana, Arial, sans-serif;
+}
+div.olMapViewport {
+	 top: 0;
+	 position: relative;
+     z-index: 0;     
+}
+
+
 #view {
 	position: relative;
 }
 
 #map {
-	width: 800px;
-	height: 600px;
-	border: 1px solid #ccc;
+	 top: 0;
+	margin-right: 32em;
+	padding: 0;
+	height:100%;	
+}
+
+#right {
+	position: fixed;
+	overflow-y:auto;
+	overflow-x:hidden;		
+	right: 0;
+	top: 0;
+	width: 32em;
+	height: 100%;
+	font-size: 1em;
+	moz-box-shadow: 0px 0px 9px #999;
+	webkit-box-shadow: 0px 0px 9px #999;
+	box-shadow: 0px 0px 9px #999;
 }
 
 #controls {
@@ -165,7 +193,7 @@
 		charts[0] = new StackedBarChart(metadata[0].max, 0, "speed_chart");
 		charts[1] = new StackedBarChart(24, 1, "hour_chart");
 		
-		var data = new DataLoader('../data/osm100k.js');
+		var data = new DataLoader('../data/500000_r.js');
 		var rastersize = data.loadData();
 		manager.num_rec = data.num_rec;
 		/**init geo buffer*/
@@ -219,6 +247,33 @@
 
 	}
 
+	function initGLDimensions(){
+		manager.update();
+		mcontroller = new MapController(manager);
+
+		canvas.setAttribute("width", div.offsetWidth);
+		canvas.setAttribute("height", div.offsetHeight);
+		
+		dimMap = new MapDimension(manager);
+		dimMap.name = "map";
+		dimMap.setProgram('map_vShader', 'map_fShader', 'map');
+
+	/*	dimSpeed = new OneDDimension(manager, 3, 180, "speed");
+		dimSpeed.setProgram('speed_vShader', 'speed_fShader', 'speed');*/
+
+		
+	  	histDim = new HistogramDimension(manager);
+	
+		mapFilterRender =  new MapFilterRender(manager);
+		histFilterRender = new HistFilterRender(manager);
+			
+		mcontroller.resize(div.offsetWidth, div.offsetHeight);
+		mcontroller.zoommove(map.zoom, tl);
+
+		mapFilterRender.init();
+		histFilterRender.init();
+	}
+	
 	onMove = function() {
 		mcontroller.zoommove(map.getZoom(), getTopLeftTC());
 	}
@@ -266,17 +321,21 @@
 </script>
 </head>
 <body onload="init()">
-<div id="stop">start/stop</div>
-	<div id="view">
-
-		<div id="map">
+<!-- <div id="stop">start/stop</div> -->
+	<div id="map">
 			<canvas id="test">Your browser does not support HTML5</canvas>
-		</div>
-		<div id="chart_container">
+	</div>
+
+	<div id="right">
+		
+		
+		
 			<div id = "speed_chart"></div>
 	 		<div id = "hour_chart"></div> 
 		
-		</div>
+		
+		<div>fps: <div id="fps">fps</div></div>	
+		
 	</div>
 	<div id="controls">
 		<ul id="controlToggle">
@@ -316,7 +375,6 @@
 							dragging Event</label></li>
 				</ul></li>-->
 		</ul>
-		fps: <div id="fps">fps</div>	
 		
 		
 	</div>

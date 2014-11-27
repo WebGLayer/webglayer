@@ -43,10 +43,14 @@ Utils.prototype.bindUniform = function(prog, u_name, value){
 
 Utils.prototype.enableAttribute = function(prog, buf){	
 	gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-	var attributeLoc = gl.getAttribLocation(prog, buf.attr);
-	if (attributeLoc >= 0){
-		gl.enableVertexAttribArray(attributeLoc);
-		gl.vertexAttribPointer(attributeLoc, 2, gl.FLOAT, false, 0, 0);
+	
+	if (prog[buf.attr] == null){
+		prog[buf.attr] = gl.getAttribLocation(prog, buf.attr);
+	}
+	
+	if (prog[buf.attr] >= 0){
+		gl.enableVertexAttribArray(prog[buf.attr]);
+		gl.vertexAttribPointer(prog[buf.attr], 2, gl.FLOAT, false, 0, 0);
 	} else {
 		console.error("Error binding buffer: "+buf);
 		return;

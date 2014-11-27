@@ -94,8 +94,8 @@ function Manager(canvasid) {
 		for (var i in this.matrices){
 			var m = this.matrices[i];
 			if (prog[m.name]== null){
-				var matrixLoc = this.getUniformLoc(prog, m.name);	
-				prog[m.name] = matrixLoc;
+				
+				prog[m.name] = 	this.getUniformLoc(prog, m.name);
 			}
 		
 			gl.uniformMatrix4fv(prog[m.name], false, m);			
@@ -107,8 +107,11 @@ function Manager(canvasid) {
 
 	this.bindMapMatrix = function(prog){
 	//	gl.useProgram(prog);
-		var matrixLoc = this.getUniformLoc(prog, this.mapMatrix.name);		
-		gl.uniformMatrix4fv(matrixLoc, false,  this.mapMatrix);		
+		if (prog.matrixLoc == null){
+			prog.matrixLoc = this.getUniformLoc(prog, this.mapMatrix.name);	
+		}
+		
+		gl.uniformMatrix4fv(prog.matrixLoc, false,  this.mapMatrix);		
 	}
 	
 	this.enableBuffer = function(prog, name){
@@ -153,8 +156,12 @@ function Manager(canvasid) {
 	
 	this.enableFilterTexture = function(prog){
 	//	gl.useProgram(prog);
-		var rasterLoc = this.getUniformLoc(prog, 'filter'); 		 
-		gl.uniform1i(rasterLoc , 0);		   
+		
+		if (prog.rasterLoc == null){
+			prog.rasterLoc = this.getUniformLoc(prog, 'filter'); 	
+		}
+			 
+		gl.uniform1i(prog.rasterLoc , 0);		   
 		gl.activeTexture(gl.TEXTURE0);
 		gl.bindTexture(gl.TEXTURE_2D, this.filterTexture);
 	}

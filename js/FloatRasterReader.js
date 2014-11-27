@@ -70,6 +70,7 @@ function FloatRasterReader(raster, width, height) {
 	/** this goes before every rendering **/
     
 	this.setup = function() {
+		gl.useProgram(this.floatProgram);
 		//gl.useProgram(this.glProgram);
 		gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
 		
@@ -79,8 +80,8 @@ function FloatRasterReader(raster, width, height) {
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 	
 		gl.disable(gl.DEPTH_TEST);
-		gl.enable(gl.BLEND);
-		gl.blendFunc(gl.ONE, gl.ONE);
+		gl.disable(gl.BLEND);
+		//gl.blendFunc(gl.ONE, gl.ONE);
 	}
 
 	this.enableBuffer = function(buffer){
@@ -88,13 +89,18 @@ function FloatRasterReader(raster, width, height) {
 		var name = buffer.name;
 		gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
 		
-		if (gl.getAttribLocation(this.floatProgram , name)>=0){
-		loc = gl.getAttribLocation(this.floatProgram , name);		
-        gl.enableVertexAttribArray(loc);
-		gl.vertexAttribPointer(loc,  buffer.itemSize, gl.FLOAT, false, 0, 0);	
-		} else {
-			console.log("Error: attribute "+name+" does not exist.");
+		if (this.floatProgram[name]==null){
+			this.floatProgram[name] = gl.getAttribLocation(this.floatProgram , name);
+			if (gl.getAttribLocation(this.floatProgram , name)<0){
+				console.log("Error: attribute "+name+" does not exist.");
+			}
 		}
+		
+		
+	
+        gl.enableVertexAttribArray(this.floatProgram[name]);
+		gl.vertexAttribPointer(this.floatProgram[name],  buffer.itemSize, gl.FLOAT, false, 0, 0);	
+	
 	
 }
 	this.setUniforms = function(){				
@@ -108,15 +114,18 @@ function FloatRasterReader(raster, width, height) {
 	
 	this.render = function(){	
 	
-		gl.useProgram(this.floatProgram);
+		
 		//gl.bindTexture(gl.TEXTURE_2D, this.floatTexture);
-		gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
+		//gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
 		
 		/**
 		 * Enable source float raster
 		 */
-		var rasterLoc =  gl.getUniformLocation(this.floatProgram, 'floatRaster'); 		 
-		gl.uniform1i(rasterLoc , 0);	
+		if (this.floatProgram.rasterLoc == null){
+			this.floatProgram.rasterLoc =  gl.getUniformLocation(this.floatProgram, 'floatRaster'); 		 
+		}
+		
+		gl.uniform1i(this.floatProgram.rasterLoc , 0);	
 		gl.activeTexture(gl.TEXTURE0);		
 		gl.bindTexture(gl.TEXTURE_2D, this.raster);
 						
@@ -128,34 +137,37 @@ function FloatRasterReader(raster, width, height) {
 		
 		
 		
-		gl.disable(gl.BLEND);
-		gl.disable(gl.DEPTH_TEST);
+	//	gl.disable(gl.BLEND);
+	//	gl.disable(gl.DEPTH_TEST);
 		
 			
 		gl.drawArrays(gl.POINTS, 0, this.bin_count*rows);		
 		
 		gl.bindBuffer(gl.ARRAY_BUFFER, null);
-		gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+		//gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 		gl.bindTexture(gl.TEXTURE_2D, null);
 		
 	}
 	
 
 	this.bindIntUniform = function(name, val){
-		var loc = gl.getUniformLocation(this.floatProgram, name);			
-		if (loc instanceof WebGLUniformLocation){
-			gl.uniform1f(loc, val);
-		} else {
-			console.error("Uniform set failed, uniform: "+name+ " value "+value );
-			return;
-		}
+		if (this.floatProgram[name]==null){
+			this.floatProgram[name] = gl.getUniformLocation(this.floatProgram, name);	
+			if (!this.floatProgram[name] instanceof WebGLUniformLocation){
+				console.error("Uniform set failed, uniform: "+name+ " value "+value );
+				return;
+			}
+				
+		}	
+		gl.uniform1f(this.floatProgram[name], val);
+	
 	}
 	
 	this.readPixels = function() {
 		
 		console.time("reading filter");
 		
-		gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
+		//gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
 		var readout_eight = new Uint8Array(this.bin_count * 4 * rows);
 		gl.readPixels(0, 0, this.bin_count, rows, gl.RGBA, gl.UNSIGNED_BYTE, readout_eight);		
 

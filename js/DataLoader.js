@@ -29,7 +29,7 @@ function DataLoader(fname) {
 		// $.getJSON('http://localhost:8181/move/rest/pos_osm?num=200000',
 		// function(data) {
 		$.getJSON(this.fname, function(data) {
-			
+		//d3.json(this.fname, function(error, data) {	
 			var rasterer = new Rasterer(data.length);
 			index.r_size = rasterer.size;
 			index.num_rec = data.length;

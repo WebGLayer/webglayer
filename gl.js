@@ -68,7 +68,9 @@ function render() {
 	
 	histDim.render();
 	
-	manager.render();
+	
+	dimMap.render(manager.num_rec);
+	//manager.render();
 	read();
 	// gl.flush();
 	// console.timeEnd(i + " rendering_all");

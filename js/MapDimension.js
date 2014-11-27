@@ -21,38 +21,42 @@ function MapDimension(manager){
 		gl.disable(gl.BLEND);
 		//gl.enable(gl.BLEND);
 		//gl.blendFunc(gl.ONE, gl.ONE);
-		var loc = gl.getUniformLocation(this.glProgram, "zoom");
-		if (loc instanceof WebGLUniformLocation) {
-			gl.uniform1f(loc, map.getZoom());
-		} else {
-			console.error("Uniform set failed, uniform: " + u_name
-					+ " value " + value);
-			return;
+		if (this.glProgram.loc == null ){
+			this.glProgram.loc = gl.getUniformLocation(this.glProgram, "zoom");
+			if (!this.glProgram.loc instanceof WebGLUniformLocation) {				
+				console.error("Uniform set failed, uniform: " + u_name
+						+ " value " + value);
+				return;
+			}
 		}
+		gl.uniform1f(this.glProgram.loc, map.getZoom());		
+		
+		
 		
 				
 	}	
 	this.render = function(num) {
 
-		//gl.useProgram(this.glProgram);		
-		var loc = gl.getUniformLocation(this.glProgram, "drawselect");
-		if (loc instanceof WebGLUniformLocation) {
-			gl.uniform1f(loc, 0);
-		} else {
-			console.error("Uniform set failed, uniform");
-			return;
+		this.setup();
+		manager.enableBuffersAndCommonUniforms(this.glProgram);
+		manager.enableFilterTexture(this.glProgram);
+		//gl.useProgram(this.glProgram);	
+		if (this.glProgram.drawselect == null){
+			this.glProgram.drawselect = gl.getUniformLocation(this.glProgram, "drawselect");
+			if (!this.glProgram.drawselect instanceof WebGLUniformLocation) {
+				console.error("Uniform set failed, uniform");
+				return;
+			}
 		}
+		gl.uniform1f(this.glProgram.drawselect, 0);
+		
 		gl.drawArrays(gl.POINTS, 0, num);	
 		
-		if (loc instanceof WebGLUniformLocation) {
-			gl.uniform1f(loc, 1);
-		} else {
-			console.error("Uniform set failed, uniform");
-			return;
-		}
+		gl.uniform1f(this.glProgram.drawselect, 1);
+		
 		gl.drawArrays(gl.POINTS, 0, num);	
 	    gl.useProgram(null);
-	    gl.finish();
+	   
 		
 	}
 	
