@@ -81,8 +81,18 @@ div.olMapViewport {
   font: 10px sans-serif;
   text-anchor: end;
 }
-.bar {
-  fill: steelblue;
+
+
+.selected.bar {
+fill: #ff8c00;
+}
+
+.unselected.bar {
+fill: #7b6888;
+}
+
+.out.bar {
+fill: #98abc5;
 }
 
 .axis text {
@@ -193,7 +203,7 @@ div.olMapViewport {
 		charts[0] = new StackedBarChart(metadata[0].max, 0, "speed_chart");
 		charts[1] = new StackedBarChart(24, 1, "hour_chart");
 		
-		var data = new DataLoader('../data/500000_r.js');
+		var data = new DataLoader('../data/10000_r.js');
 		var rastersize = data.loadData();
 		manager.num_rec = data.num_rec;
 		/**init geo buffer*/

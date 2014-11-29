@@ -23,7 +23,7 @@ initMap = function() {
                     var imgd = ctx.getImageData(0, 0, evt.tile.size.w, evt.tile.size.h);
                     var pix = imgd.data;
                     for (var i = 0, n = pix.length; i < n; i += 4) {
-                        pix[i] = pix[i + 1] = pix[i + 2] = (3 * pix[i] + 4 * pix[i + 1] + pix[i + 2]) / 6.2;
+                        pix[i] = pix[i + 1] = pix[i + 2] = (3 * pix[i] + 4 * pix[i + 1] + pix[i + 2]) / 6.4;
                     }
                     ctx.putImageData(imgd, 0, 0);
                     evt.tile.imgDiv.removeAttribute("crossorigin");
@@ -53,7 +53,7 @@ initMap = function() {
 		var temporary = new OpenLayers.Style({
 			  'pointRadius': 7,
 			  'fillColor': "#ff8c00",
-			  'fillOpacity':0.4,
+			  'fillOpacity':0.06,
 			  'strokeColor': "#ff8c00", 
               'strokeOpacity': 1, 
               'strokeWidth': 1, 
@@ -71,13 +71,14 @@ initMap = function() {
 	map.addLayers([ vectors ]);
 
 	function report(event) {
+		
 		// console.log(event.type, event.feature ? event.feature.id :
 		// event.components);
 		// console.log(event.feature.geometry.components[0].components);
 		/**
 		 * Trianglution goes on here..........
 		 */
-		if (event.feature.geometry.components[0].components.length > 3) {
+		if (event.feature.geometry.components[0].components.length >= 4) {
 			var points = event.feature.geometry.components[0].components;
 
 			var res = [];
@@ -94,6 +95,7 @@ initMap = function() {
 				ts.triangulate();
 				var pol = trianglesToArray(ts.getTriangles());
 				mapFilterRender.createFilteringData(pol);
+				mapFilter();
 			} catch (e) {
 				console.log(e);
 			}
@@ -101,11 +103,10 @@ initMap = function() {
 		}
 
 	}
-
-	function triangulate(){
-		
+	function startDraw(event) {
+		vectors.removeFeatures([vectors.features[0]]);
+		reprot(event);
 	}
-	
 	
 	vectors.events.on({
 		"beforefeaturemodified" : report,

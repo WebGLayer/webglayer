@@ -17,8 +17,8 @@
        
       void main() {
 		
-  	
-  		float p_size = 40./zoom ;
+  	  	
+  		float p_size = zoom ;
   	    	   
   		vec4 p =  mapMatrix * wPoint;
   		float n_speed = (speed+1.)/2.;

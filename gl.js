@@ -30,10 +30,27 @@ function dataupdateloop() {
 };
 
 function start() {
-	if (!request) {
+	mapFilterRender.renderFilter();
+	histFilterRender.renderFilter();
+	
+	//histFilterRender.readPixels();
+		
+	allDataFilter.mapFilter  =  mapFilterRender.filterTexture;
+	allDataFilter.histFilter =  histFilterRender.filterTexture;
+	
+	allDataFilter.render();
+	manager.filterTexture = allDataFilter.filterTexture;	
+	
+	histDim.render();
+	
+	
+	dimMap.render(manager.num_rec);
+	
+	read();
+	/*if (!request) {
 		animloop();
 		//dataupdateloop();
-	}
+	}*/
 }
 
 function stop() {
@@ -48,16 +65,16 @@ function stop() {
  * MAIN RENDERING LOOP
  */
 function render() {
-	mapFilterRender.renderFilter();
-	histFilterRender.renderFilter();
+//	mapFilterRender.renderFilter();
+//	histFilterRender.renderFilter();
 	
 	//histFilterRender.readPixels();
 		
-	allDataFilter.mapFilter  =  mapFilterRender.filterTexture;
-	allDataFilter.histFilter =  histFilterRender.filterTexture;
+//	allDataFilter.mapFilter  =  mapFilterRender.filterTexture;
+//	allDataFilter.histFilter =  histFilterRender.filterTexture;
 	
-	allDataFilter.render();
-	manager.filterTexture = allDataFilter.filterTexture;	
+//	allDataFilter.render();
+//	manager.filterTexture = allDataFilter.filterTexture;	
 	
 	
 //	allDataFilter.readPixels(); 
@@ -66,14 +83,33 @@ function render() {
 //	util.filterData();
 //	manger.filterIndex() = 
 	
-	histDim.render();
+	//histDim.render();
 	
 	
-	dimMap.render(manager.num_rec);
+	//dimMap.render(manager.num_rec);
 	//manager.render();
-	read();
+	//read();
 	// gl.flush();
 	// console.timeEnd(i + " rendering_all");
+}
+
+function mapFilter() {
+	mapFilterRender.renderFilter();
+	allDataFilter.mapFilter  =  mapFilterRender.filterTexture;
+	updateFilters()
+}
+function histFilter(){
+	histFilterRender.renderFilter();
+	allDataFilter.histFilter =  histFilterRender.filterTexture;
+	updateFilters();
+}
+
+function updateFilters(){
+	allDataFilter.render();
+	manager.filterTexture = allDataFilter.filterTexture;
+	dimMap.render(manager.num_rec);
+	histDim.render();
+	read();
 }
 
 function read() {

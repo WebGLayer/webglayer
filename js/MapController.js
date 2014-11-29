@@ -33,6 +33,7 @@ var MapController = function(manager) {
 
 		this.updateMatrix();
 		
+		mapFilter();
 		
 		function scaleMatrix(matrix, scaleX, scaleY) {
 			// scaling x and y, which is just scaling first two columns of matrix

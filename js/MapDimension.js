@@ -29,7 +29,14 @@ function MapDimension(manager){
 				return;
 			}
 		}
-		gl.uniform1f(this.glProgram.loc, map.getZoom());		
+		/*set point size*/
+		var z = map.getZoom()/3;
+		if (z < 3.5){
+			gl.uniform1f(this.glProgram.loc, 3.5);		
+		} else {
+			gl.uniform1f(this.glProgram.loc, z);		
+		}
+		
 		
 		
 		
