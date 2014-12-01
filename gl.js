@@ -1,132 +1,110 @@
-var fps_loop=1;
-var fps_sum=0;
 
-function animloop() {
-	if (fps_loop>50){
-		fps_sum = 0;
-		fps_loop = 1;
-	}
-	var now = Date.now() / 1000; // get time in seconds
-	// compute time since last frame
-	var elapsedTime = now - then;
-	then = now;
-	// compute fps
-	var fps = 1 / elapsedTime;
-	fps_sum = fps_sum+fps;
-	
-	fpsElement.textContent =  (fps_sum/fps_loop++).toFixed(2);
-	render();
-	request = window.requestAnimFrame(animloop);
-};
-
-function dataupdateloop() {
-	util.createFilteringData(generateOneTriangle());
-	mcontroller.zoommove((Math.random() - 0.5) * 0.4, {
-		x : (Math.random() - 0.5) * 5,
-		y : 0
-	});
-
-	request = window.requestAnimFrame(dataupdateloop);
-};
+//function dataupdateloop() {
+//	util.createFilteringData(generateOneTriangle());
+//	mcontroller.zoommove((Math.random() - 0.5) * 0.4, {
+//		x : (Math.random() - 0.5) * 5,
+//		y : 0
+//	});
+//
+//	request = window.requestAnimFrame(dataupdateloop);
+//};
 
 function start() {
 	mapFilterRender.renderFilter();
 	histFilterRender.renderFilter();
-	
-	//histFilterRender.readPixels();
-		
-	allDataFilter.mapFilter  =  mapFilterRender.filterTexture;
-	allDataFilter.histFilter =  histFilterRender.filterTexture;
-	
+
+	// histFilterRender.readPixels();
+
+	allDataFilter.mapFilter = mapFilterRender.filterTexture;
+	allDataFilter.histFilter = histFilterRender.filterTexture;
+
 	allDataFilter.render();
-	manager.filterTexture = allDataFilter.filterTexture;	
-	
+	manager.filterTexture = allDataFilter.filterTexture;
+
 	histDim.render();
-	
-	
+
 	dimMap.render(manager.num_rec);
-	
+
 	read();
-	/*if (!request) {
-		animloop();
-		//dataupdateloop();
-	}*/
+	/*
+	 * if (!request) { animloop(); //dataupdateloop(); }
+	 */
 }
 
-function stop() {
-	if (request) {
-		window.cancelAnimationFrame(request);
-		request = undefined;
-	}
-}
 
 
 /**
  * MAIN RENDERING LOOP
  */
 function render() {
-//	mapFilterRender.renderFilter();
-//	histFilterRender.renderFilter();
-	
-	//histFilterRender.readPixels();
-		
-//	allDataFilter.mapFilter  =  mapFilterRender.filterTexture;
-//	allDataFilter.histFilter =  histFilterRender.filterTexture;
-	
-//	allDataFilter.render();
-//	manager.filterTexture = allDataFilter.filterTexture;	
-	
-	
-//	allDataFilter.readPixels(); 
-	//manager.histTecture = util.histTexture;
-	
-//	util.filterData();
-//	manger.filterIndex() = 
-	
-	//histDim.render();
-	
-	
-	//dimMap.render(manager.num_rec);
-	//manager.render();
-	//read();
+	// mapFilterRender.renderFilter();
+	// histFilterRender.renderFilter();
+
+	// histFilterRender.readPixels();
+
+	// allDataFilter.mapFilter = mapFilterRender.filterTexture;
+	// allDataFilter.histFilter = histFilterRender.filterTexture;
+
+	// allDataFilter.render();
+	// manager.filterTexture = allDataFilter.filterTexture;
+
+	// allDataFilter.readPixels();
+	// manager.histTecture = util.histTexture;
+
+	// util.filterData();
+	// manger.filterIndex() =
+
+	// histDim.render();
+
+	// dimMap.render(manager.num_rec);
+	// manager.render();
+	// read();
 	// gl.flush();
 	// console.timeEnd(i + " rendering_all");
 }
 
 function mapFilter() {
 	mapFilterRender.renderFilter();
-	allDataFilter.mapFilter  =  mapFilterRender.filterTexture;
+	allDataFilter.mapFilter = mapFilterRender.filterTexture;
 	updateFilters()
 }
-function histFilter(){
+function histFilter() {
 	histFilterRender.renderFilter();
-	allDataFilter.histFilter =  histFilterRender.filterTexture;
+	allDataFilter.histFilter = histFilterRender.filterTexture;
 	updateFilters();
 }
 
-function updateFilters(){
+
+function updateFilters() {
+	
+	
+
 	allDataFilter.render();
 	manager.filterTexture = allDataFilter.filterTexture;
-	dimMap.render(manager.num_rec);
+	dimMap.render(manager.num_rec);	
 	histDim.render();
 	read();
+	
+
+
+	
+
 }
 
 function read() {
 
-//	readout = dimSpeed.readPixels();
-	
-	readout = histDim.readPixels();	
-	if(typeof readout!= 'undefined'){
-		for (var i in charts){
-			charts[i].update(readout[i]);
+	// readout = dimSpeed.readPixels();
+
+	readout = histDim.readPixels();
+	if (typeof readout != 'undefined') {
+		for ( var i in charts) {
+			//charts[i].update(readout[i]);
 		}
-		
+
 	}
 
-	//$("#data").text("in:"+readout[0] + "out: "+ readout[1]);
-	
-	
+	// $("#data").text("in:"+readout[0] + "out: "+ readout[1]);
+
 	// dimTime.readPixels();
 }
 
@@ -138,15 +116,10 @@ function read() {
 // dimSpeed.readFloatPixels();
 // dimTime.readFloatPixels();
 
-window.requestAnimFrame = (function() {
-	return window.requestAnimationFrame || window.webkitRequestAnimationFrame
-			|| window.mozRequestAnimationFrame || function(callback) {
-				window.setTimeout(callback, 1000 / 60);
-			};
-})();
+
 
 function getTopLeftTC() {
-		
+
 	s = Math.pow(2, map.getZoom());
 	tlpixel = map.getViewPortPxFromLonLat(tlwgs);
 	res = {
@@ -155,7 +128,6 @@ function getTopLeftTC() {
 	}
 	return res;
 }
-
 
 /**
  * Transfares the coordinates to zoom level 0 in pixel coordiantes
@@ -168,7 +140,7 @@ function toLevel0(pt, tl, zoom) {
 	return pt;
 }
 function transformProj(p) {
-	
+
 	var v = map.getViewPortPxFromLonLat(p);
 	// var v = map.getViewPortPxFromLonLat( new OpenLayers.LonLat(90,0));
 
@@ -177,7 +149,7 @@ function transformProj(p) {
 }
 
 function transform(x, y) {
-	var tl =getTopLeftTC();
+	var tl = getTopLeftTC();
 	var p = new OpenLayers.LonLat(y, x);
 	p.transform(wgs, map.projection);
 	var v = map.getViewPortPxFromLonLat(p);

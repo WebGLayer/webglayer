@@ -1,5 +1,6 @@
 initMap = function() {
 
+	
 	var options = {
 		units : 'm',
 		projection : "EPSG:900913",
@@ -13,7 +14,8 @@ initMap = function() {
 		 		mcontroller.resize(div.offsetWidth, div.offsetHeight);
 		 		mcontroller.zoommove(map.zoom, getTopLeftTC());		 		
 		 		
-			  });
+			  }) ;
+	 
 	
     var layer = new OpenLayers.Layer.OSM('Simple OSM Map', null, {
         eventListeners: {
@@ -23,7 +25,7 @@ initMap = function() {
                     var imgd = ctx.getImageData(0, 0, evt.tile.size.w, evt.tile.size.h);
                     var pix = imgd.data;
                     for (var i = 0, n = pix.length; i < n; i += 4) {
-                        pix[i] = pix[i + 1] = pix[i + 2] = (3 * pix[i] + 4 * pix[i + 1] + pix[i + 2]) / 6.4;
+                        pix[i] = pix[i + 1] = pix[i + 2] = (3 * pix[i] + 4 * pix[i + 1] + pix[i + 2]) / 12.6;
                     }
                     ctx.putImageData(imgd, 0, 0);
                     evt.tile.imgDiv.removeAttribute("crossorigin");
@@ -53,7 +55,7 @@ initMap = function() {
 		var temporary = new OpenLayers.Style({
 			  'pointRadius': 7,
 			  'fillColor': "#ff8c00",
-			  'fillOpacity':0.06,
+			  'fillOpacity':0.3,
 			  'strokeColor': "#ff8c00", 
               'strokeOpacity': 1, 
               'strokeWidth': 1, 
@@ -69,6 +71,7 @@ initMap = function() {
 	});
 
 	map.addLayers([ vectors ]);
+	
 
 	function report(event) {
 		
@@ -105,7 +108,7 @@ initMap = function() {
 	}
 	function startDraw(event) {
 		vectors.removeFeatures([vectors.features[0]]);
-		reprot(event);
+		report(event);
 	}
 	
 	vectors.events.on({

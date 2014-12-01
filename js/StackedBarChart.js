@@ -2,7 +2,7 @@ StackedBarChart = function(d_max, ch_row, div_id) {
 	var div_id;
 	var ch_row = ch_row;
 	var w = 500;
-	var h = 300;
+	var h = 200;
 	var dataset;
 	var xScale;
 	var yScale;
@@ -17,11 +17,12 @@ StackedBarChart = function(d_max, ch_row, div_id) {
 		top : 20,
 		right : 20,
 		bottom : 30,
-		left : 40
+		left : 45
 	};
 	var width = w - margin.left - margin.right;
 	var height = h - margin.top - margin.bottom;
 	var dataset = null;
+	var svgbw = "";
 
 	this.init = function() {
 		// xScale = d3.scale.ordinal().rangeRoundBands([0, width], .1);
@@ -93,7 +94,8 @@ StackedBarChart = function(d_max, ch_row, div_id) {
 			d.total = 0;
 		});
 
-		var bw = Math.floor(width / dataset.length - 1);
+		var bw = Math.floor(width / dataset.length -1);
+		svgbw= "h"+bw+"V";
 		/*
 		 * bars.selectAll("path").data(function(m) { return m.levels;
 		 * }).enter().append("rect").attr("y", function(d) { return
@@ -246,7 +248,7 @@ StackedBarChart = function(d_max, ch_row, div_id) {
 		while (++i < n) {
 			var d = groups[i];
 			path.push("M", xScale(d.min), ",", height, "V", yScale(d.selected),
-					"h8V", height);
+					svgbw, height);
 		}
 		return path.join("");
 	}
@@ -256,7 +258,7 @@ StackedBarChart = function(d_max, ch_row, div_id) {
 		while (++i < n) {
 			var d = groups[i];
 			path.push("M", xScale(d.min), ",", yScale(d.selected), "V",
-					yScale(d.selected) + yScale(d.unselected) - height, "h8V",
+					yScale(d.selected) + yScale(d.unselected) - height, svgbw,
 					yScale(d.selected));
 		}
 		return path.join("");
@@ -268,7 +270,7 @@ StackedBarChart = function(d_max, ch_row, div_id) {
 			var d = groups[i];
 			var start = yScale(d.selected) + yScale(d.unselected) - height;
 			path.push("M", xScale(d.min), ",", start, "V", start
-					+ yScale(d.out) - height, "h8V", start);
+					+ yScale(d.out) - height, svgbw, start);
 		}
 		return path.join("");
 	}
