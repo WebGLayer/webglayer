@@ -47,9 +47,14 @@ function DataLoader(fname) {
 
 				//console.log(v.x + " " + v.y);
 
-				val.hours = (new Date(val.time * 1000)).getHours()
+				val.hours = (new Date(val.time * 1000)).getHours();
+			//	val.day = (new Date(val.time * 1000)).getDay();
 				val.speed = val.speed;
-				val.unit_id = val.unit_id % 100000;
+			//	val.unit_id = val.unit_id % 100000;
+				val.random=Math.random();
+				val.random1=Math.random();
+				val.random2=Math.random();
+				
 		
 				
 			
@@ -63,12 +68,13 @@ function DataLoader(fname) {
 			
 			//	attr_hours[m]  = normaliseByMax(val.hours, this.metadata.max_bins, attr_hours.max, attr_hours.num_bins);		
 				//index[i] =  normalise(i,data.length);
-				index[i] = rasterer.calc(i);
-				
+				index[i] = rasterer.calc(i);				
 
 			});
 			
 		});
+		
+		
 		
 		
 		this.points = array2TA(pts);
@@ -83,6 +89,72 @@ function DataLoader(fname) {
 		return index.r_size;
 		
 	};
+	
+	DataLoader.prototype.generateData = function(num) {
+		
+		var pts = [];
+		
+		/*Configure speed dimension*/
+		var attr = [];
+
+		var index = [];
+		
+		var j = 0;
+		var jj = 0;
+		
+		for (var n = 0; n < num ;n++) {
+		//d3.json(this.fname, function(error, data) {	
+			var rasterer = new Rasterer(num);
+			index.r_size = rasterer.size;
+			index.num_rec = num;
+			
+			for (var m =0; m< metadata.length; m++){
+				attr[m] =[];
+			}
+						
+			// var v = map.options.crs.latLngToPoint(L.latLng(val.y,
+			// val.x),0);
+			var v = transform(14+Math.random()*2, 50+Math.random()*2);
+				pts[j++] = v.x;
+				pts[j++] = v.y;
+
+				//console.log(v.x + " " + v.y);
+
+				var val=new Object();
+				val.hours = Math.floor(Math.random()*24);
+			//	val.day = (new Date(val.time * 1000)).getDay();
+				val.speed = Math.floor(Math.random()*180);					
+			//	val.random=Math.random();
+			//	val.random1=Math.random();
+			//	val.random2=Math.random();
+				
+		
+				
+			
+				for (var m =0; m< metadata.length; m++){
+					attr[m][i]= normaliseByMax(val[metadata[m].name], 
+							metadata.max_bins, 
+							metadata[m].max, 
+							metadata[m].num_bins);
+				}
+				
+			
+			//	attr_hours[m]  = normaliseByMax(val.hours, this.metadata.max_bins, attr_hours.max, attr_hours.num_bins);		
+				//index[i] =  normalise(i,data.length);
+				index[n] = rasterer.calc(n);				
+
+			}
+	this.points = array2TA(pts);
+		
+		for (var i =0 ; i< attr.length; i++){
+			this.attributes[i] = array2TA(attr[i]);
+		}	
+		
+		
+		this.index = array2TA2D(index);
+		this.num_rec = index.num_rec;
+		return index.r_size;
+	}
 
 	/**
 	 * calculates the value to max pixels between -1 -1;

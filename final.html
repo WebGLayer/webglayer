@@ -169,7 +169,7 @@ fill: #98abc5;
 
 
 <script type="text/javascript">
-    var datafile ="10000_r.js";
+    var datafile ="1000000_r.js";
 	var map, vectors, controls;
 
 	files = ["10000_r.js","20000_r.js", "50000_r.js","100000_r.js","osm200k.js","500000_r.js","750000_r.js","1000000_r.js"];
@@ -200,15 +200,24 @@ fill: #98abc5;
 		
 		
 		/*Configure speed dimension*/
-		metadata[0] = {max : 180, num_bins : 180, name: "speed"};		
+		metadata[0] = {max : 180, num_bins : 90, name: "speed"};		
 		/*Configure hour dimension*/	
 		metadata[1] = {max : 24, num_bins :24 , name: "hours"};
+		metadata[2] = {max : 1, num_bins :100 , name: "random"};
+		metadata[3] = {max : 1, num_bins :50 , name: "random1"}
+		metadata[4] = {max : 1, num_bins :20 , name: "random2"}
+		//metadata[2] = {max : 9, num_bins :9 , name: "road"};
+		//metadata[3] = {max : 7, num_bins :7 , name: "day"};
 		
 		metadata.max_bins =metadata[0].num_bins;
 		
 		charts = [];
 		charts[0] = new StackedBarChart(metadata[0].max, 0, "speed_chart");
 		charts[1] = new StackedBarChart(24, 1, "hour_chart");
+		//charts[2] = new StackedBarChart(1, 2, "random");
+		//charts[2] = new StackedBarChart(9, 2, "road");
+		//charts[3] = new StackedBarChart(7, 3, "day");
+		
 		
 		var data = new DataLoader('../data/'+datafile);
 		var rastersize = data.loadData();
@@ -386,13 +395,14 @@ fill: #98abc5;
 	var sum_time = 0;
 	var loop_num = 0;
 	function testRender(){
-		var start = performance.now();
-		
 		mcontroller.zoommove(10+Math.random()*2,{x: 138.46093750000057, y: 86.2109375000000+Math.random()*2});		
+	
+		var start = performance.now();
+		histFilterRender.createFilteringData(0, [ -0.5+Math.random()/100, -0.5, -0.4, -0.5]);
+		histFilterRender.createFilteringData(1, [ -1.0, 0.5, 0., 0.5]);	
 		
 		/*hist filter*/
-		histFilterRender.createFilteringData(0, [ -0.5, -0.5, -0.4, -0.5]);
-		histFilterRender.createFilteringData(1, [ -1.0, 0.5, 0., 0.5]);			
+		
 		histFilterRender.renderFilter();
 		
 		/*mapfilter*/
@@ -406,6 +416,7 @@ fill: #98abc5;
 		manager.filterTexture = allDataFilter.filterTexture;
 
 		dimMap.render(manager.num_rec);	
+		//mapFilter();
 		histDim.render();
 		read();
 		/**
@@ -486,13 +497,18 @@ fill: #98abc5;
 	<div id="map">
 			<canvas id="test">Your browser does not support HTML5</canvas>
 	</div>
-<!--  <div id="stop" onclick="startLoop()">start/stop</div> -->
+ <div id="stop" onclick="startLoop()">start/stop</div> 
 	<div id="right">
 		
 		
 		
 			<div id = "speed_chart"></div>
 	 		<div id = "hour_chart"></div> 
+	 		<div id = "random"></div> 
+	 		<div id = "road"></div> 
+	 		<div id = "day"></div> 
+		
+		
 		
 		
 		<div> <div id="fps"></div></div>	
