@@ -72,7 +72,7 @@ StackedBarChart = function(d_max, ch_row, div_id) {
 
 		bars = svg.selectAll(".bar").data([ "selected", "unselected", "out" ])
 				.enter().append("path").attr("class", function(d) {
-					return d + " bar";
+					return d + " foreground bar ";
 				}).datum(dataset);
 
 		svg.selectAll(".foreground.bar").attr("clip-path",
@@ -123,7 +123,7 @@ StackedBarChart = function(d_max, ch_row, div_id) {
 				.data(classes);
 
 		legendRect.enter().append("rect").attr("id", function(d) {
-			return "legend" + d[0];
+			return div_id+ d[0];
 		}).attr("x", w - 140).attr("y", function(d) {
 			return (1 + d[0] * 15)
 		}).attr("width", 12).attr("height", 12).attr("fill", function(d) {
@@ -131,26 +131,23 @@ StackedBarChart = function(d_max, ch_row, div_id) {
 		}).on(
 				"click",
 				function(d) {
-					var el = d3.select("#legend" + d[0])
-					var s = el.attr("stroke");
-					if (s == "none") {
-						el.attr("stroke", "#000");
+					var el = d3.select("#"+div_id + d[0])
+				//	var s = el.attr("stroke");
+				//	if (s == "none") {
+				//		el.attr("stroke", "#000");
+						
+
+				//	} else {
+				//		el.attr("stroke", "none");
 						active_group = d[0];
-						for (var i = 0; i < classes.length; i++) {
-							
-
-							calcBar();
-							
-							if (classes[i][1] != d[1]) {
-								// d3.selectAll("."+div_id+classes[i][1]).attr("opacity",
-								// 0.1 );
-							}
-
+						for (var i = 0; i < classes.length; i++) {							
+							calcBar();							
+							/*if (classes[i][1] != d[1]) {
+								d3.selectAll("."+div_id+classes[i][1]).attr("opacity",
+								0.01 );
+							}*/
 						}
-
-					} else {
-						el.attr("stroke", "none");
-					}
+					
 
 				});
 

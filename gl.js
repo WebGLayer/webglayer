@@ -98,7 +98,7 @@ function read() {
 	readout = histDim.readPixels();
 	if (typeof readout != 'undefined') {
 		for ( var i in charts) {
-		//	charts[i].update(readout[i]);
+			charts[i].update(readout[i]);
 		}
 
 	}

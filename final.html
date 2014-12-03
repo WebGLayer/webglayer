@@ -86,6 +86,12 @@ div.olMapViewport {
   text-anchor: end;
 }
 
+.brush{
+ fill: grey;
+ stroke: #ff8c00;
+ stroke-opacity: 0.8;
+ stroke-width: 1;
+}
 
 .selected.bar {
 fill: #ff8c00;
@@ -169,7 +175,7 @@ fill: #98abc5;
 
 
 <script type="text/javascript">
-    var datafile ="1000000_r.js";
+    var datafile ="100000_r.js";
 	var map, vectors, controls;
 
 	files = ["10000_r.js","20000_r.js", "50000_r.js","100000_r.js","osm200k.js","500000_r.js","750000_r.js","1000000_r.js"];
@@ -203,9 +209,9 @@ fill: #98abc5;
 		metadata[0] = {max : 180, num_bins : 90, name: "speed"};		
 		/*Configure hour dimension*/	
 		metadata[1] = {max : 24, num_bins :24 , name: "hours"};
-		metadata[2] = {max : 1, num_bins :100 , name: "random"};
-		metadata[3] = {max : 1, num_bins :50 , name: "random1"}
-		metadata[4] = {max : 1, num_bins :20 , name: "random2"}
+	//	metadata[2] = {max : 1, num_bins :100 , name: "random"};
+		//metadata[3] = {max : 1, num_bins :50 , name: "random1"}
+		//metadata[4] = {max : 1, num_bins :20 , name: "random2"}
 		//metadata[2] = {max : 9, num_bins :9 , name: "road"};
 		//metadata[3] = {max : 7, num_bins :7 , name: "day"};
 		

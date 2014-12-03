@@ -25,7 +25,7 @@ initMap = function() {
                     var imgd = ctx.getImageData(0, 0, evt.tile.size.w, evt.tile.size.h);
                     var pix = imgd.data;
                     for (var i = 0, n = pix.length; i < n; i += 4) {
-                        pix[i] = pix[i + 1] = pix[i + 2] = (3 * pix[i] + 4 * pix[i + 1] + pix[i + 2]) / 12.6;
+                        pix[i] = pix[i + 1] = pix[i + 2] = (3 * pix[i] + 4 * pix[i + 1] + pix[i + 2]) / 13;
                     }
                     ctx.putImageData(imgd, 0, 0);
                     evt.tile.imgDiv.removeAttribute("crossorigin");
@@ -54,11 +54,12 @@ initMap = function() {
 		
 		var temporary = new OpenLayers.Style({
 			  'pointRadius': 7,
-			  'fillColor': "#ff8c00",
-			  'fillOpacity':0.3,
+			  'fillColor': "white",
+			  'fillOpacity':0.4,
 			  'strokeColor': "#ff8c00", 
               'strokeOpacity': 1, 
               'strokeWidth': 1, 
+              'z-index':-10
 			});
 
 	var styleMap = new OpenLayers.StyleMap({'default': temporary,
