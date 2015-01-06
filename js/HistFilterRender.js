@@ -125,8 +125,8 @@ HistFilterRender = function(manager){
 		} else {
 			filters[ch_row] = points;
 		}
-		console.log(points);
-		console.log(filters);		
+	//	console.log(points);
+	//	console.log(filters);		
 		//this.bindFilters();			
 	}
 	

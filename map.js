@@ -130,13 +130,30 @@ initMap = function() {
 	dragControl.onDrag = function(a, b) {
 		console.log(b);
 	};
-
+	
+	var removeControl = new OpenLayers.Control.SelectFeature(
+			vectors,
+			{
+		        displayClass: "olControlDelete",		     
+		        eventListeners: {
+		            featurehighlighted: function overlay_delete(event) {
+		                var feature = event.feature;
+		                vectors.removeFeatures( [ feature ] );
+		                mapFilterRender.createFilteringData([]);
+						mapFilter();
+		            }
+		        }   
+		    } 
+			);
+			
+			
 	controls = {
 
 		polygon : new OpenLayers.Control.DrawFeature(vectors,
 				OpenLayers.Handler.Polygon),
 		modify : modifyControl,
-		drag : dragControl
+		drag : dragControl,
+		remove: removeControl
 
 	};
 
