@@ -64,11 +64,17 @@ function MapFilterRender(manager){
 		
 		gl.viewport(0, 0, manager.width, manager.height);
 		
+		/**
+		 * if there are no fitlers all data are selected
+		 */
 		if (pointsSize==0){
-			gl.clearColor(1.0, 0.0, 0.0, 1.0);
+			allDataFilter.hasMapFilter = false;		
+			gl.clearColor(1.0, 0.0, 0.0, 0.0);
 		} else {
+			allDataFilter.hasMapFilter = true;
 			gl.clearColor(0.0, 1.0, 0.0, 0.0);
 		}
+		
 		
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 	
@@ -93,10 +99,13 @@ function MapFilterRender(manager){
 	this.createFilteringData = function(points){	
 		//console.log(points);
 		//console.log("...........")
+		
 		gl.bindBuffer(gl.ARRAY_BUFFER, posBuffer);
 		gl.bufferData(gl.ARRAY_BUFFER, points, gl.STATIC_DRAW);	
 		gl.bindBuffer(gl.ARRAY_BUFFER, null);
 		pointsSize = points.length/2;
+		
+		
 	}
 	
 	this.readPixels = function() {

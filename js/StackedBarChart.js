@@ -1,4 +1,4 @@
-StackedBarChart = function(d_max, ch_row, div_id) {
+StackedBarChart = function(d_max, ch_row, div_id, x_label) {
 	var div_id;
 	var ch_row = ch_row;
 	var w = 500;
@@ -16,8 +16,8 @@ StackedBarChart = function(d_max, ch_row, div_id) {
 	var margin = {
 		top : 20,
 		right : 20,
-		bottom : 30,
-		left : 45
+		bottom : 50,
+		left : 60
 	};
 	var width = w - margin.left - margin.right;
 	var height = h - margin.top - margin.bottom;
@@ -54,11 +54,13 @@ StackedBarChart = function(d_max, ch_row, div_id) {
 
 		chart = svg.select('.chart');
 		svg.append("g").attr("class", "x axis").attr("transform",
-				"translate(0," + height + ")").call(xAxis);
+				"translate(0," + height + ")").call(xAxis).append("text")
+			    .attr("y", "3.5em").attr("x",
+				width /2 ).style("text-anchor", "end").text(x_label);
 
 		svg.append("g").attr("class", "y axis").call(yAxis).append("text")
-				.attr("transform", "rotate(90)").attr("y", 6).attr("dy",
-						".71em").style("text-anchor", "end").text("");
+				.attr("transform", "rotate(270)").attr("y", "-4.5em").attr("x",
+						"-2em").style("text-anchor", "end").text("number of items [1000]");
 
 		/*
 		 * bars = svg.selectAll(".bars").data(dataset).enter()

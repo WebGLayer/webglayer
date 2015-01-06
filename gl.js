@@ -66,7 +66,7 @@ function render() {
 function mapFilter() {
 	mapFilterRender.renderFilter();
 	allDataFilter.mapFilter = mapFilterRender.filterTexture;
-	updateFilters()
+	updateFilters();
 }
 function histFilter() {
 	histFilterRender.renderFilter();

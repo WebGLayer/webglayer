@@ -50,12 +50,13 @@ function DataLoader(fname) {
 				val.hours = (new Date(val.time * 1000)).getHours();
 			//	val.day = (new Date(val.time * 1000)).getDay();
 				val.speed = val.speed;
-			//	val.unit_id = val.unit_id % 100000;
-				val.random=Math.random();
-				val.random1=Math.random();
-				val.random2=Math.random();
-				
 		
+			//	val.unit_id = val.unit_id % 100000;
+			//	val.random=Math.random();
+			//	val.random1=Math.random();
+			//	val.random2=Math.random();
+				
+		//console.log(val.road);
 				
 			
 				for (var m =0; m< metadata.length; m++){

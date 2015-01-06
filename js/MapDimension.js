@@ -30,11 +30,13 @@ function MapDimension(manager){
 			}
 		}
 		/*set point size*/
-		var z = map.getZoom()/3;
-		if (z < 3.5){
-			gl.uniform1f(this.glProgram.loc, 3.5);		
+		var z = map.getZoom();
+	//	console.log( map.getZoom());
+		if (z > 8){
+			var zz = (z -7)/2;
+			gl.uniform1f(this.glProgram.loc, zz);		
 		} else {
-			gl.uniform1f(this.glProgram.loc, z);		
+			gl.uniform1f(this.glProgram.loc, 1);		
 		}
 		
 		

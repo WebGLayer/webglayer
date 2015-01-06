@@ -88,6 +88,19 @@ Filter = function(size, rastersize, manager) {
 		gl.activeTexture(gl.TEXTURE1);
 		gl.bindTexture(gl.TEXTURE_2D, this.histFilter);
 		
+		/*Has filters*/
+		if (this.filterProgram.hasFilter == null){
+			this.filterProgram.hasFilter = manager.getUniformLoc(this.filterProgram, 'hasFilter'); 		
+		}	
+	
+		if (this.hasHistFilter == false && this.hasMapFilter == false){
+			gl.uniform1f(this.filterProgram.hasFilter, 0);		   	
+		} else {
+			gl.uniform1f(this.filterProgram.hasFilter, 1);		   
+		}
+	 		
+		
+		
 		
 		
 		gl.drawArrays(gl.POINTS, 0, this.datasize);
@@ -111,4 +124,6 @@ Filter = function(size, rastersize, manager) {
 
 		return res;// readout;
 	}
+	this.hasHistFilter = false;
+	this.hasMapFilter = false;
 }

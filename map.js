@@ -17,7 +17,7 @@ initMap = function() {
 			  }) ;
 	 
 	
-    var layer = new OpenLayers.Layer.OSM('Simple OSM Map', null, {
+    var layer = new OpenLayers.Layer.OSM('', null, {
         eventListeners: {
             tileloaded: function(evt) {
                 var ctx = evt.tile.getCanvasContext();
