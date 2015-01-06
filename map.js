@@ -73,22 +73,28 @@ initMap = function() {
 
 	map.addLayers([ vectors ]);
 	
+	var polygons = [];
 
+	var m_id;
 	function report(event) {
-		
+		if (event.type!="sketchcomplete"){
 		// console.log(event.type, event.feature ? event.feature.id :
-		// event.components);
+		 //event.components);
 		// console.log(event.feature.geometry.components[0].components);
 		/**
 		 * Trianglution goes on here..........
 		 */
-		if (event.feature.geometry.components[0].components.length >= 4) {
-			var points = event.feature.geometry.components[0].components;
-
+		if (event.feature.geometry.getVertices().length >= 3) {
+		/*
+			OPRAVITTT
+			*/
+			
+			var points = event.feature.geometry.getVertices();
+			 m_id =  event.feature.id;
 			var res = [];
-			for (var i = 1; i < points.length; i++) {
+			for (var i = 0; i < points.length; i++) {
 				var np = new OpenLayers.LonLat(points[i].x, points[i].y);
-				np.transform(merc, wgs);
+				np.transform(merc, wgs); 
 				var pp = transform(np.lat, np.lon);
 				res.push(pp);
 
@@ -97,13 +103,19 @@ initMap = function() {
 			try {
 				var ts = new poly2tri.SweepContext(res);
 				ts.triangulate();
-				var pol = trianglesToArray(ts.getTriangles());
-				mapFilterRender.createFilteringData(pol);
+				polygons[m_id] = trianglesToArray(ts.getTriangles());
+				console.log(polygons);
+				mapFilterRender.createFilteringData(polygons);
 				mapFilter();
 			} catch (e) {
 				console.log(e);
 			}
 
+		}
+		} else {
+			polygons[event.feature.id] = polygons[m_id];
+			delete polygons[m_id]; 
+			//console.log("complete "+event.feature.id);
 		}
 
 	}
@@ -136,10 +148,14 @@ initMap = function() {
 			{
 		        displayClass: "olControlDelete",		     
 		        eventListeners: {
-		            featurehighlighted: function overlay_delete(event) {
+		        	featurehighlighted: function overlay_delete(event) {
 		                var feature = event.feature;
+		                console.log("deleteing "+feature.id);
+		                delete polygons[feature.id];
 		                vectors.removeFeatures( [ feature ] );
-		                mapFilterRender.createFilteringData([]);
+		              
+		                mapFilterRender.createFilteringData(polygons);
+		                console.log( polygons);
 						mapFilter();
 		            }
 		        }   
@@ -174,7 +190,7 @@ function trianglesToArray(trig) {
 			points.push(trig[i].points_[j].y);
 		}
 	}
-	return new Float32Array(points);
+	return points;
 
 }
 function update() {

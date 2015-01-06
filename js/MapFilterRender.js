@@ -96,12 +96,17 @@ function MapFilterRender(manager){
 	
 	
 	
-	this.createFilteringData = function(points){	
-		//console.log(points);
+	this.createFilteringData = function(polygons){	
+		//console.log(polygons);
 		//console.log("...........")
-		
+		var points = new Array();		
+		for (var pol in polygons){
+			points.push.apply(points,polygons[pol]);
+		}
+		//console.log(points);
+		var p = new Float32Array(points);
 		gl.bindBuffer(gl.ARRAY_BUFFER, posBuffer);
-		gl.bufferData(gl.ARRAY_BUFFER, points, gl.STATIC_DRAW);	
+		gl.bufferData(gl.ARRAY_BUFFER, p, gl.STATIC_DRAW);	
 		gl.bindBuffer(gl.ARRAY_BUFFER, null);
 		pointsSize = points.length/2;
 		
