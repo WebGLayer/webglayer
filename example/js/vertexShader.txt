@@ -23,6 +23,7 @@
 
 				if ((min > par) || (par > max)){					
 					p=vec4(0,0,0,0);
+					break;
 				}				
    				
   			}   			
