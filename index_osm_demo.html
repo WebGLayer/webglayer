@@ -175,7 +175,7 @@ fill: #98abc5;
 
 
 <script type="text/javascript">
-    var datafile ="osm150k.js";
+    var datafile ="osm50.txt";
 	var map, vectors, controls;
 
 	files = ["10000_r.js","20000_r.js", "50000_r.js","100000_r.js","osm200k.js","500000_r.js","750000_r.js","1000000_r.js"];
@@ -227,7 +227,13 @@ fill: #98abc5;
 		
 		
 		var data = new DataLoader('../data/'+datafile);
-		var rastersize = data.loadData();
+		var rastersize = data.loadTextData();
+
+
+	}
+
+	function visualize(data){	
+		  $("#speed_chart").text("visualizing..");
 		manager.num_rec = data.num_rec;
 		/**init geo buffer*/
 		manager.addDataBuffer(data.points, 2, 'wPoint');
@@ -253,7 +259,7 @@ fill: #98abc5;
 		mapFilterRender =  new MapFilterRender(manager);
 		histFilterRender = new HistFilterRender(manager);
 		
-		allDataFilter = new Filter(data.num_rec, rastersize, manager); 
+		allDataFilter = new Filter(data.num_rec, data.raster_size, manager); 
 		data = null;
 		mcontroller.resize(div.offsetWidth, div.offsetHeight);
 		mcontroller.zoommove(map.zoom, tl);
@@ -261,25 +267,13 @@ fill: #98abc5;
 		mapFilterRender.init();
 		histFilterRender.init();
 		//util.createFilteringData(generateOneTriangle());
-
-		fpsElement = document.getElementById("fps");
-		then = Date.now() / 1000; // get time in seconds
-		request = false;
-		var datael = $("#data");
-		$("#stop").click(function() {
-			if (!request) {
-				start();
-			} else {
-				stop();
-			}
-		});
-
+		
 		map.events.register("move", map, onMove);
 		map.events.register("zoomstart", map, onMove);
 		start();
-
 	}
-
+	
+	
 	function initGLDimensions(){
 		manager.update();
 		mcontroller = new MapController(manager);

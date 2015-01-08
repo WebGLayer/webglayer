@@ -85,9 +85,7 @@ initMap = function() {
 		 * Trianglution goes on here..........
 		 */
 		if (event.feature.geometry.getVertices().length >= 3) {
-		/*
-			OPRAVITTT
-			*/
+		
 			
 			var points = event.feature.geometry.getVertices();
 			 m_id =  event.feature.id;
@@ -104,7 +102,7 @@ initMap = function() {
 				var ts = new poly2tri.SweepContext(res);
 				ts.triangulate();
 				polygons[m_id] = trianglesToArray(ts.getTriangles());
-				console.log(polygons);
+			//	console.log(polygons);
 				mapFilterRender.createFilteringData(polygons);
 				mapFilter();
 			} catch (e) {
