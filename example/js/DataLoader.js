@@ -18,7 +18,7 @@ function DataLoader(fname) {
 		var j = 0;
 		var jj = 0;
 		
-		d3.csv("/example/data/osm500k_txt.json", function(error, data) {
+		d3.csv("./data/osm500k_txt.json", function(error, data) {
 
 			var rasterer = new Rasterer(data.length);
 			index.r_size = rasterer.size;
