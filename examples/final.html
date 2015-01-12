@@ -192,7 +192,7 @@ fill: #98abc5;
 		getShader();
 		utils = new Utils();
 		//r_count = 1 * Math.pow(10, 5);
-		manager = new Manager("test");
+		manager = new Manager("test", "map");
 		mcontroller = new MapController(manager);
 
 		canvas.setAttribute("width", div.offsetWidth);
@@ -461,7 +461,9 @@ fill: #98abc5;
 							dragging Event</label></li>
 				</ul></li>-->
 		</ul>
-		
+			<div id='legend'>
+		<object data="legend2.svg" />
+	</div>
 		
 	</div>
 </body>
