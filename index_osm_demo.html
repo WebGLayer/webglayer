@@ -31,7 +31,16 @@ div.olMapViewport {
 	padding: 0;
 	height:100%;	
 }
-
+#legend {
+	position: fixed;
+	bottom: 2em;
+	left: 4em;
+	height: 3em;
+	width: 30em;
+	padding: 0.3em;
+	 z-index:2000;
+	background-color: rgba(255, 255, 255, 0);
+}
 #right {
 	position: fixed;
 	overflow-y:auto;
@@ -52,6 +61,12 @@ div.olMapViewport {
 	top: 0em;
 	left: 3em;
 	width: 512px;
+	z-index:2000;
+	background-color: rgba(255, 255, 255, 0.2);
+}
+
+#about {
+	margin: 1em;
 }
 
 #controlToggle {
@@ -192,7 +207,7 @@ fill: #98abc5;
 		getShader();
 		utils = new Utils();
 		//r_count = 1 * Math.pow(10, 5);
-		manager = new Manager("test");
+		manager = new Manager("test", "map");
 		mcontroller = new MapController(manager);
 
 		canvas.setAttribute("width", div.offsetWidth);
@@ -226,14 +241,14 @@ fill: #98abc5;
 	//	charts[3] = new StackedBarChart(metadata[3].max, 3, "random1", "");
 		
 		
-		var data = new DataLoader('../data/'+datafile);
-		var rastersize = data.loadTextData();
+		var data = new DataLoader();
+		var rastersize = data.loadTextData("../data/osm500k_txt.json");
 
 
 	}
 
 	function visualize(data){	
-		  $("#speed_chart").text("visualizing..");
+		 $("#speed_chart").text("");
 		manager.num_rec = data.num_rec;
 		/**init geo buffer*/
 		manager.addDataBuffer(data.points, 2, 'wPoint');
@@ -395,21 +410,18 @@ fill: #98abc5;
 	<div id="map">
 			<canvas id="test">Your browser does not support HTML5</canvas>
 	</div>
- <div id="stop" onclick="startLoop()">start/stop</div> 
 	<div id="right">
 		
 		
 		
 			<div id = "speed_chart"></div>
 	 		<div id = "hour_chart"></div> 	 	
+	 		<div id = "about">
+	 		This WebGLayer demo shows 500 000 GPS positions from 
+	 		<a href="http://wiki.openstreetmap.org/wiki/Planet.gpx">http://wiki.openstreetmap.org/wiki/Planet.gpx</a>
+	 		WebGLayer is open source library available on <a href="https://github.com/jezekjan/WebGLayer">github</a>.
+	 	    </div> 	 
 	 		
-	 		<div id = "random"></div> 
-		<div id = "random1"></div> 
-		
-		
-		
-		<div> <div id="fps"></div></div>	
-		
 	</div>
 	<div id="controls">
 		<ul id="controlToggle">
@@ -457,6 +469,9 @@ fill: #98abc5;
 		</ul>
 		
 		
+	</div>
+	<div id='legend'>
+		<object data="legend2.svg" />
 	</div>
 </body>
 </html>

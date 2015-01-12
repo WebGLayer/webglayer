@@ -1,9 +1,9 @@
-function Manager(canvasid) {
+function Manager(canvasid, mapid) {
 	/**
 	 * Global variables
 	 */
 	canvas = document.getElementById(canvasid);
-	div = canvas.parentElement;
+	div = document.getElementById(mapid);//canvas.parentElement;map-div
 	gl = canvas.getContext('webgl', {preserveDrawingBuffer: true});
 
 	

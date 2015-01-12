@@ -52,6 +52,7 @@ div.olMapViewport {
 	top: 0em;
 	left: 3em;
 	width: 512px;
+	background-color: rgba(255, 255, 255, 0.2);
 }
 
 #controlToggle {
@@ -78,6 +79,10 @@ div.olMapViewport {
 }
 .chart rect {
   fill: steelblue;
+}
+.chartlabel {
+  margin-left:1em;
+   margin-top:0.5em;
 }
 
 .chart text {
@@ -139,7 +144,16 @@ fill: #98abc5;
   shape-rendering: crispEdges;
 }
 
-
+#legend {
+	position: fixed;
+	bottom: 2em;
+	left: 4em;
+	height: 3em;
+	width: 30em;
+	padding: 0.3em;
+	 z-index:2000;
+	background-color: rgba(255, 255, 255, 0);
+}
 .brush .extent {
   
   fill-opacity: .125;
@@ -175,7 +189,7 @@ fill: #98abc5;
 
 
 <script type="text/javascript">
-    var datafile ="osm150k.js";
+    var datafile ="1000000_r.js";
 	var map, vectors, controls;
 
 	files = ["10000_r.js","20000_r.js", "50000_r.js","100000_r.js","osm200k.js","500000_r.js","750000_r.js","1000000_r.js"];
@@ -192,7 +206,7 @@ fill: #98abc5;
 		getShader();
 		utils = new Utils();
 		//r_count = 1 * Math.pow(10, 5);
-		manager = new Manager("test");
+		manager = new Manager("test", "map");
 		mcontroller = new MapController(manager);
 
 		canvas.setAttribute("width", div.offsetWidth);
@@ -220,7 +234,7 @@ fill: #98abc5;
 		
 		charts = [];
 		charts[0] = new StackedBarChart(metadata[0].max, 0, "speed_chart","speed [km/h]");
-		charts[1] = new StackedBarChart(metadata[1].max, 1, "hour_chart", "time of day [hour]");
+		charts[1] = new StackedBarChart(metadata[1].max, 1, "hour_chart", "time of the day [hour]");
 	//	charts[2] = new StackedBarChart(metadata[2].max, 2, "random","");
 		//charts[2] = new StackedBarChart(9, 2, "road");
 	//	charts[3] = new StackedBarChart(metadata[3].max, 3, "random1", "");
@@ -401,13 +415,13 @@ fill: #98abc5;
 	<div id="map">
 			<canvas id="test">Your browser does not support HTML5</canvas>
 	</div>
- <div id="stop" onclick="startLoop()">start/stop</div> 
+<!-- <div id="stop" onclick="startLoop()">start/stop</div>  -->
 	<div id="right">
 		
 		
 		
-			<div id = "speed_chart"></div>
-	 		<div id = "hour_chart"></div> 	 	
+			<div id = "speed_chart"><div class = "chartlabel">Car Speeds</div></div>
+	 		<div id = "hour_chart"><div  class = "chartlabel">Time of the day</div></div> 	 	
 	 		
 	 		<div id = "random"></div> 
 		<div id = "random1"></div> 
@@ -462,7 +476,9 @@ fill: #98abc5;
 				</ul></li>-->
 		</ul>
 		
-		
+			<div id='legend'>
+		<object data="legend2.svg" />
+	</div>
 	</div>
 </body>
 </html>

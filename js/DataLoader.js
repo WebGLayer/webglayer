@@ -10,7 +10,8 @@ function DataLoader(fname) {
 	/**
 	 * Load text file
 	 */
-	DataLoader.prototype.loadTextData = function() {
+	 $("#speed_chart").text("Please wait... data are being loaded. This may take a while.");
+	DataLoader.prototype.loadTextData = function(file) {
 		var pts = [];
 		var attr = [];
 		var index = [];
@@ -18,7 +19,7 @@ function DataLoader(fname) {
 		var j = 0;
 		var jj = 0;
 		
-		d3.csv("../data/osm500k_txt.json", function(error, data) {
+		d3.csv(file, function(error, data) {
 
 			var rasterer = new Rasterer(data.length);
 			index.r_size = rasterer.size;
@@ -28,7 +29,7 @@ function DataLoader(fname) {
 				attr[m] = [];
 			}
 
-			// A little coercion, since the CSV is untyped.
+	
 			data.forEach(function(val, i) {
 				  
 			 //console.log(i);
@@ -43,8 +44,7 @@ function DataLoader(fname) {
 								metadata.max_bins, metadata[m].max,
 								metadata[m].num_bins);
 					}
-					index[i] = rasterer.calc(i);
-
+					index[i] = rasterer.calc(i);			      
 				}
 			});
 			that.points = array2TA(pts);
@@ -62,8 +62,10 @@ function DataLoader(fname) {
 		}).on("progress", function(event){
 			 if (d3.event.lengthComputable) {
 		          var percentComplete = Math.round(d3.event.loaded * 100 / d3.event.total);
-		          $("#speed_chart").text(percentComplete);
-		          //console.log(percentComplete);
+		          if ( percentComplete <=100){
+		        	  $("#speed_chart").text("Please wait.. loading data. Completed "+ percentComplete+ "%");
+		   		    
+		          }
 		       }
 		});
 

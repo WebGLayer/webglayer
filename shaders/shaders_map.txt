@@ -36,7 +36,7 @@
   		} else if (drawselect<0.5) {  	
   		   // If not selected then use blue color	   
   		   //p_size = p_size-3.;
-  		   col = vec4(1.- n_speed, n_speed, 0.0, 0.000001);
+  		   col = vec4(1.- n_speed, n_speed, 0.0, 0.03);
   		   //col = vec4(0.482, 0.408, 0.533, 0.95); 	
   		   //p_size = 4.;
   		  // col = vec4(0.0,0.,0.,0.75);
