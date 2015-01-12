@@ -242,7 +242,7 @@ fill: #98abc5;
 		
 		
 		var data = new DataLoader();
-		var rastersize = data.loadTextData("../data/osm200k_txt.json");
+		var rastersize = data.loadTextData("../data/osm500k_txt.json");
 
 
 	}
@@ -416,7 +416,11 @@ fill: #98abc5;
 		
 			<div id = "speed_chart"></div>
 	 		<div id = "hour_chart"></div> 	 	
-	 		<div id = "about">About: This application shows 200 000 positions from open street map...</div> 	 
+	 		<div id = "about">
+	 		This WebGLayer demo shows 500 000 GPS positions from 
+	 		<a href="http://wiki.openstreetmap.org/wiki/Planet.gpx">http://wiki.openstreetmap.org/wiki/Planet.gpx</a>
+	 		WebGLayer is open source library available on <a href="https://github.com/jezekjan/WebGLayer">github</a>.
+	 	    </div> 	 
 	 		
 	</div>
 	<div id="controls">
