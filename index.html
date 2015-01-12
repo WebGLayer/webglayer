@@ -29,32 +29,38 @@
       </header>
       <section>
         <h3>
-<a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>One sentence description</h3>
+<a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Javacript, WebGL based library for spatial multiple coordinated views</h3>
 
-<h3>Examples</h3>
-<ul>
-<li><a href="example/index.html"> Leaflet demo </a></li>
-<li><a href="example/index_gm.html"> Google Maps API demo </a></li>
-<li><a href="example/index_ol.html"> OpenLayers demo </a></li>
-</ul>
+
+<p>
+
+ Try WebGLayer:
+ 
+<a href="examples/index_ol.html">DEMO</a>
+ The demo is visualizing 500.000 GPS positions form Open Street Map.
+ Sample enable Coordinated Multiple View with polybrush.
+
+</p>
 
 Data source: <a href="http://wiki.openstreetmap.org/wiki/Planet.gpx">http://wiki.openstreetmap.org/wiki/Planet.gpx</a>
 
-<p> Code example:</p>
+<p>Screen cast video of 1.000.000 of GPS positions from a private car monitoring system:</p>
 
-<pre><code>
-    map = L.map('map-div',{
-	    center: [50, 14],	  
-	});
-	
-	gllayer = new WebglLayer("test", map.getContainer(), dl.points, dl.attributes);
-	
-	map.on('resize', function(){gllayer.resize();gllayer.render();});
-	map.on('move', gllayer.onMove);
-	map.on('zoomstart', gllayer.onMove);
-	
-</code></pre>
+ <iframe width="500" height="305"
+src="http://www.youtube.com/embed/hzK0ZbnvsRw">
+</iframe> 
 
+<p> 
+
+ <h3>Other samples </h3>
+Samples of combination of WebGLayer with Leaflet or Google maps API:
+
+<ul>
+
+<li><a href="examples/leaflet/index_ll.html"> Leaflet demo </a></li>
+<li><a href="examples/gm/gl_gm.html"> Google Maps API demo </a></li>
+</ul>
+</p>
 <!--
 <p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
 
