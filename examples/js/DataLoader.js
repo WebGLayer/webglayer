@@ -10,6 +10,7 @@ function DataLoader(fname) {
 	/**
 	 * Load text file
 	 */
+	 $("#speed_chart").text("Please wait... data are being loaded. This may take a while.");
 	DataLoader.prototype.loadTextData = function(file) {
 		var pts = [];
 		var attr = [];
@@ -61,8 +62,11 @@ function DataLoader(fname) {
 		}).on("progress", function(event){
 			 if (d3.event.lengthComputable) {
 		          var percentComplete = Math.round(d3.event.loaded * 100 / d3.event.total);
-		          $("#speed_chart").text("Please wait.. loading data. Completed "+ percentComplete+ "%");
-		          //console.log(percentComplete);
+		          if ( percentComplete <=100){
+		        	  $("#speed_chart").text("Please wait.. loading data. Completed "+ percentComplete+ "%");
+		   		    
+		          }
+		               //console.log(percentComplete);
 		       }
 		});
 
