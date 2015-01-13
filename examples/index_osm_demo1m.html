@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Modify Feature</title>
+
+<style type="text/css">
+html,body {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	font-family: Verdana, Arial, sans-serif;
+}
+div.olMapViewport {
+	 top: 0;
+	 position: relative;
+     z-index: 0;     
+}
+
+
+#view {
+	position: relative;
+}
+
+#map {
+	 top: 0;
+	margin-right: 32em;
+	padding: 0;
+	height:100%;	
+}
+#legend {
+	position: fixed;
+	bottom: 2em;
+	left: 4em;
+	height: 3em;
+	width: 30em;
+	padding: 0.3em;
+	 z-index:2000;
+	background-color: rgba(255, 255, 255, 0);
+}
+#right {
+	position: fixed;
+	overflow-y:auto;
+	overflow-x:hidden;		
+	right: 0;
+	top: 0;
+	width: 32em;
+	height: 100%;
+	font-size: 1em;
+	moz-box-shadow: 0px 0px 10px black;
+	webkit-box-shadow: 0px 0px 9px black;
+	box-shadow: -1px 0px 6px black;
+	z-index: 10000;
+}
+
+#controls {
+	position: fixed;
+	top: 0em;
+	left: 3em;
+	width: 512px;
+	z-index:2000;
+	background-color: rgba(255, 255, 255, 0.2);
+}
+
+#about {
+	margin: 1em;
+}
+
+#controlToggle {
+	padding-left: 1em;
+}
+
+#controlToggle li {
+	list-style: none;
+}
+
+#test {
+	top: 0;
+	opacity: 1;
+	z-index: 1000;
+	pointer-events: none;
+	position: absolute;
+	top: 0px;
+}
+
+#chart_container {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+}
+.chart rect {
+  fill: steelblue;
+}
+
+.chart text {
+  fill: white;
+  font: 10px sans-serif;
+  text-anchor: end;
+}
+
+.brush{
+ fill: grey;
+ stroke: #ff8c00;
+ stroke-opacity: 0.8;
+ stroke-width: 1;
+}
+
+.selected.bar {
+fill: #ff8c00;
+}
+
+.unselected.bar {
+fill: #7b6888;
+}
+
+.out.bar {
+fill: #98abc5;
+}
+
+.axis text {
+  font: 10px sans-serif;
+}
+.l text {
+  font: 10px sans-serif;
+}
+
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
+}
+
+.l {
+ cursor: pointer;
+ stroke: #000; 
+}
+.grid-background {
+  fill: #ddd;
+}
+
+.grid line,
+.grid path {
+  fill: none;
+  stroke: #fff;
+  shape-rendering: crispEdges;
+}
+
+
+.brush .extent {
+  
+  fill-opacity: .125;
+  shape-rendering: crispEdges;
+}
+</style>
+<script src="../javascripts/ol/lib/OpenLayers.js"></script>
+<script src="../javascripts/jquery-1.9.1.min.js"></script>
+<script src="../javascripts/poly2tri.js"></script>
+<script src="../javascripts/d3.js"></script>
+
+
+<script src="map.js"></script>
+<script src="gl.js"></script>
+
+<script src="js/Dimension.js"></script>
+<script src="js/Manager.js"></script>
+<script src="js/OneDDimension.js"></script>
+<script src="js/MapDimension.js"></script>
+<script src="js/HistogramDimension.js"></script>
+
+<script src="js/MapFilterRender.js"></script>
+<script src="js/HistFilterRender.js"></script>
+<script src="js/Filter.js"></script>
+
+<script src="js/MapController.js"></script>
+<script src="js/DataLoader.js"></script>
+<script src="js/Utils.js"></script>
+<script src="js/StackedBarChart.js"></script>
+<script src="js/BarChart.js"></script>
+<script src="js/FloatRasterReader.js"></script>
+<script src="js/d3.svg.multibrush.js"></script>
+
+
+<script type="text/javascript">
+    var datafile ="osm_pix1000k.json";
+	var map, vectors, controls;
+
+	files = ["10000_r.js","20000_r.js", "50000_r.js","100000_r.js","osm200k.js","500000_r.js","750000_r.js","1000000_r.js"];
+	function init() {
+		//createChart();
+			metadata = [];
+		/* New stacked chart */
+		
+		//chart.update([1, 1, 1, 1,1,1,1,1,1, 1,1, 1, 1, 1,1,1,1,1,1, 1,1, 1, 1, 1,1,1,1,1,1, 1,1, 1, 1, 1,1,1,1,1,1, 10000]);
+		
+		/* Old chart */
+	//	chart = new Chart([1, 1, 1, 1,1,1,1,1,1, 1,1, 1, 1, 1,1,1,1,1,1, 1,1, 1, 1, 1,1,1,1,1,1, 1,1, 1, 1, 1,1,1,1,1,1, 50000]);
+		initMap();
+		getShader();
+		utils = new Utils();
+		//r_count = 1 * Math.pow(10, 5);
+		manager = new Manager("test", "map");
+		mcontroller = new MapController(manager);
+
+		canvas.setAttribute("width", div.offsetWidth);
+		canvas.setAttribute("height", div.offsetHeight);
+
+		wgs = new OpenLayers.Projection("EPSG:4326"); // Transform from WGS 1984
+		merc = new OpenLayers.Projection("EPSG:900913");
+		
+		tlwgs = (new OpenLayers.LonLat(-180, 90)).transform(wgs, merc);	
+		tl = getTopLeftTC();
+		
+		
+		/*Configure speed dimension*/
+		metadata[0] = {max : 180, num_bins : 90, name: "speed"};		
+		/*Configure hour dimension*/	
+		metadata[1] = {max : 24, num_bins :24 , name: "hours"};
+//		metadata[2] = {max : 1, num_bins :100 , name: "random"};
+	//	metadata[2] = {max : 1, num_bins :100 , name: "road"};
+	//	metadata[3] = {max : 1, num_bins :50 , name: "random1"}
+		//metadata[4] = {max : 1, num_bins :20 , name: "random2"}
+		//metadata[2] = {max : 9, num_bins :9 , name: "road"};
+		//metadata[3] = {max : 7, num_bins :7 , name: "day"};
+		
+		metadata.max_bins =metadata[0].num_bins;
+		
+		charts = [];
+		charts[0] = new StackedBarChart(metadata[0].max, 0, "speed_chart","speed [km/h]");
+		charts[1] = new StackedBarChart(metadata[1].max, 1, "hour_chart", "time of day [hour]");
+	//	charts[2] = new StackedBarChart(metadata[2].max, 2, "random","");
+		//charts[2] = new StackedBarChart(9, 2, "road");
+	//	charts[3] = new StackedBarChart(metadata[3].max, 3, "random1", "");
+		
+		
+		var data = new DataLoader();
+		//var rastersize = data.loadTextData("../data/osm50k_txt.json");
+		var rastersize = data.loadTextData("../data/"+datafile);
+
+	}
+
+	function visualize(data){	
+		 $("#speed_chart").text("");
+		manager.num_rec = data.num_rec;
+		/**init geo buffer*/
+		manager.addDataBuffer(data.points, 2, 'wPoint');
+		/*init first attribute buffer*/				
+		for (var i = 0 ; i < metadata.length; i++){
+			manager.addDataBuffer(data.attributes[i], 1, metadata[i].name);
+		}
+				
+		/* init index buffer*/
+		manager.addDataBuffer(data.index, 2, 'index');
+		
+		
+		dimMap = new MapDimension(manager);
+		dimMap.name = "map";
+		dimMap.setProgram('map_vShader', 'map_fShader', 'map');
+
+	/*	dimSpeed = new OneDDimension(manager, 3, 180, "speed");
+		dimSpeed.setProgram('speed_vShader', 'speed_fShader', 'speed');*/
+
+		
+	  	histDim = new HistogramDimension(manager);
+	
+		mapFilterRender =  new MapFilterRender(manager);
+		histFilterRender = new HistFilterRender(manager);
+		
+		allDataFilter = new Filter(data.num_rec, data.raster_size, manager); 
+		data = null;
+		mcontroller.resize(div.offsetWidth, div.offsetHeight);
+		mcontroller.zoommove(map.zoom, tl);
+
+		mapFilterRender.init();
+		histFilterRender.init();
+		//util.createFilteringData(generateOneTriangle());
+		
+		map.events.register("move", map, onMove);
+		map.events.register("zoomstart", map, onMove);
+		start();
+	}
+	
+	
+	function initGLDimensions(){
+		manager.update();
+		mcontroller = new MapController(manager);
+
+		canvas.setAttribute("width", div.offsetWidth);
+		canvas.setAttribute("height", div.offsetHeight);
+		
+		dimMap = new MapDimension(manager);
+		dimMap.name = "map";
+		dimMap.setProgram('map_vShader', 'map_fShader', 'map');
+
+	/*	dimSpeed = new OneDDimension(manager, 3, 180, "speed");
+		dimSpeed.setProgram('speed_vShader', 'speed_fShader', 'speed');*/
+
+		
+	  	histDim = new HistogramDimension(manager);
+	
+		mapFilterRender =  new MapFilterRender(manager);
+		histFilterRender = new HistFilterRender(manager);
+			
+		mcontroller.resize(div.offsetWidth, div.offsetHeight);
+		mcontroller.zoommove(map.zoom, tl);
+
+		mapFilterRender.init();
+		histFilterRender.init();
+	}
+	
+	onMove = function() {
+		mcontroller.zoommove(map.getZoom(), getTopLeftTC());
+	}
+
+	generateOneTriangle = function() {
+		atr = new Float32Array([ 10, 51, 18, 51, 15, 45 ]);
+		return atr;
+	}
+
+	getShader = function() {
+		$.ajaxSetup({
+			async : false
+		});
+
+		$.get('shaders/shaders_filtermap.txt', function(data) {
+			$("head").append(data);
+		});
+		
+		$.get('shaders/shaders_filterhist.txt', function(data) {
+			$("head").append(data);
+		});
+		
+		$.get('shaders/shaders_filter.txt', function(data) {
+			$("head").append(data);
+		});
+
+		$.get('shaders/shaders_map.txt', function(data) {
+			$("head").append(data);
+		});
+		
+		$.get('shaders/shaders_float.txt', function(data) {
+			$("head").append(data);
+		});
+
+		
+		$.get('shaders/shaders_hist.txt', function(data) {
+			$("head").append(data);
+		});
+
+		$.ajaxSetup({
+			async : true
+		});
+
+	}
+	
+
+	
+
+		
+	var sum_time = 0;
+	var loop_num = 0;
+	function testRender(){
+		mcontroller.zoommove(10+Math.random()*2,{x: 138.46093750000057, y: 86.2109375000000+Math.random()*2});		
+	
+		var start = performance.now();
+		histFilterRender.createFilteringData(0, [ -0.5+Math.random()/100, -0.5, -0.4, -0.5]);
+		histFilterRender.createFilteringData(1, [ -1.0, 0.5, 0., 0.5]);	
+		
+		/*hist filter*/
+		
+		histFilterRender.renderFilter();
+		
+		/*mapfilter*/
+		var triangles = new Float32Array([126.875, 108, 139.375, 86.25, 164.375, 106.5, 164.375, 106.5, 139.375, 86.25, 138.875, 74.75]);
+		mapFilterRender.createFilteringData(triangles);
+		mapFilterRender.renderFilter();
+		
+		allDataFilter.mapFilter = mapFilterRender.filterTexture;
+		allDataFilter.histFilter = histFilterRender.filterTexture;
+		allDataFilter.render();
+		manager.filterTexture = allDataFilter.filterTexture;
+
+		dimMap.render(manager.num_rec);	
+		//mapFilter();
+		histDim.render();
+		read();
+		/**
+		END
+		*/
+		end = performance.now();
+		sum_time = sum_time + (end-start);
+		loop_num++;
+		console.log(end-start);
+		console.log("average: "+sum_time/loop_num);
+	}
+
+
+</script>
+</head>
+<body onload="init()">
+
+	<div id="map">
+			<canvas id="test">Your browser does not support HTML5</canvas>
+	</div>
+	<div id="right">
+		
+		
+		
+			<div id = "speed_chart"></div>
+	 		<div id = "hour_chart"></div> 	 	
+	 		<div id = "about">
+	 		This WebGLayer demo shows 500 000 GPS positions from 
+	 		<a href="http://wiki.openstreetmap.org/wiki/Planet.gpx">http://wiki.openstreetmap.org/wiki/Planet.gpx</a>
+	 		WebGLayer is open source library available on <a href="https://github.com/jezekjan/WebGLayer">github</a>.
+	 	    </div> 	 
+	 		
+	</div>
+	<div id="controls">
+		<ul id="controlToggle">
+
+			<input type="radio" name="type" value="polygon" id="polygonToggle"
+				onclick="toggleControl(this);" />
+				<label for="polygonToggle">sketch polygon</label>
+			
+			<input type="radio" name="type" value="modify" id="createVertices"
+				onclick="toggleControl(this);" />
+				<label for="createVertices">modify polygon</label>
+				
+			<input type="radio" name="type" value="remove" id="removePolygon"
+				onclick="toggleControl(this);" />
+				<label for="removePolygon">remove polygon</label>				
+				
+			
+			
+		<!--	<input type="radio" name="type" value="drag" id="dragEvent"
+				onclick="toggleControl(this);" />
+			<label for="dragEvent">drag polygon</label>
+				</li>
+
+			<li><input type="radio" name="type" value="modify"
+				id="modifyToggle" onclick="toggleControl(this);" /> <label
+				for="modifyToggle">modify feature</label>
+				<ul>
+					<li><input id="createVertices" type="checkbox" checked
+						name="createVertices" onchange="update()" /> <label
+						for="createVertices">allow vertices creation</label></li>
+			 	<li><input id="rotate" type="checkbox" name="rotate"
+						onchange="update()" /> <label for="rotate">allow rotation</label>
+					</li>
+					<li><input id="resize" type="checkbox" name="resize"
+						onchange="update()" /> <label for="resize">allow resizing</label>
+						(<input id="keepAspectRatio" type="checkbox"
+						name="keepAspectRatio" onchange="update()" checked="checked" /> <label
+						for="keepAspectRatio">keep aspect ratio</label>)</li>
+					<li><input id="drag" type="checkbox" name="drag"
+						onchange="update()" /> <label for="drag">allow dragging</label></li> 
+					<li><input id="dragEvent" type="checkbox" name="dragEvent"
+						onchange="update()" /> <label for="dragEvent">allow
+							dragging Event</label></li>
+				</ul></li>-->
+		</ul>
+		
+		
+	</div>
+	<div id='legend'>
+		<object data="legend2.svg" />
+	</div>
+</body>
+</html>
