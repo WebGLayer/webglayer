@@ -34,9 +34,9 @@ function DataLoader(fname) {
 				  
 			 //console.log(i);
 				{
-					var v = transform(val.y, val.x);
-					pts[j++] = v.x;
-					pts[j++] = v.y;
+					//var v = transform(val.y, val.x);
+					pts[j++] = val.x;
+					pts[j++] = val.y;
 					val.hours = (new Date(val.time * 1000)).getHours();
 					val.speed = val.speed;
 					for (var m = 0; m < metadata.length; m++) {
@@ -66,7 +66,6 @@ function DataLoader(fname) {
 		        	  $("#speed_chart").text("Please wait.. loading data. Completed "+ percentComplete+ "%");
 		   		    
 		          }
-		               //console.log(percentComplete);
 		       }
 		});
 
