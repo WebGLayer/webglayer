@@ -30,7 +30,7 @@ function initMap() {
 		 * points and crossfilter
 		 */
 		dl = new DataLoader()
-		dl.loadTextData("../../data/osm50k_txt.json");
+		dl.loadTextData("../../data/osm_pix100k.json");
 		/** take crossfilter object for coordination */
 		// cf = dl.cf;
 		/** init the canvas */
