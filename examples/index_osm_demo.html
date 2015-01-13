@@ -190,7 +190,7 @@ fill: #98abc5;
 
 
 <script type="text/javascript">
-    var datafile ="osm50.txt";
+    var datafile ="osm_pix500k.json";
 	var map, vectors, controls;
 
 	files = ["10000_r.js","20000_r.js", "50000_r.js","100000_r.js","osm200k.js","500000_r.js","750000_r.js","1000000_r.js"];
@@ -242,8 +242,8 @@ fill: #98abc5;
 		
 		
 		var data = new DataLoader();
-		var rastersize = data.loadTextData("../data/osm500k_txt.json");
-
+		//var rastersize = data.loadTextData("../data/osm50k_txt.json");
+		var rastersize = data.loadTextData("../data/"+datafile);
 
 	}
 
