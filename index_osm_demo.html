@@ -190,7 +190,7 @@ fill: #98abc5;
 
 
 <script type="text/javascript">
-    var datafile ="osm50.txt";
+    var datafile ="osm_pix500k.json";
 	var map, vectors, controls;
 
 	files = ["10000_r.js","20000_r.js", "50000_r.js","100000_r.js","osm200k.js","500000_r.js","750000_r.js","1000000_r.js"];
@@ -242,8 +242,8 @@ fill: #98abc5;
 		
 		
 		var data = new DataLoader();
-		var rastersize = data.loadTextData("../data/osm500k_txt.json");
-
+		//var rastersize = data.loadTextData("../data/osm50k_txt.json");
+		var rastersize = data.loadTextData("../data/"+datafile);
 
 	}
 
@@ -289,32 +289,6 @@ fill: #98abc5;
 	}
 	
 	
-	function initGLDimensions(){
-		manager.update();
-		mcontroller = new MapController(manager);
-
-		canvas.setAttribute("width", div.offsetWidth);
-		canvas.setAttribute("height", div.offsetHeight);
-		
-		dimMap = new MapDimension(manager);
-		dimMap.name = "map";
-		dimMap.setProgram('map_vShader', 'map_fShader', 'map');
-
-	/*	dimSpeed = new OneDDimension(manager, 3, 180, "speed");
-		dimSpeed.setProgram('speed_vShader', 'speed_fShader', 'speed');*/
-
-		
-	  	histDim = new HistogramDimension(manager);
-	
-		mapFilterRender =  new MapFilterRender(manager);
-		histFilterRender = new HistFilterRender(manager);
-			
-		mcontroller.resize(div.offsetWidth, div.offsetHeight);
-		mcontroller.zoommove(map.zoom, tl);
-
-		mapFilterRender.init();
-		histFilterRender.init();
-	}
 	
 	onMove = function() {
 		mcontroller.zoommove(map.getZoom(), getTopLeftTC());
@@ -402,6 +376,32 @@ fill: #98abc5;
 		console.log("average: "+sum_time/loop_num);
 	}
 
+	function initGLDimensions(){
+		manager.update();
+		mcontroller = new MapController(manager);
+
+		canvas.setAttribute("width", div.offsetWidth);
+		canvas.setAttribute("height", div.offsetHeight);
+		
+		dimMap = new MapDimension(manager);
+		dimMap.name = "map";
+		dimMap.setProgram('map_vShader', 'map_fShader', 'map');
+
+	/*	dimSpeed = new OneDDimension(manager, 3, 180, "speed");
+		dimSpeed.setProgram('speed_vShader', 'speed_fShader', 'speed');*/
+
+		
+	  	histDim = new HistogramDimension(manager);
+	
+		mapFilterRender =  new MapFilterRender(manager);
+		histFilterRender = new HistFilterRender(manager);
+			
+		mcontroller.resize(div.offsetWidth, div.offsetHeight);
+		mcontroller.zoommove(map.zoom, tl);
+
+		mapFilterRender.init();
+		histFilterRender.init();
+	}
 
 </script>
 </head>

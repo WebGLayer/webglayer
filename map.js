@@ -1,6 +1,5 @@
 initMap = function() {
 
-	
 	var options = {
 		units : 'm',
 		projection : "EPSG:900913",
@@ -70,6 +69,7 @@ initMap = function() {
 		renderers : renderer,
 		styleMap: styleMap
 	});
+
 
 	map.addLayers([ vectors ]);
 	
