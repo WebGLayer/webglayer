@@ -2,7 +2,7 @@ var MapController = function(manager) {
 	this.manager = manager;
 	this.layers = [];
 	
-	this.matrix;
+	var matrix;
 	this.width;
 	this.height;
 	
