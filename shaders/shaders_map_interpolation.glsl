@@ -2,74 +2,71 @@
       attribute vec4 wPoint;
       attribute float attr;
       attribute vec2 index;
+      attribute vec4 xy;
       
       uniform mat4 mapMatrix;
       uniform mat4 rasterMatrix;
-      uniform float zoom;
+     // uniform float zoom;
  	  uniform float drawselect;   
        
-      uniform sampler2D filter;
+    //  uniform sampler2D filter;
 
-      varying vec4 col;
+      varying float attrp;
+      varying vec4 xyp;
+      varying vec4 frag_point;
+      varying mat4 mMatrix;
      
        
       void main() {
 		
   	  	
-  		float p_size = zoom*10. ;
+  	//	float p_size = zoom*10. ;
   	    	   
   		vec4 p =  mapMatrix * wPoint;
   		float n_speed = ( attr+1.)/2.;
   		
   		vec4 rp = rasterMatrix * vec4(index[0],index[1],0.,1.);
-  		vec4 fdata = texture2D(filter, vec2(rp[0],rp[1]));  		
-  		
-  		// if data are selected  
-  		if (fdata[0]>0. && drawselect>0.5){
-  			p_size = p_size +3.;
-  			col = vec4(1.- n_speed, n_speed, 0.0, 0.8); 
-  			gl_Position = p;    	
-		gl_PointSize = p_size;
-  			
-  		} else if (drawselect<0.5) {  	
-  		   // If not selected then use blue color	   
-  		   //p_size = p_size-3.;
-  		   col = vec4(1.- n_speed, n_speed, 0.0, 0.03);
-  		   //col = vec4(0.482, 0.408, 0.533, 0.95); 	
-  		   //p_size = 4.;
-  		  // col = vec4(0.0,0.,0.,0.75);
-  		 	gl_Position = p;    	
-			gl_PointSize = 500.;
-  		} else {
-  			gl_Position = vec4(-2.,-2.,0.,0.);    	
-			gl_PointSize = 0.;
-  		}
-  		gl_PointSize = 256.;
+  	//vec4 fdata = texture2D(filter, vec2(rp[0],rp[1]));  		
+  		  	  			
+  		gl_Position = p;    		
+  		gl_PointSize = 100.;
 
-          col = vec4(n_speed/10., n_speed, 0.0, 0.);
-
+          attrp = n_speed;
+ 		  xyp = mapMatrix * xy;
+ 		  frag_point=mapMatrix * wPoint;
+ 		  mMatrix =  mapMatrix ;
  		
       }
     </script>
     
     <script id="map_interpolation_fShader" type="x-shader/x-fragment">
       precision mediump float;  
- 	
-    
-	  varying vec4 col;
+ 	    
+	  varying float attrp;
+	  varying vec4 xyp;
+      varying vec4 frag_point;
+      varying mat4 mMatrix;      
  
+   	  uniform float zoom;
 
-   		float length(vec2 a, vec2 b){
-        	return sqrt(pow((a[0]-b[0]),2.)+pow((a[1]-b[1]),2.));
+   		float length(vec4 a, vec4 b){
+   		
+   		 	float ax = (1./mMatrix[0][0])*a[0];
+   		 	float ay = (1./mMatrix[1][1])*a[1];
+   		 	
+   		 	float bx = (1./mMatrix[0][0])*b[0];
+   		 	float by = (1./mMatrix[1][1])*b[1];
+   		 
+        	return (pow((ax- bx),2.)+pow((ay- by),2.));
       	}
       
       void main() {
 
-      float dist = length(gl_PointCoord.xy, vec2(0.5,0.5));
+      float dist2 = length(frag_point, xyp);
 
-	  float alpha = (dist> .5 && col[1] >0.) ? 0. : 1. ;
-	  float w = 1. / (dist*2.*dist*2.);
-      gl_FragColor = vec4(col[0]*w, w ,0.,1.)*alpha; 
+	  float alpha = (dist2> (.02)&& attrp >0.) ? 0. : 1. ;
+	  float w = 1. / (dist2*dist2);
+      gl_FragColor = vec4(attrp*w, w ,0.,1.)*alpha;    
        
       }
       

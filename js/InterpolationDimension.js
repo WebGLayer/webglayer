@@ -1,8 +1,10 @@
 
 function InterpolationDimension(manager){
 	this.manager = manager;
+	this.buf_id = 0;
 	Dimension.call(this, manager);
 	
+	//var ext = gl.getExtension("ANGLE_instanced_arrays"); // Vendor prefixes may apply!
 	var framebuffer = gl.createFramebuffer();
 	framebuffer.width = manager.width; 
 	framebuffer.height = manager.height;
@@ -54,7 +56,8 @@ function InterpolationDimension(manager){
 		gl.useProgram(this.glProgram);
 		this.manager.bindMapMatrix(this.glProgram);
 		this.manager.enableBuffer(this.glProgram, "wPoint");
-		this.manager.enableBuffer(this.glProgram, "attr");
+		this.manager.enableBufferForName(this.glProgram, "attr"+this.buf_id, "attr");
+		this.manager.enableBuffer(this.glProgram, "xy");
 		
 		gl.bindTexture(gl.TEXTURE_2D, this.interTexture);
 		gl.bindFramebuffer(gl.FRAMEBUFFER,framebuffer );	
@@ -79,23 +82,14 @@ function InterpolationDimension(manager){
 		/*set point size*/
 		var z = map.getZoom();
 	//	console.log( map.getZoom());
-		if (z > 8){
-			var zz = (z -7)/2;
-			gl.uniform1f(this.glProgram.loc, 20);		
-		} else {
-			gl.uniform1f(this.glProgram.loc, 20);		
-		}
 		
-		
-		
-		
-				
+			gl.uniform1f(this.glProgram.loc, z);						
 	}	
 	this.render = function(num) {
 
-		this.setup();
-		manager.enableBuffersAndCommonUniforms(this.glProgram);
-		manager.enableFilterTexture(this.glProgram);
+		this.setup();				
+		
+		
 		//gl.useProgram(this.glProgram);	
 		if (this.glProgram.drawselect == null){
 			this.glProgram.drawselect = gl.getUniformLocation(this.glProgram, "drawselect");
@@ -107,16 +101,16 @@ function InterpolationDimension(manager){
 		gl.uniform1f(this.glProgram.drawselect, 0);
 		
 	
-		gl.drawArrays(gl.POINTS, 0, num);	
-		
+		gl.drawArrays(gl.TRIANGLES, 0, num*3);	
+		//ext.drawArraysInstancedANGLE(gl.TRIANGLES,num*3, gl.UNSIGNED_SHORT,0,num);
 		gl.uniform1f(this.glProgram.drawselect, 1);
 		
-		gl.drawArrays(gl.POINTS, 0, num);	
+		//gl.drawArrays(gl.POINTS, 0, num*3);	
 		gl.bindTexture(gl.TEXTURE_2D, null);
 	    gl.useProgram(null);
 	   
 	    renderer.intepolationTexture =  this.interTexture;
-	   renderer.render();
+	    renderer.render();
 		
 	}
 	

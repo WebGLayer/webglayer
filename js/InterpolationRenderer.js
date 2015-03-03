@@ -25,11 +25,12 @@ function InterpolationRenderer(){
 		 gl.vertexAttribPointer(texCoordLocation, 2, gl.FLOAT, false, 0, 0);
 		//gl.useProgram(this.glProgram);
 		/** add specific buffer and uniforms */
+		 gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 	     gl.uniform1i(rasterLoc , 0);		   
 		 gl.activeTexture(gl.TEXTURE0);
 		 gl.bindTexture(gl.TEXTURE_2D, this.intepolationTexture);
 	
-		gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+	
 		//gl.bindFramebuffer(gl.FRAMEBUFFER,null);	
 		gl.viewport(0, 0, manager.width, manager.height);
 		gl.clearColor(0.0, 0.0, 0.0, 0.0);
@@ -51,7 +52,7 @@ function InterpolationRenderer(){
 	
 	
 		gl.drawArrays(gl.TRIANGLES, 0, 6);	
-		
+		gl.bindTexture(gl.TEXTURE_2D, null);
 	    gl.useProgram(null);
 	   
 		
