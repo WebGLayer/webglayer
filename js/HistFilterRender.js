@@ -26,10 +26,9 @@ HistFilterRender = function(manager){
 	
 	this.filterTexture = gl.createTexture();
 	this.filterTexture.name = "hist filter texture";
-		
-	
-	this.init = function(){		
-		/*Initialise offscreen buffer*/
+
+
+	/*Initialise offscreen buffer*/
 		
 		/** Framebuffer */
 		gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
@@ -59,7 +58,7 @@ HistFilterRender = function(manager){
 		gl.bindRenderbuffer(gl.RENDERBUFFER, null);
 		gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 		gl.bindTexture(gl.TEXTURE_2D, null);
-	}
+
 	
 
 	
@@ -73,7 +72,7 @@ HistFilterRender = function(manager){
 		
 		//allDataFilter.hasHistFilter = false;
 		
-		allDataFilter.hasHistFilter = false;
+		//allDataFilter.hasHistFilter = false;
 		/*for (var num_hist =0; num_hist< height;num_hist++){			
 			if (filters[num_hist] != null && filters[num_hist].length > 0){
 				allDataFilter.hasHistFilter = true;
@@ -108,7 +107,7 @@ HistFilterRender = function(manager){
 		
 	
 		gl.drawArrays(gl.LINES, 0, pointsSize);		
-
+		//this.readPixels();
 		
 		gl.bindBuffer(gl.ARRAY_BUFFER, null);
 		gl.bindFramebuffer(gl.FRAMEBUFFER, null);
@@ -138,7 +137,7 @@ HistFilterRender = function(manager){
 				var index = m++;
 				allfilters[index] = filters[i][j];
 				if (index%2 ==0 && (allfilters[index]<=1. && allfilters[index]>=-1. ) ){
-					allDataFilter.hasHistFilter= true;
+				//	allDataFilter.hasHistFilter= true;
 				}
 			}
 		
@@ -167,7 +166,7 @@ HistFilterRender = function(manager){
 			readout[i];
 		}**/
 		//console.log(sum);
-		//console.log(readout);
+		console.log(readout);
 		gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 	}
 	

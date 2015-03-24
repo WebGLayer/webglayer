@@ -27,7 +27,7 @@ StackedBarChart = function(d_max, ch_row, div_id, x_label) {
 	this.init = function() {
 		// xScale = d3.scale.ordinal().rangeRoundBands([0, width], .1);
 		// xScale = d3.scale.ordinal().rangeRoundBands([0, width], .1);
-		xScale = d3.scale.linear().domain([ 0, d_max ]).range([ 0, width ]);
+		xScale = d3.scale.pow().domain([ 0, d_max ]).range([ 0, width ]);
 
 		var cols = [ "#ff8c00", "#7b6888", "#98abc5" ];
 		var classes = [ [ "0", "selected", cols[0] ],
@@ -184,7 +184,7 @@ StackedBarChart = function(d_max, ch_row, div_id, x_label) {
 
 			histFilterRender.createFilteringData(ch_row, h_filter);
 
-			histFilter();
+			GLU.histFilter();
 			// add data, attach elements and so on
 
 			// add data, attach elements and so on

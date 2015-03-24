@@ -101,7 +101,7 @@ function Manager(canvasid, mapid) {
 			gl.uniformMatrix4fv(prog[m.name], false, m);			
 		}
 		
-		this.enableBuffer(prog, "index");
+		this.enableBufferForName(prog, this.index, "index");		
 					
 	}
 
@@ -114,10 +114,24 @@ function Manager(canvasid, mapid) {
 		gl.uniformMatrix4fv(prog.matrixLoc, false,  this.mapMatrix);		
 	}
 	
+	this.bindRasterMatrix = function(prog){
+		//	gl.useProgram(prog);
+			if (prog.rmatrixLoc == null){
+				prog.rmatrixLoc = this.getUniformLoc(prog, this.rMatrix.name);	
+			}
+			
+			gl.uniformMatrix4fv(prog.rmatrixLoc, false,  this.rMatrix);		
+		}
+	
 	this.enableBuffer = function(prog, name){
 	//	gl.useProgram(prog);
 		var buf = this.databuffers[name];
 		gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+		
+		if (buf==undefined){
+			console.error("Error: " +  name + " is not registered in manager.");			
+			return;
+		}
 
 		if (prog[name]==null){
 			if (gl.getAttribLocation(prog, buf.name) >= 0) {
@@ -174,4 +188,5 @@ function Manager(canvasid, mapid) {
 			return loc;
 		}			
 	}
+	
 }

@@ -59,8 +59,10 @@ function HistogramDimension(manager) {
 		gl.enable(gl.BLEND);
 		gl.blendFunc(gl.ONE, gl.ONE);
 
-		manager.enableBuffersAndCommonUniforms(this.program);
-		manager.enableFilterTexture(this.program);
+	//	manager.enableBuffersAndCommonUniforms(this.program);
+		manager.enableBufferForName(this.program,  "index"+manager.year, "index");	
+		manager.enableFilterTexture(this.program);	
+		manager.bindRasterMatrix(this.program);
 
 		//gl.finish();
 
@@ -81,8 +83,8 @@ function HistogramDimension(manager) {
 				gl.uniform1f(this.program.loc, r);
 			}
 			
-
-			manager.enableBufferForName(this.program, metadata[i].name, "attr");
+		//manager.enableBufferForName(this.glProgram,  "attr"+this.y_id+this.buf_id, "attr");
+		 manager.enableBufferForName(this.program, metadata[i].name, "attr");
 			/* bind proper buffer */
 
 			/* rneder */

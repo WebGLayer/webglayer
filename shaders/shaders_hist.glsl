@@ -15,7 +15,7 @@
 			
 
 		
-		gl_Position = vec4(attr, attr_row, 0., 1.);
+		gl_Position = vec4((attr*2.)-1., attr_row, 0., 1.);
   		gl_PointSize = 1.;
   			
   		vec4 rp = rasterMatrix * vec4(index[0],index[1],0.,1.);
@@ -46,3 +46,4 @@
 		gl_FragColor = col;
       }
 </script>
+
