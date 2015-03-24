@@ -60,7 +60,7 @@ StackedBarChart = function(d_max, ch_row, div_id, x_label) {
 
 		svg.append("g").attr("class", "y axis").call(yAxis).append("text")
 				.attr("transform", "rotate(270)").attr("y", "-4.5em").attr("x",
-						"-2em").style("text-anchor", "end").text("number of items [1000]");
+						"-2em").style("text-anchor", "end").text("number of segments");
 
 		/*
 		 * bars = svg.selectAll(".bars").data(dataset).enter()
