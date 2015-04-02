@@ -4,9 +4,13 @@ function Manager(canvasid, mapid) {
 	 */
 	canvas = document.getElementById(canvasid);
 	div = document.getElementById(mapid);//canvas.parentElement;map-div
-	gl = canvas.getContext('webgl', {preserveDrawingBuffer: true});
+	//gl = canvas.getContext('webgl', {preservedrawingbuffer: true});
+	gl = canvas.getContext('webgl', {preservedrawingbuffer: true}) || canvas.getContext('experimental-webgl', {preservedrawingbuffer: true});
 
-	
+	  if (!gl) {
+          alert("Could not initialise WebGL, sorry :-(. Are you using Chrome?");
+      }
+
 	
 	this.dimensions = [];
 	
@@ -25,7 +29,11 @@ function Manager(canvasid, mapid) {
 		 */
 		canvas = document.getElementById(canvasid);
 		div = canvas.parentElement;
-		gl = canvas.getContext('webgl', {preserveDrawingBuffer: true});
+		gl = canvas.getContext('webgl', {preservedrawingbuffer: true}) || canvas.getContext('experimental-webgl', {preservedrawingbuffer: true});
+
+		  if (!gl) {
+			  alert("Could not initialise WebGL, sorry :-(. Are you using Chrome?");
+	      }
 
 	}
 	
