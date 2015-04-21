@@ -3,7 +3,18 @@ function Manager(canvasid, mapid) {
 	 * Global variables
 	 */
 	canvas = document.getElementById(canvasid);
-	div = document.getElementById(mapid);//canvas.parentElement;map-div
+	div = document.getElementById(mapid);
+	
+		 
+	 var newdiv = document.createElement('div');
+	 var divIdName = 'webglayer_footer';
+	 newdiv.setAttribute('id',divIdName);
+	 newdiv.innerHTML = '© <a href="http://jezekjan.github.io/webglayer/">WebGLayer</a> ';
+	 div.appendChild(newdiv);
+	
+	
+	
+	//canvas.parentElement;map-div
 	//gl = canvas.getContext('webgl', {preservedrawingbuffer: true});
 	gl = canvas.getContext('webgl', {preservedrawingbuffer: true}) || canvas.getContext('experimental-webgl', {preservedrawingbuffer: true});
 
@@ -28,7 +39,9 @@ function Manager(canvasid, mapid) {
 		 * Global variables
 		 */
 		canvas = document.getElementById(canvasid);
+		
 		div = canvas.parentElement;
+		
 		gl = canvas.getContext('webgl', {preservedrawingbuffer: true}) || canvas.getContext('experimental-webgl', {preservedrawingbuffer: true});
 
 		  if (!gl) {
@@ -196,5 +209,7 @@ function Manager(canvasid, mapid) {
 			return loc;
 		}			
 	}
+	
+	
 	
 }
