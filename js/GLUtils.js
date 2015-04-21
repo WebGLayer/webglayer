@@ -40,7 +40,19 @@ function GLUtils() {
 						function(data) {
 							$("head").append(data);
 						});
+		
+		$.get('http://localhost:9999/js/webglayer/shaders/shaders_map_interpolation.glsl', function(data) {
+			$("head").append(data);
+		});
+		
+		$.get('http://localhost:9999/js/webglayer/shaders/shaders_interpolation.glsl', function(data) {
+			$("head").append(data);
+		});
 
+		$.get('http://localhost:9999/js/webglayer/shaders/shaders_linechart.glsl', function(data) {
+			$("head").append(data);
+		});
+		
 		$.ajaxSetup({
 			async : true
 		});
