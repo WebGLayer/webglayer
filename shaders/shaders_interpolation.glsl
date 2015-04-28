@@ -38,7 +38,7 @@
   			else if (val>0.6 && val <=0.8)  { col = vec4(227./256.,74./256.,51./256.,.8);}  		
   			else if (val>0.8 && val <=1.)  { col = vec4(179./256.,0.,0.,.8);}
   			else {col = vec4(179./256.,0.,0.,.8);}
-  			col = vec4(1.-val,val+0.1,val,1.);
+  			//col = vec4(.1,val+0.1,1.-val,1.);
   		}	else {
   			col = vec4(0.,0.,0.,0.);
   		}

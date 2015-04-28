@@ -53,6 +53,10 @@ function GLUtils() {
 			$("head").append(data);
 		});
 		
+		$.get('http://localhost:9999/js/webglayer/shaders/shaders_sdlinechart.glsl', function(data) {
+			$("head").append(data);
+		});
+		
 		$.ajaxSetup({
 			async : true
 		});

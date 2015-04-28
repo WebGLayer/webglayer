@@ -1,8 +1,8 @@
 /**/
-function LineChartDimension(manager, width) {
+function SDLineChartDimension(manager, width) {
 	var manager = manager;
 
-	this.program = utils.loadShaders("lineChart_vShader", "lineChart_fShader", this);
+	this.program = utils.loadShaders("sdlineChart_vShader", "sdlineChart_fShader", this);
 
 	var framebuffer = gl.createFramebuffer();
 	framebuffer.width = width;
@@ -44,10 +44,10 @@ function LineChartDimension(manager, width) {
 
 	this.floatReader = new FloatRasterReader(this.lineTexture,
 			framebuffer.width, framebuffer.height);
-	
+	var rasterLoc = gl.getUniformLocation(this.program, "lineRaster" );
 	
 
-	this.render = function(bufname) {
+	this.render = function() {
 		gl.useProgram(this.program);
 		gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
 
@@ -61,8 +61,13 @@ function LineChartDimension(manager, width) {
 
 	//	manager.enableBuffersAndCommonUniforms(this.program);
 		manager.enableBufferForName(this.program,  "findex", "findex");			
-		manager.enableBufferForName(this.program,  bufname,"attr");
+		manager.enableBufferForName(this.program, "attr", "attr");
 			
+	//	gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+	    gl.uniform1i(rasterLoc , 0);		   
+		gl.activeTexture(gl.TEXTURE0);
+		gl.bindTexture(gl.TEXTURE_2D, this.lineChartTexture);
+		 
 		gl.drawArrays(gl.POINTS, 0, manager.num_frames);
 	
 
@@ -78,11 +83,10 @@ function LineChartDimension(manager, width) {
 		gl.useProgram(this.program);
 
 		
-	/*	 gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer); var readout = new
+		 gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer); var readout = new
 		 Float32Array(framebuffer.width * framebuffer.height * 4);
 		 gl.readPixels(0, 0, framebuffer.width, framebuffer.height, gl.RGBA,
-		 gl.FLOAT, readout); console.log("HistDim:"); 
-		 console.log(readout);*/
+		 gl.FLOAT, readout); console.log("HistDim:"); console.log(readout);
 		
 
 		/*
@@ -99,7 +103,7 @@ function LineChartDimension(manager, width) {
 
 		var res =[];
 
-	//	console.log(readout);
+		console.log(readout);
 		/*for (var m = 0; m < metadata.length; m++) {
 			res[m] = new Array(metadata[m].num_bins);
 			res[m].max = {0:0,1:0,2:0,3:0};
@@ -128,7 +132,6 @@ function LineChartDimension(manager, width) {
 			d.value = readout[i];
 			d.date=i;
 			d.numrec=readout[width+i];
-			d.nan=readout[2*width+i];
 			res[i]=d
 		}
 		

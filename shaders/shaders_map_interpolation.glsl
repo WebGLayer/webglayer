@@ -20,21 +20,27 @@
       void main() {
 		
   	  	
-  	//	float p_size = zoom*10. ;
+  		//	float p_size = zoom*10. ;
+  	 	if (attr != -99999.){
   	    	   
-  		vec4 p =  mapMatrix * wPoint;
-  		float n_speed = ( attr+1.)/2.;
-  		
-  		vec4 rp = rasterMatrix * vec4(index[0],index[1],0.,1.);
-  	//vec4 fdata = texture2D(filter, vec2(rp[0],rp[1]));  		
+  			vec4 p =  mapMatrix * wPoint;
+  			float n_speed = attr; //( attr+1.)/2.;
+  			
+  			vec4 rp = rasterMatrix * vec4(index[0],index[1],1.,0.);
+  			//vec4 fdata = texture2D(filter, vec2(rp[0],rp[1]));  		
   		  	  			
-  		gl_Position = p;    		
-  		gl_PointSize = 100.;
+  			gl_Position = p;    		
+  			gl_PointSize = 100.;
 
-          attrp = n_speed;
- 		  xyp = mapMatrix * xy;
- 		  frag_point=mapMatrix * wPoint;
- 		  mMatrix =  mapMatrix ;
+        	attrp = n_speed;
+ 			xyp = mapMatrix * xy;
+ 			frag_point=mapMatrix * wPoint;
+ 		  	mMatrix =  mapMatrix ;
+ 		  }
+ 		  else {
+ 		  		gl_Position = vec4(-2.,-2.,0.,0.);    		
+  				gl_PointSize = 100.;
+ 		  }
  		
       }
     </script>
