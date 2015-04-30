@@ -179,6 +179,9 @@ initMap = function() {
 	var lonlat = new OpenLayers.LonLat(10,51).transform(new OpenLayers.Projection("EPSG:4326"),new OpenLayers.Projection("EPSG:900913"));
 	map.setCenter(lonlat);
 	map.zoomTo(4);
+	
+	
+	
 }
 function trianglesToArray(trig) {
 	var points = [];

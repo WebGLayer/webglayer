@@ -45,6 +45,8 @@ function InterpolationDimension(manager){
 
 	gl.bindTexture(gl.TEXTURE_2D, null);
 	
+	this.floatReader = new FloatRasterReader(this.interTexture,
+			framebuffer.width, framebuffer.height);
 	
 
 	var renderer = new InterpolationRenderer();
@@ -126,22 +128,34 @@ function InterpolationDimension(manager){
 		manager.mapMatrix=matrix;
 	}
 
-	this.readPixels = function() {
+	this.readPixel = function(x,y) {
 		
-		//gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+				
+		
 		var readout = new Uint8Array(4);
 	//	console.time("reading_pix");
-		gl.readPixels(0, 0, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, readout);
+		gl.readPixels(x, y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, readout);
 	//	console.timeEnd("reading_pix");
 	//	gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 		var sum = 0;
 		for (i = 0; i < readout.length; i++) {
 			sum = sum + readout[i];
 		}
-		console.log(sum);
-		console.log(readout);	
+		//console.log(sum);
+		//console.log(readout);	
 	}
 	
+	this.readPixelaa = function() {
+
+		gl.useProgram(this.program);	
+		this.floatReader.setup()
+		this.floatReader.render();
+		var readout = this.floatReader.readPixel(10,10);
+
+		
+		return readout;
+
+	}
 }
 
 InterpolationDimension.prototype.filter = function(raster) {

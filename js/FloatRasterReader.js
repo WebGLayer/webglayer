@@ -182,6 +182,18 @@ function FloatRasterReader(raster, width, height) {
 		return readout;
 	}
 	
+	this.readPixel = function(x,y) {
+		
+		//gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
+		var readout_eight = new Uint8Array(4);
+		gl.readPixels(x, y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, readout_eight);		
+
+		var readout = new Float32Array(readout_eight.buffer);
+		gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+		return readout;
+	}
+	
+	
 	
 }
 

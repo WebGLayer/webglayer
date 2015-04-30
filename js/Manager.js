@@ -1,16 +1,29 @@
-function Manager(canvasid, mapid) {
+function Manager(mapid) {
 	/**
 	 * Global variables
 	 */
-	canvas = document.getElementById(canvasid);
+	//canvas = document.getElementById(canvasid);
+	var canvasid = 'test';
 	div = document.getElementById(mapid);
+	canvas = document.createElement('canvas');
+	canvas.setAttribute('id','test');
 	
+
+	div.appendChild(canvas);
+	
+	
+	canvas.setAttribute("width", div.offsetWidth);
+	canvas.setAttribute("height", div.offsetHeight);
+
+	
+	this.width=div.offsetWidth;
+	this.height=div.offsetHeight;
 		 
-	 var newdiv = document.createElement('div');
-	 var divIdName = 'webglayer_footer';
-	 newdiv.setAttribute('id',divIdName);
-	 newdiv.innerHTML = '© <a href="http://jezekjan.github.io/webglayer/">WebGLayer</a> ';
-	 div.appendChild(newdiv);
+//	 var newdiv = document.createElement('div');
+	// var divIdName = 'webglayer_footer';
+	// newdiv.setAttribute('id',divIdName);
+	// newdiv.innerHTML = '© <a href="http://jezekjan.github.io/webglayer/">WebGLayer</a> ';
+//	 div.appendChild(newdiv);
 	
 	
 	

@@ -1,11 +1,11 @@
-function LineChart(div_id, x_label) {
+function LineChart(div_id, pts) {
 	
 	var dataset = null;
 	
 	var svg ;
 	var x;
 	var y;
-	var colors = d3.scale.category10();
+
 	this.init = function() {
 		var margin = {top: 20, right: 20, bottom: 30, left: 50},
 	    width = 500 - margin.left - margin.right,
@@ -40,13 +40,13 @@ function LineChart(div_id, x_label) {
 	   		.attr("height", height + margin.top + margin.bottom)
 	   		.append("g")
 	   		.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-		
-		
-		
+	
 
-
-			  x.domain(d3.extent(dataset, function(d) { return d.date; }));
-			  y.domain([210,250]); //d3.extent(dataset,function(d) { return d.av_value; }));
+			  x.domain(d3.extent(dataset, function(d) { 
+				  return d.date; }));
+			  
+			  y.domain(d3.extent(dataset,function(d) {
+				  return d.av_value; }));
 
 			  svg.append("g")
 			      .attr("class", "x axis")
@@ -62,8 +62,7 @@ function LineChart(div_id, x_label) {
 			      .attr("dy", ".71em")
 			      .style("text-anchor", "end")
 			      .text("level [m]");
-			  
-			  			 
+			  			  			 
 			
 			
 			  		
@@ -106,15 +105,15 @@ function LineChart(div_id, x_label) {
 	};
 	
 	
-	this.update = function(data, uid) {
+	this.update = function(data, pts) {
 		if (dataset == null) {
 			dataset = Array.prototype.slice.call(data);
 			dataset.max = data.max;
 			this.init();
 		}
+	
 		dataset = Array.prototype.slice.call(data);			
-		 dataset.forEach(function(d) {
-			    d.date = d.date;
+		 dataset.forEach(function(d) {			   
 			    if (d.numrec == 0){
 			    	 d.av_value = NaN;
 			    } else {
@@ -127,10 +126,13 @@ function LineChart(div_id, x_label) {
 	      .datum(dataset)
 	      .attr("class", "line")
 	      .attr("d",this.createLine(dataset))
-		  .style("stroke", function(d){return colors(uid)})
-		  .on("mousewheel.zoom", function(e,d){
-			  console.log(d)
-			  });  
+		  .style("stroke",pts.col)
+		  .on("mouseover", function(){
+				console.log("aaa");
+			});
+		  //.on("mousewheel.zoom", function(e,d){
+		  //	  console.log(d)
+		  //  });  
 	}
 	
 

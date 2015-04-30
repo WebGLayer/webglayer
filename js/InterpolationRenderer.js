@@ -72,18 +72,15 @@ function InterpolationRenderer(){
 
 	this.readPixels = function() {
 		
-		//gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-		var readout = new Uint8Array(4);
-	//	console.time("reading_pix");
-		gl.readPixels(0, 0, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, readout);
-	//	console.timeEnd("reading_pix");
-	//	gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-		var sum = 0;
-		for (i = 0; i < readout.length; i++) {
-			sum = sum + readout[i];
-		}
-		console.log(sum);
-		console.log(readout);	
+		gl.useProgram(this.program);
+
+		
+		 gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
+		 var readout = new Float32Array(16);
+		 gl.readPixels(5, 5, framebuffer.width, framebuffer.height, gl.RGBA,
+			 gl.FLOAT, readout); 
+			 console.log(readout);
+	
 	}
 	
 }
