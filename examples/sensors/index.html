@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Modify Feature</title>
+
+<style type="text/css">
+html,body {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	font-family: Verdana, Arial, sans-serif;
+}
+div.olMapViewport {
+	 top: 0;
+	 position: relative;
+     z-index: 0;     
+}
+
+
+#view {
+	position: relative;
+}
+
+#map {
+	 top: 0;
+	margin-right: 36em;
+	padding: 0;
+	height:100%;	
+}
+#legend {
+	position: fixed;
+	bottom: 2em;
+	left: 4em;
+	height: 3em;
+	width: 30em;
+	padding: 0.3em;
+	 z-index:2000;
+	background-color: rgba(255, 255, 255, 0);
+}
+#right {
+	position: fixed;
+	overflow-y:auto;
+	overflow-x:hidden;		
+	right: 0;
+	top: 0;
+	width: 36em;
+	height: 100%;
+	font-size: 1em;
+	moz-box-shadow: 0px 0px 10px black;
+	webkit-box-shadow: 0px 0px 9px black;
+	box-shadow: -1px 0px 6px black;
+	z-index: 10000;
+}
+
+#controls {
+	position: fixed;
+	top: 0em;
+	left: 3em;
+	width: 512px;
+	z-index:2000;
+	background-color: rgba(255, 255, 255, 0.2);
+}
+
+#about {
+	margin: 1em;
+}
+
+#controlToggle {
+	padding-left: 1em;
+}
+
+#controlToggle li {
+	list-style: none;
+}
+
+#test {
+	top: 0;
+	opacity: 1;
+	z-index: 1000;
+	pointer-events: none;
+	position: absolute;
+	top: 0px;
+}
+
+#svgcanvas {
+	top: 0;
+	opacity: 1;
+	z-index: 1000;
+	pointer-events: none; 
+ 	position: absolute;
+	top: 0px;
+}
+
+
+
+
+#chart_container {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+}
+.chart rect {
+  fill: steelblue;
+}
+
+.chart text {
+  fill: white;
+  font: 10px sans-serif;
+  text-anchor: end;
+}
+
+.brush{
+ fill: grey;
+ stroke: #ff8c00;
+ stroke-opacity: 0.8;
+ stroke-width: 1;
+}
+
+.selected.bar {
+fill: #ff8c00;
+}
+
+.unselected.bar {
+fill: #7b6888;
+}
+
+.out.bar {
+fill: #98abc5;
+}
+
+.axis text {
+  font: 10px sans-serif;
+}
+.l text {
+  font: 10px sans-serif;
+}
+
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
+}
+
+.line {
+fill: none;
+stroke: steelblue;
+stroke-width: 2px;
+shape-rendering: optimizeSpeed ;
+ 
+}
+
+.point {
+	
+	stroke-width: 0.0005px;
+	z-index: 2000;
+ 	fill: #000;
+  	fill-opacity: .8;
+  	stroke: #fff; 
+}
+
+.l {
+ cursor: pointer;
+ stroke: #000; 
+}
+.grid-background {
+  fill: #ddd;
+}
+
+.grid line,
+.grid path {
+  fill: none;path{
+
+}
+
+}
+
+
+.brush .extent {
+  
+  fill-opacity: .125;
+  shape-rendering: crispEdges;
+}
+</style>
+<script src="javascripts/ol/lib/OpenLayers.js"></script>
+<script src="javascripts/jquery-1.9.1.min.js"></script>
+<script src="javascripts/jquery-ui.js"></script>
+<link rel="stylesheet" href="stylesheets/jquery-ui.css">
+<script src="javascripts/poly2tri.js"></script>
+<script src="javascripts/d3.js"></script>
+
+
+<script src="map.js"></script>
+<script src="js/DataLoader.js"></script>
+
+
+<script src="http://localhost:9999/js/webglayer/js/GLUtils.js"></script>
+<script src="http://localhost:9999/js/webglayer/js/Dimension.js"></script>
+<script src="http://localhost:9999/js/webglayer/js/Manager.js"></script>
+<script src="http://localhost:9999/js/webglayer/js/OneDDimension.js"></script>
+<script src="http://localhost:9999/js/webglayer/js/InterpolationDimension.js"></script>
+<script src="http://localhost:9999/js/webglayer/js/InterpolationRenderer.js"></script>
+<script src="http://localhost:9999/js/webglayer/js/MapDimension.js"></script>
+<script src="http://localhost:9999/js/webglayer/js/MapLineDimension.js"></script>
+<script src="http://localhost:9999/js/webglayer/js/HistogramDimension.js"></script>
+<script src="http://localhost:9999/js/webglayer/js/Dimension.js"></script>
+<script src="http://localhost:9999/js/webglayer/js/Utils.js"></script>
+<script src="http://localhost:9999/js/webglayer/js/MapController.js"></script>
+<script src="http://localhost:9999/js/webglayer/js/StackedBarChart.js"></script>
+<script src="http://localhost:9999/js/webglayer/js/FloatRasterReader.js"></script>
+<script src="http://localhost:9999/js/webglayer/js/d3.svg.multibrush.js"></script>
+<script src="http://localhost:9999/js/webglayer/js/Filter.js"></script>
+<script src="http://localhost:9999/js/webglayer/js/HistFilterRender.js"></script>
+<script src="http://localhost:9999/js/webglayer/js/LineChartDimension.js"></script>
+<script src="http://localhost:9999/js/webglayer/js/SDLineChartDimension.js"></script>
+<script src="http://localhost:9999/js/webglayer/js/LineChart.js"></script>
+<script src="http://localhost:9999/js/webglayer/js/SVGCanvas.js"></script>
+
+<script type="text/javascript">
+  
+	var map, vectors, controls, pts; 
+
+		function init() { 
+			 
+		metadata = [];
+		initMap();
+		GLU.loadShaders();
+		utils = new Utils();
+		//r_count = 1 * Math.pow(10, 5);
+		manager = new Manager("map");
+		mcontroller = new MapController(manager);
+
+		svgc = new SVGCanvas();
+		
+	
+
+		wgs = new OpenLayers.Projection("EPSG:4326"); // Transform from WGS 1984
+		merc = new OpenLayers.Projection("EPSG:900913");
+		
+		/*Importat global variables*/
+		tlwgs = (new OpenLayers.LonLat(-180, 90)).transform(wgs, merc);	
+		tl = GLU.getTopLeftTC();
+		
+		
+		/*Configure speed dimension*/
+		metadata[0] = {max : 50, num_bins : 90, name: "attr"};		
+		/*Configure hour dimension*/	
+	//	metadata[1] = {max : 24, num_bins :24 , name: "hours"};
+
+		
+		metadata.max_bins =metadata[0].num_bins;
+		
+	
+		
+	
+		
+		
+		var data = new DataLoader();
+		var rastersize = data.loadPosData("data/pos2.json","data/obs5k4_5.json");
+	//	svgc.addPoints();
+		//var rastersize = data.loadPosData("data/pos.json");
+		//data.loadObsData("data/obs.json")
+		
+		//var rastersize = data.loadTextData("data/"+datafile);
+		
+		
+
+	}
+
+	function visualize(data){	
+		pts = data.ptsxy;
+		chart = new LineChart("line_chart1",pts, data.timest);
+		chart_det = new LineChart("line_chart_det",pts, data.timest);
+		
+		svgc.addPoints(pts);
+		 $(function() {
+			 $( "#slider" ).slider({min:0, max:data.attributes.length});
+			 });
+		 $( "#slider" ).on( "slide", function( event, ui ) {
+		//	 console.log(ui.value);			 			 
+			 dimMap.buf_id = ui.value;
+			 dimMap.render(manager.num_rec);	
+			 
+			
+			 });
+		 
+		 
+		 $("#speed_chart").text("");
+		manager.num_rec = data.num_rec;
+		manager.num_frames = data.findex.length;
+		/**init geo buffer*/
+		manager.addDataBuffer(data.points, 2, 'wPoint');
+		manager.addDataBuffer(data.pointsxy, 2, 'xy');
+		/*init first attribute buffer*/			
+		
+		for (var i = 0; i < data.attributes.length; i++){
+			manager.addDataBuffer(data.attributes[i], 1, "attr"+i);
+		}
+		
+		for (var i = 0; i < data.attributes_line.length; i++){
+			manager.addDataBuffer(data.attributes_line[i],1, "attr_line"+i);
+		}
+	
+		
+		
+	
+		manager.addDataBuffer(data.findex,1, "findex");
+				
+		/* init index buffer*/
+		manager.addDataBuffer(data.index, 2, 'index');
+		allDataFilter = new Filter(data.num_rec, data.raster_size, manager); 
+		data = null;
+		initGLDimensions();
+		//util.createFilteringData(generateOneTriangle());
+		
+		map.events.register("move", map, onMove);
+		map.events.register("zoomstart", map, onZoom);	
+	}
+	
+	
+	function initGLDimensions(){
+		manager.update();
+		mcontroller = new MapController(manager);
+
+		canvas.setAttribute("width", div.offsetWidth);
+		canvas.setAttribute("height", div.offsetHeight);
+		
+		dimMap = new InterpolationDimension(manager);
+		dimMap.name = "map";
+		dimMap.setProgram('map_interpolation_vShader', 'map_interpolation_fShader', 'map');
+	
+			
+		dimLineChart = new LineChartDimension(manager, 400);
+		
+		SDLineChart = new SDLineChartDimension(manager,10);
+			
+			
+		mcontroller.resize(div.offsetWidth, div.offsetHeight);
+		mcontroller.zoommove(map.zoom, tl, render);
+		renderChart();
+
+	}
+	
+	function render(){
+		dimMap.render(manager.num_rec);
+		var read = dimMap.readPixel();
+		console.log(read);
+	
+		
+	}
+	
+	function renderChart(){
+		for (var i=0; i < pts.length; i++){
+			//var i=2;
+				dimLineChart.render("attr_line"+i,1,0);
+				//SDLineChart.lineChartTexture=dimLineChart.lineTexture;
+				
+				//SDLineChart.render();
+				var readout = dimLineChart.readPixels();
+				pts[i].data=readout;
+			//	var readout = SDLineChart.readPixels()			    				
+			}
+		chart.update(pts);	
+	
+	}
+	
+	function renderDetChart(zoom,trans){
+		for (var i=0; i < pts.length; i++){			
+				dimLineChart.render("attr_line"+i,zoom,trans);				
+				var readout = dimLineChart.readPixels();
+			
+				pts[i].data=readout;
+			}
+		chart_det.update(pts);	
+	}
+
+	
+	
+	onMove = function() {
+		mcontroller.zoommove(map.getZoom(), GLU.getTopLeftTC(), render);
+		
+		svgc.transform(map.getZoom(),GLU.getTopLeftTC());
+		
+	}
+	
+	onZoom = function() {
+		mcontroller.zoommove(map.getZoom(), GLU.getTopLeftTC(), render);
+	
+		svgc.transform(map.getZoom(),GLU.getTopLeftTC());
+	}
+
+	
+
+
+</script>
+</head>
+<body onload="init()">
+
+	<div id="map">
+	</div>
+	<div id="right">
+		
+		
+			<div style="margin:1em"><div id = "slider"> </div></div>
+			<div id = "line_chart1"></div>
+			<div id = "line_chart_det"></div>
+	 		
+	 		
+	</div>
+	<div id="controls">
+		
+		
+		
+	</div>
+	<div id='legend' style="padding:1em">
+		<object data="legend2.svg" />
+	</div>
+</body>
+</html>
