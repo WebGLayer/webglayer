@@ -12,8 +12,8 @@ function LineChart(div_id, timesdomain, enablebrush) {
 	
 	this.init = function() {		
 		var margin = {top: 20, right: 20, bottom: 30, left: 50},
-	    width = 500 - margin.left - margin.right,
-	    height = 300 - margin.top - margin.bottom;
+	    width = 550 - margin.left - margin.right,
+	    height = 250 - margin.top - margin.bottom;
 		
 		var parseDate = d3.time.format("%d-%b-%y").parse;
 
@@ -74,6 +74,7 @@ function LineChart(div_id, timesdomain, enablebrush) {
 		
 		if (enablebrush){
 			var brush = d3.svg.brush().x(x)	   
+			.extent(0,0)
 	  	 	.on("brushstart", brush)
 	   	 	.on("brush", brush)
 	    	.on("brushend", brush);
