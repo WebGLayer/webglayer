@@ -18,7 +18,7 @@ function GLUtils() {
 		if (dom==null){
 			 domain = 'http://localhost:9999/js/webglayer/';
 		} else {
-			domain = domain;
+			domain = dom;
 		}
 		
 		
