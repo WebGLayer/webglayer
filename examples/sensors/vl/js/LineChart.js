@@ -13,7 +13,7 @@ function LineChart(div_id, timesdomain, enablebrush) {
 	this.init = function() {		
 		var margin = {top: 20, right: 20, bottom: 30, left: 50},
 	    width = 550 - margin.left - margin.right,
-	    height = 250 - margin.top - margin.bottom;
+	    height = 200 - margin.top - margin.bottom;
 		
 		var parseDate = d3.time.format("%d-%b-%y").parse;
 
