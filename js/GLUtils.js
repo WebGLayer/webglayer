@@ -11,49 +11,60 @@ function GLUtils() {
 	// request = window.requestAnimFrame(dataupdateloop);
 	// };
 
-	this.loadShaders = function() {
+	this.loadShaders = function(dom) {
+		
+		var domain;
+		
+		if (dom==null){
+			 domain = 'http://localhost:9999/js/webglayer/';
+		} else {
+			domain = domain;
+		}
+		
+		
+		
 		$.ajaxSetup({
 			async : false
 		});
 
-		$.get('http://localhost:9999/js/webglayer/shaders/shaders_linemap.glsl',
+		$.get(domain+'shaders/shaders_linemap.glsl',
 						function(data) {
 							$("head").append(data);
 						});
 
-		$.get('http://localhost:9999/js/webglayer/shaders/shaders_hist.glsl',
+		$.get(domain+'shaders/shaders_hist.glsl',
 						function(data) {
 							$("head").append(data);
 						});
 
-		$.get('http://localhost:9999/js/webglayer/shaders/shaders_float.glsl',
+		$.get(domain+'shaders/shaders_float.glsl',
 				function(data) {
 					$("head").append(data);
 				});
 
-		$.get('http://localhost:9999/js/webglayer/shaders/shaders_filter_generic.glsl',
+		$.get(domain+'shaders/shaders_filter_generic.glsl',
 						function(data) {
 							$("head").append(data);
 						});
 
-		$.get('http://localhost:9999/js/webglayer/shaders/shaders_filterhist.glsl',
+		$.get(domain+'shaders/shaders_filterhist.glsl',
 						function(data) {
 							$("head").append(data);
 						});
 		
-		$.get('http://localhost:9999/js/webglayer/shaders/shaders_map_interpolation.glsl', function(data) {
+		$.get(domain+'shaders/shaders_map_interpolation.glsl', function(data) {
 			$("head").append(data);
 		});
 		
-		$.get('http://localhost:9999/js/webglayer/shaders/shaders_interpolation.glsl', function(data) {
+		$.get(domain+'shaders/shaders_interpolation.glsl', function(data) {
 			$("head").append(data);
 		});
 
-		$.get('http://localhost:9999/js/webglayer/shaders/shaders_linechart.glsl', function(data) {
+		$.get(domain+'shaders/shaders_linechart.glsl', function(data) {
 			$("head").append(data);
 		});
 		
-		$.get('http://localhost:9999/js/webglayer/shaders/shaders_sdlinechart.glsl', function(data) {
+		$.get(domain+'shaders/shaders_sdlinechart.glsl', function(data) {
 			$("head").append(data);
 		});
 		
