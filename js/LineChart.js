@@ -12,8 +12,8 @@ function LineChart(div_id, timesdomain, enablebrush) {
 	
 	this.init = function() {		
 		var margin = {top: 20, right: 20, bottom: 30, left: 50},
-	    width = 500 - margin.left - margin.right,
-	    height = 300 - margin.top - margin.bottom;
+	    width = 550 - margin.left - margin.right,
+	    height = 250 - margin.top - margin.bottom;
 		
 		var parseDate = d3.time.format("%d-%b-%y").parse;
 
@@ -73,21 +73,22 @@ function LineChart(div_id, timesdomain, enablebrush) {
 		
 		
 		if (enablebrush){
-			var brush = d3.svg.brush().x(x)	   
-	  	 	.on("brushstart", brush)
-	   	 	.on("brush", brush)
-	    	.on("brushend", brush);
-		
-		
-		  function brush() {
-			  var s = brush.extent();
-			  var start = x(s[0])/width;
-			  var end = x(s[1])/width ;
 			
-			//  console.log( new Date((s[0].getTime()+s[1].getTime())/2));
-			  
-			  renderDetChart(1/(end-start), (end+start)/2-0.5, s[0],s[1]);
-			}
+			function onbrush() {
+				  var s = brush.extent();
+				  var start = x(s[0])/width;
+				  var end = x(s[1])/width ;
+				  renderDetChart(1/(end-start), (end+start)/2-0.5, s[0],s[1]);
+				}
+			
+			var brush = d3.svg.brush().x(x)	   
+			.extent(0,0)
+	  	 	.on("brushstart", onbrush)
+	   	 	.on("brush", onbrush)
+	    	.on("brushend", onbrush);
+		
+		
+		  
 			var brushg = svg.append("g")
 	    	.attr("class", "brush")
 	    	.call(brush);
