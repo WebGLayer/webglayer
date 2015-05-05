@@ -133,21 +133,10 @@ StackedBarChart = function(d_max, ch_row, div_id, x_label) {
 		}).on(
 				"click",
 				function(d) {
-					var el = d3.select("#"+div_id + d[0])
-				//	var s = el.attr("stroke");
-				//	if (s == "none") {
-				//		el.attr("stroke", "#000");
-						
-
-				//	} else {
-				//		el.attr("stroke", "none");
+					var el = d3.select("#"+div_id + d[0])				
 						active_group = d[0];
 						for (var i = 0; i < classes.length; i++) {							
-							calcBar();							
-							/*if (classes[i][1] != d[1]) {
-								d3.selectAll("."+div_id+classes[i][1]).attr("opacity",
-								0.01 );
-							}*/
+							calcBar();													
 						}
 					
 

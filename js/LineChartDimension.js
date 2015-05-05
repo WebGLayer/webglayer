@@ -47,7 +47,7 @@ function LineChartDimension(manager, width) {
 	
 	
 
-	this.render = function(bufname) {
+	this.render = function(bufname, zoom, translate) {
 		gl.useProgram(this.program);
 		gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
 
@@ -62,6 +62,27 @@ function LineChartDimension(manager, width) {
 	//	manager.enableBuffersAndCommonUniforms(this.program);
 		manager.enableBufferForName(this.program,  "findex", "findex");			
 		manager.enableBufferForName(this.program,  bufname,"attr");
+		
+		if (this.program.locz == null ){
+			this.program.locz = gl.getUniformLocation(this.program, "zoom");
+			if (!this.program.loc instanceof WebGLUniformLocation) {				
+				console.error("Uniform set failed, uniform: " + u_name
+						+ " value " + value);
+				return;
+			}
+		}
+		gl.uniform1f(this.program.locz, zoom);		
+		
+		
+		if (this.program.loct == null ){
+			this.program.loct = gl.getUniformLocation(this.program, "translate");
+			if (!this.program.loct instanceof WebGLUniformLocation) {				
+				console.error("Uniform set failed, uniform: " + u_name
+						+ " value " + value);
+				return;
+			}
+		}
+		gl.uniform1f(this.program.loct, translate);
 			
 		gl.drawArrays(gl.POINTS, 0, manager.num_frames);
 	
@@ -108,6 +129,7 @@ function LineChartDimension(manager, width) {
 			d.nan=readout[2*width+i];
 			res[i]=d
 		}
+		res.width = framebuffer.width;
 		
 		return res;
 
