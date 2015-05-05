@@ -26,11 +26,42 @@ div.olMapViewport {
 }
 
 #map {
-	 top: 0;
+	top: 0;
 	margin-right: 36em;
 	padding: 0;
 	height:100%;	
 }
+#date {
+	top: 0;	
+	padding: 1em;
+	height:3empt;
+	width:23em;	
+	margin-right: 48em;
+	z-index:99999;	
+	position:absolute;
+	right:2em;
+	top:1em;
+	background-color: rgba(255, 255, 255, 0.5);
+	font: 12px sans-serif;
+	
+}
+
+#wgl {
+	bottom: 0;	
+	padding: 1em;
+	height:3empt;
+	
+	margin-right: 48em;
+	z-index:99999;	
+	position:absolute;
+	right:2em;
+	
+	background-color: rgba(255, 255, 255, 0.1);
+	font: 12px sans-serif;
+	
+}
+
+
 #legend {
 	position: fixed;
 	bottom: 2em;
@@ -203,45 +234,45 @@ shape-rendering: optimizeSpeed ;
 <script src="js/DataLoader.js"></script>
 
 
-<script src="http://localhost:9999/js/webglayer/js/GLUtils.js"></script>
-<script src="http://localhost:9999/js/webglayer/js/Dimension.js"></script>
-<script src="http://localhost:9999/js/webglayer/js/Manager.js"></script>
-<script src="http://localhost:9999/js/webglayer/js/OneDDimension.js"></script>
-<script src="http://localhost:9999/js/webglayer/js/InterpolationDimension.js"></script>
-<script src="http://localhost:9999/js/webglayer/js/InterpolationRenderer.js"></script>
-<script src="http://localhost:9999/js/webglayer/js/MapDimension.js"></script>
-<script src="http://localhost:9999/js/webglayer/js/MapLineDimension.js"></script>
-<script src="http://localhost:9999/js/webglayer/js/HistogramDimension.js"></script>
-<script src="http://localhost:9999/js/webglayer/js/Dimension.js"></script>
-<script src="http://localhost:9999/js/webglayer/js/Utils.js"></script>
-<script src="http://localhost:9999/js/webglayer/js/MapController.js"></script>
-<script src="http://localhost:9999/js/webglayer/js/StackedBarChart.js"></script>
-<script src="http://localhost:9999/js/webglayer/js/FloatRasterReader.js"></script>
-<script src="http://localhost:9999/js/webglayer/js/d3.svg.multibrush.js"></script>
-<script src="http://localhost:9999/js/webglayer/js/Filter.js"></script>
-<script src="http://localhost:9999/js/webglayer/js/HistFilterRender.js"></script>
-<script src="http://localhost:9999/js/webglayer/js/LineChartDimension.js"></script>
-<script src="http://localhost:9999/js/webglayer/js/SDLineChartDimension.js"></script>
-<script src="http://localhost:9999/js/webglayer/js/LineChart.js"></script>
-<script src="http://localhost:9999/js/webglayer/js/SVGCanvas.js"></script>
+<script src="vl/js/GLUtils.js"></script>
+<script src="vl/js/Dimension.js"></script>
+<script src="vl/js/Manager.js"></script>
+<script src="vl/js/OneDDimension.js"></script>
+<script src="vl/js/InterpolationDimension.js"></script>
+<script src="vl/js/InterpolationRenderer.js"></script>
+<script src="vl/js/MapDimension.js"></script>
+<script src="vl/js/MapLineDimension.js"></script>
+<script src="vl/js/HistogramDimension.js"></script>
+<script src="vl/js/Dimension.js"></script>
+<script src="vl/js/Utils.js"></script>
+<script src="vl/js/MapController.js"></script>
+<script src="vl/js/StackedBarChart.js"></script>
+<script src="vl/js/FloatRasterReader.js"></script>
+<script src="vl/js/d3.svg.multibrush.js"></script>
+<script src="vl/js/Filter.js"></script>
+<script src="vl/js/HistFilterRender.js"></script>
+<script src="vl/js/LineChartDimension.js"></script>
+<script src="vl/js/SDLineChartDimension.js"></script>
+<script src="vl/js/LineChart.js"></script>
+<script src="vl/js/SVGCanvas.js"></script>
 
 <script type="text/javascript">
   
 	var map, vectors, controls, pts; 
 
+	
+	
 		function init() { 
 			 
 		metadata = [];
 		initMap();
-		GLU.loadShaders();
+		GLU.loadShaders('vl/');
 		utils = new Utils();
 		//r_count = 1 * Math.pow(10, 5);
 		manager = new Manager("map");
 		mcontroller = new MapController(manager);
 
 		svgc = new SVGCanvas();
-		
-	
 
 		wgs = new OpenLayers.Projection("EPSG:4326"); // Transform from WGS 1984
 		merc = new OpenLayers.Projection("EPSG:900913");
@@ -249,69 +280,49 @@ shape-rendering: optimizeSpeed ;
 		/*Importat global variables*/
 		tlwgs = (new OpenLayers.LonLat(-180, 90)).transform(wgs, merc);	
 		tl = GLU.getTopLeftTC();
-		
-		
-		/*Configure speed dimension*/
-		metadata[0] = {max : 50, num_bins : 90, name: "attr"};		
-		/*Configure hour dimension*/	
-	//	metadata[1] = {max : 24, num_bins :24 , name: "hours"};
-
-		
-		metadata.max_bins =metadata[0].num_bins;
-		
 	
-		
-	
-		
-		
 		var data = new DataLoader();
-		var rastersize = data.loadPosData("data/pos2.json","data/obs5k4_5.json");
-	//	svgc.addPoints();
-		//var rastersize = data.loadPosData("data/pos.json");
-		//data.loadObsData("data/obs.json")
-		
-		//var rastersize = data.loadTextData("data/"+datafile);
-		
-		
+		var rastersize = data.loadPosData("data/pos2.json","data/obs_snap.json");
 
 	}
 
 	function visualize(data){	
 		pts = data.ptsxy;
-		chart = new LineChart("line_chart1",pts, data.timest);
-		chart_det = new LineChart("line_chart_det",pts, data.timest);
+		chart = new LineChart("line_chart1", [new Date(data.timemin*1000), new Date(data.timemax *1000)],true);
+		chart_det = new LineChart("line_chart_det", [new Date(data.timemin*1000), new Date(data.timemax *1000)],false);
 		
+		
+	
 		svgc.addPoints(pts);
-		 $(function() {
-			 $( "#slider" ).slider({min:0, max:data.attributes.length});
-			 });
-		 $( "#slider" ).on( "slide", function( event, ui ) {
-		//	 console.log(ui.value);			 			 
-			 dimMap.buf_id = ui.value;
-			 dimMap.render(manager.num_rec);	
-			 
-			
-			 });
-		 
+	
 		 
 		 $("#speed_chart").text("");
 		manager.num_rec = data.num_rec;
 		manager.num_frames = data.findex.length;
+		manager.times = data.times.reverse();
+	
+
+		var colour = d3.scale.ordinal()
+		  .domain(manager.times)
+		  .range(manager.times);
+		
+		colourIndex = d3.scale.linear()
+		  .domain([d3.min(manager.times), d3.max(manager.times) ])
+		  .range([0, manager.times.length - 1]);
+		
 		/**init geo buffer*/
 		manager.addDataBuffer(data.points, 2, 'wPoint');
 		manager.addDataBuffer(data.pointsxy, 2, 'xy');
 		/*init first attribute buffer*/			
 		
 		for (var i = 0; i < data.attributes.length; i++){
-			manager.addDataBuffer(data.attributes[i], 1, "attr"+i);
+			manager.addDataBuffer(data.attributes[data.attributes.length-i-1], 1, "attr"+ manager.times[i]);
 		}
 		
 		for (var i = 0; i < data.attributes_line.length; i++){
+			console.log(data.times[i]);
 			manager.addDataBuffer(data.attributes_line[i],1, "attr_line"+i);
 		}
-	
-		
-		
 	
 		manager.addDataBuffer(data.findex,1, "findex");
 				
@@ -337,20 +348,21 @@ shape-rendering: optimizeSpeed ;
 		dimMap = new InterpolationDimension(manager);
 		dimMap.name = "map";
 		dimMap.setProgram('map_interpolation_vShader', 'map_interpolation_fShader', 'map');
-	
+		dimMap.buf_id = manager.times[0];
 			
-		dimLineChart = new LineChartDimension(manager, 400);
+		dimLineChart = new LineChartDimension(manager, 200);
 		
 		SDLineChart = new SDLineChartDimension(manager,10);
 			
 			
 		mcontroller.resize(div.offsetWidth, div.offsetHeight);
 		mcontroller.zoommove(map.zoom, tl, render);
+		svgc.transform(map.getZoom(),GLU.getTopLeftTC());
 		renderChart();
 
 	}
 	
-	function render(){
+	function render(){		
 		dimMap.render(manager.num_rec);
 		var read = dimMap.readPixel();
 		console.log(read);
@@ -373,14 +385,22 @@ shape-rendering: optimizeSpeed ;
 	
 	}
 	
-	function renderDetChart(zoom,trans){
+	function renderDetChart(zoom,trans, start, end){
+		
 		for (var i=0; i < pts.length; i++){			
 				dimLineChart.render("attr_line"+i,zoom,trans);				
 				var readout = dimLineChart.readPixels();
 			
 				pts[i].data=readout;
+				
+				var buf = manager.times[Math.ceil(colourIndex(start.getTime()/1000))];// manager.times[Math.ceil(colourIndex( ((start.getTime()+end.getTime())/2)/1000) )];
+				var d = new Date(buf*1000);
+				dimMap.buf_id =  buf; // ui.value; //manager.times[ui.value];
+				dimMap.render(manager.num_rec);
+				$("#date").html(d);
+			
 			}
-		chart_det.update(pts);	
+		chart_det.updatePart(pts, start,end);	
 	}
 
 	
@@ -400,18 +420,34 @@ shape-rendering: optimizeSpeed ;
 
 	
 
+	scaleToTime = function(t){
+
+		var colour = d3.scale.ordinal()
+		  .domain(manager.times)
+		  .range(manager.times);
+		
+		var colourIndex = d3.scale.linear()
+		  .domain([d3.min(manager.times), d3.max(manager.times)])
+		  .range([0, manager.times.length - 1]);
+		
+		return colours[Math.ceil(colourIndex(t))];
+		
+	}
 
 </script>
 </head>
 <body onload="init()">
 
-	<div id="map">
+
+	<div id="map">	
+	<div id="date"></div>
+	<div id="wgl">Visualization made by <a href="http://jezekjan.github.io/webglayer/"> WebGLayer </a></div>
 	</div>
 	<div id="right">
 		
-		
-			<div style="margin:1em"><div id = "slider"> </div></div>
+			<div style="padding:0.5em"> Overview: </div>
 			<div id = "line_chart1"></div>
+			<div style="padding:0.5em">  Detail: </div>
 			<div id = "line_chart_det"></div>
 	 		
 	 		
@@ -421,8 +457,8 @@ shape-rendering: optimizeSpeed ;
 		
 		
 	</div>
-	<div id='legend' style="padding:1em">
-		<object data="legend2.svg" />
-	</div>
+<!-- 	<div id='legend' style="padding:1em"> -->
+<!-- 		<object data="legend2.svg" /> -->
+<!-- 	</div> -->
 </body>
 </html>

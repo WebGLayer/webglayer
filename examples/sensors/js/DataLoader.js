@@ -88,6 +88,14 @@ function DataLoader(fname) {
 			d3.csv(atrib_file, function(error, data){
 				var min = Number.MAX_VALUE;
 				var max = Number.MIN_VALUE;
+				
+				
+				var mint = Number.MAX_VALUE;
+				var maxt = Number.MIN_VALUE;
+				
+				
+				var timeframe = null;
+	
 				var timeframe = null;
 				var times = [];
 				var timest= [] ;
@@ -96,29 +104,40 @@ function DataLoader(fname) {
 				data.forEach(function(val, i) {		
 					var time = val.time_stamp;
 					var obsval = parseFloat(val.value);
-					if (timeframe == null){timeframe = time; attr[frame]=[];times[frame] = frame; timest[frame] =  new Date(time*1000);}
+					if (timeframe == null){startframe();}
 				
 					if (timeframe!=time){	
 						/*new time series*/
 						frame++;
-						attr[frame]=[];						
-						timeframe=time;
-						times[frame] = frame;//new Date(time*1000);//frame;//time;
-						timest[frame] = new Date(time*1000);
+						startframe();
 						uidcount = 0;
 					}	
+			
 					attr_line[uidcount][frame] = obsval;
 					attr[frame][uidcount++] = obsval;
 					if (obsval < min) {min = obsval };
 					if (obsval > max) {max = obsval };
+					
+					
 				
+					function startframe(){
+						 timeframe = time;
+						 attr[frame]=[];
+						 times[frame] =  parseFloat(time); 
+						 timest[frame] = new Date(time*1000);
+						 if (time < mint) {mint = time };
+						 if (time > maxt) {maxt = time };
+					}
 									
 				});
 
 				/**covert to typed array*/
 
 				that.valmax = max;
-				that.valmin =min;
+				that.valmin = min;
+				
+				that.timemax = maxt;
+				that.timemin = mint;
 				
 				for (var j in attr ){
 					attr[j]=  array2TATrigNorm(attr[j], min, (max-min));		
@@ -128,14 +147,14 @@ function DataLoader(fname) {
 					attr_line[j]=  array2TA(attr_line[j]);	
 				}
 				
-				frameindex =   array2TANorm(times, 0, times.length);
+				frameindex =   array2TANorm(times, mint, (maxt-mint));
 				
 				
 				that.attributes = attr;
 				that.attributes_line= attr_line;
 				that.findex = frameindex;
 				that.timest = timest;
-				//that.times = times;
+				that.times = times;
 				visualize(that);
 			});
 			/*d3.csv(atrib_file, function(error, data) {
@@ -244,7 +263,7 @@ function DataLoader(fname) {
 				val =  (pts[i] - min)/norm;
 			}
 			pts_ar[i] = val;
-			pts[i] = null;
+			//pts[i] = null;
 		}
 		return pts_ar;
 	}
