@@ -13,7 +13,7 @@ HistFilterRender = function(manager){
 	var height = metadata.length;
 	var width = metadata.max_bins;
 		
-	this.filterProgram = utils.loadShaders("histFilter_vShader",  "histFilter_fShader", this);
+	this.filterProgram = GLU.compileShaders("histFilter_vShader",  "histFilter_fShader", this);
 	this.filterProgram.name ="HistFitler";
 	/***
 	 * Buffers
@@ -102,9 +102,20 @@ HistFilterRender = function(manager){
 		gl.disable(gl.DEPTH_TEST);
 		
 	
-		utils.enableAttribute(this.filterProgram, posBuffer);
+		//utils.enableAttribute(this.filterProgram, posBuffer);
+		//manager.enableBuffer(this.filterProgram, posBuffer.attr);
+		gl.bindBuffer(gl.ARRAY_BUFFER, posBuffer);
 		
-		
+		if (this.filterProgram[posBuffer.attr] == null){
+			this.filterProgram[posBuffer.attr] = gl.getAttribLocation(this.filterProgram, posBuffer.attr);
+		}		
+		if (this.filterProgram[posBuffer.attr] >= 0){
+			gl.enableVertexAttribArray(this.filterProgram[posBuffer.attr]);
+			gl.vertexAttribPointer(this.filterProgram[posBuffer.attr], 2, gl.FLOAT, false, 0, 0);
+		} else {
+			console.error("Error binding buffer: "+posBuffer);
+			return;
+		}
 	
 		gl.drawArrays(gl.LINES, 0, pointsSize);		
 		//this.readPixels();
@@ -149,6 +160,7 @@ HistFilterRender = function(manager){
 			gl.bindBuffer(gl.ARRAY_BUFFER, posBuffer );
 			gl.bufferData(gl.ARRAY_BUFFER, f, gl.STATIC_DRAW);	
 			gl.bindBuffer(gl.ARRAY_BUFFER, null);
+			
 			pointsSize = allfilters.length/2;
 	}
 	

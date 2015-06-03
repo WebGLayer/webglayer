@@ -1,8 +1,9 @@
 /**/
-function HistogramDimension(manager) {
+function HistogramDimension(manager, meta) {
 	var manager = manager;
-
-	this.program = utils.loadShaders("hist_vShader", "hist_fShader", this);
+	var metadata = meta;
+	
+	this.program = GLU.compileShaders("hist_vShader", "hist_fShader", this);
 
 	var framebuffer = gl.createFramebuffer();
 	framebuffer.width = metadata.max_bins;
@@ -60,7 +61,8 @@ function HistogramDimension(manager) {
 		gl.blendFunc(gl.ONE, gl.ONE);
 
 	//	manager.enableBuffersAndCommonUniforms(this.program);
-		manager.enableBufferForName(this.program,  "index"+manager.year, "index");	
+		//manager.enableBufferForName(this.program,  "index"+manager.year, "index");	
+		manager.enableBufferForName(this.program,  "index", "index");	
 		manager.enableFilterTexture(this.program);	
 		manager.bindRasterMatrix(this.program);
 

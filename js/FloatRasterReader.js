@@ -7,7 +7,7 @@ function FloatRasterReader(raster, width, height) {
 	var rows = 3 * height;
     /*Initialise offscreen buffer*/
 		
-	this.floatProgram = utils.loadShaders("float_vShader",  "float_fShader", this);
+	this.floatProgram = GLU.compileShaders("float_vShader",  "float_fShader", this);
 	var framebuffer = gl.createFramebuffer();	
 	framebuffer.name = "float frameBuffer";
 	var renderbuffer = gl.createRenderbuffer();

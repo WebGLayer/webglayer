@@ -2,7 +2,7 @@
 function LineChartDimension(manager, width) {
 	var manager = manager;
 
-	this.program = utils.loadShaders("lineChart_vShader", "lineChart_fShader", this);
+	this.program = GLU.compileShaders("lineChart_vShader", "lineChart_fShader", this);
 
 	var framebuffer = gl.createFramebuffer();
 	framebuffer.width = width;

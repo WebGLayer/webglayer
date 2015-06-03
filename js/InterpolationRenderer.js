@@ -1,7 +1,7 @@
 
 function InterpolationRenderer(){
 	
-	this.glProgram = utils.loadShaders("interpolation_vShader",  "interpolation_fShader");
+	this.glProgram = GLU.loadShaders("interpolation_vShader",  "interpolation_fShader");
 	
 	var texCoordLocation = gl.getAttribLocation(this.glProgram, "v_texCoord");
 	var rasterLoc = 	   gl.getUniformLocation(this.glProgram, "inter_raster" );

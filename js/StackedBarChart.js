@@ -2,7 +2,7 @@ StackedBarChart = function(d_max, ch_row, div_id, x_label) {
 	var div_id;
 	var ch_row = ch_row;
 	var w = 500;
-	var h = 300;
+	var h = 200;
 	var dataset;
 	var xScale;
 	var yScale;

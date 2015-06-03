@@ -1,11 +1,11 @@
-Filter = function(rastersize, manager) {
+Filter = function(manager, metadata) {
 
 	
-	this.rastersize = rastersize;
+	this.rastersize = manager.r_size ;
 	this.manager = manager;	
 	
 	
-	this.filterProgram = utils.loadShaders("filter_vShader", "filter_fShader",
+	this.filterProgram = GLU.compileShaders("filter_vShader", "filter_fShader",
 			this);
 	this.filterProgram.name = "Main filter";
 
@@ -56,13 +56,12 @@ Filter = function(rastersize, manager) {
 	//	this.manager.enableBuffersAndCommonUniforms(this.filterProgram);
 
 		manager.bindMapMatrix(this.filterProgram);
-		manager.enableBufferForName(this.filterProgram, "wPoint"+manager.year, "wPoint");
-		manager.enableBufferForName(this.filterProgram,  "attr"+manager.year+manager.time, "attr");
-		manager.enableBufferForName(this.filterProgram,  "index"+manager.year+"Line", "index");	
+		manager.enableBufferForName(this.filterProgram, "wPoint", "wPoint");
+		manager.enableBufferForName(this.filterProgram,  "index", "index");	
+
+	//	manager.enableBufferForName(this.filterProgram,  "index"+manager.year+"Line", "index");	
 	
-	//	for(var i = 0; i < metadata.length; i++){
-		//	this.manager.enableBuffer(this.filterProgram, metadata[i].name);
-	//	}
+		
 		
 		/*for (var i = 0; i < metadata.length; i++) {
 			
@@ -91,7 +90,7 @@ Filter = function(rastersize, manager) {
 		
 		/*Has filters*/
 		if (this.filterProgram.hasFilter == null){
-			this.filterProgram.hasFilter = manager.getUniformLoc(this.filterProgram, 'hasFilter'); 		
+		//	this.filterProgram.hasFilter = manager.getUniformLoc(this.filterProgram, 'hasFilter'); 		
 		}	
 	
 		if (this.hasHistFilter == false && this.hasMapFilter == false){
@@ -102,9 +101,35 @@ Filter = function(rastersize, manager) {
 	 		
 		
 		
+		for (var i = 0; i < metadata.length; i++) {
+			/* set unifom */
+			var r = (i / metadata.length) * 2 - 1 + (1 / metadata.length);
+			
+			if (this.filterProgram.loc==null){
+				this.filterProgram.loc = gl.getUniformLocation(this.filterProgram, "attr_row");
+				if (this.filterProgram.loc instanceof WebGLUniformLocation) {
+					gl.uniform1f(this.filterProgram.loc, r);
+				} else {
+					console.error("Uniform set failed, uniform: " + u_name
+							+ " value " + value);
+					return;
+				}
+			} else {
+				gl.uniform1f(this.filterProgram.loc, (r+1)/2);
+			}
+			
+		//manager.enableBufferForName(this.glProgram,  "attr"+this.y_id+this.buf_id, "attr");
+			manager.enableBufferForName(this.filterProgram, metadata[i].name, "attr1");
+		 	gl.drawArrays(gl.POINTS, 0, manager.num_rec);
+		}
+
+		
+		//manager.enableBufferForName(this.filterProgram,  "attr1", "attr1");
+		//manager.enableBufferForName(this.filterProgram,  "attr2", "attr2");
+		//manager.enableBufferForName(this.filterProgram,  "attr3", "attr3");
 		
 	
-		gl.drawArrays(gl.POINTS, 0, manager.num_rec*2);
+		//gl.drawArrays(gl.POINTS, 0, manager.num_rec);
 		gl.useProgram(null);
 	//	gl.finish();
 	}

@@ -39,12 +39,6 @@ var Dimension = function(manager) {
 		this.glProgram.name = name;
 	}
 	
-	
-	
-
-	/**
-	 * 
-	 */
 	this.render = function(num) {
 		gl.useProgram(this.glProgram);		
 		gl.drawArrays(gl.POINTS, 0, num);	

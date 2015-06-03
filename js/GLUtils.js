@@ -19,9 +19,7 @@ function GLUtils() {
 			 domain = 'http://localhost:9999/js/webglayer/';
 		} else {
 			domain = dom;
-		}
-		
-		
+		}				
 		
 		$.ajaxSetup({
 			async : false
@@ -66,43 +64,21 @@ function GLUtils() {
 		
 		$.get(domain+'shaders/shaders_sdlinechart.glsl', function(data) {
 			$("head").append(data);
+		});		
+		
+		$.get(domain+'shaders/shaders_map.glsl', function(data) {
+			$("head").append(data);
+		});
+			
+		$.get(domain+'shaders/shaders_heatmap.glsl', function(data) {
+			$("head").append(data);
 		});
 		
 		$.ajaxSetup({
 			async : true
 		});
-
 	}
 
-	/**
-	 * MAIN RENDERING LOOP
-	 */
-/*	function render() {
-		// mapFilterRender.renderFilter();
-		// histFilterRender.renderFilter();
-
-		// histFilterRender.readPixels();
-
-		// allDataFilter.mapFilter = mapFilterRender.filterTexture;
-		// allDataFilter.histFilter = histFilterRender.filterTexture;
-
-		// allDataFilter.render();
-		// manager.filterTexture = allDataFilter.filterTexture;
-
-		// allDataFilter.readPixels();
-		// manager.histTecture = util.histTexture;
-
-		// util.filterData();
-		// manger.filterIndex() =
-
-		// histDim.render();
-
-		// dimMap.render(manager.num_rec);
-		// manager.render();
-		// read();
-		// gl.flush();
-		// console.timeEnd(i + " rendering_all");
-	}*/
 
 	this.mapFilter = function() {
 		// mapFilterRender.renderFilter();
@@ -127,70 +103,46 @@ function GLUtils() {
 	}
 
 	function read() {
-
-		// readout = dimSpeed.readPixels();
-
 		readout = histDim.readPixels();
 		if (typeof readout != 'undefined') {
 			for ( var i in charts) {
 				charts[i].update(readout[i]);
 			}
-
 		}
-
-		// $("#data").text("in:"+readout[0] + "out: "+ readout[1]);
-
-		// dimTime.readPixels();
 	}
 
-	// util.createFilteringData(generatePolygon(2,3));
-	// util.renderFilter();
-	// util.addDataToFilter(generatePolygon(2,3));
-	// util.renderFilter();
 
-	// dimSpeed.readFloatPixels();
-	// dimTime.readFloatPixels();
+	this.compileShaders = function(vs, fs){	
+		var vertexSrc = document.getElementById(vs).text;
+		var vertexShader = gl.createShader(gl.VERTEX_SHADER);
+		gl.shaderSource(vertexShader, vertexSrc);
+		gl.compileShader(vertexShader);
 
-	this.getTopLeftTC = function() {
-
-		var s = Math.pow(2, map.getZoom());
-		tlpixel = map.getViewPortPxFromLonLat(tlwgs);
-		res = {
-			x : -tlpixel.x / s,
-			y : -tlpixel.y / s
+		if (!gl.getShaderParameter(vertexShader, gl.COMPILE_STATUS)) {
+			alert("An error occurred compiling the shaders: "
+					+ gl.getShaderInfoLog(vertexShader));
+			return null;
 		}
-		return res;
+		// create fragment shader
+		var fragmentSrc = document.getElementById(fs).text;
+		var fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
+		gl.shaderSource(fragmentShader, fragmentSrc);
+		gl.compileShader(fragmentShader);
+
+		if (!gl.getShaderParameter(fragmentShader, gl.COMPILE_STATUS)) {
+			alert("An error occurred compiling the shaders: "
+					+ gl.getShaderInfoLog(vertexShader));
+			return null;
+		}
+		// link shaders to create our program
+		var pointProgram = gl.createProgram();
+		gl.attachShader(pointProgram, vertexShader);
+		gl.attachShader(pointProgram, fragmentShader);
+		gl.linkProgram(pointProgram);
+		return pointProgram;
 	}
 
-	/**
-	 * Transfares the coordinates to zoom level 0 in pixel coordiantes
-	 */
-	function toLevel0(pt, tl, zoom) {
-		var ts = 256;
-		var scale = Math.pow(2, zoom);
-		pt.x = pt.x / scale + tl.x;
-		pt.y = pt.y / scale + tl.y;
-		return pt;
-	}
-	function transformProj(p) {
 
-		var v = map.getViewPortPxFromLonLat(p);
-		// var v = map.getViewPortPxFromLonLat( new OpenLayers.LonLat(90,0));
-
-		var v0 = toLevel0(v, tl, map.getZoom());
-		return v0;
-	}
-
-	function transform(x, y) {
-		var tl = getTopLeftTC();
-		var p = new OpenLayers.LonLat(y, x);
-		p.transform(wgs, map.projection);
-		var v = map.getViewPortPxFromLonLat(p);
-		// var v = map.getViewPortPxFromLonLat( new OpenLayers.LonLat(90,0));
-
-		var v0 = toLevel0(v, tl, map.getZoom());
-		return v0;
-	}
 }
 
 var GLU = new GLUtils();
