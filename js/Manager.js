@@ -3,32 +3,34 @@ function Manager(mapid) {
 	 * Global variables
 	 */
 	//canvas = document.getElementById(canvasid);
-	var canvasid = 'test';
-	div = document.getElementById(mapid);
-	canvas = document.createElement('canvas');
-	canvas.setAttribute('id','test');
-	
+	var canvasid = 'webglayer';
+	var mapdiv = document.getElementById(mapid);
+	var mapparentdiv = document.getElementById(mapid).parentElement;
 
-	div.appendChild(canvas);
+	var t = mapdiv.clientTop;
+	var l = mapdiv.clientLeft;	
+	var w = mapdiv.offsetWidth;
+	var h = mapdiv.offsetHeight;
+	var z = mapdiv.style.zIndex;
 	
-	
-	canvas.setAttribute("width", div.offsetWidth);
-	canvas.setAttribute("height", div.offsetHeight);
-
-	
-	this.width=div.offsetWidth;
-	this.height=div.offsetHeight;
+	z == "" ? z=1000 :z = z+1;
 		 
-//	 var newdiv = document.createElement('div');
-	// var divIdName = 'webglayer_footer';
-	// newdiv.setAttribute('id',divIdName);
-	// newdiv.innerHTML = '© <a href="http://jezekjan.github.io/webglayer/">WebGLayer</a> ';
-//	 div.appendChild(newdiv);
+	canvas = document.createElement('canvas');
+	canvas.setAttribute('id','webglayer');
+	canvas.setAttribute("width", w);
+	canvas.setAttribute("height", h);
+	canvas.setAttribute("style", "position:absolute ; " +
+						"top:"+t+"px ; " +
+						"left:"+l+"px; " +
+						"pointer-events: none;" +
+						"opacity: 1;" +
+						"z-index: " + z);
 	
 	
+	mapparentdiv.appendChild(canvas);
 	
-	//canvas.parentElement;map-div
-	//gl = canvas.getContext('webgl', {preservedrawingbuffer: true});
+	
+
 	gl = canvas.getContext('webgl', {preservedrawingbuffer: true}) || canvas.getContext('experimental-webgl', {preservedrawingbuffer: true});
 
 	  if (!gl) {
