@@ -15,11 +15,11 @@ function Manager(mapid) {
 	
 	z == "" ? z=1000 :z = z+1;
 		 
-	canvas = document.createElement('canvas');
-	canvas.setAttribute('id','webglayer');
-	canvas.setAttribute("width", this.w);
-	canvas.setAttribute("height",this.h);
-	canvas.setAttribute("style", "position:absolute ; " +
+	this.canvas = document.createElement('canvas');
+	this.canvas.setAttribute('id','webglayer');
+	this.canvas.setAttribute("width", this.w);
+	this.canvas.setAttribute("height",this.h);
+	this.canvas.setAttribute("style", "position:absolute ; " +
 						"top:"+t+"px ; " +
 						"left:"+l+"px; " +
 						"pointer-events: none;" +
@@ -27,11 +27,11 @@ function Manager(mapid) {
 						"z-index: " + z);
 	
 	
-	mapparentdiv.appendChild(canvas);
+	mapparentdiv.appendChild(this.canvas);
 	
 	
 
-	gl = canvas.getContext('webgl', {preservedrawingbuffer: true}) || canvas.getContext('experimental-webgl', {preservedrawingbuffer: true});
+	gl = this.canvas.getContext('webgl', {preservedrawingbuffer: true}) || this.canvas.getContext('experimental-webgl', {preservedrawingbuffer: true});
 
 	  if (!gl) {
           alert("Could not initialise WebGL, sorry :-(. Are you using Chrome?");
@@ -57,7 +57,7 @@ function Manager(mapid) {
 		
 		//div = canvas.parentElement;
 		
-		gl = canvas.getContext('webgl', {preservedrawingbuffer: true}) || canvas.getContext('experimental-webgl', {preservedrawingbuffer: true});
+		gl = this.canvas.getContext('webgl', {preservedrawingbuffer: true}) || this.canvas.getContext('experimental-webgl', {preservedrawingbuffer: true});
 
 		  if (!gl) {
 			  alert("Could not initialise WebGL, sorry :-(. Are you using Chrome?");
@@ -141,6 +141,17 @@ function Manager(mapid) {
 					
 	}
 
+	this.storeUniformLoc = function(program, name){
+		if (program[name] == null ){
+			program[name] = gl.getUniformLocation(program, name);
+			if (!program[name] instanceof WebGLUniformLocation) {				
+				console.error("Uniform set failed, uniform: " + name
+						+ " value " + value);
+				return;
+			}
+		}		
+	}
+	
 	this.bindMapMatrix = function(prog){
 	//	gl.useProgram(prog);
 		if (prog.matrixLoc == null){

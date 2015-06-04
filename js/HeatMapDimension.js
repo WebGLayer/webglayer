@@ -1,6 +1,6 @@
 
 function HeatMapDimension(manager){
-	this.manager = manager;
+	//this.manager = manager;
 	Dimension.call(this, manager);
 	
 
@@ -27,15 +27,10 @@ function HeatMapDimension(manager){
 	//	gl.disable(gl.BLEND);
 		gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 	
-		if (this.glProgram.loc == null ){
-			this.glProgram.loc = gl.getUniformLocation(this.glProgram, "zoom");
-			if (!this.glProgram.loc instanceof WebGLUniformLocation) {				
-				console.error("Uniform set failed, uniform: " + u_name
-						+ " value " + value);
-				return;
-			}
-		}
-		
+		manager.storeUniformLoc(this.glProgram, "zoom");
+		manager.storeUniformLoc(this.glProgram, "drawselect");
+		manager.storeUniformLoc(this.glProgram, "numfilters");
+				
 		manager.enableFilterTexture(this.glProgram);		
 				
 	}	
@@ -44,13 +39,8 @@ function HeatMapDimension(manager){
 		this.setup();		
 	
 		//gl.useProgram(this.glProgram);	
-		if (this.glProgram.drawselect == null){
-			this.glProgram.drawselect = gl.getUniformLocation(this.glProgram, "drawselect");
-			if (!this.glProgram.drawselect instanceof WebGLUniformLocation) {
-				console.error("Uniform set failed, uniform");
-				return;
-			}
-		}
+	
+		gl.uniform1f(this.glProgram.numfilters, 3);
 		gl.uniform1f(this.glProgram.drawselect, 0);
 		gl.drawArrays(gl.POINTS, 0, num);	
 		
