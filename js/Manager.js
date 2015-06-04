@@ -4,21 +4,21 @@ function Manager(mapid) {
 	 */
 	//canvas = document.getElementById(canvasid);
 	var canvasid = 'webglayer';
-	var mapdiv = document.getElementById(mapid);
+	this.mapdiv = document.getElementById(mapid);
 	var mapparentdiv = document.getElementById(mapid).parentElement;
 
-	var t = mapdiv.clientTop;
-	var l = mapdiv.clientLeft;	
-	var w = mapdiv.offsetWidth;
-	var h = mapdiv.offsetHeight;
-	var z = mapdiv.style.zIndex;
+	var t = this.mapdiv.clientTop;
+	var l = this.mapdiv.clientLeft;	
+	this.w = this.mapdiv.offsetWidth;
+	this.h = this.mapdiv.offsetHeight;
+	var z = this.mapdiv.style.zIndex;
 	
 	z == "" ? z=1000 :z = z+1;
 		 
 	canvas = document.createElement('canvas');
 	canvas.setAttribute('id','webglayer');
-	canvas.setAttribute("width", w);
-	canvas.setAttribute("height", h);
+	canvas.setAttribute("width", this.w);
+	canvas.setAttribute("height",this.h);
 	canvas.setAttribute("style", "position:absolute ; " +
 						"top:"+t+"px ; " +
 						"left:"+l+"px; " +
@@ -53,9 +53,9 @@ function Manager(mapid) {
 		/**
 		 * Global variables
 		 */
-		canvas = document.getElementById(canvasid);
+		//canvas = document.getElementById(canvasid);
 		
-		div = canvas.parentElement;
+		//div = canvas.parentElement;
 		
 		gl = canvas.getContext('webgl', {preservedrawingbuffer: true}) || canvas.getContext('experimental-webgl', {preservedrawingbuffer: true});
 
