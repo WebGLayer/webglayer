@@ -1,16 +1,21 @@
 
 function HeatMapDimension(manager){
 	//this.manager = manager;
-	Dimension.call(this, manager);
+	//Dimension.call(this, manager);
 	
-
+	this.glProgram = GLU.compileShaders('heatmap_vShader', 'heatmap_fShader', this);
+	gl.useProgram(this.glProgram);
+	manager.storeUniformLoc(this.glProgram, "zoom");
+	manager.storeUniformLoc(this.glProgram, "drawselect");
+	manager.storeUniformLoc(this.glProgram, "numfilters");
+	gl.uniform1f(this.glProgram.numfilters, 3);		
+	gl.useProgram(null);
+	
 	this.setup = function() {
 		
 		//gl.useProgram(this.glProgram);
 		/** add specific buffer and uniforms */
 		gl.useProgram(this.glProgram);
-		
-		
 		
 		manager.bindMapMatrix(this.glProgram);
 		manager.enableBufferForName(this.glProgram, "wPoint", "wPoint");
@@ -27,10 +32,7 @@ function HeatMapDimension(manager){
 	//	gl.disable(gl.BLEND);
 		gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 	
-		manager.storeUniformLoc(this.glProgram, "zoom");
-		manager.storeUniformLoc(this.glProgram, "drawselect");
-		manager.storeUniformLoc(this.glProgram, "numfilters");
-				
+		
 		manager.enableFilterTexture(this.glProgram);		
 				
 	}	
@@ -39,8 +41,7 @@ function HeatMapDimension(manager){
 		this.setup();		
 	
 		//gl.useProgram(this.glProgram);	
-	
-		gl.uniform1f(this.glProgram.numfilters, 3);
+		gl.uniform1f(this.glProgram.numfilters, 3);			
 		gl.uniform1f(this.glProgram.drawselect, 0);
 		gl.drawArrays(gl.POINTS, 0, num);	
 		
@@ -82,14 +83,4 @@ function HeatMapDimension(manager){
 	
 }
 
-HeatMapDimension.prototype.filter = function(raster) {
-	/*rendertriangel*/
-	
-	/*use result as uniform*/	
-}
-
-
-HeatMapDimension.prototype = Object.create(Dimension.prototype);
-
-HeatMapDimension.prototype.constructor = Dimension;
 	

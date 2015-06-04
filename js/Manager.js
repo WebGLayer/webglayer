@@ -13,7 +13,7 @@ function Manager(mapid) {
 	this.h = this.mapdiv.offsetHeight;
 	var z = this.mapdiv.style.zIndex;
 	
-	z == "" ? z=1000 :z = z+1;
+	z == "" ? z=1000 :z = parseInt(z)+1;
 		 
 	this.canvas = document.createElement('canvas');
 	this.canvas.setAttribute('id','webglayer');

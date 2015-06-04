@@ -1,4 +1,4 @@
-StackedBarChart = function(d_max, ch_row, div_id, x_label) {
+StackedBarChart = function(d_max, ch_row, div_id, x_label, metadata) {
 	var div_id;
 	var ch_row = ch_row;
 	var w = 500;
@@ -171,8 +171,8 @@ StackedBarChart = function(d_max, ch_row, div_id, x_label) {
 				h_filter[j++] = y;
 			}
 
-			histFilterRender.createFilteringData(ch_row, h_filter);
-
+			GLU.histFilterRender.createFilteringData(ch_row, h_filter);
+			
 			GLU.histFilter();
 			// add data, attach elements and so on
 

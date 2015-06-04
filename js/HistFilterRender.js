@@ -1,6 +1,7 @@
 HistFilterRender = function(manager){	
 	
 	this.manager = manager;
+	var metadata = manager.metadata;
 	
 	var filters = [];
 	

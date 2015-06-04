@@ -5,6 +5,10 @@ function HistogramDimension(manager, meta) {
 	
 	this.program = GLU.compileShaders("hist_vShader", "hist_fShader", this);
 
+	gl.useProgram(this.program);
+	manager.storeUniformLoc(this.program, "attr_row");
+	manager.storeUniformLoc(this.program, "numfilters");
+	
 	var framebuffer = gl.createFramebuffer();
 	framebuffer.width = metadata.max_bins;
 	framebuffer.height = metadata.length;
@@ -60,8 +64,7 @@ function HistogramDimension(manager, meta) {
 		gl.enable(gl.BLEND);
 		gl.blendFunc(gl.ONE, gl.ONE);
 
-	//	manager.enableBuffersAndCommonUniforms(this.program);
-		//manager.enableBufferForName(this.program,  "index"+manager.year, "index");	
+
 		manager.enableBufferForName(this.program,  "index", "index");	
 		manager.enableFilterTexture(this.program);	
 		manager.bindRasterMatrix(this.program);
@@ -72,25 +75,10 @@ function HistogramDimension(manager, meta) {
 			/* set unifom */
 			var r = (i / metadata.length) * 2 - 1 + (1 / metadata.length);
 			
-			if (this.program.loc==null){
-				this.program.loc = gl.getUniformLocation(this.program, "attr_row");
-				if (this.program.loc instanceof WebGLUniformLocation) {
-					gl.uniform1f(this.program.loc, r);
-				} else {
-					console.error("Uniform set failed, uniform: " + u_name
-							+ " value " + value);
-					return;
-				}
-			} else {
-				gl.uniform1f(this.program.loc, r);
-			}
+			gl.uniform1f(this.program.attr_row, r);
+			gl.uniform1f(this.program.numfilters, 3);
 			
-		//manager.enableBufferForName(this.glProgram,  "attr"+this.y_id+this.buf_id, "attr");
-		 manager.enableBufferForName(this.program, metadata[i].name, "attr");
-			/* bind proper buffer */
-
-			/* rneder */
-
+			manager.enableBufferForName(this.program, metadata[i].name, "attr");
 			gl.drawArrays(gl.POINTS, 0, manager.num_rec);
 		}
 

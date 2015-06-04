@@ -86,8 +86,8 @@ function GLUtils() {
 		updateFilters();
 	}
 	this.histFilter = function() {
-		histFilterRender.renderFilter();
-		manager.histFilter = histFilterRender.filterTexture;
+		this.histFilterRender.renderFilter();
+		this.manager.histFilter = this.histFilterRender.filterTexture;
 		updateFilters();
 	}
 
@@ -95,9 +95,7 @@ function GLUtils() {
 
 		
 
-		 render();
-		//dimLineMap.render(manager.num_rec);
-		//histDim.render();
+		 GLU.render();
 		//read();
 
 	}
