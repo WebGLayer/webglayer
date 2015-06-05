@@ -17,7 +17,7 @@
       void main() {
 		
   	  	
-  		float p_size = zoom *5.;
+  		float p_size = zoom *5. +30.;
   	    	   
   		vec4 p =  mapMatrix * wPoint;  	
   		  		
@@ -35,8 +35,9 @@
   		   // If not selected then use blue color	   
   		   p_size = p_size+3.;
   		   col = vec4(0., 0., 1.0, 0.5);  		  
-  			gl_Position = p;    	
-			gl_PointSize = p_size;
+  			//gl_Position = p;    	
+  			gl_Position = vec4(-2.,-2.,0.,0.);    
+			gl_PointSize = 0.;
   		} else {
   			gl_Position = vec4(-2.,-2.,0.,0.);    	
 			gl_PointSize = 0.;
@@ -62,8 +63,10 @@
       
       void main() {
 
-      	float dist = length(gl_FragCoord.xy, vec2(0.5,0.5)); 
-    	gl_FragColor = col; 
+      	float dist = length(gl_PointCoord.xy, vec2(0.5,0.5)); 
+      	
+     	float alpha = (dist > 0.5) ? 0. : 1.;
+    	gl_FragColor = vec4(1.-dist, 0.1 ,0.,alpha);//col; 
        
       }
       

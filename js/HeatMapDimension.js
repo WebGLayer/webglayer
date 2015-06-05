@@ -4,6 +4,50 @@ function HeatMapDimension(manager){
 	//Dimension.call(this, manager);
 	
 	this.glProgram = GLU.compileShaders('heatmap_vShader', 'heatmap_fShader', this);
+	var framebuffer = gl.createFramebuffer();
+	framebuffer.width = manager.w; 
+	framebuffer.height = manager.h;
+
+	var renderbuffer = gl.createRenderbuffer();
+
+	this.heatTexture = gl.createTexture();
+	this.heatTexture.name = "Interpolation texture";
+
+	if (!gl.getExtension("OES_texture_float")) {
+		console.log("OES_texture_float not availble -- this is legal");
+	}
+	/** Framebuffer */
+	gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
+
+	/** Texture */
+	gl.bindTexture(gl.TEXTURE_2D, this.heatTexture);
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); // Prevents
+	// s-coordinate
+	// wrapping
+	// (repeating).
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, framebuffer.width,
+			framebuffer.height, 0, gl.RGBA, gl.FLOAT, null);
+
+	/** Render buffer */
+	gl.bindRenderbuffer(gl.RENDERBUFFER, renderbuffer);
+	gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT16,
+			framebuffer.width, framebuffer.height);
+
+	gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0,
+			gl.TEXTURE_2D, this.heatTexture, 0);
+	gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT,
+			gl.RENDERBUFFER, renderbuffer);
+
+	gl.bindTexture(gl.TEXTURE_2D, null);
+	
+
+	var renderer = new HeatMapRenderer();
+	
+	
 	gl.useProgram(this.glProgram);
 	manager.storeUniformLoc(this.glProgram, "zoom");
 	manager.storeUniformLoc(this.glProgram, "drawselect");
@@ -22,15 +66,28 @@ function HeatMapDimension(manager){
 		manager.enableBufferForName(this.glProgram,  "index", "index");	
 		manager.bindRasterMatrix(this.glProgram);	
 		
-		gl.bindFramebuffer(gl.FRAMEBUFFER, null);	
+		gl.bindTexture(gl.TEXTURE_2D, this.heatTexture);
+		gl.bindFramebuffer(gl.FRAMEBUFFER,framebuffer );	
+		
+		
 		gl.viewport(0, 0, manager.width, manager.height);
 		gl.clearColor(0.0, 0.0, 0.0, 0.0);
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 	
 		gl.disable(gl.DEPTH_TEST);
+		//gl.disable(gl.BLEND);
 		gl.enable(gl.BLEND);
+		gl.blendFunc(gl.ONE, gl.ONE);
+		
+		//gl.bindFramebuffer(gl.FRAMEBUFFER, null);	
+		gl.viewport(0, 0, manager.width, manager.height);
+		gl.clearColor(0.0, 0.0, 0.0, 0.0);
+		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+	
+	//	gl.disable(gl.DEPTH_TEST);
+	//	gl.enable(gl.BLEND);
 	//	gl.disable(gl.BLEND);
-		gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+		//gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 	
 		
 		manager.enableFilterTexture(this.glProgram);		
@@ -49,6 +106,14 @@ function HeatMapDimension(manager){
 		gl.drawArrays(gl.POINTS, 0, num);	
 	    gl.useProgram(null);
 	   
+		gl.bindTexture(gl.TEXTURE_2D, null);
+	    gl.useProgram(null);
+	   
+	    renderer.heatTexture =  this.heatTexture;
+	    renderer.render();
+	    
+			
+	
 		
 	}
 	

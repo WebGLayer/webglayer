@@ -74,6 +74,10 @@ function GLUtils() {
 			$("head").append(data);
 		});
 		
+		$.get(domain+'shaders/shaders_heatmap_render.glsl', function(data) {
+			$("head").append(data);
+		});
+		
 		$.ajaxSetup({
 			async : true
 		});
