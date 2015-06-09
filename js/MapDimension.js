@@ -1,7 +1,18 @@
 
 function MapDimension(manager){
-	this.manager = manager;
-	Dimension.call(this, manager);
+	
+	this.glProgram = GLU.compileShaders('map_vShader', 'map_fShader', this);
+	
+	var zoom = 'zoom';
+	var drawselect = 'drawselect';
+	var numfilters = 'numfilters';
+	
+	gl.useProgram(this.glProgram);
+	manager.storeUniformLoc(this.glProgram, zoom);
+	manager.storeUniformLoc(this.glProgram, drawselect);
+	manager.storeUniformLoc(this.glProgram, numfilters);
+	gl.uniform1f(this.glProgram.numfilters, 3);		
+	gl.useProgram(null);
 	
 
 	this.setup = function() {
@@ -9,9 +20,12 @@ function MapDimension(manager){
 		//gl.useProgram(this.glProgram);
 		/** add specific buffer and uniforms */
 		gl.useProgram(this.glProgram);
-		this.manager.bindMapMatrix(this.glProgram);
-		this.manager.enableBuffer(this.glProgram, "wPoint");
-		this.manager.enableBuffer(this.glProgram, "speed");
+		
+		manager.bindMapMatrix(this.glProgram);
+		manager.enableBufferForName(this.glProgram, "wPoint", "wPoint");
+		manager.enableBufferForName(this.glProgram,  "index", "index");	
+		manager.bindRasterMatrix(this.glProgram);	
+		
 		gl.bindFramebuffer(gl.FRAMEBUFFER, null);	
 		gl.viewport(0, 0, manager.width, manager.height);
 		gl.clearColor(0.0, 0.0, 0.0, 0.0);
@@ -100,14 +114,4 @@ function MapDimension(manager){
 	
 }
 
-MapDimension.prototype.filter = function(raster) {
-	/*rendertriangel*/
-	
-	/*use result as uniform*/	
-}
-
-
-MapDimension.prototype = Object.create(Dimension.prototype);
-
-MapDimension.prototype.constructor = Dimension;
 	

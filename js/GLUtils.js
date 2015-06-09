@@ -78,6 +78,11 @@ function GLUtils() {
 			$("head").append(data);
 		});
 		
+		$.get(domain+'shaders/shaders_max_calculator.glsl', function(data) {
+			$("head").append(data);
+		});
+		
+		
 		$.ajaxSetup({
 			async : true
 		});
@@ -143,6 +148,10 @@ function GLUtils() {
 		gl.linkProgram(pointProgram);
 		return pointProgram;
 	}
+	
+
+	
+
 
 
 }

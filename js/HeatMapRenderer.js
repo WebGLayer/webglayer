@@ -5,6 +5,7 @@ function HeatMapRenderer(){
 	
 	var texCoordLocation = gl.getAttribLocation(this.glProgram, "v_texCoord");
 	var rasterLoc = 	   gl.getUniformLocation(this.glProgram, "heatmap" );
+	manager.storeUniformLoc(this.glProgram, "max");
 
 	  // provide texture coordinates for the rectangle.
 	  var texCoordBuffer = gl.createBuffer();
@@ -33,24 +34,24 @@ function HeatMapRenderer(){
 	
 		//gl.bindFramebuffer(gl.FRAMEBUFFER,null);	
 		gl.viewport(0, 0, manager.width, manager.height);
-		gl.clearColor(0.0, 0.0, 0.0, 0.0);
-		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+		//gl.clearColor(0.0, 0.0, 0.0, 0.0);
+		//gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 	
 		gl.disable(gl.DEPTH_TEST);
 		//gl.disable(gl.BLEND);
-		gl.disable(gl.BLEND);		
-		
+		gl.enable(gl.BLEND);		
+		gl.blendFunc( gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA  );
 		
 	
 		
 		
 				
 	}	
-	this.render = function(num) {
+	this.render = function(max) {
 
 		this.setup();
 	
-	
+	    gl.uniform1f(this.glProgram.max, max);	
 		gl.drawArrays(gl.TRIANGLES, 0, 6);	
 		gl.bindTexture(gl.TEXTURE_2D, null);
 	    gl.useProgram(null);

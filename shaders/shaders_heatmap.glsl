@@ -17,7 +17,7 @@
       void main() {
 		
   	  	
-  		float p_size = zoom *5. +30.;
+  		float p_size = zoom /300. +20.;
   	    	   
   		vec4 p =  mapMatrix * wPoint;  	
   		  		
@@ -65,8 +65,13 @@
 
       	float dist = length(gl_PointCoord.xy, vec2(0.5,0.5)); 
       	
-     	float alpha = (dist > 0.5) ? 0. : 1.;
-    	gl_FragColor = vec4(1.-dist, 0.1 ,0.,alpha);//col; 
+     	
+     	if (dist < 0.5 ) {
+     		gl_FragColor = vec4(1., 1./(1.+dist*5.) ,0.,1.);//col; 
+     	} else {
+     		gl_FragColor = vec4(0., 0. ,0.,0.);//col; 
+     	}
+    	
        
       }
       
