@@ -5,7 +5,7 @@
 			 
 		metadata = [];
 		initMap();
-		GLU.loadShaders();
+		GLU.loadShaders('http://home.zcu.cz/~jezekjan/webglayer-gl-filter2/');
 	
 		//r_count = 1 * Math.pow(10, 5);
 		manager = new Manager("map");
