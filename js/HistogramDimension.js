@@ -49,7 +49,7 @@ function HistogramDimension(manager, meta) {
 
 	gl.bindTexture(gl.TEXTURE_2D, null);
 
-	this.floatReader = new FloatRasterReader(this.histTexture,
+	this.floatReader = new FloatReaderHistogram(this.histTexture,
 			framebuffer.width, framebuffer.height);
 
 	this.render = function() {

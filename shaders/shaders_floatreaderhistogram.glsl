@@ -1,27 +1,44 @@
-<script id="float_vShader" type="x-shader/x-vertex">
+<script id="floathist_vShader" type="x-shader/x-vertex">
 	
 	
-	attribute vec4 vertices;
-			
-	varying vec4 coord;
+	attribute vec2 ras_vert;
+	
+	uniform sampler2D floatRaster;	  
+	uniform float height;
+	uniform float width;
+	
+	varying float col;
+
 	
 
 	void main() {
 			
-			gl_Position = vertices;
-			coord = vertices;									
-			gl_PointSize = 1.0;
+			float row_id = floor(ras_vert[1] / 3.); 
+			float band = ras_vert[1] - row_id*3.;
 			
+			// normalise			
+			float x = (ras_vert[0] + 0.5) / width;
+			float y = (row_id + 0.5) / (height/3.);
+			
+			vec4 fdata = texture2D(floatRaster, vec2(x, y));
+		
+			gl_Position = vec4( ((ras_vert[0]+0.5)/ width)*2. -1., ((ras_vert[1]+0.5) / height)*2. -1., 0., 1.);	
+			gl_PointSize = 1.0;
+			//col =fdata;
+			if      (band == 0.){col = fdata[0];} //selected
+			else if (band == 1.){col = fdata[1];} // in in window
+			else if (band == 2.){col = fdata[2];} // unselected
+			else col=0.;	
+			//col = 	 fdata[0];
 	}
 </script>
     
-<script id="float_fShader" type="x-shader/x-fragment">
+<script id="floathist_fShader" type="x-shader/x-fragment">
       precision highp float;   
     
-	  varying vec4 coord; 
-	  uniform float band;
- 	  uniform sampler2D floatRaster;
+	  varying float col;
 	
+ 	
             
        float shift_right(float v, float amt) {
           v = floor(v) + 0.5;
@@ -62,16 +79,7 @@
           return vec4(byte4, byte3, byte2, byte1);
         }
         
-        void main() {	
-           float x = (coord[0]+1.) / 2.;
-           float y = (coord[1]+1.) / 2.;
-           vec4 fdata = texture2D(floatRaster, vec2(x, y)); 		
-           float col = 0.;
-          	if      (band == 0.){col = fdata[0];} //selected
-			else if (band == 1.){col = fdata[1];} // in in window
-			else if (band == 2.){col = fdata[2];} // unselected
-			else col=0.;
-        	
+        void main() {	 		
 			gl_FragColor = encode_float(col);
      	}
 </script>

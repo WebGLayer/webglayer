@@ -17,6 +17,7 @@ function GLUtils() {
 		
 		if (dom==null){
 			 domain = 'http://localhost:9999/js/webglayer/';
+			// domain = 'http://home.zcu.cz/~jezekjan/webglayer-gl-filter2/';
 		} else {
 			domain = dom;
 		}				
@@ -82,6 +83,9 @@ function GLUtils() {
 			$("head").append(data);
 		});
 		
+		$.get(domain+'shaders/shaders_floatreaderhistogram.glsl', function(data) {
+			$("head").append(data);
+		});
 		
 		$.ajaxSetup({
 			async : true

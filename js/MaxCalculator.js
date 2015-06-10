@@ -56,8 +56,7 @@ function MaxCalculator(w, h){
 	       1.0, -1.0,
 	      -1.0,  1.0]), gl.STATIC_DRAW);
 	
-	 //this.floatReader = new FloatRasterReader(this.maxTexture,
-	//			framebuffer.width, framebuffer.height);
+	
 	  
 	this.setup = function(texture) {
 		 gl.useProgram(this.glProgram);		
@@ -169,10 +168,16 @@ function MaxCalculator(w, h){
 			 gl.FLOAT, readout); 
 			 //console.log(readout);
 		 var max = arrayMax(readout);
-		console.log(readout.length+" "+max);	 
+		console.log(readout);	 
+		
+		this.floatReader = new FloatRasterReader(this.maxTexture,
+					framebuffer.width, framebuffer.height);
+		this.floatReader.setup()
+		this.floatReader.render();
+		
+		var readf = this.floatReader.readPixels();
+		console.log(readf);	 
 		return max;
-	//	this.floatReader.setup()
-	//	this.floatReader.render();
 	//	var readout = this.floatReader.readPixels();
 		
 	

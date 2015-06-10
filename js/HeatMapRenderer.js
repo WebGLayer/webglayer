@@ -26,13 +26,13 @@ function HeatMapRenderer(){
 		 gl.vertexAttribPointer(texCoordLocation, 2, gl.FLOAT, false, 0, 0);
 		//gl.useProgram(this.glProgram);
 		/** add specific buffer and uniforms */
-		 gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+		// gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 	     gl.uniform1i(rasterLoc , 0);		   
 		 gl.activeTexture(gl.TEXTURE0);
 		 gl.bindTexture(gl.TEXTURE_2D, this.heatTexture);
 	
 	
-		//gl.bindFramebuffer(gl.FRAMEBUFFER,null);	
+		gl.bindFramebuffer(gl.FRAMEBUFFER,null);	
 		gl.viewport(0, 0, manager.width, manager.height);
 		//gl.clearColor(0.0, 0.0, 0.0, 0.0);
 		//gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -41,11 +41,7 @@ function HeatMapRenderer(){
 		//gl.disable(gl.BLEND);
 		gl.enable(gl.BLEND);		
 		gl.blendFunc( gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA  );
-		
-	
-		
-		
-				
+
 	}	
 	this.render = function(max) {
 

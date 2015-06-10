@@ -153,7 +153,9 @@ function Manager(mapid) {
 						+ " value " + value);
 				return;
 			}
-		}		
+		}	else {
+			console.log("warning - uniform "+name+" already set.")
+		}	
 	}
 	
 	this.bindMapMatrix = function(prog){
