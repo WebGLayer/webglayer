@@ -1,29 +1,30 @@
-<script id="float_vShader" type="x-shader/x-vertex">
+<script id="float_reader_vShader" type="x-shader/x-vertex">
+		
+	attribute vec4 v_texCoord;
+		
+	//uniform sampler2D inter_raster;
 	
-	
-	attribute vec4 vertices;
-			
-	varying vec4 coord;
-	
+	varying vec4 var_texCoord;
 
 	void main() {
-			
-			gl_Position = vertices;
-			coord = vertices;									
-			gl_PointSize = 1.0;
-			
+		
+		gl_Position = v_texCoord;
+		var_texCoord =  v_texCoord;
+
 	}
 </script>
     
-<script id="float_fShader" type="x-shader/x-fragment">
-      precision highp float;   
-    
-	  varying vec4 coord; 
+<script id="float_reader_fShader" type="x-shader/x-fragment">
+       precision highp float;   
+	  
+ 	// uniform mat4 rasterMatrix;	
+	  uniform sampler2D raster;
 	  uniform float band;
- 	  uniform sampler2D floatRaster;
+	  varying vec4 var_texCoord;
+	// varying vec2 v_texCoord;
 	
-            
-       float shift_right(float v, float amt) {
+	
+	   float shift_right(float v, float amt) {
           v = floor(v) + 0.5;
           return floor(v / exp2(amt));
         }
@@ -62,16 +63,16 @@
           return vec4(byte4, byte3, byte2, byte1);
         }
         
-        void main() {	
-           float x = (coord[0]+1.) / 2.;
-           float y = (coord[1]+1.) / 2.;
-           vec4 fdata = texture2D(floatRaster, vec2(x, y)); 		
-           float col = 0.;
-          	if      (band == 0.){col = fdata[0];} //selected
-			else if (band == 1.){col = fdata[1];} // in in window
-			else if (band == 2.){col = fdata[2];} // unselected
-			else col=0.;
-        	
-			gl_FragColor = encode_float(col);
-     	}
+      void main() {
+	 	float x = (var_texCoord[0]+1.)/2.;
+	 	float y =  (var_texCoord[1] +1.)/2.;
+  		vec4 fdata = texture2D(raster, vec2(x, y));  		
+	//	gl_FragColor = col;//fdata;//vec4(1.,0.,0.,1.);
+		float val = 0.;
+	  	if (band == 0.){val = fdata[0];}
+	  	else if (band == 1.){val = fdata[1];}
+	  	else if (band == 2.){val = fdata[2];}
+	  	else if (band == 3.){val = fdata[3];}
+		gl_FragColor = encode_float(val);
+      }
 </script>

@@ -57,7 +57,7 @@ function HeatMapDimension(manager){
 	gl.uniform1f(this.glProgram.numfilters, 3);		
 	gl.useProgram(null);
 	var	renderer = new HeatMapRenderer();
-	var	maxcale = new MaxCalculator(2,2);//Math.floor(manager.w/4),Math.floor(manager.h/4));
+	var	maxcale = new MaxCalculator(Math.floor(manager.w/4),Math.floor(manager.h/4));
 	
 	
 	this.setup = function() {
@@ -96,7 +96,8 @@ function HeatMapDimension(manager){
 		gl.uniform1f(this.glProgram[drawselect], 0);
 		gl.drawArrays(gl.POINTS, 0, num);	
 		
-		gl.uniform1f(this.glProgram[drawselect], 1);		
+		gl.uniform1f(this.glProgram[drawselect], 1);	
+		gl.bindFramebuffer(gl.FRAMEBUFFER,framebuffer );	
 		gl.drawArrays(gl.POINTS, 0, num);	
 	    gl.useProgram(null);
 	   

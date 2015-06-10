@@ -1,10 +1,10 @@
 
 function HeatMapRenderer(){
 	
-	this.glProgram = GLU.compileShaders("heatmap_render_vShader",  "heatmap_render_fShader",this);
+	this.glProgram = GLU.compileShaders("heatmap_render_vShader",  "heatmap_render_fShader");
 	
 	var texCoordLocation = gl.getAttribLocation(this.glProgram, "v_texCoord");
-	var rasterLoc = 	   gl.getUniformLocation(this.glProgram, "heatmap" );
+	var rasterLoc = 	   gl.getUniformLocation(this.glProgram, "heatmap_raster" );
 	manager.storeUniformLoc(this.glProgram, "max");
 
 	  // provide texture coordinates for the rectangle.
@@ -26,7 +26,7 @@ function HeatMapRenderer(){
 		 gl.vertexAttribPointer(texCoordLocation, 2, gl.FLOAT, false, 0, 0);
 		//gl.useProgram(this.glProgram);
 		/** add specific buffer and uniforms */
-		// gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+		 gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 	     gl.uniform1i(rasterLoc , 0);		   
 		 gl.activeTexture(gl.TEXTURE0);
 		 gl.bindTexture(gl.TEXTURE_2D, this.heatTexture);
@@ -67,18 +67,7 @@ function HeatMapRenderer(){
 		manager.mapMatrix=matrix;
 	}
 
-	this.readPixels = function() {
-		
-		gl.useProgram(this.program);
 
-		
-		 gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
-		 var readout = new Float32Array(16);
-		 gl.readPixels(5, 5, framebuffer.width, framebuffer.height, gl.RGBA,
-			 gl.FLOAT, readout); 
-			 console.log(readout);
-	
-	}
 	
 }
 	

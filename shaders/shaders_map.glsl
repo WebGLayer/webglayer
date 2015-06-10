@@ -16,8 +16,12 @@
        
       void main() {
 		
+		float c = 0.;
+		if (zoom > 10.) {
+			c = zoom / 7.;
+			}
   	  	
-  		float p_size = 2. + zoom /100. ;
+  		float p_size = 1. + c ;
   	    	   
   		vec4 p =  mapMatrix * wPoint;
   		//float n_speed = (speed+1.)/2.;
@@ -28,19 +32,19 @@
   		// if data are selected  
   		if (fdata[0]>=1./256.*numfilters && drawselect>0.5){
   			p_size = p_size +0.;
-  			col = vec4(255. /255., 140./255., 0., 0.6); 
+  			col = vec4(255. /255., 140./255., 0., 0.8); 
   			gl_Position = p;    	
 			gl_PointSize = p_size;
   			
-  		} else if (drawselect<0.5) {  	
+  		} else if (fdata[0] < 1./256.*numfilters && drawselect<0.5) {  	
   		   // If not selected then use blue color	   
   		   //p_size = p_size-3.;
-  		   col = vec4(0., 0. , 1., 0.03);
+  		   col = vec4(0., 0. , 1., 0.5);
   		   //col = vec4(0.482, 0.408, 0.533, 0.95); 	
   		   //p_size = 4.;
   		  // col = vec4(0.0,0.,0.,0.75);
   		  	gl_Position = p;    	
-			gl_PointSize = p_size;
+			gl_PointSize =  p_size;//p_size;
   		} else {
   			gl_Position = vec4(-2.,-2.,0.,0.);    	
 			gl_PointSize = 0.;

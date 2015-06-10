@@ -41,7 +41,7 @@
   		}
   			
 	
-	//	gl_FragColor = col;//fdata;//vec4(1.,0.,0.,1.);
-		gl_FragColor = col;
+		gl_FragColor = col;//fdata;//vec4(1.,0.,0.,1.);
+		
       }
 </script>

@@ -33,6 +33,8 @@ function MapDimension(manager){
 	
 		gl.disable(gl.DEPTH_TEST);
 		gl.disable(gl.BLEND);
+	
+		gl.blendFunc( gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA  );
 		//gl.enable(gl.BLEND);
 		//gl.blendFunc(gl.ONE, gl.ONE);
 		if (this.glProgram.loc == null ){
@@ -46,12 +48,8 @@ function MapDimension(manager){
 		/*set point size*/
 		var z = map.getZoom();
 	//	console.log( map.getZoom());
-		if (z > 8){
-			var zz = (z -7)/2;
-			gl.uniform1f(this.glProgram.loc, zz);		
-		} else {
-			gl.uniform1f(this.glProgram.loc, 1);		
-		}
+		
+		gl.uniform1f(this.glProgram.loc, z);		
 		
 		
 		
