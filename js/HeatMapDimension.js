@@ -108,6 +108,7 @@ function HeatMapDimension(manager){
 	    
 	    var max = maxcale.getMax(this.heatTexture);
 
+	    manager.max = max;
 	    renderer.heatTexture = 	this.heatTexture;	
 	    renderer.render(max);
 	    

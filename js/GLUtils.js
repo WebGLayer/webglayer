@@ -87,6 +87,10 @@ function GLUtils() {
 			$("head").append(data);
 		});
 		
+		$.get(domain+'shaders/shaders_heat_hist.glsl', function(data) {
+			$("head").append(data);
+		});
+		
 		$.ajaxSetup({
 			async : true
 		});

@@ -17,7 +17,7 @@
       void main() {
 		
   	  	
-  		float p_size = zoom /300. +20.;
+  		float p_size = zoom /300. +40.;
   	    	   
   		vec4 p =  mapMatrix * wPoint;  	
   		  		
@@ -27,7 +27,7 @@
   		// if data are selected  
   		if (fdata[0]>=1./256.*numfilters && drawselect>0.5){
   			p_size = p_size +6.;
-  			col = vec4(255./255., 140./250., 0.0, .7); 
+  			col = vec4(1., 140./250., 0.0, .7); 
   			gl_Position = p;    	
 			gl_PointSize = p_size;
   			

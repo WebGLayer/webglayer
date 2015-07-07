@@ -234,7 +234,7 @@ function Manager(mapid) {
 	}
 	
 	this.getUniformLoc = function(prog, name){
-		var loc = gl.getUniformLocation(prog, name)
+		var loc = gl.getUniformLocation(prog, name);
 		if (loc==null){
 			console.error("Error setting common uniform "+name+" for program "+ prog.name);
 		} else {

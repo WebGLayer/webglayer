@@ -125,7 +125,7 @@ function MaxCalculator(w, h){
 		
 		var readf = this.floatReader.readPixels();
 		var max = arrayMax(readf);
-		console.log(max);	 
+		//console.log(max);	 
 		return max;
 
 		

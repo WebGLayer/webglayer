@@ -18,7 +18,7 @@
       void main() {	
   			
 		vec4 p =  mapMatrix * wPoint;
-  		
+  		gl_PointSize = 1.;
   		   	     	
 		 // if data are in the map window 
 		if (-1. <= p[0] && p[0]<=1. && -1. <= p[1] && p[1]<=1.){
