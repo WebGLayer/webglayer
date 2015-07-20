@@ -10,8 +10,8 @@ function HistogramDimension(manager, meta) {
 	manager.storeUniformLoc(this.program, "numfilters");
 	
 	var framebuffer = gl.createFramebuffer();
-	framebuffer.width = metadata.max_bins;
-	framebuffer.height = metadata.length;
+	framebuffer.width = manager.max_bins;
+	framebuffer.height = Object.keys(metadata).length;
 
 	var renderbuffer = gl.createRenderbuffer();
 
@@ -71,14 +71,14 @@ function HistogramDimension(manager, meta) {
 
 		//gl.finish();
 
-		for (var i = 0; i < metadata.length; i++) {
+		for (var i in metadata) {
+			var m = metadata[i];
 			/* set unifom */
-			var r = (i / metadata.length) * 2 - 1 + (1 / metadata.length);
-			
+			var r = (m.index / framebuffer.height) * 2 - 1 + (1 / framebuffer.height);
 			gl.uniform1f(this.program.attr_row, r);
 			gl.uniform1f(this.program.numfilters, 3);
 			
-			manager.enableBufferForName(this.program, metadata[i].name, "attr");
+			manager.enableBufferForName(this.program, m.name, "attr");
 			gl.drawArrays(gl.POINTS, 0, manager.num_rec);
 		}
 
@@ -91,14 +91,16 @@ function HistogramDimension(manager, meta) {
 	this.readPixels = function() {
 
 		/* console.time("reading filter"); */
-		//gl.useProgram(this.program);
+		gl.useProgram(this.program);
 
-		/*
-		 * gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer); var readout = new
-		 * Float32Array(framebuffer.width * framebuffer.height * 4);
-		 * gl.readPixels(0, 0, framebuffer.width, framebuffer.height, gl.RGBA,
-		 * gl.FLOAT, readout); console.log("HistDim:"); console.log(readout);
-		 */
+		
+		 gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer); var readout = new
+		 Float32Array(framebuffer.width * framebuffer.height * 4);
+		 gl.readPixels(0, 0, framebuffer.width, framebuffer.height, gl.RGBA,
+		 gl.FLOAT, readout); 
+		// console.log("HistDim:");
+		// console.log(readout);
+		
 
 		/*
 		 * sum = 0; for (i = 0; i < readout.length; i++) { sum = sum +
@@ -111,23 +113,26 @@ function HistogramDimension(manager, meta) {
 		this.floatReader.setup()
 		this.floatReader.render();
 		var readout = this.floatReader.readPixels();
+		
+		//console.log(readout);
 
 		var res =[];
 
 		
-		for (var m = 0; m < metadata.length; m++) {
-			res[m] = new Array(metadata[m].num_bins);
+		for (var m in metadata) {
+			var meta = metadata[m];
+			res[m] = new Array(meta.num_bins);
 			res[m].max = {0:0,1:0,2:0,3:0};
-			for (var i = 0; i < metadata[m].num_bins; i++) {
-				var s = metadata[m].max / metadata[m].num_bins;
+			for (var i = 0; i < meta.num_bins; i++) {
+				var s =meta.max / meta.num_bins;
 				
-				var dimid = m * metadata.max_bins*3;
+				var dimid = meta.index * manager.max_bins*3;
 				var d = {					
 					min : i * s,
 					max : (i + 1) * s,
 					selected : readout[dimid+i],
-					unselected : readout[dimid+i + 1 * metadata.max_bins],
-					out : readout[dimid+i + 2 * metadata.max_bins]
+					unselected : readout[dimid+i + 1 *  manager.max_bins],
+					out : readout[dimid+i + 2 *  manager.max_bins]
 				};
 				
 				if (d.selected > res[m].max[0]){res[m].max[0] = d.selected};

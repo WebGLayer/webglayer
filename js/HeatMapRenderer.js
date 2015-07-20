@@ -47,6 +47,7 @@ function HeatMapRenderer(){
 
 		this.setup();
 	
+		
 	    gl.uniform1f(this.glProgram.max, max);	
 		gl.drawArrays(gl.TRIANGLES, 0, 6);	
 		gl.bindTexture(gl.TEXTURE_2D, null);

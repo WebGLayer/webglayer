@@ -83,6 +83,9 @@ Filter = function(manager, metadata) {
 		if (this.filterProgram.histLoc == null){
 			this.filterProgram.histLoc = manager.getUniformLoc(this.filterProgram, 'histFilter'); 		
 		}	
+		if ( typeof(manager.histFilter) == 'undefined' && manager.histFilter == null){
+			console.error('histFilter undefined or null.'); 		
+		}	
 	 
 		gl.uniform1i(this.filterProgram.histLoc , 1);		   
 		gl.activeTexture(gl.TEXTURE1);
@@ -101,9 +104,10 @@ Filter = function(manager, metadata) {
 	 		
 		
 		
-		for (var i = 0; i < metadata.length; i++) {
+		for (var i in metadata) {
+			var m = metadata[i];
 			/* set unifom */
-			var r = (i / metadata.length) * 2 - 1 + (1 / metadata.length);
+			var r = (m.index / manager.dimnum) * 2 - 1 + (1 / manager.dimnum);
 			
 			if (this.filterProgram.loc==null){
 				this.filterProgram.loc = gl.getUniformLocation(this.filterProgram, "attr_row");
@@ -119,7 +123,7 @@ Filter = function(manager, metadata) {
 			}
 			
 		//manager.enableBufferForName(this.glProgram,  "attr"+this.y_id+this.buf_id, "attr");
-			manager.enableBufferForName(this.filterProgram, metadata[i].name, "attr1");
+			manager.enableBufferForName(this.filterProgram, m.name, "attr1");
 		 	gl.drawArrays(gl.POINTS, 0, manager.num_rec);
 		}
 

@@ -1,6 +1,5 @@
-StackedBarChart = function(d_max, ch_row, div_id, x_label, metadata) {
+StackedBarChart = function(d_max, div_id, x_label, id) {
 	var div_id;
-	var ch_row = ch_row;
 	var w = 500;
 	var h = 200;
 	var dataset;
@@ -151,36 +150,16 @@ StackedBarChart = function(d_max, ch_row, div_id, x_label, metadata) {
 		function resizeExtent(selection) {
 			selection.attr("height", height);
 		}
-
+		
 		function brush() {
 			// console.log(brush1.extent());
-
 			var f = brush1.extent();
-			var h_filter = new Float32Array(f.length * 4);
-			// console.log(h_filter.length);
-			var j = 0;
-			for ( var i in f) {
-				var y = ((ch_row + 0.5) / metadata.length) * 2 - 1;
-
-				h_filter[j++] = normaliseByMax(f[i][0], metadata.max_bins,
-						metadata[ch_row].max, metadata[ch_row].num_bins);
-				h_filter[j++] = y;
-
-				h_filter[j++] = normaliseByMax(f[i][1], metadata.max_bins,
-						metadata[ch_row].max, metadata[ch_row].num_bins);
-				h_filter[j++] = y;
-			}
-
-			GLU.histFilterRender.createFilteringData(ch_row, h_filter);
+			WGL.filterHist(id, f);
 			
-			GLU.histFilter();
-			// add data, attach elements and so on
-
-			// add data, attach elements and so on
-			// console.log(h_filter);
 		}
 
 	}
+	
 
 	// Create bars
 

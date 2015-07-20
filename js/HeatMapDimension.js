@@ -97,7 +97,7 @@ function HeatMapDimension(manager){
 		gl.drawArrays(gl.POINTS, 0, num);	
 		
 		gl.uniform1f(this.glProgram[drawselect], 1);	
-		gl.bindFramebuffer(gl.FRAMEBUFFER,framebuffer );	
+		gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
 		gl.drawArrays(gl.POINTS, 0, num);	
 	    gl.useProgram(null);
 	   

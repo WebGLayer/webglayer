@@ -26,6 +26,8 @@ function Manager(mapid) {
 						"opacity: 1;" +
 						"z-index: " + z);
 	
+
+	
 	
 	mapparentdiv.appendChild(this.canvas);
 	
@@ -51,6 +53,8 @@ function Manager(mapid) {
 	this.matrices = [];
 	
 	this.filters = [];
+	
+	this.mapController = new MapController(this);
 	
 	
 	this.update = function(){

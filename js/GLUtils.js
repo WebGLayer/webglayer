@@ -97,11 +97,7 @@ function GLUtils() {
 	}
 
 
-	this.mapFilter = function() {
-		// mapFilterRender.renderFilter();
-		// allDataFilter.mapFilter = mapFilterRender.filterTexture;
-		updateFilters();
-	}
+	
 	this.histFilter = function() {
 		this.histFilterRender.renderFilter();
 		this.manager.histFilter = this.histFilterRender.filterTexture;
@@ -109,12 +105,7 @@ function GLUtils() {
 	}
 
 	function updateFilters() {
-
-		
-
 		 GLU.render();
-		//read();
-
 	}
 
 	function read() {

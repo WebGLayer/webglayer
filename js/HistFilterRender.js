@@ -1,18 +1,25 @@
-HistFilterRender = function(manager){	
+HistFilterRender = function(manager, metadata){	
 	
-	this.manager = manager;
-	var metadata = manager.metadata;
+	//this.manager = manager;
 	
 	var filters = [];
 	
-	for (var m = 0 ; m < metadata.length ; m++){
-		var y = ((m + 0.5) / metadata.length) * 2 - 1;
-		filters[m] = new Float32Array([-1.1,y,1.1,y]);				
+	//for (var m = 0 ; m < metadata.length ; m++){
+	//	var y = ((m + 0.5) / metadata.length) * 2 - 1;
+	//	filters[m] = new Float32Array([-1.1,y,1.1,y]);				
+	//}
+	var numdims= Object.keys(metadata).length;
+
+	for (var i in metadata){
+		
+		var m = metadata[i];
+		var y = ((m.index + 0.5) / numdims) * 2 - 1;
+		filters[m.index] = new Float32Array([-1.1,y,1.1,y]);				
 	}
 	
 	var pointsSize = 0;
-	var height = metadata.length;
-	var width = metadata.max_bins;
+	var height = numdims;
+	var width = manager.max_bins;
 		
 	this.filterProgram = GLU.compileShaders("histFilter_vShader",  "histFilter_fShader", this);
 	this.filterProgram.name ="HistFitler";
@@ -131,13 +138,13 @@ HistFilterRender = function(manager){
 	
 	this.createFilteringData = function(ch_row, points){
 		if (points.length==0){		
-			var y = ((ch_row + 0.5) / metadata.length) * 2 - 1;
+			var y = ((ch_row + 0.5) / manager.dimnum) * 2 - 1;
 			filters[ch_row] = new Float32Array([-1.1,y,1.1,y]);												
 		} else {
 			filters[ch_row] = points;
 		}
 	//	console.log(points);
-	//	console.log(filters);		
+		console.log(filters);		
 		//this.bindFilters();			
 	}
 	

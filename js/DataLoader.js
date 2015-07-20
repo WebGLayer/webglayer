@@ -8,9 +8,9 @@ function DataLoader(fname) {
 	var that = this;
 
 	/**
-	 * Load text file
-	 */
-	 $("#speed_chart").text("Please wait... data are being loaded. This may take a while.");
+	* Load text file
+	*/	
+	$("#speed_chart").text("Please wait... data are being loaded. This may take a while.");
 	DataLoader.prototype.loadTextData = function(file) {
 		var pts = [];
 		var attr = [];
@@ -28,12 +28,10 @@ function DataLoader(fname) {
 			for (var m = 0; m < metadata.length; m++) {
 				attr[m] = [];
 			}
-
 	
 			data.forEach(function(val, i) {
 				  
-			 //console.log(i);
-				{
+					{
 					//var v = transform(val.y, val.x);
 					pts[j++] = val.x;
 					pts[j++] = val.y;
@@ -41,8 +39,8 @@ function DataLoader(fname) {
 					val.speed = val.speed;
 					for (var m = 0; m < metadata.length; m++) {
 						attr[m][i] = normaliseByMax(val[metadata[m].name],
-								metadata.max_bins, metadata[m].max,
-								metadata[m].num_bins);
+						metadata.max_bins, metadata[m].max,
+						metadata[m].num_bins);
 					}
 					index[i] = rasterer.calc(i);			      
 				}
@@ -244,6 +242,8 @@ function DataLoader(fname) {
 	function normalise(value, max) {
 		return value / max * 2 - 1 + (2 / (max * 2));
 	}
+	
+	
 	function array2TA(pts) {
 		pts_ar = new Float32Array(pts.length);
 		var i = 0;
@@ -252,7 +252,8 @@ function DataLoader(fname) {
 			pts[i] = null;
 		}
 		return pts_ar;
-	}
+	}	
+	
 	function array2TA2D(pts) {
 
 		pts_ar = new Float32Array(pts.length * 2);
