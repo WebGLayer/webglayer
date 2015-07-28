@@ -160,10 +160,30 @@ StackedBarChart = function(m, div_id, x_label, id) {
 		
 		function brush() {
 			// console.log(brush1.extent());
-			var f = brush1.extent();
+			var f = brush1.extent();		
 			WGL.filterHist(id, f);
 			
 		}
+
+		function brushOrdinal() {
+			// console.log(brush1.extent());
+			var f = brush1.extent();
+			var ff=[];
+	
+			for (var i in brush1.extent()){
+				var b = brush1.extent()[i];
+				var selection = xScale.domain().filter(function(d){									
+						var p = (b[0] <= xScale(d)) && (xScale(d) <= b[1])
+						return p;});
+				var s = m.domain.indexOf(selection[0]);
+			}
+			 	
+			 		
+			 	 
+			WGL.filterHist(id, f);
+			
+		}
+
 
 	}
 	

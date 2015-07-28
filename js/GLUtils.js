@@ -1,16 +1,6 @@
 
 function GLUtils() {
 
-	// function dataupdateloop() {
-	// util.createFilteringData(generateOneTriangle());
-	// mcontroller.zoommove((Math.random() - 0.5) * 0.4, {
-	// x : (Math.random() - 0.5) * 5,
-	// y : 0
-	// });
-	//
-	// request = window.requestAnimFrame(dataupdateloop);
-	// };
-
 	this.loadShaders = function(dom) {
 		
 		var domain;
@@ -97,25 +87,7 @@ function GLUtils() {
 	}
 
 
-	
-	this.histFilter = function() {
-		this.histFilterRender.renderFilter();
-		this.manager.histFilter = this.histFilterRender.filterTexture;
-		updateFilters();
-	}
-
-	function updateFilters() {
-		 GLU.render();
-	}
-
-	function read() {
-		readout = histDim.readPixels();
-		if (typeof readout != 'undefined') {
-			for ( var i in charts) {
-				charts[i].update(readout[i]);
-			}
-		}
-	}
+		
 
 
 	this.compileShaders = function(vs, fs){	

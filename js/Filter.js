@@ -65,7 +65,7 @@ Filter = function(manager, metadata) {
 			this.filterProgram.histLoc = manager.getUniformLoc(this.filterProgram, 'histFilter'); 		
 		}	
 		if ( typeof(manager.histFilter) == 'undefined' && manager.histFilter == null){
-			console.error('histFilter undefined or null.'); 		
+			console.warn('histFilter undefined or null.'); 		
 		}	
 	 
 		gl.uniform1i(this.filterProgram.histLoc , 1);		   

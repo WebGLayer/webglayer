@@ -77,26 +77,7 @@ HistFilterRender = function(manager, metadata){
 		gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
 		
 		gl.viewport(0, 0, width, height);
-		
-		//allDataFilter.hasHistFilter = false;
-		
-		//allDataFilter.hasHistFilter = false;
-		/*for (var num_hist =0; num_hist< height;num_hist++){			
-			if (filters[num_hist] != null && filters[num_hist].length > 0){
-				allDataFilter.hasHistFilter = true;
-			} 
-		}
-		console.log(allDataFilter.hasHistFilter);
-		
-		for (var num_hist =0; num_hist< height;num_hist++){
-			if (filters[num_hist] == null || filters[num_hist].length == 0) {
-				var y = ((num_hist + 0.5) / metadata.length) * 2 - 1;
-				filters[num_hist] = new Float32Array([-1,y,1,y]);	
-				
-				
-			}
-			this.bindFilters();		
-		}*/
+			
 		
 		this.bindFilters();	
 		gl.clearColor(0.0, 0.0, 0.0, 0.0);

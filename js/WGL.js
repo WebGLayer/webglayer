@@ -11,6 +11,8 @@ WGL = function(numrec){
 	manager.index = "index";
 	manager.r_size = rasterer.size;
 
+	this.mcontroller = new MapController(manager);
+	this.mcontroller.resize(manager.mapdiv.offsetWidth, manager.mapdiv.offsetHeight);
 	
 	var dimensions = [];
 
