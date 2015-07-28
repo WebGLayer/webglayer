@@ -25,7 +25,7 @@ var MapController = function(manager) {
 	
 		this.matrix.name="mapMatrix";
 	}
-	this.zoommove = function(zoom, offset, render_func){		
+	this.zoommove = function(zoom, offset){		
 		manager.zoom = zoom;
 		this.initMatrix();
 		// Scale to current zoom (worldCoords * 2^zoom)
@@ -37,7 +37,9 @@ var MapController = function(manager) {
 
 		this.updateMatrix();
 		
-		render_func();
+		manager.wgl.filterByExt();
+		manager.wgl.render();
+		manager.wgl.updateCharts();
 		
 		function scaleMatrix(matrix, scaleX, scaleY) {
 			// scaling x and y, which is just scaling first two columns of matrix

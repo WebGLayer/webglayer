@@ -10,12 +10,13 @@ WGL = function(numrec){
 	manager.num_rec = numrec;
 	manager.index = "index";
 	manager.r_size = rasterer.size;
+	manager.wgl = this;
 
 	this.mcontroller = new MapController(manager);
 	this.mcontroller.resize(manager.mapdiv.offsetWidth, manager.mapdiv.offsetHeight);
 	
 	var dimensions = [];
-
+	var charts = [];
 	
 	
 	var index = [];
@@ -44,6 +45,10 @@ WGL = function(numrec){
 		var i =  Object.keys(metadata).length;
 		o.index = i;
 		metadata[o.name] = o;	
+	}
+	
+	this.addCharts = function(ch){		
+		charts = ch;	
 	}
 
 	this.getManager = function(){
@@ -91,14 +96,26 @@ WGL = function(numrec){
 		for (var i in dimensions){
 			dimensions[i].render(numrec);
 		}
+		
 	
+	}
+	
+	this.updateCharts = function(){				
+			
+		//console.log(WGL.readHist());
+		var readout =this.readHist();
+		if (typeof readout != 'undefined') {
+			for ( var i in charts) {
+				charts[i].update(readout[i]);
+			}
+		}		
 	}
 	
 	
 	this.filterByExt = function(){
 		mainFilter.render();
-		manager.filterTexture = mainFilter.filterTexture;
-		render();
+		manager.filterTexture = mainFilter.filterTexture;		
+		this.updateCharts();
 	}
 	this.filterHist = function(id, f){		
 		var h_filter = new Float32Array(f.length * 4);
@@ -130,7 +147,8 @@ WGL = function(numrec){
 		manager.histFilter = histFilter.filterTexture;
 		mainFilter.render();
 		manager.filterTexture = mainFilter.filterTexture;
-		render();
+		this.render();
+		this.updateCharts();
 	
 	}
 	/**
