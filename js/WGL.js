@@ -44,7 +44,7 @@ WGL = function(numrec){
 		metadata[o.name] = o;	
 	}
 
-	this.manager = function(){
+	this.getManager = function(){
 		return manager;
 	}
 
@@ -54,17 +54,25 @@ WGL = function(numrec){
 	
 	this.initHistograms = function(){
 		var max_bins = 0;
-		for (var i in metadata){
-			
-			if (metadata[i].max > max_bins) {max_bins = metadata[i].max } ;
+		for (var i in metadata){			
+			if (metadata[i].num_bins > max_bins) {max_bins = metadata[i].num_bins } ;
 		}
 		manager.max_bins = max_bins;
 		manager.dimnum = Object.keys(metadata).length;
 		
 		for (var i in metadata){
 			var m = metadata[i];
-			var ta = array2TANorm(m.data, m.min, max_bins);
-			manager.addDataBuffer(ta, 1, m.name);
+			
+			if (m.type=='linear'){
+				var ta = array2TANormLinear(m , max_bins);
+				manager.addDataBuffer(ta, 1, m.name);
+			} else if (m.type=='ordinal'){
+				var ta = array2TANormOrdinal(m , max_bins);
+				manager.addDataBuffer(ta, 1, m.name);
+			} else {
+				console.error('type missing or undefined');
+			}
+			
 		}
 		
 		GLU.manager = manager;
@@ -83,8 +91,13 @@ WGL = function(numrec){
 		}
 	
 	}
-
 	
+	
+	this.filterByExt = function(){
+		mainFilter.render();
+		manager.filterTexture = mainFilter.filterTexture;
+		render();
+	}
 	this.filterHist = function(id, f){		
 		var h_filter = new Float32Array(f.length * 4);
 		// console.log(h_filter.length);
@@ -94,12 +107,18 @@ WGL = function(numrec){
 		for ( var i in f) {
 			var y = ((ch_row + 0.5) / manager.dimnum) * 2 - 1;
 
-			h_filter[j++] = normaliseByMax(f[i][0],manager.max_bins,
-					m.max, m.num_bins);
+			var l = normaliseByMax(f[i][0],manager.max_bins,
+					m.min, m.max, m.num_bins);
+			h_filter[j++] = l		
+			
 			h_filter[j++] = y;
 
-			h_filter[j++] = normaliseByMax(f[i][1], manager.max_bins,
-					m.max, m.num_bins);
+			var p = normaliseByMax(f[i][1], manager.max_bins,
+					m.min, m.max, m.num_bins);
+			
+			h_filter[j++] = p;
+			console.log("filter "+f[i][0]+" " +f[i][1] + " normalized to "+l+" "+p);
+			
 			h_filter[j++] = y;
 		}
 
@@ -115,24 +134,65 @@ WGL = function(numrec){
 	/**
 	 * calculates the value to max pixels between -1 -1;
 	 */
-	function normaliseByMax(value, max_all, this_max, this_num) {
+	function normaliseByMax(value, max_all, this_min, this_max, this_num) {
 		/* reduced value to 0-1 */
 		// var c = value/ this_max;
-		var c_size = this_max / this_num;
-		var v = (value / c_size) / max_all * 2 - 1;
-		
+		var s = (2/max_all) * ((this_max-this_min) / this_num);
+		//var c_size = (this_max-this_min) / (this_num);
+		//var v = (value / c_size) / max_all * 2 - 1;
+		var v = s * (value - this_min) - 1 ;
 		return v;
 		// return 0.5;
 	}
-	function array2TANorm(pts, min, norm) {
-		pts_ar = new Float32Array(pts.length);
+	function array2TANormOrdinal(m, max_bins) {
+		pts_ar = new Float32Array(m.data.length);
 		var i = 0;
-		for (var i in pts) {
-			if (isNaN(pts[i])) {
+		m.num_bins = m.domain.length;
+		m.min = 0.;
+		m.max =m.num_bins;
+		for (var i in m.data) {
+			if (isNaN(m.data[i])) {
 				val = 0.//-99999.			
 				} 
 			else {
-				val =  (pts[i] - min)/norm;
+				var bin = m.domain.indexOf(m.data[i]);
+				if (bin == -1){
+					console.error('data out of range');
+				}
+				val =  (bin+0.5) /max_bins ;
+			}
+			pts_ar[i] = val;
+			//pts[i] = null;
+		}
+		return pts_ar;
+	}
+	
+	function array2TANormLinear(m, max_bins) {
+		pts_ar = new Float32Array(m.data.length);
+		var i = 0;
+		for (var i in m.data) {
+			if (isNaN(m.data[i])) {
+				val = 0.//-99999.			
+				} 
+			else {
+				val =  ( (m.data[i] - m.min) / (m.max - m.min) ) *  m.num_bins /max_bins +  (1 /(2*max_bins)) ;
+			}
+			pts_ar[i] = val;
+			//pts[i] = null;
+		}
+		return pts_ar;
+	}
+	
+	
+	function array2TANorm(m, max_bins) {
+		pts_ar = new Float32Array(m.data.length);
+		var i = 0;
+		for (var i in m.data) {
+			if (isNaN(m.data[i])) {
+				val = 0.//-99999.			
+				} 
+			else {
+				val =  ( (m.data[i] - m.min) / (m.max - m.min) ) *  m.num_bins /max_bins ;//+  (1 /(3*max_bins)) ;
 			}
 			pts_ar[i] = val;
 			//pts[i] = null;

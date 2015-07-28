@@ -59,26 +59,7 @@ Filter = function(manager, metadata) {
 		manager.enableBufferForName(this.filterProgram, "wPoint", "wPoint");
 		manager.enableBufferForName(this.filterProgram,  "index", "index");	
 
-	//	manager.enableBufferForName(this.filterProgram,  "index"+manager.year+"Line", "index");	
 	
-		
-		
-		/*for (var i = 0; i < metadata.length; i++) {
-			
-			
-		}*/
-		
-		
-		/*Filter texture*/
-		/*if (this.filterProgram.mapLoc == null){
-			this.filterProgram.mapLoc = manager.getUniformLoc(this.filterProgram, 'mapFilter'); 
-		}*/
-				 
-		/*gl.uniform1i(this.filterProgram.mapLoc , 0);		   
-		gl.activeTexture(gl.TEXTURE0);
-		gl.bindTexture(gl.TEXTURE_2D, this.mapFilter);*/
-		
-		
 		/*Filter texture*/
 		if (this.filterProgram.histLoc == null){
 			this.filterProgram.histLoc = manager.getUniformLoc(this.filterProgram, 'histFilter'); 		

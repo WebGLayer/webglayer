@@ -1,4 +1,4 @@
-StackedBarChart = function(d_max, div_id, x_label, id) {
+StackedBarChart = function(m, div_id, x_label, id) {
 	var div_id;
 	var w = 500;
 	var h = 200;
@@ -26,7 +26,15 @@ StackedBarChart = function(d_max, div_id, x_label, id) {
 	this.init = function() {
 		// xScale = d3.scale.ordinal().rangeRoundBands([0, width], .1);
 		// xScale = d3.scale.ordinal().rangeRoundBands([0, width], .1);
-		xScale = d3.scale.pow().domain([ 0, d_max ]).range([ 0, width ]);
+		if (m.type == 'linear') {
+			xScale = d3.scale.linear().domain([ m.min , m.max ]).range([ 0, width ]);
+			var bw = Math.floor(width / dataset.length -1);
+			svgbw= "h"+bw+"V";
+		} else if (m.type == 'ordinal') {
+			xScale = d3.scale.ordinal().domain(m.domain).rangeRoundBands([ 0, width ],0.01);
+			var bw =xScale.rangeBand();
+			svgbw= "h"+bw+"V";
+		}
 
 		var cols = [ "#ff8c00", "#7b6888", "#98abc5" ];
 		var classes = [ [ "0", "selected", cols[0] ],
@@ -95,8 +103,7 @@ StackedBarChart = function(d_max, div_id, x_label, id) {
 			d.total = 0;
 		});
 
-		var bw = Math.floor(width / dataset.length -1);
-		svgbw= "h"+bw+"V";
+	
 		/*
 		 * bars.selectAll("path").data(function(m) { return m.levels;
 		 * }).enter().append("rect").attr("y", function(d) { return
@@ -214,7 +221,7 @@ StackedBarChart = function(d_max, div_id, x_label, id) {
 		var path = [], i = -1, n = groups.length, d;
 		while (++i < n) {
 			var d = groups[i];
-			path.push("M", xScale(d.min), ",", height, "V", yScale(d.selected),
+			path.push("M", xScale(d.val), ",", height, "V", yScale(d.selected),
 					svgbw, height);
 		}
 		return path.join("");
@@ -224,7 +231,7 @@ StackedBarChart = function(d_max, div_id, x_label, id) {
 		var path = [], i = -1, n = groups.length, d;
 		while (++i < n) {
 			var d = groups[i];
-			path.push("M", xScale(d.min), ",", yScale(d.selected), "V",
+			path.push("M", xScale(d.val), ",", yScale(d.selected), "V",
 					yScale(d.selected) + yScale(d.unselected) - height, svgbw,
 					yScale(d.selected));
 		}
@@ -236,7 +243,7 @@ StackedBarChart = function(d_max, div_id, x_label, id) {
 		while (++i < n) {
 			var d = groups[i];
 			var start = yScale(d.selected) + yScale(d.unselected) - height;
-			path.push("M", xScale(d.min), ",", start, "V", start
+			path.push("M", xScale(d.val), ",", start, "V", start
 					+ yScale(d.out) - height, svgbw, start);
 		}
 		return path.join("");

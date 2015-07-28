@@ -76,7 +76,7 @@ function HistogramDimension(manager, meta) {
 			/* set unifom */
 			var r = (m.index / framebuffer.height) * 2 - 1 + (1 / framebuffer.height);
 			gl.uniform1f(this.program.attr_row, r);
-			gl.uniform1f(this.program.numfilters, 3);
+			gl.uniform1f(this.program.numfilters, manager.dimnum);
 			
 			manager.enableBufferForName(this.program, m.name, "attr");
 			gl.drawArrays(gl.POINTS, 0, manager.num_rec);
@@ -120,16 +120,23 @@ function HistogramDimension(manager, meta) {
 
 		
 		for (var m in metadata) {
+
 			var meta = metadata[m];
 			res[m] = new Array(meta.num_bins);
 			res[m].max = {0:0,1:0,2:0,3:0};
-			for (var i = 0; i < meta.num_bins; i++) {
-				var s =meta.max / meta.num_bins;
+
+			var valcalc;
+			if (meta.type=='linear'){
+					valclac = function(i){ return (i + meta.min ) * (meta.max -meta.min) / (meta.num_bins)}	
+				} else if (meta.type=='ordinal'){
+					valclac = function(i){return meta.domain[i]};
+				}
+			for (var i = 0; i < meta.num_bins; i++) {				
+				
 				
 				var dimid = meta.index * manager.max_bins*3;
 				var d = {					
-					min : i * s,
-					max : (i + 1) * s,
+					val : valclac(i) ,
 					selected : readout[dimid+i],
 					unselected : readout[dimid+i + 1 *  manager.max_bins],
 					out : readout[dimid+i + 2 *  manager.max_bins]
