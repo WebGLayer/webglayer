@@ -6,6 +6,7 @@ var MapController = function(manager) {
 	this.width;
 	this.height;
 	
+	
 	this.resize = function(w, h){
 		manager.canvas.setAttribute("width", w);
 		manager.canvas.setAttribute("height", h);
@@ -25,7 +26,7 @@ var MapController = function(manager) {
 		this.matrix.name="mapMatrix";
 	}
 	this.zoommove = function(zoom, offset, render_func){		
-		
+		manager.zoom = zoom;
 		this.initMatrix();
 		// Scale to current zoom (worldCoords * 2^zoom)
 		var scale = Math.pow(2, zoom);
@@ -52,6 +53,7 @@ var MapController = function(manager) {
 		}
 				
 	}
+	
 	
 	this.updateMatrix = function(){	
 		manager.width=this.width;

@@ -45,11 +45,10 @@ function MapDimension(manager){
 				return;
 			}
 		}
-		/*set point size*/
-		var z = map.getZoom();
+		/*set point size*/		
 	//	console.log( map.getZoom());
 		
-		gl.uniform1f(this.glProgram.loc, z);		
+		gl.uniform1f(this.glProgram.loc, manager.zoom);		
 		
 		
 		
