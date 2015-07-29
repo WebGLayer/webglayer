@@ -23,7 +23,7 @@ function MapDimension(manager){
 		
 		manager.bindMapMatrix(this.glProgram);
 		manager.enableBufferForName(this.glProgram, "wPoint", "wPoint");
-		manager.enableBufferForName(this.glProgram,  "index", "index");	
+		manager.enableBufferForName(this.glProgram, "index", "index");	
 		manager.bindRasterMatrix(this.glProgram);	
 		
 		gl.bindFramebuffer(gl.FRAMEBUFFER, null);	

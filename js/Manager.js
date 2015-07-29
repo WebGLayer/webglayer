@@ -28,9 +28,7 @@ function Manager(mapid) {
 	
 
 	
-	
 	mapparentdiv.appendChild(this.canvas);
-	
 	
 
 	gl = this.canvas.getContext('webgl', 
