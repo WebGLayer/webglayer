@@ -4,9 +4,7 @@ WGL = function(numrec, url){
 	var manager  = new Manager("map"); 	
 	var rasterer = new Rasterer(numrec);
 	var metadata = [];
-	var mainFilter;
-	var histFilter;
-	
+
 	manager.num_rec = numrec;
 	manager.index = "index";
 	manager.r_size = rasterer.size;
@@ -16,7 +14,11 @@ WGL = function(numrec, url){
 	this.mcontroller.resize(manager.mapdiv.offsetWidth, manager.mapdiv.offsetHeight);
 	
 	var dimensions = [];
+	var oneDDim = [];
+	var filters = [];
+		
 	var charts = [];
+	var mainFilter = new Filter(manager);
 	
 	
 	var index = [];
@@ -27,7 +29,7 @@ WGL = function(numrec, url){
 	var indexta = array2TA2D(index);
 
 	manager.addDataBuffer(indexta, 2, 'index');
-
+	GLU.manager = manager;
 	
 	/*
 	 * 
@@ -38,14 +40,25 @@ WGL = function(numrec, url){
 		dimensions[id] = dim;
 	}
 	
-	/*
-	 * 
-	 */
-	this.addHistogramDimension = function(o){
-		var i =  Object.keys(metadata).length;
-		o.index = i;
-		metadata[o.name] = o;	
+	this.addLinearHistDimension = function(m){
+		var ta = array2TANormLinear(m , m.num_bins);
+		manager.addDataBuffer(ta, 1, m.name);
+		var dim = new LinearHistDimension(manager, m);
+		dimensions[m.name] = dim;
+		oneDDim[m.name]  = m;
+		manager.dimnum =  Object.keys(oneDDim).length;
 	}
+	
+	this.addLinearFilter = function(m, res){
+		var d = dimensions[m.name];
+		if (d == null){
+			console.error('Cant set fitler to not defined dimension '+m.name);
+		}
+		var f = new LinearFilter(manager, m, res);//res);
+		d.filter = f; 
+	}
+	
+
 	
 	this.addCharts = function(ch){		
 		charts = ch;	
@@ -53,43 +66,7 @@ WGL = function(numrec, url){
 
 	this.getManager = function(){
 		return manager;
-	}
-
-	this.readHist = function(){
-		return dimensions['hist'].readPixels();
-	}
-	
-	this.initHistograms = function(){
-		var max_bins = 0;
-		for (var i in metadata){			
-			if (metadata[i].num_bins > max_bins) {max_bins = metadata[i].num_bins } ;
-		}
-		manager.max_bins = max_bins;
-		manager.dimnum = Object.keys(metadata).length;
-		
-		for (var i in metadata){
-			var m = metadata[i];
-			
-			if (m.type=='linear'){
-				var ta = array2TANormLinear(m , max_bins);
-				manager.addDataBuffer(ta, 1, m.name);
-			} else if (m.type=='ordinal'){
-				var ta = array2TANormOrdinal(m , max_bins);
-				manager.addDataBuffer(ta, 1, m.name);
-			} else {
-				console.error('type missing or undefined');
-			}
-			
-		}
-		
-		GLU.manager = manager;
-		dimensions['hist'] = new HistogramDimension(manager, metadata);
-	
-		mainFilter = new Filter(manager, metadata);
-		histFilter = new HistFilterRender(manager, metadata);
-		
- 		
-	}
+	}		
 
 	this.render = function(){		
 		
@@ -103,21 +80,41 @@ WGL = function(numrec, url){
 	this.updateCharts = function(){				
 			
 		//console.log(WGL.readHist());
-		var readout =this.readHist();
-		if (typeof readout != 'undefined') {
-			for ( var i in charts) {
-				charts[i].update(readout[i]);
+		//var readout =this.readHist();
+		
+		for ( var i in charts) {
+				var readout = dimensions[i].readPixels();
+				if (typeof readout != 'undefined') {
+				charts[i].update(readout);
 			}
 		}		
 	}
 	
 	
 	this.filterByExt = function(){
-		mainFilter.render();
-		manager.filterTexture = mainFilter.filterTexture;		
+		mainFilter.render(dimensions);
+		
+		manager.filterTexture = mainFilter.filterTexture;
+		this.render();
 		this.updateCharts();
 	}
-	this.filterHist = function(id, f){		
+
+	
+	this.filterDim = function(id, filter){
+		var f = dimensions[id].filter;
+		f.createFilteringData(filter);
+		f.renderFilter();
+		//f.readPixels();
+
+		mainFilter.render(dimensions);
+		
+		manager.filterTexture = mainFilter.filterTexture;
+		this.render();
+		this.updateCharts();
+	}
+	
+	
+	this.filterHistOld = function(id, f){		
 		var h_filter = new Float32Array(f.length * 4);
 		// console.log(h_filter.length);
 		var j = 0;

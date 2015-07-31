@@ -1,4 +1,4 @@
-Filter = function(manager, metadata) {
+Filter = function(manager) {
 
 	
 	this.rastersize = manager.r_size ;
@@ -40,8 +40,12 @@ Filter = function(manager, metadata) {
 			gl.RENDERBUFFER, renderbuffer);
 
 	gl.bindTexture(gl.TEXTURE_2D, null);
+	
+	if (this.filterProgram.histLoc == null){
+		this.filterProgram.histLoc = manager.getUniformLoc(this.filterProgram, 'histFilter'); 		
+	}	
 
-	this.render = function() {
+	this.render = function(dimensions) {
 
 		gl.useProgram(this.filterProgram);
 		gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
@@ -59,18 +63,6 @@ Filter = function(manager, metadata) {
 		manager.enableBufferForName(this.filterProgram, "wPoint", "wPoint");
 		manager.enableBufferForName(this.filterProgram,  "index", "index");	
 
-	
-		/*Filter texture*/
-		if (this.filterProgram.histLoc == null){
-			this.filterProgram.histLoc = manager.getUniformLoc(this.filterProgram, 'histFilter'); 		
-		}	
-		if ( typeof(manager.histFilter) == 'undefined' && manager.histFilter == null){
-			console.warn('histFilter undefined or null.'); 		
-		}	
-	 
-		gl.uniform1i(this.filterProgram.histLoc , 1);		   
-		gl.activeTexture(gl.TEXTURE1);
-		gl.bindTexture(gl.TEXTURE_2D, manager.histFilter);
 		
 		/*Has filters*/
 		if (this.filterProgram.hasFilter == null){
@@ -82,30 +74,22 @@ Filter = function(manager, metadata) {
 		} else {
 			gl.uniform1f(this.filterProgram.hasFilter, 1);		   
 		}
-	 		
+	 				
+		for (var i in dimensions) {
+			var d = dimensions[i];		
+			/*Filter texture*/
 		
-		
-		for (var i in metadata) {
-			var m = metadata[i];
-			/* set unifom */
-			var r = (m.index / manager.dimnum) * 2 - 1 + (1 / manager.dimnum);
+			if (typeof(d.filter) != 'undefined'){
+				
 			
-			if (this.filterProgram.loc==null){
-				this.filterProgram.loc = gl.getUniformLocation(this.filterProgram, "attr_row");
-				if (this.filterProgram.loc instanceof WebGLUniformLocation) {
-					gl.uniform1f(this.filterProgram.loc, r);
-				} else {
-					console.error("Uniform set failed, uniform: " + u_name
-							+ " value " + value);
-					return;
-				}
-			} else {
-				gl.uniform1f(this.filterProgram.loc, (r+1)/2);
+			gl.uniform1i(this.filterProgram.histLoc , 1);		   
+			gl.activeTexture(gl.TEXTURE1);
+			gl.bindTexture(gl.TEXTURE_2D, d.filter.filterTexture);
+			
+			manager.enableBufferForName(this.filterProgram, d.name, "attr1");
+		 	gl.drawArrays(gl.POINTS, 0, manager.num_rec);			
 			}
 			
-		//manager.enableBufferForName(this.glProgram,  "attr"+this.y_id+this.buf_id, "attr");
-			manager.enableBufferForName(this.filterProgram, m.name, "attr1");
-		 	gl.drawArrays(gl.POINTS, 0, manager.num_rec);
 		}
 
 		

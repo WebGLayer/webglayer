@@ -38,8 +38,8 @@ var MapController = function(manager) {
 		this.updateMatrix();
 		
 		manager.wgl.filterByExt();
-		manager.wgl.render();
-		manager.wgl.updateCharts();
+		//manager.wgl.render();
+		//manager.wgl.updateCharts();
 		
 		function scaleMatrix(matrix, scaleX, scaleY) {
 			// scaling x and y, which is just scaling first two columns of matrix

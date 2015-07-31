@@ -11,7 +11,7 @@ function MapDimension(manager){
 	manager.storeUniformLoc(this.glProgram, zoom);
 	manager.storeUniformLoc(this.glProgram, drawselect);
 	manager.storeUniformLoc(this.glProgram, numfilters);
-	gl.uniform1f(this.glProgram.numfilters, 3);		
+	gl.uniform1f(this.glProgram.numfilters, 1);		
 	gl.useProgram(null);
 	
 
@@ -48,17 +48,13 @@ function MapDimension(manager){
 		/*set point size*/		
 	//	console.log( map.getZoom());
 		
-		gl.uniform1f(this.glProgram.loc, manager.zoom);		
-		
-		
-		
+		gl.uniform1f(this.glProgram.loc, manager.zoom);				
 		
 				
 	}	
 	this.render = function(num) {
 
-		this.setup();
-		manager.enableBuffersAndCommonUniforms(this.glProgram);
+		this.setup();	
 		manager.enableFilterTexture(this.glProgram);
 		//gl.useProgram(this.glProgram);	
 		if (this.glProgram.drawselect == null){
