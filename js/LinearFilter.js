@@ -1,5 +1,6 @@
-LinearFilter = function(manager, meta, width){	
+LinearFilter = function(manager, meta, width, id){	
 	
+	this.id = id;
 	var filters = new Float32Array([-1.1,0,1.1,0]);			
 	var filters_fa;	
 	var height = 1;

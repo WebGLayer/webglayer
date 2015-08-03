@@ -23,14 +23,32 @@ StackedBarChart = function(m, div_id, x_label, id) {
 	var dataset = null;
 	var svgbw = "";	
 
+	this.setLinearXScale = function(){
+		xScale = d3.scale.linear().domain([ m.min , m.max ]).range([ 0, width ]);
+		var bw = Math.floor(width / dataset.length -1);
+		svgbw= "h"+bw+"V";
+		return this;
+	}
+
+	this.setOrdinalXScale = function(){
+		xScale = d3.scale.ordinal().domain(m.domain).rangeRoundBands([ 0, width ],0.01);
+		var bw =xScale.rangeBand();
+		svgbw= "h"+bw+"V";
+		return this;
+	}
+
+
 	this.init = function() {
 		// xScale = d3.scale.ordinal().rangeRoundBands([0, width], .1);
 		// xScale = d3.scale.ordinal().rangeRoundBands([0, width], .1);
 	
-		xScale = d3.scale.linear().domain([ m.min , m.max ]).range([ 0, width ]);
-		var bw = Math.floor(width / dataset.length -1);
-		svgbw= "h"+bw+"V";
 		
+		//this.setLinearXScale();
+		if (typeof m.domain == 'undefined'){
+			this.setLinearXScale();
+		} else {
+			this.setOrdinalXScale();
+		}
 
 		var cols = [ "#ff8c00", "#7b6888", "#98abc5" ];
 		var classes = [ [ "0", "selected", cols[0] ],

@@ -1,6 +1,8 @@
 /**/
-function LinearHistDimension(manager, meta) {
+function HistDimension(manager, meta) {
 	
+	var valcalc = function(i){return (i + meta.min ) * (meta.max -meta.min) / (meta.num_bins)};
+			
 	var metadata = meta;
 	this.name = meta.name;
 	this.program = GLU.compileShaders("linearhist_vShader", "linearhist_fShader", this);
@@ -67,7 +69,7 @@ function LinearHistDimension(manager, meta) {
 		manager.enableBufferForName(this.program,  "index", "index");	
 		manager.enableFilterTexture(this.program);	
 		manager.bindRasterMatrix(this.program);
-		gl.uniform1f(this.program.numfilters, 	manager.dimnum );
+		gl.uniform1f(this.program.numfilters, 	manager.filternum );
 
 		//gl.finish();
 
@@ -81,6 +83,18 @@ function LinearHistDimension(manager, meta) {
 
 	}
 
+
+	this.setToOrdinal = function( ){
+		valcalc = function(i){ 
+			return meta.domain[i];
+			}	
+	}
+
+	this.setToLinear = function() {
+			valcalc = function(i){ 
+			return (i + meta.min ) * (meta.max -meta.min) / (meta.num_bins)
+			}	
+	}
 	this.readPixels = function() {
 
 		/* console.time("reading filter"); */
@@ -105,16 +119,12 @@ function LinearHistDimension(manager, meta) {
 		res = new Array(meta.num_bins);
 		res.max = {0:0,1:0,2:0,3:0};
 
-		var valcalc;
 	
-		valclac = function(i){ 
-			return (i + meta.min ) * (meta.max -meta.min) / (meta.num_bins)
-			}	
 		
 		for (var i = 0; i < meta.num_bins; i++) {								
 							
 				var d = {					
-					val : valclac(i) ,
+					val : valcalc(i) ,
 					selected : readout[i],
 					unselected : readout[i + 1 *  meta.num_bins],
 					out : readout[i + 2 *  meta.num_bins]

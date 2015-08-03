@@ -43,19 +43,31 @@ WGL = function(numrec, url){
 	this.addLinearHistDimension = function(m){
 		var ta = array2TANormLinear(m , m.num_bins);
 		manager.addDataBuffer(ta, 1, m.name);
-		var dim = new LinearHistDimension(manager, m);
+		var dim = new HistDimension(manager, m);
 		dimensions[m.name] = dim;
 		oneDDim[m.name]  = m;
 		manager.dimnum =  Object.keys(oneDDim).length;
 	}
 	
-	this.addLinearFilter = function(m, res){
+	this.addOrdinalHistDimension = function(m){
+		var ta = array2TANormOrdinal(m);
+		manager.addDataBuffer(ta, 1, m.name);
+		var dim = new HistDimension(manager, m);
+		dim.setToOrdinal();
+		dimensions[m.name] = dim;
+		oneDDim[m.name]  = m;
+		manager.dimnum =  Object.keys(oneDDim).length;
+	}
+	
+	this.addLinearFilter = function(m, res, id){
 		var d = dimensions[m.name];
 		if (d == null){
 			console.error('Cant set fitler to not defined dimension '+m.name);
 		}
-		var f = new LinearFilter(manager, m, res);//res);
-		d.filter = f; 
+		var f = new LinearFilter(manager, m, res, id);//res);
+		d.filter = f;
+		filters[id]= f;
+		manager.filternum =  Object.keys(filters).length;
 	}
 	
 
@@ -161,12 +173,13 @@ WGL = function(numrec, url){
 		return v;
 		// return 0.5;
 	}
-	function array2TANormOrdinal(m, max_bins) {
+	
+	function array2TANormOrdinal(m) {
 		pts_ar = new Float32Array(m.data.length);
 		var i = 0;
 		m.num_bins = m.domain.length;
 		m.min = 0.;
-		m.max =m.num_bins;
+		m.max = m.num_bins;
 		for (var i in m.data) {
 			if (isNaN(m.data[i])) {
 				val = 0.//-99999.			
@@ -176,7 +189,7 @@ WGL = function(numrec, url){
 				if (bin == -1){
 					console.error('data out of range');
 				}
-				val =  (bin+0.5) /max_bins ;
+				val =  (bin+0.5) / m.num_bins ;
 			}
 			pts_ar[i] = val;
 			//pts[i] = null;
@@ -199,7 +212,7 @@ WGL = function(numrec, url){
 		}
 		return pts_ar;
 	}
-	
+
 	
 	function array2TANorm(m, max_bins) {
 		pts_ar = new Float32Array(m.data.length);

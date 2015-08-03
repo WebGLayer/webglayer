@@ -11,7 +11,7 @@ function MapDimension(manager){
 	manager.storeUniformLoc(this.glProgram, zoom);
 	manager.storeUniformLoc(this.glProgram, drawselect);
 	manager.storeUniformLoc(this.glProgram, numfilters);
-	gl.uniform1f(this.glProgram.numfilters, 1);		
+	
 	gl.useProgram(null);
 	
 
@@ -21,6 +21,7 @@ function MapDimension(manager){
 		/** add specific buffer and uniforms */
 		gl.useProgram(this.glProgram);
 		
+		gl.uniform1f(this.glProgram.numfilters, manager.filternum );		
 		manager.bindMapMatrix(this.glProgram);
 		manager.enableBufferForName(this.glProgram, "wPoint", "wPoint");
 		manager.enableBufferForName(this.glProgram, "index", "index");	

@@ -21,19 +21,33 @@ StackedBarChart = function(m, div_id, x_label, id) {
 	var width = w - margin.left - margin.right;
 	var height = h - margin.top - margin.bottom;
 	var dataset = null;
-	var svgbw = "";
+	var svgbw = "";	
+
+	this.setLinearXScale = function(){
+		xScale = d3.scale.linear().domain([ m.min , m.max ]).range([ 0, width ]);
+		var bw = Math.floor(width / dataset.length -1);
+		svgbw= "h"+bw+"V";
+		return this;
+	}
+
+	this.setOrdinalXScale = function(){
+		xScale = d3.scale.ordinal().domain(m.domain).rangeRoundBands([ 0, width ],0.01);
+		var bw =xScale.rangeBand();
+		svgbw= "h"+bw+"V";
+		return this;
+	}
+
 
 	this.init = function() {
 		// xScale = d3.scale.ordinal().rangeRoundBands([0, width], .1);
 		// xScale = d3.scale.ordinal().rangeRoundBands([0, width], .1);
-		if (m.type == 'linear') {
-			xScale = d3.scale.linear().domain([ m.min , m.max ]).range([ 0, width ]);
-			var bw = Math.floor(width / dataset.length -1);
-			svgbw= "h"+bw+"V";
-		} else if (m.type == 'ordinal') {
-			xScale = d3.scale.ordinal().domain(m.domain).rangeRoundBands([ 0, width ],0.01);
-			var bw =xScale.rangeBand();
-			svgbw= "h"+bw+"V";
+	
+		
+		//this.setLinearXScale();
+		if (typeof m.domain == 'undefined'){
+			this.setLinearXScale();
+		} else {
+			this.setOrdinalXScale();
 		}
 
 		var cols = [ "#ff8c00", "#7b6888", "#98abc5" ];
@@ -160,29 +174,12 @@ StackedBarChart = function(m, div_id, x_label, id) {
 		
 		function brush() {
 			// console.log(brush1.extent());
-			var f = brush1.extent();		
-			WGL.filterHist(id, f);
+			var f = brush1.extent();				
+			WGL.filterDim(id, f);
 			
 		}
 
-		function brushOrdinal() {
-			// console.log(brush1.extent());
-			var f = brush1.extent();
-			var ff=[];
 	
-			for (var i in brush1.extent()){
-				var b = brush1.extent()[i];
-				var selection = xScale.domain().filter(function(d){									
-						var p = (b[0] <= xScale(d)) && (xScale(d) <= b[1])
-						return p;});
-				var s = m.domain.indexOf(selection[0]);
-			}
-			 	
-			 		
-			 	 
-			WGL.filterHist(id, f);
-			
-		}
 
 
 	}
