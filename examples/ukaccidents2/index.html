@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Modify Feature</title>
+
+<style type="text/css">
+html,body {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	font-family: Verdana, Arial, sans-serif;
+}
+div.olMapViewport {
+	 top: 0;
+	 position: relative;
+     z-index: 0;     
+}
+
+
+#view {
+	position: relative;
+}
+
+#map {
+	top: 0;
+	margin-right: 32em;
+	padding: 0;
+	height:100%;	
+}
+#date {
+	top: 0;	
+	padding: 1em;
+	height:3empt;
+	width:23em;	
+	margin-right: 48em;
+	z-index:99999;	
+	position:absolute;
+	right:2em;
+	top:1em;
+	background-color: rgba(255, 255, 255, 0.5);
+	font: 12px sans-serif;
+	
+}
+
+#wgl {
+	bottom: 0;	
+	padding: 1em;
+	height:3empt;
+	
+	margin-right: 48em;
+	z-index:99999;	
+	position:absolute;
+	right:2em;
+	
+	background-color: rgba(255, 255, 255, 0.1);
+	font: 12px sans-serif;
+	
+}
+
+
+#legend {
+	position: fixed;
+	bottom: 2em;
+	left: 4em;
+	height: 3em;
+	width: 30em;
+	padding: 0.3em;
+	 z-index:2000;
+	background-color: rgba(255, 255, 255, 0);
+}
+#right {
+	position: fixed;
+	overflow-y:auto;
+	overflow-x:hidden;		
+	right: 0;
+	top: 0;
+	width: 32em;
+	height: 100%;
+	font-size: 1em;
+	moz-box-shadow: 0px 0px 10px black;
+	webkit-box-shadow: 0px 0px 9px black;
+	box-shadow: -1px 0px 6px black;
+	z-index: 10000;
+}
+
+#controls {
+	position: fixed;
+	top: 0em;
+	left: 3em;
+	width: 512px;
+	z-index:2000;
+	background-color: rgba(255, 255, 255, 0.2);
+}
+
+#about {
+	margin: 1em;
+}
+
+#controlToggle {
+	padding-left: 1em;
+}
+
+#controlToggle li {
+	list-style: none;
+}
+
+#test {
+	top: 0;
+	opacity: 1;
+	z-index: 1000;
+	pointer-events: none;
+	position: absolute;
+	top: 0px;
+}
+
+
+
+
+
+
+#chart_container {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+}
+.chart rect {
+  fill: steelblue;
+}
+
+.chart text {
+  fill: white;
+  font: 10px sans-serif;
+  text-anchor: end;
+}
+
+.brush{
+ fill: grey;
+ stroke: #ff8c00;
+ stroke-opacity: 0.8;
+ stroke-width: 1;
+}
+
+.selected.bar {
+fill: #ff8c00;
+}
+
+.unselected.bar {
+fill: #7b6888;
+}
+
+.out.bar {
+fill: #98abc5;
+}
+
+.axis text {
+  font: 10px sans-serif;
+}
+.l text {
+  font: 10px sans-serif;
+}
+
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
+}
+
+.line {
+fill: none;
+stroke: steelblue;
+stroke-width: 2px;
+shape-rendering: optimizeSpeed ;
+ 
+}
+
+.point {
+	
+	stroke-width: 0.0005px;
+	z-index: 2000;
+ 	fill: #000;
+  	fill-opacity: .8;
+  	stroke: #fff; 
+}
+
+.l {
+ cursor: pointer;
+ stroke: #000; 
+}
+.grid-background {
+  fill: #ddd;
+}
+
+.grid line,
+.grid path {
+  fill: none;path{
+
+}
+
+}
+
+
+.brush .extent {
+  
+  fill-opacity: .125;
+  shape-rendering: crispEdges;
+}
+</style>
+<script src="javascripts/ol/lib/OpenLayers.js"></script>
+<script src="javascripts/jquery-1.9.1.min.js"></script>
+
+<script src="javascripts/d3.v3.min.js"></script>
+
+
+<script src="map.js"></script>
+<script src="js/DataLoader.js"></script>
+<script src="js/init.js"></script>
+
+
+<script src="http://localhost:9999/js/webglayer/js/GLUtils.js"></script>
+<script src="http://localhost:9999/js/webglayer/js/Dimension.js"></script>
+<script src="http://localhost:9999/js/webglayer/js/Manager.js"></script>
+<script src="http://localhost:9999/js/webglayer/js/OneDDimension.js"></script>
+<script src="http://localhost:9999/js/webglayer/js/MapDimension.js"></script>
+<script src="http://localhost:9999/js/webglayer/js/MapLineDimension.js"></script>
+<script src="http://localhost:9999/js/webglayer/js/HistogramDimension.js"></script>
+<script src="http://localhost:9999/js/webglayer/js/Dimension.js"></script>
+<script src="http://localhost:9999/js/webglayer/js/MapController.js"></script>
+<script src="http://localhost:9999/js/webglayer/js/StackedBarChart.js"></script>
+<script src="http://localhost:9999/js/webglayer/js/FloatRasterReader.js"></script>
+<script src="http://localhost:9999/js/webglayer/js/d3.svg.multibrush.js"></script>
+<script src="http://localhost:9999/js/webglayer/js/Filter.js"></script>
+<script src="http://localhost:9999/js/webglayer/js/HistFilterRender.js"></script>
+<script src="http://localhost:9999/js/webglayer/js/HeatMapDimension.js"></script>
+<script src="http://localhost:9999/js/webglayer/js/WGL.js"></script>
+<script src="http://localhost:9999/js/webglayer/js/HeatMapRenderer.js"></script>
+<script src="http://localhost:9999/js/webglayer/js/MaxCalculator.js"></script>
+<script src="http://localhost:9999/js/webglayer/js/FloatReaderHistogram.js"></script>
+<script src="http://localhost:9999/js/webglayer/js/HeatMapHistogram.js"></script>
+<script src="http://localhost:9999/js/webglayer/js/HistDimension.js"></script>
+<script src="http://localhost:9999/js/webglayer/js/LinearFilter.js"></script>
+<script src="http://localhost:9999/js/webglayer/js/WGL.js"></script>
+
+<!-- <script src="http://home.zcu.cz/~jezekjan/webglayer-gl-filter2/js/GLUtils.js"></script>
+<script src="http://home.zcu.cz/~jezekjan/webglayer-gl-filter2/js/Dimension.js"></script>
+<script src="http://home.zcu.cz/~jezekjan/webglayer-gl-filter2/js/Manager.js"></script>
+<script src="http://home.zcu.cz/~jezekjan/webglayer-gl-filter2/js/OneDDimension.js"></script>
+<script src="http://home.zcu.cz/~jezekjan/webglayer-gl-filter2/js/MapDimension.js"></script>
+<script src="http://home.zcu.cz/~jezekjan/webglayer-gl-filter2/js/MapLineDimension.js"></script>
+<script src="http://home.zcu.cz/~jezekjan/webglayer-gl-filter2/js/HistogramDimension.js"></script>
+<script src="http://home.zcu.cz/~jezekjan/webglayer-gl-filter2/js/Dimension.js"></script>
+<script src="http://home.zcu.cz/~jezekjan/webglayer-gl-filter2/js/MapController.js"></script>
+<script src="http://home.zcu.cz/~jezekjan/webglayer-gl-filter2/js/StackedBarChart.js"></script>
+<script src="http://home.zcu.cz/~jezekjan/webglayer-gl-filter2/js/FloatRasterReader.js"></script>
+<script src="http://home.zcu.cz/~jezekjan/webglayer-gl-filter2/js/d3.svg.multibrush.js"></script>
+<script src="http://home.zcu.cz/~jezekjan/webglayer-gl-filter2/js/Filter.js"></script>
+<script src="http://home.zcu.cz/~jezekjan/webglayer-gl-filter2/js/HistFilterRender.js"></script>
+<script src="http://home.zcu.cz/~jezekjan/webglayer-gl-filter2/js/HeatMapDimension.js"></script>
+<script src="http://home.zcu.cz/~jezekjan/webglayer-gl-filter2/js/WGL.js"></script>
+<script src="http://home.zcu.cz/~jezekjan/webglayer-gl-filter2/js/HeatMapRenderer.js"></script>
+<script src="http://home.zcu.cz/~jezekjan/webglayer-gl-filter2/js/MaxCalculator.js"></script> -->
+
+
+
+</head>
+<body onload="init()">
+
+
+	<div id="map">	
+	<div id="date"></div>
+	<div id="wgl">Visualization made by <a href="http://jezekjan.github.io/webglayer/"> WebGLayer </a></div>
+	</div>
+	<div id="right">
+				
+			<div id = "chart1"></div>
+			<div id = "chart2"></div>
+			<div id = "chart3"></div>
+			<div id = "chart4"></div>
+				 		
+	</div>
+	<div id="controls">
+		
+		
+		
+	</div>
+<!-- 	<div id='legend' style="padding:1em"> -->
+<!-- 		<object data="legend2.svg" /> -->
+<!-- 	</div> -->
+</body>
+</html>
