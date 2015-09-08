@@ -1,7 +1,9 @@
 /**/
 function HistDimension(manager, meta) {
 	
-	var valcalc = function(i){return (i + meta.min ) * (meta.max -meta.min) / (meta.num_bins)};
+	var valcalc = function(i){
+		return meta.min + i * (meta.max -meta.min) / (meta.num_bins)
+		};
 			
 	var metadata = meta;
 	this.name = meta.name;
@@ -118,7 +120,7 @@ function HistDimension(manager, meta) {
 		
 		res = new Array(meta.num_bins);
 		res.max = {0:0,1:0,2:0,3:0};
-
+		res.sum_selected = 0;
 	
 		
 		for (var i = 0; i < meta.num_bins; i++) {								
@@ -132,7 +134,9 @@ function HistDimension(manager, meta) {
 				
 				if (d.selected > res.max[0]){res.max[0] = d.selected};
 				if (d.unselected+d.selected > res.max[1]){res.max[1] = d.unselected+d.selected};
-				if (d.out+d.unselected+d.selected > res.max[2]){res.max[2] = d.out+d.unselected+d.selected};				
+				if (d.out+d.unselected+d.selected > res.max[2]){res.max[2] = d.out+d.unselected+d.selected};	
+
+				res.sum_selected = res.sum_selected + d.selected;			
 				res[i] = d;
 			}
 		
