@@ -94,10 +94,10 @@ function HistogramDimension(manager, meta) {
 		gl.useProgram(this.program);
 
 		
-		 gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer); var readout = new
-		 Float32Array(framebuffer.width * framebuffer.height * 4);
-		 gl.readPixels(0, 0, framebuffer.width, framebuffer.height, gl.RGBA,
-		 gl.FLOAT, readout); 
+		// gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer); var readout = new
+		// Float32Array(framebuffer.width * framebuffer.height * 4);
+		// gl.readPixels(0, 0, framebuffer.width, framebuffer.height, gl.RGBA,
+		// gl.FLOAT, readout); 
 		// console.log("HistDim:");
 		// console.log(readout);
 		

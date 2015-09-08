@@ -47,7 +47,7 @@ function FloatRasterReader(w, h) {
 	var rasterLoc = 	   gl.getUniformLocation(this.glProgram, "raster" );
 	
 	var band = 'band';
-	manager.storeUniformLoc(this.glProgram, band);
+	GLU.manager.storeUniformLoc(this.glProgram, band);
 
 	  // provide texture coordinates for the rectangle.
 	  var texCoordBuffer = gl.createBuffer();

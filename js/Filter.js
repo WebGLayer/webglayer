@@ -115,9 +115,15 @@ Filter = function(manager) {
 		// console.timeEnd("reading_pix");
 		gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 
-		console.log(readout);
+		//console.log(readout);
 
-		return res;// readout;
+		var selected = [];
+		for (var i = 0; i < readout.length; i=i+4){
+			if (readout[i]>1) {selected.push(i/4)};
+		}
+
+		//console.log(selected);
+		return selected;// readout;
 	}
 	this.hasHistFilter = false;
 	this.hasMapFilter = false;

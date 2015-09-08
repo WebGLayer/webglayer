@@ -1,11 +1,12 @@
 
-function HeatMapRenderer(){
+function HeatMapRenderer(manager){
 	
 	this.glProgram = GLU.compileShaders("heatmap_render_vShader",  "heatmap_render_fShader");
 	
 	var texCoordLocation = gl.getAttribLocation(this.glProgram, "v_texCoord");
 	var rasterLoc = 	   gl.getUniformLocation(this.glProgram, "heatmap_raster" );
 	manager.storeUniformLoc(this.glProgram, "max");
+	var legend = new HeatMapLegend('legend');
 
 	  // provide texture coordinates for the rectangle.
 	  var texCoordBuffer = gl.createBuffer();
@@ -44,7 +45,7 @@ function HeatMapRenderer(){
 
 	}	
 	this.render = function(max) {
-
+		legend.updateMax(max);
 		this.setup();
 	
 		

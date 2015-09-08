@@ -1,6 +1,7 @@
-WGL = function(numrec, url){
+WGL = function(data, url){
 	
-	GLU.loadShaders(url);		
+	GLU.loadShaders(url);
+	var numrec = data.num;
 	var manager  = new Manager("map"); 	
 	var rasterer = new Rasterer(numrec);
 	var metadata = [];
@@ -40,12 +41,18 @@ WGL = function(numrec, url){
 		dimensions[id] = dim;
 	}
 	
+	this.addHeatMapDimension = function(data, id){
+		//manager.addDataBuffer(array2TA(data), 2, 'wPoint');
+		var dim = new HeatMapDimension(manager);
+		dimensions[id] = dim;
+	}
+	
 	this.addLinearHistDimension = function(m){
 		var ta = array2TANormLinear(m , m.num_bins);
 		manager.addDataBuffer(ta, 1, m.name);
 		var dim = new HistDimension(manager, m);
 		dimensions[m.name] = dim;
-		oneDDim[m.name]  = m;
+		oneDDim[m.name]  = dim;
 		manager.dimnum =  Object.keys(oneDDim).length;
 	}
 	
@@ -55,7 +62,7 @@ WGL = function(numrec, url){
 		var dim = new HistDimension(manager, m);
 		dim.setToOrdinal();
 		dimensions[m.name] = dim;
-		oneDDim[m.name]  = m;
+		oneDDim[m.name]  = dim;
 		manager.dimnum =  Object.keys(oneDDim).length;
 	}
 	
@@ -119,47 +126,24 @@ WGL = function(numrec, url){
 		//f.readPixels();
 
 		mainFilter.render(dimensions);
+		var sel = mainFilter.readPixels();
 		
 		manager.filterTexture = mainFilter.filterTexture;
 		this.render();
 		this.updateCharts();
-	}
-	
-	
-	this.filterHistOld = function(id, f){		
-		var h_filter = new Float32Array(f.length * 4);
-		// console.log(h_filter.length);
-		var j = 0;
-		var ch_row = metadata[id].index;
-		var m = metadata[id];
-		for ( var i in f) {
-			var y = ((ch_row + 0.5) / manager.dimnum) * 2 - 1;
-
-			var l = normaliseByMax(f[i][0],manager.max_bins,
-					m.min, m.max, m.num_bins);
-			h_filter[j++] = l		
-			
-			h_filter[j++] = y;
-
-			var p = normaliseByMax(f[i][1], manager.max_bins,
-					m.min, m.max, m.num_bins);
-			
-			h_filter[j++] = p;
-			console.log("filter "+f[i][0]+" " +f[i][1] + " normalized to "+l+" "+p);
-			
-			h_filter[j++] = y;
+		
+		var top = []
+		console.log(sel.length);
+		if(sel.length <500){
+			for (var i = 0; i <10 ;i++ )
+				top.push(data.hours[sel[i]]);
 		}
-
-		histFilter.createFilteringData(ch_row, h_filter);
-		histFilter.renderFilter();
+		console.log(top);
 		
-		manager.histFilter = histFilter.filterTexture;
-		mainFilter.render();
-		manager.filterTexture = mainFilter.filterTexture;
-		this.render();
-		this.updateCharts();
-	
 	}
+	
+	
+	
 	/**
 	 * calculates the value to max pixels between -1 -1;
 	 */
@@ -187,7 +171,8 @@ WGL = function(numrec, url){
 			else {
 				var bin = m.domain.indexOf(m.data[i]);
 				if (bin == -1){
-					console.error('data out of range');
+					console.warn('data out of range ' +(m.data[i]));
+					val = -1;
 				}
 				val =  (bin+0.5) / m.num_bins ;
 			}
