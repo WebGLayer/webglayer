@@ -121,28 +121,45 @@ WGL = function(data, url){
 	
 	this.filterDim = function(id, filter){
 		var f = dimensions[id].filter;
+		if (filter.length >0){
+			filters[f.id].isActive = true;	
+		} else {
+			filters[f.id].isActive = false;	
+		}
+		//console.log(getNumberOfActiveFilters());
+		
+		manager.filternum = getNumberOfActiveFilters();
+		
 		f.createFilteringData(filter);
 		f.renderFilter();
 		//f.readPixels();
 
 		mainFilter.render(dimensions);
-		var sel = mainFilter.readPixels();
+		
 		
 		manager.filterTexture = mainFilter.filterTexture;
 		this.render();
 		this.updateCharts();
 		
+		/** geting top k elemnts*/
+		/* var sel = mainFilter.readPixels();
 		var top = []
 		console.log(sel.length);
 		if(sel.length <500){
 			for (var i = 0; i <10 ;i++ )
 				top.push(data.hours[sel[i]]);
 		}
-		console.log(top);
+		console.log(top);*/
 		
 	}
 	
-	
+	function getNumberOfActiveFilters(){
+		var  num = 0;
+		for (i in filters){
+			if (filters[i].isActive) {num++}
+		}
+		return num;
+	}
 	
 	/**
 	 * calculates the value to max pixels between -1 -1;

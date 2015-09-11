@@ -32,7 +32,7 @@
 	
 
   		if (fdata[0] > 0.) {
-  			float val = fdata[1]/(max);
+  			float val = fdata[1]/(max/2.);
   			col = vec4(val, 1.-val , 0., 0.0+val*2.);//vec4(1.,0.,0.,0.);
   		
   			

@@ -112,9 +112,9 @@ LinearFilter = function(manager, meta, width, id){
 		var allfilters = [];
 		var m = 0;
 		for(var j = 0; j < filters.length; j++){
-			allfilters[m++] = 2*((filters[j][0]-meta.min) / meta.max) - 1;
+			allfilters[m++] = 2*((filters[j][0]-meta.min) / (meta.max-meta.min)) - 1;
 			allfilters[m++] = 0.;
-			allfilters[m++] = 2*((filters[j][1]-meta.min) / meta.max) - 1;
+			allfilters[m++] = 2*((filters[j][1]-meta.min) / (meta.max-meta.min)) - 1;
 			allfilters[m++] =  0.;
 		}
 		

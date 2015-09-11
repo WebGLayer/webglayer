@@ -21,23 +21,13 @@
       void main() {	
   			
 		vec4 p =  mapMatrix * wPoint;
-  		
   		   	     	
 		 // if data are in the map window 
 		if (-1. <= p[0] && p[0]<=1. && -1. <= p[1] && p[1]<=1.){
 			vec4 rp = rasterMatrix * p;
-			
-			
-  			//vec4 fdata = texture2D(mapFilter, vec2(rp[0],rp[1]));
-  			  			
-  			 
-  			vec4 at1 = texture2D(histFilter, vec2(attr1, 0.5));
-  		//	vec4 at2 = texture2D(histFilter, vec2((attr2), 0.15+0.33));
-  		//	vec4 at3 = texture2D(histFilter, vec2((attr3), 0.15+0.33*2.));
-  		//	vec4 hoursData = texture2D(histFilter, vec2((hours+1.)/2., 0.666));
-		
-			// if data are selected
-  			//if ( at1[0] > 0. && at2[0] > 0. && at3[0]>0.){  // && add other filters speed>-1.
+  			vec4 at1 = texture2D(histFilter, vec2(attr1, 0.5));  
+  					
+			// if data are selected  			
   			if ( at1[0] > 0. ){
   				col = vec4(1./256., 0., 0., 0.);
   			} else {  	  		   
