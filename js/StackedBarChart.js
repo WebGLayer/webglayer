@@ -97,6 +97,11 @@ StackedBarChart = function(m, div_id, x_label, id) {
 				.enter().append("path").attr("class", function(d) {
 					return d + " foreground bar ";
 				}).datum(dataset);
+		
+		//bars.on("click", function(d) 
+		//		{ d.selected = !d.selected; 				
+		//			console.log(d);			
+		//		})
 
 		svg.selectAll(".foreground.bar").attr("clip-path",
 				"url(#clip-" + div_id + ")");
@@ -173,9 +178,31 @@ StackedBarChart = function(m, div_id, x_label, id) {
 		}
 		
 		function brush() {
-			// console.log(brush1.extent());
+			
 			var f = brush1.extent();				
 			WGL.filterDim(id, f);
+			console.log(brush1.extent()[0][0]+' '+brush1.extent()[0][1]);
+			
+		}
+
+		function brushO() {
+			
+			var f = brush1.extent();	
+			var leftEdges = xScale.range();
+        	var width = xScale.rangeBand();
+        	var l;
+        	var r;
+        	var left = brush1.extent()[0][0];
+        	var right = brush1.extent()[0][1]
+        	for(l=0; left > (leftEdges[l] + width); l++) {}
+        	for(r=0; right > (leftEdges[r] + width); r++) {}
+            //do nothing, just increment j until case fails
+        	console.log("Clicked on " + xScale.domain()[l]+ " "+xScale.domain()[r]);		
+
+        	var f = [];
+        	f[0] = [ xScale.domain()[l],  xScale.domain()[r]];
+			WGL.filterDim(id, f);
+			//console.log(xScale.domain()[j]+' '+brush1.extent()[0][1]);
 			
 		}
 
