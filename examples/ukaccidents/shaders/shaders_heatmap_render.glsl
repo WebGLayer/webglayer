@@ -39,7 +39,7 @@
   		}	else {
   			col = vec4(0.,0.,0.,0.);
   		}
-  			
+  		
 	
 		gl_FragColor = col;//fdata;//vec4(1.,0.,0.,1.);
 		

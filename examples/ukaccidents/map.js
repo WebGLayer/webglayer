@@ -9,9 +9,9 @@ initMap = function() {
 //	map.addLayer(new OpenLayers.Layer.OSM());
 	 map.events.register('updatesize', map, 
 			  function(){
-		 		initGLDimensions();		 		
-		 		mcontroller.resize(div.offsetWidth, div.offsetHeight);
-		 		mcontroller.zoommove(map.zoom, getTopLeftTC());		 		
+		 		//initGLDimensions();		 		
+		 		//WGL.mcontroller.resize(div.offsetWidth, div.offsetHeight);
+		 		WGL.mcontroller.zoommove(map.zoom, getTopLeftTC(),WGL.filterByExt);		 		
 		 		
 			  }) ;
 	 
@@ -30,8 +30,7 @@ initMap = function() {
                     var imgd = ctx.getImageData(0, 0, evt.tile.size.w, evt.tile.size.h);
                     var pix = imgd.data;
                     for (var i = 0, n = pix.length; i < n; i += 4) {
-                        pix[i] = pix[i + 1] = pix[i + 2] = (3 * pix[i] + 4 * pix[i + 1] + pix[i + 2]) / 13;
-                    }
+                        pix[i] = pix[i + 1] = pix[i + 2] = (3 * pix[i] + 4 * pix[i + 1] + pix[i + 2]) / 20;                    }
                     ctx.putImageData(imgd, 0, 0);
                     evt.tile.imgDiv.removeAttribute("crossorigin");
                     evt.tile.imgDiv.src = ctx.canvas.toDataURL();
@@ -186,9 +185,9 @@ initMap = function() {
 		map.addControl(controls[key]);
 	}
 
-	var lonlat = new OpenLayers.LonLat(-2.0,54.2).transform(new OpenLayers.Projection("EPSG:4326"),new OpenLayers.Projection("EPSG:900913"));
+	var lonlat = new OpenLayers.LonLat(-1.9,52.5).transform(new OpenLayers.Projection("EPSG:4326"),new OpenLayers.Projection("EPSG:900913"));
 	map.setCenter(lonlat);
-	map.zoomTo(5);
+	map.zoomTo(11);
 }
 function trianglesToArray(trig) {
 	var points = [];
