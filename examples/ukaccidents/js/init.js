@@ -59,7 +59,7 @@ function visualize(data){
 		
 		WGL.addCharts(charts);
 		
-		WGL.render();
+		//WGL.render();
 		WGL.mcontroller.zoommove(map.getZoom(), getTopLeftTC(), WGL.filterByExt);
 		WGL.render();	
 	}
