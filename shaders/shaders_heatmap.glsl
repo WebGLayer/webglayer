@@ -11,7 +11,7 @@
       uniform float numfilters;
        
       varying vec4 aPos;  
-      varying vec4 col;
+     // varying vec4 col;
      
        
       void main() {
@@ -25,22 +25,22 @@
   		vec4 fdata = texture2D(filter, vec2(rp[0],rp[1]));  		
   		
   		// if data are selected  
-  		if (fdata[0]>=1./256.*numfilters && drawselect>0.5){
+  		if ((fdata[0]>=1./256.*numfilters && drawselect>0.5) || numfilters==0.){
   			p_size = p_size +6.;
-  			col = vec4(1., 140./250., 0.0, .7); 
+  			
   			gl_Position = p;    	
 			gl_PointSize = p_size;
   			
   		} else if (drawselect<0.5) {  	
-  		   // If not selected then use blue color	   
-  		   p_size = p_size+3.;
-  		   col = vec4(0., 0., 1.0, 0.5);  		  
+  		   // If not selected then dont render   
+  		   p_size = 0.;
+  		  	  
   			//gl_Position = p;    	
   			gl_Position = vec4(-2.,-2.,0.,0.);    
 			gl_PointSize = 0.;
   		} else {
-  			gl_Position = vec4(-2.,-2.,0.,0.);    	
-			gl_PointSize = 0.;
+  			gl_Position = vec4(-0.,-2.,0.,0.);    	
+			gl_PointSize = 10.;
   		}
   	
   	  		  
@@ -54,7 +54,7 @@
     <script id="heatmap_fShader" type="x-shader/x-fragment">
       precision mediump float;  
  	  varying vec4 aPos;   
-	  varying vec4 col;
+	 // varying vec4 col;
  
 
    		float length(vec2 a, vec2 b){
