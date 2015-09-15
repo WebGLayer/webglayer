@@ -10,6 +10,7 @@ WGL = function(data, url){
 	manager.index = "index";
 	manager.r_size = rasterer.size;
 	manager.wgl = this;
+	manager.filternum = 0.;
 
 	this.mcontroller = new MapController(manager);
 	this.mcontroller.resize(manager.mapdiv.offsetWidth, manager.mapdiv.offsetHeight);
@@ -74,7 +75,7 @@ WGL = function(data, url){
 		var f = new LinearFilter(manager, m, res, id);//res);
 		d.filter = f;
 		filters[id]= f;
-		manager.filternum =  Object.keys(filters).length;
+		//manager.filternum =  Object.keys(filters).length;
 	}
 	
 
