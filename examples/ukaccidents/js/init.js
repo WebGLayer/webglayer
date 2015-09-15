@@ -12,7 +12,7 @@ function init() {
 	}
 
 function visualize(data){	
-		WGL = new WGL(data,'shaders/');		
+		WGL = new WGL(data,'');		
 				
 		map.events.register("move", map, onMove);							
 	
