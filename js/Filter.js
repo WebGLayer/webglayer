@@ -3,10 +3,13 @@ Filter = function(manager) {
 	
 	this.rastersize = manager.r_size ;
 	this.manager = manager;	
-	
+	this.lastDim ="";
 	
 	this.filterProgram = GLU.compileShaders("filter_vShader", "filter_fShader",
 			this);
+
+	var filterid = 'filterid';
+	manager.storeUniformLoc(this.filterProgram, filterid);
 	this.filterProgram.name = "Main filter";
 
 	var framebuffer = gl.createFramebuffer();
@@ -63,31 +66,25 @@ Filter = function(manager) {
 		manager.enableBufferForName(this.filterProgram, "wPoint", "wPoint");
 		manager.enableBufferForName(this.filterProgram,  "index", "index");	
 
-		
-		/*Has filters*/
-		if (this.filterProgram.hasFilter == null){
-		//	this.filterProgram.hasFilter = manager.getUniformLoc(this.filterProgram, 'hasFilter'); 		
-		}	
-	
-		if (this.hasHistFilter == false && this.hasMapFilter == false){
-			gl.uniform1f(this.filterProgram.hasFilter, 0);		   	
-		} else {
-			gl.uniform1f(this.filterProgram.hasFilter, 1);		   
-		}
 	 				
 		for (var i in dimensions) {
+			/* traverse all filters and evalut tham */
 			var d = dimensions[i];		
 			/*Filter texture*/
 		
 			if (typeof(d.filter) != 'undefined'){
-				
+				if(d.filter.isActive){		
 			
-			gl.uniform1i(this.filterProgram.histLoc , 1);		   
-			gl.activeTexture(gl.TEXTURE1);
-			gl.bindTexture(gl.TEXTURE_2D, d.filter.filterTexture);
+					gl.uniform1f(this.filterProgram.filterid, d.filter.index);
+				   
+				   	console.log('idex '+d.filter.index+", filter num "+manager.filternum);
+					gl.activeTexture(gl.TEXTURE0);
+					gl.bindTexture(gl.TEXTURE_2D, d.filter.filterTexture);
+					gl.uniform1i(this.filterProgram.histLoc , 0);	
 			
-			manager.enableBufferForName(this.filterProgram, d.name, "attr1");
-		 	gl.drawArrays(gl.POINTS, 0, manager.num_rec);			
+					manager.enableBufferForName(this.filterProgram, d.name, "attr1");
+		 			gl.drawArrays(gl.POINTS, 0, manager.num_rec);			
+				}
 			}
 			
 		}

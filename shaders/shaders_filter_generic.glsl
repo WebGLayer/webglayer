@@ -8,7 +8,7 @@
          
       uniform float attr_row;
          
-      uniform float hasFilter;   
+      uniform float filterid;   
       uniform mat4 mapMatrix;
       uniform mat4 rasterMatrix;
    
@@ -29,8 +29,9 @@
   					
 			// if data are selected  			
   			if ( at1[0] > 0. ){
-  				col = vec4(1./256., 0., 0., 0.);
-  			} else {  	  		   
+  				col = vec4(pow(2.,filterid)/256., 0., 0., 0.);
+  			} else {  	
+  				// data are not selected  		   
   		    	col = vec4(0., 1./256., 0., 0.); 	  		  
   			}
   		} else {

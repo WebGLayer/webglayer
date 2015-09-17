@@ -1,8 +1,8 @@
-function MapFilterRender(manager){	
+function MapPolyFilter(manager){	
 	var manager = manager;
 	
 	var pointsSize = 0;	
-	this.filterProgram = utils.loadShaders("mapFilter_vShader",  "mapFilter_fShader", this);
+	this.filterProgram = GLU.compileShaders("mapFilter_vShader",  "mapFilter_fShader", this);
 	/***
 	 * Buffers
 	 */

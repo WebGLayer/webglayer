@@ -181,7 +181,7 @@ StackedBarChart = function(m, div_id, x_label, id) {
 			
 			var f = brush1.extent();				
 			WGL.filterDim(id, f);
-			console.log(brush1.extent()[0][0]+' '+brush1.extent()[0][1]);
+			//console.log(brush1.extent()[0][0]+' '+brush1.extent()[0][1]);
 			
 		}
 

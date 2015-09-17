@@ -10,13 +10,14 @@ WGL = function(data, url){
 	manager.index = "index";
 	manager.r_size = rasterer.size;
 	manager.wgl = this;
+	manager.filternum = 0.;
 
 	this.mcontroller = new MapController(manager);
 	this.mcontroller.resize(manager.mapdiv.offsetWidth, manager.mapdiv.offsetHeight);
 	
 	var dimensions = [];
 	var oneDDim = [];
-	var filters = [];
+	
 		
 	var charts = [];
 	var mainFilter = new Filter(manager);
@@ -73,10 +74,20 @@ WGL = function(data, url){
 		}
 		var f = new LinearFilter(manager, m, res, id);//res);
 		d.filter = f;
-		filters[id]= f;
-		manager.filternum =  Object.keys(filters).length;
+		//filters[id]= f;
+		//manager.filternum =  Object.keys(filters).length;
 	}
 	
+	this.addPolyBrushFilter = function(name, id){
+		var d = dimensions[name];
+		if (d == null){
+			console.error('Cant set fitler to not defined dimension '+name);
+		}
+		var f = new MapPolyFilter(manager);//res);
+		//d.filter = f;
+		//filters[id]= f;
+		//manager.filternum =  Object.keys(filters).length;
+	}
 
 	
 	this.addCharts = function(ch){		
@@ -122,9 +133,9 @@ WGL = function(data, url){
 	this.filterDim = function(id, filter){
 		var f = dimensions[id].filter;
 		if (filter.length >0){
-			filters[f.id].isActive = true;	
+			f.isActive = true;	
 		} else {
-			filters[f.id].isActive = false;	
+			f.isActive = false;	
 		}
 		//console.log(getNumberOfActiveFilters());
 		
@@ -134,6 +145,7 @@ WGL = function(data, url){
 		f.renderFilter();
 		//f.readPixels();
 
+		//mainFilter.render([dimensions[id]]);
 		mainFilter.render(dimensions);
 		
 		
@@ -155,8 +167,18 @@ WGL = function(data, url){
 	
 	function getNumberOfActiveFilters(){
 		var  num = 0;
-		for (i in filters){
-			if (filters[i].isActive) {num++}
+		for (i in dimensions){
+			var d =dimensions[i];
+			if (typeof(d.filter)!='undefined')
+			{ 
+				if (d.filter.isActive) {		
+					d.filter.index = num;	
+					num++;			
+					}
+					else {
+						d.filter.index = -1;
+					}
+			} 
 		}
 		return num;
 	}
