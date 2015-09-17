@@ -28,7 +28,7 @@
   		vec4 fdata = texture2D(filter, vec2(rp[0],rp[1]));  		
   		
   		// if data are selected  
-  		if (fdata[0]>=1./256.*numfilters  && numfilters != 0. &&   drawselect>0.5 ){
+  		if (fdata[0]>= ( (pow(2.,numfilters)-1.) / 256.)  && numfilters != 0. &&   drawselect>0.5 ){
   			p_size = p_size;
   			col = vec4(255. /255., 140./255., 0., 0.8); 
   			gl_Position = p;    	

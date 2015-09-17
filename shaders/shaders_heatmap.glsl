@@ -4,8 +4,7 @@
       
       uniform mat4 mapMatrix;
       uniform mat4 rasterMatrix;
-      uniform float zoom;
- 	  uniform float drawselect;   
+      uniform float zoom;  
        
       uniform sampler2D filter;
       uniform float numfilters;
@@ -15,8 +14,7 @@
      
        
       void main() {
-		
-  	  	
+		  	  
   		float p_size = zoom /300. +40.;
   	    	   
   		vec4 p =  mapMatrix * wPoint;  	
@@ -25,22 +23,15 @@
   		vec4 fdata = texture2D(filter, vec2(rp[0],rp[1]));  		
   		
   		// if data are selected  
-  		if ((fdata[0]>=1./256.*numfilters && drawselect>0.5) || numfilters==0.){
+  		if ( fdata[0]>= ( (pow(2.,numfilters)-1.) / 256.)  || numfilters==0.){
   			p_size = p_size +6.;
   			
   			gl_Position = p;    	
 			gl_PointSize = p_size;
-  			
-  		} else if (drawselect<0.5) {  	
-  		   // If not selected then dont render   
-  		   p_size = 0.;
-  		  	  
-  			//gl_Position = p;    	
-  			gl_Position = vec4(-2.,-2.,0.,0.);    
-			gl_PointSize = 0.;
+  			  	
   		} else {
   			gl_Position = vec4(-0.,-2.,0.,0.);    	
-			gl_PointSize = 10.;
+			gl_PointSize = 0.;
   		}
   	
   	  		  

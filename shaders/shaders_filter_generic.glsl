@@ -29,7 +29,7 @@
   					
 			// if data are selected  			
   			if ( at1[0] > 0. ){
-  				col = vec4(pow(2.,filterid)/256., 0., 0., 0.);
+  				col = vec4( pow(2.,filterid)/256., 0., 0., 0.);
   			} else {  	
   				// data are not selected  		   
   		    	col = vec4(0., 1./256., 0., 0.); 	  		  
