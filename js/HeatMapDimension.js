@@ -96,21 +96,18 @@ function HeatMapDimension(manager){
 		//gl.uniform1f(this.glProgram[drawselect], 0);
 		//gl.drawArrays(gl.POINTS, 0, num);	
 		
-		gl.uniform1f(this.glProgram[drawselect], 1);	
+		//gl.uniform1f(this.glProgram[drawselect], 1);	
 		gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
 		gl.drawArrays(gl.POINTS, 0, num);	
 	    gl.useProgram(null);
 	   
 		gl.bindTexture(gl.TEXTURE_2D, null);
-	    gl.useProgram(null);
-	   
-	 
 	    
-	    var max = maxcale.getMax(this.heatTexture);
+	    //var max = maxcale.getMax(this.heatTexture);
 
-	    manager.max = max;
+	    manager.max = maxcale.getMax(this.heatTexture);
 	    renderer.heatTexture = 	this.heatTexture;	
-	    renderer.render(max);
+	    renderer.render(  manager.max);
 	    
 		
 	     			

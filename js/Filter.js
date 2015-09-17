@@ -48,6 +48,7 @@ Filter = function(manager) {
 		this.filterProgram.histLoc = manager.getUniformLoc(this.filterProgram, 'histFilter'); 		
 	}	
 
+	
 	this.render = function(dimensions) {
 
 		gl.useProgram(this.filterProgram);
@@ -77,7 +78,7 @@ Filter = function(manager) {
 			
 					gl.uniform1f(this.filterProgram.filterid, d.filter.index);
 				   
-				   	console.log('idex '+d.filter.index+", filter num "+manager.filternum);
+				   //	console.log('idex '+d.filter.index+", filter num "+manager.filternum);
 					gl.activeTexture(gl.TEXTURE0);
 					gl.bindTexture(gl.TEXTURE_2D, d.filter.filterTexture);
 					gl.uniform1i(this.filterProgram.histLoc , 0);	

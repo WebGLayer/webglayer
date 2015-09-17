@@ -15,8 +15,7 @@ function MapPolyFilter(manager){
 	this.filterTexture = gl.createTexture();
 	this.filterTexture.name = "filter texture";
 		
-	
-	this.init = function(){		
+		
 		/*Initialise offscreen buffer*/
 		
 		/** Framebuffer */
@@ -47,18 +46,12 @@ function MapPolyFilter(manager){
 		gl.bindRenderbuffer(gl.RENDERBUFFER, null);
 		gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 		gl.bindTexture(gl.TEXTURE_2D, null);
-	}
-	
-
-	this.setUniforms = function(){		
-		//utils.bindUniform(this.filterProgram, 'mapMatrix', manager.mapMatrix);
-		manager.bindMapMatrix(this.filterProgram);
-	}
 	
 	
 	
 	this.renderFilter = function(){		
 		gl.useProgram(this.filterProgram);
+		manager.bindMapMatrix(this.filterProgram);
 		gl.bindTexture(gl.TEXTURE_2D, this.filterTexture);
 		gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
 		
@@ -68,23 +61,33 @@ function MapPolyFilter(manager){
 		 * if there are no fitlers all data are selected
 		 */
 		if (pointsSize==0){
-			allDataFilter.hasMapFilter = false;		
+			//allDataFilter.hasMapFilter = false;		
 			gl.clearColor(1.0, 0.0, 0.0, 0.0);
 		} else {
-			allDataFilter.hasMapFilter = true;
+			//allDataFilter.hasMapFilter = true;
 			gl.clearColor(0.0, 1.0, 0.0, 0.0);
 		}
 		
 		
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-	
-		this.setUniforms();
 				
 		gl.disable(gl.BLEND);
 		gl.disable(gl.DEPTH_TEST);
 		
 	
-		utils.enableAttribute(this.filterProgram, posBuffer);			
+		gl.bindBuffer(gl.ARRAY_BUFFER, posBuffer);
+		
+		
+		if (this.filterProgram[posBuffer.attr] == null){
+			this.filterProgram[posBuffer.attr] = gl.getAttribLocation(this.filterProgram, posBuffer.attr);
+		}		
+		if (this.filterProgram[posBuffer.attr] >= 0){
+			gl.enableVertexAttribArray(this.filterProgram[posBuffer.attr]);
+			gl.vertexAttribPointer(this.filterProgram[posBuffer.attr], 2, gl.FLOAT, false, 0, 0);
+		} else {
+			console.error("Error binding buffer: "+posBuffer);
+			return;
+		}	
 		
 		gl.drawArrays(gl.TRIANGLES, 0, pointsSize);		
 		

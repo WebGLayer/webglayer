@@ -84,7 +84,7 @@ WGL = function(data, url){
 			console.error('Cant set fitler to not defined dimension '+name);
 		}
 		var f = new MapPolyFilter(manager);//res);
-		//d.filter = f;
+		d.filter = f;
 		//filters[id]= f;
 		//manager.filternum =  Object.keys(filters).length;
 	}
@@ -128,6 +128,16 @@ WGL = function(data, url){
 		this.render();
 		this.updateCharts();
 	}
+
+	this.filterByPoly = function(id, polygons){
+		var f = dimensions[id].filter;
+		f.createFilteringData(polygons);
+		f.renderFilter();
+		manager.mapFilterTexture = f.filterTexture;
+		this.render();
+		this.updateCharts();
+	}
+
 
 	
 	this.filterDim = function(id, filter){
