@@ -47,8 +47,12 @@ Filter = function(manager) {
 	if (this.filterProgram.histLoc == null){
 		this.filterProgram.histLoc = manager.getUniformLoc(this.filterProgram, 'histFilter'); 		
 	}	
-
 	
+	if (this.filterProgram.polyLoc == null){
+		this.filterProgram.polyLoc = manager.getUniformLoc(this.filterProgram, 'mapFilter'); 		
+	}	
+
+	/*Render 1d filters*/
 	this.render = function(dimensions) {
 
 		gl.useProgram(this.filterProgram);
@@ -68,6 +72,8 @@ Filter = function(manager) {
 		manager.enableBufferForName(this.filterProgram,  "index", "index");	
 
 	 				
+	 	
+		
 		for (var i in dimensions) {
 			/* traverse all filters and evalut tham */
 			var d = dimensions[i];		
@@ -76,12 +82,20 @@ Filter = function(manager) {
 			if (typeof(d.filter) != 'undefined'){
 				if(d.filter.isActive){		
 			
-					gl.uniform1f(this.filterProgram.filterid, d.filter.index);
-				   
-				   //	console.log('idex '+d.filter.index+", filter num "+manager.filternum);
+					/* Activate histogram texture*/
 					gl.activeTexture(gl.TEXTURE0);
 					gl.bindTexture(gl.TEXTURE_2D, d.filter.filterTexture);
 					gl.uniform1i(this.filterProgram.histLoc , 0);	
+					
+					/*Activate polybrush texture*/
+					gl.activeTexture(gl.TEXTURE1);
+					gl.bindTexture(gl.TEXTURE_2D, manager.mapFilterTexture);
+					gl.uniform1i(this.filterProgram.polyLoc , 1);	
+					
+					gl.uniform1f(this.filterProgram.filterid, d.filter.index);
+				   
+				   //	console.log('idex '+d.filter.index+", filter num "+manager.filternum);
+				
 			
 					manager.enableBufferForName(this.filterProgram, d.name, "attr1");
 		 			gl.drawArrays(gl.POINTS, 0, manager.num_rec);			

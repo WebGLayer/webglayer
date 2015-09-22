@@ -21,6 +21,8 @@ WGL = function(data, url){
 		
 	var charts = [];
 	var mainFilter = new Filter(manager);
+	var polyFilter;
+	
 	
 	
 	var index = [];
@@ -79,12 +81,12 @@ WGL = function(data, url){
 	}
 	
 	this.addPolyBrushFilter = function(name, id){
-		var d = dimensions[name];
-		if (d == null){
-			console.error('Cant set fitler to not defined dimension '+name);
-		}
-		var f = new MapPolyFilter(manager);//res);
-		d.filter = f;
+		//var d = dimensions[name];
+		//	if (d == null){
+		//	console.error('Cant set fitler to not defined dimension '+name);
+		//}
+		polyFilter = new MapPolyFilter(manager);//res);
+		//d.filter = f;
 		//filters[id]= f;
 		//manager.filternum =  Object.keys(filters).length;
 	}
@@ -122,6 +124,11 @@ WGL = function(data, url){
 	
 	
 	this.filterByExt = function(){
+		if (typeof(polyFilter)!='undefined'){
+				polyFilter.renderFilter();
+				manager.mapFilterTexture =  polyFilter.filterTexture;
+		}
+	
 		mainFilter.render(dimensions);
 		
 		manager.filterTexture = mainFilter.filterTexture;
@@ -129,11 +136,12 @@ WGL = function(data, url){
 		this.updateCharts();
 	}
 
-	this.filterByPoly = function(id, polygons){
-		var f = dimensions[id].filter;
+	this.filterByPoly = function(polygons){
+		var f = polyFilter;//dimensions[id].filter;
 		f.createFilteringData(polygons);
 		f.renderFilter();
 		manager.mapFilterTexture = f.filterTexture;
+		mainFilter.render(dimensions);
 		this.render();
 		this.updateCharts();
 	}
@@ -159,7 +167,7 @@ WGL = function(data, url){
 		mainFilter.render(dimensions);
 		
 		
-		manager.filterTexture = mainFilter.filterTexture;
+		//manager.filterTexture = mainFilter.filterTexture;
 		this.render();
 		this.updateCharts();
 		
