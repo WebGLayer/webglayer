@@ -6,27 +6,31 @@
          
       uniform float filterid;   
       uniform mat4 mapMatrix;
-      uniform mat4 rasterMatrix;
+ 
    
       uniform sampler2D histFilter;
-      uniform sampler2D mapFilter;
+      uniform sampler2D indexText;
       
       
       varying vec4 col;
       
       void main() {	
-  			
+  		bool fil[4];
 		vec4 p =  mapMatrix * wPoint;
   		   	     	
 		 // if data are in the map window 
 		if (-1. <= p[0] && p[0]<=1. && -1. <= p[1] && p[1]<=1.){
-			vec4 rp = rasterMatrix * p;
+		
   			vec4 at1   = texture2D(histFilter, vec2(attr1, 0.5));
-  			vec4 polyb = texture2D(mapFilter , vec2((p[0]+1.)/2., (p[1]+1.)/2.));    
-  					
+  			
+  			//vec4 ip = rasterMatrix * vec4(index[0],index[1],0.,1.);
+  			
+  			vec4 thatval = texture2D(indexText , vec2((index[0] +1.)/2. , (index[1]+1.)/2.));    
+  			float val =  thatval[0];
 			// if data are selected  			
-  			if ( at1[0] > 0. &&  polyb[0] > 0.){
-  				col = vec4( pow(2.,filterid)/256., 0., 0., 0.);
+  			if ( at1[0] > 0. ){ //|| thatval[0] > 0.){ //&&  polyb[0] > 0.){  				
+  				//col = vec4( val  + pow(2.,(filterid))/256., 0., 0., 0.);
+  				col = vec4( val + pow(2.,(filterid))/256., 0., 0., 0.);
   			} else {  	
   				// data are not selected  		   
   		    	col = vec4(0., 1./256., 0., 0.); 	  		  

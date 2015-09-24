@@ -70,7 +70,7 @@ function HistDimension(manager, meta) {
 
 		manager.enableBufferForName(this.program,  "index", "index");	
 		manager.enableFilterTexture(this.program);	
-		manager.bindRasterMatrix(this.program);
+	//	manager.bindRasterMatrix(this.program);
 		gl.uniform1f(this.program.numfilters, 	manager.filternum );
 
 		//gl.finish();

@@ -17,7 +17,8 @@ WGL = function(data, url){
 	
 	var dimensions = [];
 	var oneDDim = [];
-	
+	var thisfilter;
+	var thatfilter;
 		
 	var charts = [];
 	var mainFilter = new Filter(manager);
@@ -100,7 +101,8 @@ WGL = function(data, url){
 		return manager;
 	}		
 
-	this.render = function(){		
+	this.render = function(){	
+	 	console.log("filter num "+manager.filternum);	
 		
 		for (var i in dimensions){
 			dimensions[i].render(numrec);
@@ -131,7 +133,7 @@ WGL = function(data, url){
 	
 		mainFilter.render(dimensions);
 		
-		manager.filterTexture = mainFilter.filterTexture;
+		//manager.filterTexture = mainFilter.filterTexture;
 		this.render();
 		this.updateCharts();
 	}
@@ -150,6 +152,8 @@ WGL = function(data, url){
 	
 	this.filterDim = function(id, filter){
 		var f = dimensions[id].filter;
+	
+
 		if (filter.length >0){
 			f.isActive = true;	
 		} else {
@@ -159,12 +163,21 @@ WGL = function(data, url){
 		
 		manager.filternum = getNumberOfActiveFilters();
 		
+		if (typeof(thisfilter)=='undefined'){
+			thisfilter = id;
+		} 
+		else if (id!=thisfilter){
+			console.log('filter changed');
+			thatfilter = thisfilter;			
+			thisfilter = id;
+			this.filterChanged(thisfilter);						
+		} 
 		f.createFilteringData(filter);
 		f.renderFilter();
 		//f.readPixels();
 
-		//mainFilter.render([dimensions[id]]);
-		mainFilter.render(dimensions);
+		mainFilter.applyFilter(dimensions[id]);
+		//mainFilter.render(dimensions);
 		
 		
 		//manager.filterTexture = mainFilter.filterTexture;
@@ -179,19 +192,40 @@ WGL = function(data, url){
 			for (var i = 0; i <10 ;i++ )
 				top.push(data.hours[sel[i]]);
 		}
-		console.log(top);*/
-		
+		console.log(top);*/		
 	}
 	
+	this.filterChanged = function(newf){
+		/*apply all filter and set current to empty selected all the features*/		
+	
+		
+		dimensions[newf].filter.isActive=true;	 	
+		manager.filternum = getNumberOfActiveFilters();
+
+		/*render with this filter not active*/
+		dimensions[newf].filter.isActive=false;	
+		
+		mainFilter.render(dimensions);
+		
+		this.render();
+		this.updateCharts();
+		mainFilter.switchTextures();
+		
+		/*us all selection as that filter*/
+
+		/*aplly this as aggregation of both*/
+	}
+
+
 	function getNumberOfActiveFilters(){
 		var  num = 0;
 		for (i in dimensions){
 			var d =dimensions[i];
 			if (typeof(d.filter)!='undefined')
 			{ 
-				if (d.filter.isActive) {		
+				if (d.filter.isActive) {						
 					d.filter.index = num;	
-					num++;			
+					num++;								
 					}
 					else {
 						d.filter.index = -1;

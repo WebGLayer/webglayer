@@ -19,12 +19,7 @@ function GLUtils() {
 		$.get(domain+'shaders/shaders_linemap.glsl',
 						function(data) {
 							$("head").append(data);
-						});
-
-		$.get(domain+'shaders/shaders_hist.glsl',
-						function(data) {
-							$("head").append(data);
-						});
+						});	
 
 		$.get(domain+'shaders/shaders_float.glsl',
 				function(data) {
