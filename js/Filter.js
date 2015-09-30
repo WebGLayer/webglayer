@@ -13,6 +13,10 @@ Filter = function(manager) {
 
 	var indexText = 'indexText';
 	manager.storeUniformLoc(this.filterProgram, indexText);
+	
+	var isspatial = 'isspatial';
+	manager.storeUniformLoc(this.filterProgram, isspatial);
+	
 	this.filterProgram.name = "Main filter";
 
 	var framebuffer = [];
@@ -139,11 +143,12 @@ Filter = function(manager) {
 					gl.uniform1i(this.filterProgram.indexText, 1);	
 					
 					gl.uniform1f(this.filterProgram.filterid, d.filter.index);
-				   
+				   	gl.uniform1f(this.filterProgram.isspatial, d.filter.isspatial);
 				 //  	console.log("filter num "+manager.filternum);
 				
-			
-					manager.enableBufferForName(this.filterProgram, d.name, "attr1");
+					if (d.filter.isspatial == 0.0){
+						manager.enableBufferForName(this.filterProgram, d.name, "attr1");
+					}
 		 			gl.drawArrays(gl.POINTS, 0, manager.num_rec);			
 				}
 			}								
@@ -195,10 +200,15 @@ Filter = function(manager) {
 		gl.bindTexture(gl.TEXTURE_2D, filterTexture[thatID]);
 		gl.uniform1i(this.filterProgram.indexText, 1);	
 				
-		console.log("index "+ dim.filter.index);
+		//console.log("index "+ dim.filter.index);
 		gl.uniform1f(this.filterProgram.filterid, dim.filter.index);
-				   		
-		manager.enableBufferForName(this.filterProgram, dim.name, "attr1");
+		
+		gl.uniform1f(this.filterProgram.isspatial, dim.filter.isspatial);
+				   
+		if (dim.filter.isspatial == 0.0){
+			manager.enableBufferForName(this.filterProgram, dim.name, "attr1");
+		}
+		
 		gl.drawArrays(gl.POINTS, 0, manager.num_rec);																			
 		
 		//this.filterTexture = filterTexture[activeID];

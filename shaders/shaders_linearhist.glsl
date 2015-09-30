@@ -30,10 +30,7 @@
 			} else if (fdata[2]>0.){
 				// data are out of the window
   				col = vec4(0., 0. , 1., 0.);
-  		
-  			} else if (fdata[1]>0.|| numfilters == 0.) {  
-  				// data are unselected	     		   					
-				col = vec4(0., 1. , 0., 0.);  			
+  		  					
   			} else {
   				col = vec4(0., 1. , 0., 0.);
   			}

@@ -1,6 +1,6 @@
 LinearFilter = function(manager, meta, width, id){	
 	
-	this.type = 'OneD'; 
+	this.isspatial = 0.0;//'OneD'; 
 	this.id = id;
 	var filters = new Float32Array([-1.1,0,1.1,0]);			
 	var filters_fa;	
@@ -105,19 +105,20 @@ LinearFilter = function(manager, meta, width, id){
 	this.createFilteringData = function(points){
 		
 		
-		if (points.length==0){				
-			filters = new Float32Array([-1.1,0,1.1,0]);												
-		} else {
-			filters = points;
-		} 
 		var allfilters = [];
-		var m = 0;
-		for(var j = 0; j < filters.length; j++){
-			allfilters[m++] = 2*((filters[j][0]-meta.min) / (meta.max-meta.min)) - 1;
-			allfilters[m++] = 0.;
-			allfilters[m++] = 2*((filters[j][1]-meta.min) / (meta.max-meta.min)) - 1;
-			allfilters[m++] =  0.;
-		}
+
+		//if (points.length==0){				
+		//	allfilters = new Float32Array([-1.5, 0, 1.5,0,0]);												
+		//} else {
+		var	filters = points;
+			var m = 0;
+			for(var j = 0; j < filters.length; j++){
+				allfilters[m++] = 2*((filters[j][0]-meta.min) / (meta.max-meta.min)) - 1;
+				allfilters[m++] = 0.;
+				allfilters[m++] = 2*((filters[j][1]-meta.min) / (meta.max-meta.min)) - 1;
+				allfilters[m++] =  0.;
+			}
+		//} 
 		
 		
 		filters_fa = new Float32Array(allfilters);

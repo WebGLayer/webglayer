@@ -1,6 +1,7 @@
 function MapPolyFilter(manager){	
 	var manager = manager;
 	
+	this.isspatial = 1.0;
 	var pointsSize = 0;	
 	this.filterProgram = GLU.compileShaders("mapFilter_vShader",  "mapFilter_fShader", this);
 	/***
@@ -62,10 +63,10 @@ function MapPolyFilter(manager){
 		 */
 		if (pointsSize==0){
 			//allDataFilter.hasMapFilter = false;		
-			gl.clearColor(1.0, 0.0, 0.0, 0.0);
+			gl.clearColor(0.0, 0.0, 0.0, 0.0);
 		} else {
 			//allDataFilter.hasMapFilter = true;
-			gl.clearColor(0.0, 1.0, 0.0, 0.0);
+			gl.clearColor(0.0, 0.0, 0.0, 0.0);
 		}
 		
 		

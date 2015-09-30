@@ -82,12 +82,12 @@ WGL = function(data, url){
 	}
 	
 	this.addPolyBrushFilter = function(name, id){
-		//var d = dimensions[name];
-		//	if (d == null){
-		//	console.error('Cant set fitler to not defined dimension '+name);
-		//}
-		polyFilter = new MapPolyFilter(manager);//res);
-		//d.filter = f;
+		var d = dimensions[name];
+			if (d == null){
+			console.error('Cant set fitler to not defined dimension '+name);
+		}
+		var polyFilter = new MapPolyFilter(manager);//res);
+		d.filter = polyFilter;
 		//filters[id]= f;
 		//manager.filternum =  Object.keys(filters).length;
 	}
@@ -102,7 +102,7 @@ WGL = function(data, url){
 	}		
 
 	this.render = function(){	
-	 	console.log("filter num "+manager.filternum);	
+	 	//console.log("filter num "+manager.filternum);	
 		
 		for (var i in dimensions){
 			dimensions[i].render(numrec);
@@ -138,8 +138,8 @@ WGL = function(data, url){
 		this.updateCharts();
 	}
 
-	this.filterByPoly = function(polygons){
-		var f = polyFilter;//dimensions[id].filter;
+	this.filterByPoly = function(id, polygons){
+		var f = dimensions[id].filter;
 		f.createFilteringData(polygons);
 		f.renderFilter();
 		manager.mapFilterTexture = f.filterTexture;
@@ -152,35 +152,39 @@ WGL = function(data, url){
 	
 	this.filterDim = function(id, filter){
 		var f = dimensions[id].filter;
+		
 	
-
 		if (filter.length >0){
-			f.isActive = true;	
+			f.isActive = true;				
 		} else {
-			f.isActive = false;	
-		}
-		//console.log(getNumberOfActiveFilters());
+			f.isActive = false;		
+		//	this.filterChanged(f);
+		}				
 		
 		manager.filternum = getNumberOfActiveFilters();
-		
-		if (typeof(thisfilter)=='undefined'){
-			thisfilter = id;
+
+		if (typeof(thisfilter)=='undefined' && filter.length>0){
+			thisfilter = id;	
+			this.filterChanged(thisfilter);				
 		} 
 		else if (id!=thisfilter){
 			console.log('filter changed');
-			thatfilter = thisfilter;			
+			//thatfilter = thisfilter;			
 			thisfilter = id;
 			this.filterChanged(thisfilter);						
 		} 
+		else if  (id==thisfilter && filter.length==0){
+			console.log("filter deleted");
+			this.filterDeleted(thisfilter);	
+			thisfilter = undefined;		
+		}
+
+		
 		f.createFilteringData(filter);
 		f.renderFilter();
-		//f.readPixels();
+					//f.readPixels();
 
-		mainFilter.applyFilter(dimensions[id]);
-		//mainFilter.render(dimensions);
-		
-		
-		//manager.filterTexture = mainFilter.filterTexture;
+		mainFilter.applyFilter(dimensions[id]);		
 		this.render();
 		this.updateCharts();
 		
@@ -216,6 +220,24 @@ WGL = function(data, url){
 		/*aplly this as aggregation of both*/
 	}
 
+	this.filterDeleted = function(newf){
+		/*apply all filter and set current to empty selected all the features*/		
+	
+		
+		dimensions[newf].filter.isActive=false;	 	
+		manager.filternum = getNumberOfActiveFilters();
+		
+		
+		mainFilter.render(dimensions);
+		
+		this.render();
+		this.updateCharts();
+		mainFilter.switchTextures();
+		
+		/*us all selection as that filter*/
+
+		/*aplly this as aggregation of both*/
+	}
 
 	function getNumberOfActiveFilters(){
 		var  num = 0;
@@ -223,12 +245,13 @@ WGL = function(data, url){
 			var d =dimensions[i];
 			if (typeof(d.filter)!='undefined')
 			{ 
-				if (d.filter.isActive) {						
+				if (d.filter.isActive) {		
+					//console.log("active filter on dim "+d.name+" "+num);
 					d.filter.index = num;	
 					num++;								
 					}
 					else {
-						d.filter.index = -1;
+						//d.filter.index = -1;
 					}
 			} 
 		}

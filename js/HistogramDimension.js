@@ -77,6 +77,7 @@ function HistogramDimension(manager, meta) {
 			var r = (m.index / framebuffer.height) * 2 - 1 + (1 / framebuffer.height);
 			gl.uniform1f(this.program.attr_row, r);
 			gl.uniform1f(this.program.numfilters, manager.dimnum);
+			console.log("Filter num "+manager.dimnum);
 			
 			manager.enableBufferForName(this.program, m.name, "attr");
 			gl.drawArrays(gl.POINTS, 0, manager.num_rec);

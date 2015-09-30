@@ -3,6 +3,7 @@ function MapDimension(manager){
 	
 	this.glProgram = GLU.compileShaders('map_vShader', 'map_fShader', this);
 	
+	this.name = "map";
 	var zoom = 'zoom';
 	var drawselect = 'drawselect';
 	var numfilters = 'numfilters';

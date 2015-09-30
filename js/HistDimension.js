@@ -71,10 +71,9 @@ function HistDimension(manager, meta) {
 		manager.enableBufferForName(this.program,  "index", "index");	
 		manager.enableFilterTexture(this.program);	
 	//	manager.bindRasterMatrix(this.program);
-		gl.uniform1f(this.program.numfilters, 	manager.filternum );
-
+		gl.uniform1f(this.program.numfilters, 	manager.filternum );	
 		//gl.finish();
-
+		//console.log("Filter num "+manager.filternum);
 			
 		manager.enableBufferForName(this.program, meta.name, "attr");
 		gl.drawArrays(gl.POINTS, 0, manager.num_rec);
