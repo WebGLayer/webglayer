@@ -100,7 +100,8 @@ LinearFilter = function(manager, meta, width, id){
 		
 	}
 	
-	
+	this.updateFilter = function(points){
+	}
 	
 	this.createFilteringData = function(points){
 		

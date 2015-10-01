@@ -24,6 +24,7 @@ Filter = function(manager) {
 	var filterTexture = [];
 	framebuffer.width = this.rastersize;
 	framebuffer.height = this.rastersize;
+	
 
 
 /*******************************first texture*************************************/
@@ -33,6 +34,12 @@ Filter = function(manager) {
 	framebuffer[1] = gl.createFramebuffer();	
 	renderbuffer[0] =  gl.createRenderbuffer();
 	renderbuffer[1] =  gl.createRenderbuffer();
+
+	framebuffer[0].width = this.rastersize;
+	framebuffer[0].height = this.rastersize;
+
+	framebuffer[1].width = this.rastersize;
+	framebuffer[1].height = this.rastersize;
 	var activeID =0 ;
 	var thatID = 1;
 	/** Framebuffer */
@@ -43,6 +50,7 @@ Filter = function(manager) {
 	
 	confFrameBufferTexture(1);
 	confFrameBufferTexture(0);
+	manager.indexFB = framebuffer[activeID];
 	
 	function confFrameBufferTexture(tid){
 		/** Texture */
@@ -89,8 +97,18 @@ Filter = function(manager) {
 	
 
 
-	/*Render 1d filters*/
+	/*evaluate all filters*/
 	this.render = function(dimensions) {
+
+		/*update filtering data if (important for polybrush filter)*/
+		for (var i in dimensions) {
+			var d = dimensions[i];		
+			if (typeof(d.filter) != 'undefined'){
+					if(d.filter.isActive){					
+						d.filter.updateFilter(); // update filering texture if needed;
+					}	
+			}
+		}
 		gl.useProgram(this.filterProgram);			
 		
 		gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer[thatID]);
@@ -111,7 +129,7 @@ Filter = function(manager) {
 		gl.disable(gl.DEPTH_TEST);
 		gl.enable(gl.BLEND);
 		gl.blendFunc(gl.ONE, gl.ONE);
-
+		
 	//	this.manager.enableBuffersAndCommonUniforms(this.filterProgram);
 
 		manager.bindMapMatrix(this.filterProgram);
@@ -125,8 +143,7 @@ Filter = function(manager) {
 			/*Filter texture*/
 		
 			if (typeof(d.filter) != 'undefined'){
-				if(d.filter.isActive){		
-			
+				if(d.filter.isActive){										
 					/* Activate histogram texture*/
 					gl.activeTexture(gl.TEXTURE0);
 					gl.bindTexture(gl.TEXTURE_2D, d.filter.filterTexture);
@@ -157,7 +174,10 @@ Filter = function(manager) {
     	//this.readPixels(thatID, 'pasive');
 		//this.filterTexture = filterTexture[activeID];
 		manager.filterTexture = filterTexture[activeID];
-		//console.log("returnunt texture "+activeID);	
+		//console.log("returnunt texture "+activeID);
+
+		//this.readPixels(activeID, 'active');
+    	//this.readPixels(thatID, 'pasive');	
 				
 		gl.useProgram(null);
 		gl.bindRenderbuffer(gl.RENDERBUFFER, null);
@@ -171,11 +191,13 @@ Filter = function(manager) {
 		gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer[activeID]);
 
 		gl.viewport(0, 0, framebuffer.width,framebuffer.height);
-		gl.clearColor(0.0, 0.0, 0.0, 0.0);
-		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+		//gl.clearColor(0.0, 0.0, 0.0, 0.0);
+		//gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
 		gl.disable(gl.DEPTH_TEST);
-		gl.disable(gl.BLEND);
+		gl.enable(gl.BLEND);
+		gl.blendFuncSeparate(gl.ONE, gl.ZERO, gl.ONE, gl.ZERO
+			)
 		//gl.blendFunc(gl.ONE, gl.ONE);
 
 	//	this.manager.enableBuffersAndCommonUniforms(this.filterProgram);
@@ -185,7 +207,7 @@ Filter = function(manager) {
 		manager.enableBufferForName(this.filterProgram,  "index", "index");	
 
 	
-		/* Activate histogram texture*/
+		/* Activate filtering texture*/
 		gl.activeTexture(gl.TEXTURE0);
 		gl.bindTexture(gl.TEXTURE_2D, dim.filter.filterTexture);
 		gl.uniform1i(this.filterProgram.histLoc , 0);	
@@ -213,14 +235,14 @@ Filter = function(manager) {
 		
 		//this.filterTexture = filterTexture[activeID];
 		manager.filterTexture = filterTexture[activeID];
-		
+	
 				
 		gl.useProgram(null);
 		gl.bindRenderbuffer(gl.RENDERBUFFER, null);
     	gl.bindFramebuffer(gl.FRAMEBUFFER, null);	
     	
     	//this.readPixels(activeID, 'active');
-    	//this.readPixels(thatID, 'pasive');
+		//this.readPixels(thatID, 'pasive');
 	}
 
 	this.switchTextures = function() {		
@@ -230,7 +252,8 @@ Filter = function(manager) {
 		} else {
 			activeID = 0;
 			thatID =  1;
-		}	        		
+		}	   
+		manager.indexFB = framebuffer[activeID];     		
 	}
 
 	this.readPixels = function(id, label) {
@@ -248,7 +271,7 @@ Filter = function(manager) {
 		//console.log(readout);
 
 		var selected = [];
-		for (var i = 0; i < readout.length; i=i+4){
+		for (var i =0; i < readout.length; i=i+1){
 			//console.log(readout[i]);
 			selected.push(readout[i]);
 			//if (readout[i]>1) {selected.push(i/4)};

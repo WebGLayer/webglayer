@@ -12,6 +12,8 @@ function MapPolyFilter(manager){
 	
 	var framebuffer = gl.createFramebuffer();			
 	var renderbuffer = gl.createRenderbuffer();
+
+	var saved_polygons;
 	
 	this.filterTexture = gl.createTexture();
 	this.filterTexture.name = "filter texture";
@@ -58,17 +60,8 @@ function MapPolyFilter(manager){
 		
 		gl.viewport(0, 0, manager.width, manager.height);
 		
-		/**
-		 * if there are no fitlers all data are selected
-		 */
-		if (pointsSize==0){
-			//allDataFilter.hasMapFilter = false;		
-			gl.clearColor(0.0, 0.0, 0.0, 0.0);
-		} else {
-			//allDataFilter.hasMapFilter = true;
-			gl.clearColor(0.0, 0.0, 0.0, 0.0);
-		}
-		
+		gl.clearColor(0.0, 0.0, 0.0, 0.0);
+	
 		
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 				
@@ -98,9 +91,13 @@ function MapPolyFilter(manager){
 		
 	}
 	
-	
+	this.updateFilter = function(points){
+		this.createFilteringData(saved_polygons);
+		this.renderFilter();
+	}
 	
 	this.createFilteringData = function(polygons){	
+		saved_polygons = polygons;
 		//console.log(polygons);
 		//console.log("...........")
 		var points = new Array();		

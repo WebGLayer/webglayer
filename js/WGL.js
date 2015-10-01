@@ -18,7 +18,7 @@ WGL = function(data, url){
 	var dimensions = [];
 	var oneDDim = [];
 	var thisfilter;
-	var thatfilter;
+	var extf;
 		
 	var charts = [];
 	var mainFilter = new Filter(manager);
@@ -92,6 +92,9 @@ WGL = function(data, url){
 		//manager.filternum =  Object.keys(filters).length;
 	}
 
+	this.addExtentFilter = function(){
+		extf = new ExtentFilter(manager);
+	}
 	
 	this.addCharts = function(ch){		
 		charts = ch;	
@@ -110,6 +113,9 @@ WGL = function(data, url){
 		
 	
 	}
+	this.initFilters = function(){
+			mainFilter.render(dimensions);	
+	}
 	
 	this.updateCharts = function(){				
 			
@@ -125,20 +131,20 @@ WGL = function(data, url){
 	}
 	
 	
-	this.filterByExt = function(){
-		if (typeof(polyFilter)!='undefined'){
-				polyFilter.renderFilter();
-				manager.mapFilterTexture =  polyFilter.filterTexture;
-		}
+	this.filterByExt = function(){		
 	
-		mainFilter.render(dimensions);
+		//mainFilter.render(dimensions);
 		
-		//manager.filterTexture = mainFilter.filterTexture;
+		
+		if (typeof(extf)!='undefined'){
+			extf.render();
+			thisfilter = undefined;	
+		}
 		this.render();
 		this.updateCharts();
 	}
 
-	this.filterByPoly = function(id, polygons){
+	/*this.filterByPoly = function(id, polygons){
 		var f = dimensions[id].filter;
 		f.createFilteringData(polygons);
 		f.renderFilter();
@@ -146,7 +152,7 @@ WGL = function(data, url){
 		mainFilter.render(dimensions);
 		this.render();
 		this.updateCharts();
-	}
+	}*/
 
 
 	
@@ -209,8 +215,10 @@ WGL = function(data, url){
 		/*render with this filter not active*/
 		dimensions[newf].filter.isActive=false;	
 		
-		mainFilter.render(dimensions);
 		
+		mainFilter.render(dimensions);	
+		extf.render();
+		//mainFilter.switchTextures();
 		this.render();
 		this.updateCharts();
 		mainFilter.switchTextures();

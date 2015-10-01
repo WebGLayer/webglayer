@@ -24,14 +24,16 @@
   			
   					
   			//if (fdata[0]>= ( (pow(2.,numfilters-1.)) / 256.) && numfilters != 0. ){
-  			if (fdata[0]>=  ( (pow(2.,numfilters) -1.) / 256.) && numfilters != 0. ){    
-  				// data are selected						
-				col = vec4(1., 0. , 0., 0.);
-			} else if (fdata[2]>0.){
+  			if (fdata[3]>0.){
 				// data are out of the window
   				col = vec4(0., 0. , 1., 0.);
   		  					
-  			} else {
+  			} 
+  			else if (fdata[0]>=  ( (pow(2.,numfilters) -1.) / 256.) && numfilters != 0. ){    
+  				// data are selected						
+				col = vec4(1., 0. , 0., 0.);
+			} else {
+  				// data visible but not selected
   				col = vec4(0., 1. , 0., 0.);
   			}
   				
