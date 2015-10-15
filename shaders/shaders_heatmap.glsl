@@ -8,15 +8,17 @@
        
       uniform sampler2D filter;
       uniform float numfilters;
+      
+      uniform float spIndex;
        
       varying vec4 aPos;  
-     // varying vec4 col;
+      varying float selected;
      
        
       void main() {
 		  	  
-  		float p_size = zoom /300. +40.;
-  	    	   
+  		float p_size = zoom*zoom/6.;
+  	    	 
   		vec4 p =  mapMatrix * wPoint;  	
   		  		
   		vec4 rp = rasterMatrix * vec4(index[0],index[1],0.,1.);
@@ -24,17 +26,23 @@
   		
   		// if data are selected  
   		if ( fdata[0]>= ( (pow(2.,numfilters)-1.) / 256.)  || numfilters==0.){
-  			p_size = p_size +6.;
-  			
-  			gl_Position = p;    	
+  			selected = 1.;
+  		
+  			gl_Position = p; //vec4(-0.,-2.,0.,0.);    	
 			gl_PointSize = p_size;
   			  	
+  		} else if ( fdata[0]>=  (pow(2.,numfilters) - pow(2., spIndex) - 1.) / 256. ){
+  			selected = 0.;
+  			//gl_Position = vec4(-0.,-2.,0.,0.);    	
+			//gl_PointSize = 0.;
+			gl_Position = p;//vec4(-0.,-2.,0.,0.);    	
+			gl_PointSize = p_size;
   		} else {
   			gl_Position = vec4(-0.,-2.,0.,0.);    	
 			gl_PointSize = 0.;
+  		
   		}
-  	
-  	  		  
+  		
 		
 		aPos = wPoint;	
 				
@@ -45,7 +53,7 @@
     <script id="heatmap_fShader" type="x-shader/x-fragment">
       precision mediump float;  
  	  varying vec4 aPos;   
-	 // varying vec4 col;
+	  varying float selected;
  
 
    		float length(vec2 a, vec2 b){
@@ -58,7 +66,7 @@
       	
      	
      	if (dist < 0.5 ) {
-     		gl_FragColor = vec4(1., 1./(1.+dist*2.) ,0.,1.);//col; 
+     		gl_FragColor = vec4(1., 1./(1.+dist*2.) ,selected,1.);//col; 
      	} else {
      		gl_FragColor = vec4(0., 0. ,0.,0.);//col; 
      	}

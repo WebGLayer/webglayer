@@ -2,46 +2,51 @@
 function HeatMapDimension(manager){
 	//this.manager = manager;
 	//Dimension.call(this, manager);
+	this.isSpatial = true;
+	
 	
 	this.glProgram = GLU.compileShaders('heatmap_vShader', 'heatmap_fShader', this);
 	var framebuffer = gl.createFramebuffer();
 	
-	framebuffer.width = manager.w;	
-	framebuffer.height = manager.h;
+	this.createMapFramebuffer = function(){
+		framebuffer.width = manager.w;	
+		framebuffer.height = manager.h;
 
-	var renderbuffer = gl.createRenderbuffer();
+		var renderbuffer = gl.createRenderbuffer();
 
-	this.heatTexture = gl.createTexture();
-	this.heatTexture.name = "heat map texture";
+		this.heatTexture = gl.createTexture();
+		this.heatTexture.name = "heat map texture";
 
-	if (!gl.getExtension("OES_texture_float")) {
-		console.log("OES_texture_float not availble -- this is legal");
-	}
-	/** Framebuffer */
-	gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
+		if (!gl.getExtension("OES_texture_float")) {
+			console.log("OES_texture_float not availble -- this is legal");
+		}
+		/** Framebuffer */
+		gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
 
-	/** Texture */
-	gl.bindTexture(gl.TEXTURE_2D, this.heatTexture);
-	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); // Prevents
-	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+		/** Texture */
+		gl.bindTexture(gl.TEXTURE_2D, this.heatTexture);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); // Prevents
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 
-	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, framebuffer.width,
+		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, framebuffer.width,
 			framebuffer.height, 0, gl.RGBA, gl.FLOAT, null);
 
-	/** Render buffer */
-	gl.bindRenderbuffer(gl.RENDERBUFFER, renderbuffer);
-	gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT16,
+		/** Render buffer */
+		gl.bindRenderbuffer(gl.RENDERBUFFER, renderbuffer);
+		gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT16,
 			framebuffer.width, framebuffer.height);
 
-	gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0,
+		gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0,
 			gl.TEXTURE_2D, this.heatTexture, 0);
-	gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT,
+		gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT,
 			gl.RENDERBUFFER, renderbuffer);
 
-	gl.bindTexture(gl.TEXTURE_2D, null);
-	
+		gl.bindTexture(gl.TEXTURE_2D, null);
+	}
+		
+	this.createMapFramebuffer(); 
 
 	/**
 	 * program uniforms
@@ -49,11 +54,15 @@ function HeatMapDimension(manager){
 	var zoom = 'zoom';
 	var drawselect = 'drawselect';
 	var numfilters = 'numfilters';
-	
+	var spIndex = 'spIndex'
 	gl.useProgram(this.glProgram);
+	
 	manager.storeUniformLoc(this.glProgram, zoom);
 	manager.storeUniformLoc(this.glProgram, drawselect);
 	manager.storeUniformLoc(this.glProgram, numfilters);
+	manager.storeUniformLoc(this.glProgram, spIndex);
+	
+	
 	gl.uniform1f(this.glProgram.numfilters, 3);		
 	gl.useProgram(null);
 	var	renderer = new HeatMapRenderer(manager);
@@ -61,7 +70,7 @@ function HeatMapDimension(manager){
 	
 	
 	this.setup = function() {
-		
+		//this.createFramebuffer(); 
 		//gl.useProgram(this.glProgram);
 		/** add specific buffer and uniforms */
 		gl.useProgram(this.glProgram);
@@ -75,7 +84,7 @@ function HeatMapDimension(manager){
 		gl.bindFramebuffer(gl.FRAMEBUFFER,framebuffer );	
 		
 		
-		gl.viewport(0, 0, manager.width, manager.height);
+		gl.viewport(0, 0, manager.w, manager.h);
 		gl.clearColor(0.0, 0.0, 0.0, 0.0);
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 	
@@ -93,6 +102,8 @@ function HeatMapDimension(manager){
 	
 		gl.useProgram(this.glProgram);	
 		gl.uniform1f(this.glProgram[numfilters], manager.filternum);			
+		gl.uniform1f(this.glProgram[zoom], manager.zoom);
+		gl.uniform1f(this.glProgram[spIndex], manager.spIndex);			
 		//gl.uniform1f(this.glProgram[drawselect], 0);
 		//gl.drawArrays(gl.POINTS, 0, num);	
 		

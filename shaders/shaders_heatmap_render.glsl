@@ -31,12 +31,15 @@
   		 
 	
 
-  		if (fdata[0] > 0.) {
+  		if (fdata[0] > 0.  && fdata[2]> 0.5) {  			
   			float val = fdata[1]/(max/2.);
-  			col = vec4(val, 1.-val , 0., 0.0+val*2.);//vec4(1.,0.,0.,0.);
-  		
-  			
+  			col = vec4(val, 1.-val , 0. , 0.0+val*3.);//vec4(1.,0.,0.,0.);
+  			}
+  		else if (fdata[0] > 0.  && fdata[2] < 0.5) {  		
+  			float val = fdata[1]/(max/2.);
+  			col = vec4(val, 1.-val , 0.2 , 0.0+val*1.5);//vec4(1.,0.,0.,0.);
   		}	else {
+  			
   			col = vec4(0.,0.,0.,0.);
   		}
   		

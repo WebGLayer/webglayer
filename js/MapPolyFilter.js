@@ -18,6 +18,7 @@ function MapPolyFilter(manager){
 	this.filterTexture = gl.createTexture();
 	this.filterTexture.name = "filter texture";
 		
+	this.createMapFramebuffer = function(){ 
 		
 		/*Initialise offscreen buffer*/
 		
@@ -31,8 +32,8 @@ function MapPolyFilter(manager){
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); 
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 
-		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, manager.width,
-				manager.height, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, manager.w,
+				manager.h, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
 		
 		
 		/** Render buffer*/
@@ -49,8 +50,9 @@ function MapPolyFilter(manager){
 		gl.bindRenderbuffer(gl.RENDERBUFFER, null);
 		gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 		gl.bindTexture(gl.TEXTURE_2D, null);
+	}
 	
-	
+	this.createMapFramebuffer();
 	
 	this.renderFilter = function(){		
 		gl.useProgram(this.filterProgram);
@@ -58,7 +60,7 @@ function MapPolyFilter(manager){
 		gl.bindTexture(gl.TEXTURE_2D, this.filterTexture);
 		gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
 		
-		gl.viewport(0, 0, manager.width, manager.height);
+		gl.viewport(0, 0, manager.w, manager.h);
 		
 		gl.clearColor(0.0, 0.0, 0.0, 0.0);
 	

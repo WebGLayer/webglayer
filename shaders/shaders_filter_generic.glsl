@@ -23,6 +23,7 @@
   		   	     
   		 vec4 thatval = texture2D(indexText , vec2((index[0] +1.)/2. , (index[1]+1.)/2.));    
   		float val =  thatval[0];	
+  		float spat = 0.;
 		 // if data are in the map window 
 		//if (-1. <= p[0] && p[0]<=1. && -1. <= p[1] && p[1]<=1.){
 		vec4 at1;
@@ -32,12 +33,13 @@
   			} else {
   				/*consider map filter*/
   				at1   = texture2D(histFilter, vec2((p[0]+1.)/2., (p[1]+1.)/2.));
+  				spat = 1./256.;
   			}
-  			  		  		
+  				  		
   			
 			// if data are selected  			
   			if ( at1[0] > 0. ){ //|| thatval[0] > 0.){ //&&  polyb[0] > 0.){  				  			
-  				col = vec4( val + pow(2.,(filterid))/256., 0., 0., thatval[3]);
+  				col = vec4( val + pow(2.,(filterid))/256., 0., spat, thatval[3]);
   			} else {  	
   				// data are not selected  		   
   		    	col = vec4(val , 0., 0., thatval[3]); 	  		  

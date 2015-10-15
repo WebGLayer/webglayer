@@ -34,7 +34,7 @@ function HeatMapRenderer(manager){
 	
 	
 		gl.bindFramebuffer(gl.FRAMEBUFFER,null);	
-		gl.viewport(0, 0, manager.width, manager.height);
+		gl.viewport(0, 0, manager.w, manager.h);
 		//gl.clearColor(0.0, 0.0, 0.0, 0.0);
 		//gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 	

@@ -1,4 +1,27 @@
 function Manager(mapid) {
+
+	this.updateMapSize = function(){
+		this.mapdiv = document.getElementById(mapid);
+		var mapparentdiv = document.getElementById(mapid).parentElement;
+
+		var t = this.mapdiv.clientTop;
+		var l = this.mapdiv.clientLeft;	
+		this.w = this.mapdiv.offsetWidth;
+		this.h = this.mapdiv.offsetHeight;
+		var z = this.mapdiv.style.zIndex;
+	
+		z == "" ? z=1000 :z = parseInt(z)+1;
+		 	
+		this.canvas.setAttribute('id','webglayer');
+		this.canvas.setAttribute("width", this.w);
+		this.canvas.setAttribute("height",this.h);
+		this.canvas.setAttribute("style", "position:absolute ; " +
+						"top:"+t+"px ; " +
+						"left:"+l+"px; " +
+						"pointer-events: none;" +
+						"opacity: 1;" +
+						"z-index: " + z);
+	}
 	/**
 	 * Global variables
 	 */
@@ -6,25 +29,8 @@ function Manager(mapid) {
 	var canvasid = 'webglayer';
 	this.mapdiv = document.getElementById(mapid);
 	var mapparentdiv = document.getElementById(mapid).parentElement;
-
-	var t = this.mapdiv.clientTop;
-	var l = this.mapdiv.clientLeft;	
-	this.w = this.mapdiv.offsetWidth;
-	this.h = this.mapdiv.offsetHeight;
-	var z = this.mapdiv.style.zIndex;
-	
-	z == "" ? z=1000 :z = parseInt(z)+1;
-		 
 	this.canvas = document.createElement('canvas');
-	this.canvas.setAttribute('id','webglayer');
-	this.canvas.setAttribute("width", this.w);
-	this.canvas.setAttribute("height",this.h);
-	this.canvas.setAttribute("style", "position:absolute ; " +
-						"top:"+t+"px ; " +
-						"left:"+l+"px; " +
-						"pointer-events: none;" +
-						"opacity: 1;" +
-						"z-index: " + z);
+	this.updateMapSize();
 	
 
 	

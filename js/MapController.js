@@ -7,15 +7,18 @@ var MapController = function(manager) {
 	this.height;
 	
 	
-	this.resize = function(w, h){
-		manager.canvas.setAttribute("width", w);
-		manager.canvas.setAttribute("height", h);
-		this.width = w;
-		this.height = h;
+	this.resize = function(){
+		manager.canvas.setAttribute("width", manager.w);
+		manager.canvas.setAttribute("height", manager.h);
+		this.width = manager.w;
+		this.height =  manager.h;
 		
 		this.initMatrix();
 			
 		this.updateMatrix();
+
+		
+		
 	}
 	this.initMatrix = function(){
 		this.matrix = new Float32Array([ 2 / this.width, 0, 0, 0, 0, -2 / this.height, 0, 0,
@@ -36,7 +39,7 @@ var MapController = function(manager) {
 		translateMatrix(this.matrix, -offset.x, -offset.y);			
 
 		this.updateMatrix();
-		
+		manager.wgl.updateSizeOfMapDimensions();
 		manager.wgl.filterByExt();
 		//func();
 		//manager.wgl.render();

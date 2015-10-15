@@ -1,6 +1,6 @@
 /**/
 function HistDimension(manager, meta) {
-	
+	this.isSpatial = false;
 	var valcalc = function(i){
 		return meta.min + i * (meta.max -meta.min) / (meta.num_bins)
 		};

@@ -13,7 +13,7 @@ WGL = function(data, url){
 	manager.filternum = 0.;
 
 	this.mcontroller = new MapController(manager);
-	this.mcontroller.resize(manager.mapdiv.offsetWidth, manager.mapdiv.offsetHeight);
+	this.mcontroller.resize();
 	
 	var dimensions = [];
 	var oneDDim = [];
@@ -117,6 +117,21 @@ WGL = function(data, url){
 			mainFilter.render(dimensions);	
 	}
 	
+	this.updateSizeOfMapDimensions = function(){
+	
+		for (var i in dimensions){
+			var d = dimensions[i];
+			if (typeof(d.createMapFramebuffer)!='undefined'){
+				d.createMapFramebuffer();
+			}
+
+			if (typeof(d.filter) !='undefined'){
+				if (typeof(d.filter.createMapFramebuffer) !='undefined'){
+					d.filter.createMapFramebuffer();
+				}
+			}
+		}
+	}
 	this.updateCharts = function(){				
 			
 		//console.log(WGL.readHist());
@@ -125,7 +140,7 @@ WGL = function(data, url){
 		for ( var i in charts) {
 				var readout = dimensions[i].readPixels();
 				if (typeof readout != 'undefined') {
-				charts[i].update(readout);
+				charts[i].update(readout);				
 			}
 		}		
 	}
@@ -168,6 +183,7 @@ WGL = function(data, url){
 		}				
 		
 		manager.filternum = getNumberOfActiveFilters();
+	
 
 		if (typeof(thisfilter)=='undefined' && filter.length>0){
 			thisfilter = id;	
@@ -236,9 +252,11 @@ WGL = function(data, url){
 		manager.filternum = getNumberOfActiveFilters();
 		
 		
+		
 		mainFilter.render(dimensions);
 		
 		this.render();
+		this.filterByExt();
 		this.updateCharts();
 		mainFilter.switchTextures();
 		
@@ -249,13 +267,35 @@ WGL = function(data, url){
 
 	function getNumberOfActiveFilters(){
 		var  num = 0;
-		for (i in dimensions){
+		for (var i in dimensions){
 			var d =dimensions[i];
 			if (typeof(d.filter)!='undefined')
 			{ 
 				if (d.filter.isActive) {		
 					//console.log("active filter on dim "+d.name+" "+num);
 					d.filter.index = num;	
+					if (d.isSpatial){
+						manager.spIndex = num;
+					}
+					num++;								
+					}
+					else {
+						//d.filter.index = -1;
+					}
+			} 
+		}
+		return num;
+	}
+	
+	function getNumberOfNonSpatiolFilters(){
+		var  num = 0;
+		for (var i in dimensions){
+			var d =dimensions[i];
+			if (typeof(d.filter)!='undefined')
+			{ 
+				if (d.filter.isActive && !d.isSpatial) {		
+					//console.log("active filter on dim "+d.name+" "+num);
+					//d.filter.index = num;	
 					num++;								
 					}
 					else {
@@ -287,17 +327,15 @@ WGL = function(data, url){
 		m.min = 0.;
 		m.max = m.num_bins;
 		for (var i in m.data) {
-			if (isNaN(m.data[i])) {
-				val = 0.//-99999.			
-				} 
-			else {
-				var bin = m.domain.indexOf(m.data[i]);
+		
+			var bin = m.domain.indexOf(m.data[i]);
 				if (bin == -1){
 					console.warn('data out of range ' +(m.data[i]));
 					val = -1;
+				} else {
+					val =  (bin+0.5) / m.num_bins ;
 				}
-				val =  (bin+0.5) / m.num_bins ;
-			}
+			
 			pts_ar[i] = val;
 			//pts[i] = null;
 		}

@@ -2,6 +2,7 @@
 function HistogramDimension(manager, meta) {
 	var manager = manager;
 	var metadata = meta;
+	this.isSpatial = false;
 	
 	this.program = GLU.compileShaders("hist_vShader", "hist_fShader", this);
 

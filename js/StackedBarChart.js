@@ -1,4 +1,5 @@
 StackedBarChart = function(m, div_id, x_label, id) {
+	var type;
 	var div_id;
 	var w = 500;
 	var h = 200;
@@ -24,16 +25,19 @@ StackedBarChart = function(m, div_id, x_label, id) {
 	var svgbw = "";	
 
 	this.setLinearXScale = function(){
+		xScale = new d3.scale.linear();
 		xScale = d3.scale.linear().domain([ m.min , m.max ]).range([ 0, width ]);
 		var bw = Math.floor(width / dataset.length -1);
 		svgbw= "h"+bw+"V";
+		type = 'linear';
 		return this;
 	}
 
 	this.setOrdinalXScale = function(){
-		xScale = d3.scale.ordinal().domain(m.domain).rangeRoundBands([ 0, width ],0.01);
+		xScale = d3.scale.ordinal().domain(m.domain).rangeRoundBands([ 0, width ],0.03);
 		var bw =xScale.rangeBand();
 		svgbw= "h"+bw+"V";
+		type = 'ordinal';
 		return this;
 	}
 
@@ -60,7 +64,12 @@ StackedBarChart = function(m, div_id, x_label, id) {
 				[ height, 0 ]);
 
 		colorScale.domain([ "selected", "unselected", "out" ]);
-		xAxis = d3.svg.axis().scale(xScale).orient("bottom");
+		
+		
+		//to update label printing
+		var date_format = function(d){return d; }//new Date(d*1000).getYear()};
+		
+		xAxis = d3.svg.axis().scale(xScale).orient("bottom").tickFormat(date_format);;
 
 		yAxis = d3.svg.axis().scale(yScale).orient("left");
 
@@ -131,10 +140,36 @@ StackedBarChart = function(m, div_id, x_label, id) {
 		 * return colorScale(d.name); }).attr("class", function(d){return
 		 * div_id+d.name});
 		 */
+		function brushLinear() {
+			var f = brush1.extent();				
+			WGL.filterDim(id, f);
+			//console.log(brush1.extent()[0][0]+' '+brush1.extent()[0][1]);
+		}
+
+		function brushOrdinal() {
+			var f = brush1.extent();
+			var of = []
+			var l = xScale.domain().length;
+			for (var i in f){
+				of[i] = [];
+				of[i][0] = f[i][0] /width * l; 
+				of[i][1] = f[i][1] /width * l;  	
+			}
+			WGL.filterDim(id, of);
+			console.log(of[0][0]+' '+of[0][1]);
+			
+		}
+		var brush;
+		if (type=='linear') {
+			brush = brushLinear;
+		}
+		else if (type=='ordinal'){
+			brush = brushOrdinal;
+		}
 
 		var brush1 = d3.svg.multibrush().x(xScale).extentAdaption(resizeExtent)
 				.on("brush", brush).on("brushend", function(d) {
-					if (brush1.extent().length == 0) {
+					if (brush1.extent().length == 0) {						
 						brush();
 					}
 
@@ -177,14 +212,8 @@ StackedBarChart = function(m, div_id, x_label, id) {
 			selection.attr("height", height);
 		}
 		
-		function brush() {
-			
-			var f = brush1.extent();				
-			WGL.filterDim(id, f);
-			//console.log(brush1.extent()[0][0]+' '+brush1.extent()[0][1]);
-			
-		}
-
+	
+	
 		function brushO() {
 			
 			var f = brush1.extent();	
