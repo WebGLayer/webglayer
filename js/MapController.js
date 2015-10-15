@@ -8,9 +8,9 @@ var MapController = function(manager) {
 	
 	
 	this.resize = function(){
-		manager.canvas.setAttribute("width", manager.w);
-		manager.canvas.setAttribute("height", manager.h);
-		this.width = manager.w;
+		manager.canvas.setAttribute("width", manager.body_width);
+		manager.canvas.setAttribute("height", manager.body_height);
+		this.width =manager.w;
 		this.height =  manager.h;
 		
 		this.initMatrix();

@@ -2,17 +2,35 @@ function Manager(mapid) {
 
 	this.updateMapSize = function(){
 		this.mapdiv = document.getElementById(mapid);
-		var mapparentdiv = document.getElementById(mapid).parentElement;
-
-		var t = this.mapdiv.clientTop;
-		var l = this.mapdiv.clientLeft;	
+		var body = document.getElementsByTagName('body')[0];		
+		
+		var mapparentdiv = document.getElementById(mapid).parentElement;		
+		this.b = body.offsetHeight - (this.mapdiv.offsetTop +this.mapdiv.offsetHeight); /* lower (bottom)left corner for webgl*/
+		this.l = this.mapdiv.offsetLeft; /* lower left corner for webgl*/	
 		this.w = this.mapdiv.offsetWidth;
 		this.h = this.mapdiv.offsetHeight;
+
+
+		
+		this.body_width  = body.offsetWidth;
+		this.body_height = body.offsetHeight;
+
+		
 		var z = this.mapdiv.style.zIndex;
 	
 		z == "" ? z=1000 :z = parseInt(z)+1;
 		 	
 		this.canvas.setAttribute('id','webglayer');
+		this.canvas.setAttribute("width",  this.body_width);
+		this.canvas.setAttribute("height",this.body_height);
+		this.canvas.setAttribute("style", "position:absolute ; " +
+						"top:"+0+"px ; " +
+						"left:"+0+"px; " +
+						"pointer-events: none;" +
+						"opacity: 1;" +
+						"z-index: " + z)
+		
+		/*this.canvas.setAttribute('id','webglayer');
 		this.canvas.setAttribute("width", this.w);
 		this.canvas.setAttribute("height",this.h);
 		this.canvas.setAttribute("style", "position:absolute ; " +
@@ -20,7 +38,7 @@ function Manager(mapid) {
 						"left:"+l+"px; " +
 						"pointer-events: none;" +
 						"opacity: 1;" +
-						"z-index: " + z);
+						"z-index: " + z);*/
 	}
 	/**
 	 * Global variables
