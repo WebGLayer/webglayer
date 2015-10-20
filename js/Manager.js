@@ -128,7 +128,16 @@ function Manager(mapid) {
 		this.databuffers[name] = buffer;		
 	}
 	
-	
+	this.addElementBuffer = function(data, itemSize, name) {
+		var buffer = gl.createBuffer();
+		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer);
+		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, data, gl.STATIC_DRAW);
+		buffer.itemSize = itemSize;
+		buffer.numItems = data.length / itemSize;
+		buffer.name = name;
+		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
+		this.databuffers[name] = buffer;		
+	}
 
 	
 	/**
@@ -188,8 +197,7 @@ function Manager(mapid) {
 	//	gl.useProgram(prog);
 		if (prog.matrixLoc == null){
 			prog.matrixLoc = this.getUniformLoc(prog, this.mapMatrix.name);	
-		}
-		
+		}		
 		gl.uniformMatrix4fv(prog.matrixLoc, false,  this.mapMatrix);		
 	}
 	
@@ -223,7 +231,13 @@ function Manager(mapid) {
 			gl.enableVertexAttribArray(prog[name]);
 			gl.vertexAttribPointer(prog[name], buf.itemSize, gl.FLOAT,
 					false, 0, 0);
+		gl.bindBuffer(gl.ARRAY_BUFFER, null);
 		
+	}
+
+	
+	this.bindElementBuffer = function(id){
+		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.databuffers[id]);
 	}
 	
 	this.enableBufferForName = function(prog, buff, name){

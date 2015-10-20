@@ -87,6 +87,10 @@ function GLUtils() {
 		$.get(domain+'shaders/shaders_filter_extent.glsl', function(data) {
 			$("head").append(data);
 		});
+		
+		$.get(domain+'shaders/shaders_pc.glsl', function(data) {
+			$("head").append(data);
+		});
 		$.ajaxSetup({
 			async : true
 		});

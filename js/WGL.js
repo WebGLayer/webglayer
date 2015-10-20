@@ -51,6 +51,14 @@ WGL = function(data, url){
 		dimensions[id] = dim;
 	}
 	
+	this.addParallelCoordinates = function(div, data){
+		for (var i in data){
+			var dim = data[i];
+		}
+		var dim = new ParallelCoordinates(manager,div);
+		dimensions[div] = dim;
+	}
+	
 	this.addLinearHistDimension = function(m){
 		var ta = array2TANormLinear(m , m.num_bins);
 		manager.addDataBuffer(ta, 1, m.name);
@@ -70,6 +78,49 @@ WGL = function(data, url){
 		manager.dimnum =  Object.keys(oneDDim).length;
 	}
 	
+	this.addMultiDim = function(d){
+		 var ta = [];		
+		 
+		for (var i in d){
+			var dim = d[i];
+			if (dim.type=='ordinal'){
+				ta[i] = array2TANormOrdinal(dim);
+			} else if (dim.type =='linear'){
+				ta[i] = array2TANormLinear(dim , dim.num_bins);
+			} else {
+				console.error('Dimension type miising or unknown for dim '+d);
+			}
+		}
+
+		var td = [];
+		var ti = [];
+		var indicies =[];
+		var index_pc = [];
+
+		for (var j in ta[0]){
+			for(var i in ta){
+				if (i < (ta.length-1)){
+					var ii =  parseInt(i);
+					indicies.push(ta.length*j + ii);
+					indicies.push(ta.length*j + ii+1);
+					
+					
+					
+				}
+				index_pc.push(index[parseInt(j)]);
+				td.push(ta[i][j]);
+				ti.push(i / d.length + 1/ (d.length*2));
+				
+			}
+		}
+		
+		var ai=array2TA2D(index_pc);
+		manager.addDataBuffer(ai, 2, 'indexpc');
+		manager.addElementBuffer(new Uint16Array(indicies),1, 'indicies');
+		manager.addDataBuffer(new Float32Array(td), 1, 'td');
+		manager.addDataBuffer(new Float32Array(ti), 1, 'ti');
+	}
+	
 	this.addLinearFilter = function(m, res, id){
 		var d = dimensions[m.name];
 		if (d == null){
@@ -77,8 +128,6 @@ WGL = function(data, url){
 		}
 		var f = new LinearFilter(manager, m, res, id);//res);
 		d.filter = f;
-		//filters[id]= f;
-		//manager.filternum =  Object.keys(filters).length;
 	}
 	
 	this.addPolyBrushFilter = function(name, id){
@@ -88,8 +137,6 @@ WGL = function(data, url){
 		}
 		var polyFilter = new MapPolyFilter(manager);//res);
 		d.filter = polyFilter;
-		//filters[id]= f;
-		//manager.filternum =  Object.keys(filters).length;
 	}
 
 	this.addExtentFilter = function(){
@@ -105,13 +152,9 @@ WGL = function(data, url){
 	}		
 
 	this.render = function(){	
-	 	//console.log("filter num "+manager.filternum);	
-		
 		for (var i in dimensions){
 			dimensions[i].render(numrec);
 		}
-		
-	
 	}
 	this.initFilters = function(){
 			mainFilter.render(dimensions);	
@@ -132,11 +175,8 @@ WGL = function(data, url){
 			}
 		}
 	}
-	this.updateCharts = function(){				
-			
-		//console.log(WGL.readHist());
-		//var readout =this.readHist();
-		
+	
+	this.updateCharts = function(){						
 		for ( var i in charts) {
 				var readout = dimensions[i].readPixels();
 				if (typeof readout != 'undefined') {
@@ -147,10 +187,6 @@ WGL = function(data, url){
 	
 	
 	this.filterByExt = function(){		
-	
-		//mainFilter.render(dimensions);
-		
-		
 		if (typeof(extf)!='undefined'){
 			extf.render();
 			thisfilter = undefined;	
@@ -383,7 +419,7 @@ WGL = function(data, url){
 		for (var i = 0; i < pts.length; i++) {
 			pts_ar[j++] = pts[i][0];
 			pts_ar[j++] = pts[i][1];
-			pts[i] = null;
+			//pts[i] = null;
 		}
 
 		return pts_ar;
