@@ -99,24 +99,29 @@ WGL = function(data, url){
 
 		for (var j in ta[0]){
 			for(var i in ta){
-				if (i < (ta.length-1)){
-					var ii =  parseInt(i);
-					indicies.push(ta.length*j + ii);
-					indicies.push(ta.length*j + ii+1);
-					
-					
-					
-				}
+				i =  parseInt(i);
+				//if (i < (ta.length-1)){
+				//	var ii =  parseInt(i);
+				//	indicies.push(ta.length*j + ii);
+				//	indicies.push(ta.length*j + ii+1);
+				//}
 				index_pc.push(index[parseInt(j)]);
 				td.push(ta[i][j]);
 				ti.push(i / d.length + 1/ (d.length*2));
+			
+				/*if not end point add twice*/
+				 if( !(i==0 || i==(ta.length-1)) ){
+					 index_pc.push(index[parseInt(j)]);
+					 td.push(ta[i][j]);
+					 ti.push(i / d.length + 1/ (d.length*2));
+				 }
 				
 			}
 		}
 		
 		var ai=array2TA2D(index_pc);
 		manager.addDataBuffer(ai, 2, 'indexpc');
-		manager.addElementBuffer(new Uint16Array(indicies),1, 'indicies');
+		//manager.addElementBuffer(new Uint16Array(indicies),1, 'indicies');
 		manager.addDataBuffer(new Float32Array(td), 1, 'td');
 		manager.addDataBuffer(new Float32Array(ti), 1, 'ti');
 	}

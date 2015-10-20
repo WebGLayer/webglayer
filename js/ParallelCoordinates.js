@@ -49,12 +49,12 @@ function ParallelCoordinates(manager, div){
 		gl.blendFunc( gl.ONE, gl.ONE  );		
 	
 		//gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, manager.databuffers['indicies']);//pcIndexBuffer);
-		manager.bindElementBuffer("indicies");	
+	//	manager.bindElementBuffer("indicies");	
 		manager.enableFilterTexture(this.glProgram);
 
 		gl.lineWidth(1);
-        gl.drawElements(gl.LINES, manager.num_rec*4, gl.UNSIGNED_SHORT,0);
-       //	gl.drawArrays(gl.LINES, 0, manager.num_rec*3);
+       // gl.drawElements(gl.LINES, manager.num_rec*4, gl.UNSIGNED_SHORT,0);
+       	gl.drawArrays(gl.LINES, 0, manager.num_rec*4);
 				
 	    gl.useProgram(null);
 	   

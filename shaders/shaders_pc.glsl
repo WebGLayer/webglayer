@@ -19,13 +19,13 @@
   			if (fdata[0]>=  ( (pow(2.,numfilters) -1.) / 256.) && numfilters != 0. ){    
   				// data are selected						
 				gl_Position = vec4(ti*2.-1., td*2.-1.,0.,1.);    
-				col = vec4(100./256.,0.,0.,100./256.);	
+				col = vec4(1./256.,0.,0.,1./256.);	
 				
 			} else {
   				// data visible but not selected
   				gl_Position = vec4(-2., -2., 0.,0.);    
   				//gl_Position = vec4(ti*2.-1., td*2.-1.,0.,1.); 
-  				col = vec4(0.,1.,0., 0.);		
+  				col = vec4(0.,0.,0., 0.);		
 				//gl_Position = vec4(ti*2.-1., td*2.-1.,0.,1.); 
   			}
 
