@@ -118,6 +118,11 @@ function Manager(mapid) {
 	 * Creates a data buffer object. itemSize is a dimension of the data
 	 */
 	this.addDataBuffer = function(data, itemSize, name) {
+		 
+		if (typeof(this.databuffers[name])!='undefined'){
+			throw 'buffer '+name+' already exists';
+		}
+		
 		var buffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
 		gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW);
@@ -249,8 +254,12 @@ function Manager(mapid) {
 				if (gl.getAttribLocation(prog, name) >= 0) {
 					prog[name] = gl.getAttribLocation(prog, name);
 				} else {
-					console.log("Error: attribute " +  name + " does not exist in program "+prog.name);
+					throw "Error: attribute " +  name + " does not exist in program."+prog.name ;
 				}
+			}
+
+			if (typeof(buf)=='undefined'){
+				throw 'Buffer for ' +name + ' is not deffined.';
 			}
 					
 				gl.enableVertexAttribArray(prog[name]);

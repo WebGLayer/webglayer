@@ -98,7 +98,7 @@ Filter = function(manager) {
 
 
 	/*evaluate all filters*/
-	this.render = function(dimensions) {
+	this.applyFilterAll = function(dimensions) {
 
 		/*update filtering data if (important for polybrush filter)*/
 		for (var i in dimensions) {
@@ -133,9 +133,8 @@ Filter = function(manager) {
 	//	this.manager.enableBuffersAndCommonUniforms(this.filterProgram);
 
 		manager.bindMapMatrix(this.filterProgram);
-		manager.enableBufferForName(this.filterProgram, "wPoint", "wPoint");
 		manager.enableBufferForName(this.filterProgram,  "index", "index");	
-
+	
 	
 		for (var i in dimensions) {
 			/* traverse all filters and evalut tham */
@@ -144,16 +143,11 @@ Filter = function(manager) {
 		
 			if (typeof(d.filter) != 'undefined'){
 				if(d.filter.isActive){										
-					/* Activate histogram texture*/
+					/* Activate filter texture*/
 					gl.activeTexture(gl.TEXTURE0);
 					gl.bindTexture(gl.TEXTURE_2D, d.filter.filterTexture);
 					gl.uniform1i(this.filterProgram.histLoc , 0);	
-					
-					/*Activate polybrush texture*/
-				//	gl.activeTexture(gl.TEXTURE1);
-				//	gl.bindTexture(gl.TEXTURE_2D, manager.mapFilterTexture);
-				//	gl.uniform1i(this.filterProgram.polyLoc , 1);	
-
+									
 					/*Activate index texture*/
 					gl.activeTexture(gl.TEXTURE1);
 					gl.bindTexture(gl.TEXTURE_2D, filterTexture[thatID]);
@@ -164,7 +158,11 @@ Filter = function(manager) {
 				 //  	console.log("filter num "+manager.filternum);
 				
 					if (d.filter.isspatial == 0.0){
+						/*this fitler is not spatial - bind 1d attribute*/
 						manager.enableBufferForName(this.filterProgram, d.name, "attr1");
+					} else {
+						/*this filter is spatial - bind the wPoint*/
+						manager.enableBufferForName(this.filterProgram, "wPoint", "wPoint");
 					}
 		 			gl.drawArrays(gl.POINTS, 0, manager.num_rec);			
 				}
@@ -184,8 +182,8 @@ Filter = function(manager) {
     	gl.bindFramebuffer(gl.FRAMEBUFFER, null);	
 	}
 
-/*Render 1d filters*/
-	this.applyFilter = function(dim) {
+/*Render filter for particular dimesnion*/
+	this.applyFilterDim = function(dim) {
 		gl.useProgram(this.filterProgram);					
 		//console.log("binding framebuffer to "+activeID);	
 		gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer[activeID]);
@@ -202,8 +200,7 @@ Filter = function(manager) {
 
 	//	this.manager.enableBuffersAndCommonUniforms(this.filterProgram);
 
-		manager.bindMapMatrix(this.filterProgram);
-		manager.enableBufferForName(this.filterProgram, "wPoint", "wPoint");
+		manager.bindMapMatrix(this.filterProgram);		
 		manager.enableBufferForName(this.filterProgram,  "index", "index");	
 
 	
@@ -211,11 +208,6 @@ Filter = function(manager) {
 		gl.activeTexture(gl.TEXTURE0);
 		gl.bindTexture(gl.TEXTURE_2D, dim.filter.filterTexture);
 		gl.uniform1i(this.filterProgram.histLoc , 0);	
-					
-		/*Activate polybrush texture*/
-		//	gl.activeTexture(gl.TEXTURE1);
-		//	gl.bindTexture(gl.TEXTURE_2D, manager.mapFilterTexture);
-		//	gl.uniform1i(this.filterProgram.polyLoc , 1);	
 
 		/*Activate index texture*/
 		gl.activeTexture(gl.TEXTURE1);
@@ -229,7 +221,10 @@ Filter = function(manager) {
 				   
 		if (dim.filter.isspatial == 0.0){
 			manager.enableBufferForName(this.filterProgram, dim.name, "attr1");
+		} else {
+			manager.enableBufferForName(this.filterProgram, "wPoint", "wPoint");
 		}
+	
 		
 		gl.drawArrays(gl.POINTS, 0, manager.num_rec);																			
 		

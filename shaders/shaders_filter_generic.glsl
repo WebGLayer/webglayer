@@ -1,9 +1,10 @@
 <script id="filter_vShader" type="x-shader/x-vertex">
-  	  attribute vec4 wPoint;
-      attribute float attr1;   
+  	 
+     
       attribute vec2 index;
-
-         
+      attribute vec4 wPoint;
+      attribute float attr1;
+               
       uniform float filterid;
       
       /*flag for spatial filter*/

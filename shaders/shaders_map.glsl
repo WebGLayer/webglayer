@@ -1,7 +1,7 @@
 <script id="map_vShader" type="x-shader/x-vertex">
       attribute vec4 wPoint;  
       attribute vec2 index;
-      
+     
       uniform mat4 mapMatrix;
       uniform mat4 rasterMatrix;
       uniform float zoom;

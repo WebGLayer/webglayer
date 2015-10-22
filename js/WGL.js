@@ -38,13 +38,20 @@ WGL = function(data, url){
 	 * 
 	 */
 	this.addMapDimension = function(data, id){
-		manager.addDataBuffer(array2TA(data), 2, 'wPoint');
+		try { manager.addDataBuffer(array2TA(data), 2, 'wPoint');}
+		catch(err) {
+			console.warn(err);
+		};
 		var dim = new MapDimension(manager);
 		dimensions[id] = dim;
 	}
 	
 	this.addHeatMapDimension = function(data, id){
-		//manager.addDataBuffer(array2TA(data), 2, 'wPoint');
+		try { manager.addDataBuffer(array2TA(data), 2, 'wPoint');}
+		catch(err) {
+			console.warn(err);
+		};
+		
 		var dim = new HeatMapDimension(manager);
 		dimensions[id] = dim;
 	}
@@ -146,6 +153,13 @@ WGL = function(data, url){
 	}
 
 	this.addExtentFilter = function(){
+		var isspatial=false;
+		for (i in dimensions){
+			// check if there is spatial dimension
+			if (dimensions[i].isSpatial) {isspatial=true};
+		}
+		if (!isspatial){throw "Can not set spatial filter without spatial dimension" }
+		
 		extf = new ExtentFilter(manager);
 	}
 	
@@ -163,7 +177,7 @@ WGL = function(data, url){
 		}
 	}
 	this.initFilters = function(){
-			mainFilter.render(dimensions);	
+			mainFilter.applyFilterAll(dimensions);	
 	}
 	
 	this.updateSizeOfMapDimensions = function(){
@@ -237,7 +251,7 @@ WGL = function(data, url){
 		f.renderFilter();
 					//f.readPixels();
 
-		mainFilter.applyFilter(dimensions[id]);		
+		mainFilter.applyFilterDim(dimensions[id]);		
 		this.render();
 		this.updateCharts();
 		
@@ -263,8 +277,12 @@ WGL = function(data, url){
 		dimensions[newf].filter.isActive=false;	
 		
 		
-		mainFilter.render(dimensions);	
-		extf.render();
+		mainFilter.applyFilterAll(dimensions);	
+
+		if (typeof(extf)!='undefined'){
+			extf.render();
+		}
+		
 		//mainFilter.switchTextures();
 		this.render();
 		this.updateCharts();
@@ -275,7 +293,7 @@ WGL = function(data, url){
 		dimensions[newf].filter.isActive=false;	 	
 		manager.filternum = getNumberOfActiveFilters();
 		
-		mainFilter.render(dimensions);
+		mainFilter.applyFilterAll(dimensions);
 		
 		this.render();
 		this.filterByExt();
