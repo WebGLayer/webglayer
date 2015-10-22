@@ -145,8 +145,8 @@ WGL = function(data, url){
 	
 	this.addPolyBrushFilter = function(name, id){
 		var d = dimensions[name];
-			if (d == null){
-			console.error('Cant set fitler to not defined dimension '+name);
+			if (typeof(d) == 'undefined'){
+			throw ('Cant set fitler to not defined dimension '+name);
 		}
 		var polyFilter = new MapPolyFilter(manager);//res);
 		d.filter = polyFilter;
@@ -235,13 +235,13 @@ WGL = function(data, url){
 			this.filterChanged(thisfilter);				
 		} 
 		else if (id!=thisfilter){
-			console.log('filter changed');
+			//console.log('filter changed');
 			//thatfilter = thisfilter;			
 			thisfilter = id;
 			this.filterChanged(thisfilter);						
 		} 
 		else if  (id==thisfilter && filter.length==0){
-			console.log("filter deleted");
+			//console.log("filter deleted");
 			this.filterDeleted(thisfilter);	
 			thisfilter = undefined;		
 		}

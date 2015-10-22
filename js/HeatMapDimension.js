@@ -8,6 +8,12 @@ function HeatMapDimension(manager){
 	this.glProgram = GLU.compileShaders('heatmap_vShader', 'heatmap_fShader', this);
 	var framebuffer = gl.createFramebuffer();
 	
+	
+	// default radiusFunc
+	this.radiusFunction = function(z){
+		return z*z / 7;
+	};
+		
 	this.createMapFramebuffer = function(){
 		framebuffer.width = manager.w;	
 		framebuffer.height = manager.h;
@@ -51,13 +57,16 @@ function HeatMapDimension(manager){
 	/**
 	 * program uniforms
 	 */
-	var zoom = 'zoom';
+	
 	var drawselect = 'drawselect';
 	var numfilters = 'numfilters';
-	var spIndex = 'spIndex'
+	var spIndex =    'spIndex'
+		
+	var radius =     'radius';	
+	
 	gl.useProgram(this.glProgram);
 	
-	manager.storeUniformLoc(this.glProgram, zoom);
+	manager.storeUniformLoc(this.glProgram, radius);
 	manager.storeUniformLoc(this.glProgram, drawselect);
 	manager.storeUniformLoc(this.glProgram, numfilters);
 	manager.storeUniformLoc(this.glProgram, spIndex);
@@ -66,7 +75,7 @@ function HeatMapDimension(manager){
 	gl.uniform1f(this.glProgram.numfilters, 3);		
 	gl.useProgram(null);
 	var	renderer = new HeatMapRenderer(manager);
-	var	maxcale = new MaxCalculator(Math.floor(manager.w/4),Math.floor(manager.h/4));
+	var	maxcal = new MaxCalculator(Math.floor(manager.w/6),Math.floor(manager.h/6));
 	
 	
 	this.setup = function() {
@@ -102,7 +111,7 @@ function HeatMapDimension(manager){
 	
 		gl.useProgram(this.glProgram);	
 		gl.uniform1f(this.glProgram[numfilters], manager.filternum);			
-		gl.uniform1f(this.glProgram[zoom], manager.zoom);
+		gl.uniform1f(this.glProgram[radius], this.radiusFunction(manager.zoom));
 		gl.uniform1f(this.glProgram[spIndex], manager.spIndex);			
 		//gl.uniform1f(this.glProgram[drawselect], 0);
 		//gl.drawArrays(gl.POINTS, 0, num);	
@@ -116,7 +125,7 @@ function HeatMapDimension(manager){
 	    
 	    //var max = maxcale.getMax(this.heatTexture);
 
-	    manager.max = maxcale.getMax(this.heatTexture);
+	    manager.max = maxcal.getMax(this.heatTexture);
 	    renderer.heatTexture = 	this.heatTexture;	
 	    renderer.render(  manager.max);
 	    

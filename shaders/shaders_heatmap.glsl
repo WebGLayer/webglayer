@@ -4,7 +4,8 @@
       
       uniform mat4 mapMatrix;
       uniform mat4 rasterMatrix;
-      uniform float zoom;  
+      
+      uniform float radius;    
        
       uniform sampler2D filter;
       uniform float numfilters;
@@ -17,7 +18,7 @@
        
       void main() {
 		  	  
-  		float p_size = zoom*zoom/6.;
+  		float p_size = radius;
   	    	 
   		vec4 p =  mapMatrix * wPoint;  	
   		  		
@@ -30,7 +31,8 @@
   		
   			gl_Position = p; //vec4(-0.,-2.,0.,0.);    	
 			gl_PointSize = p_size;
-  			  	
+  			  
+  			  /*test if the data are selected without considering spatial index*/	
   		} else if ( fdata[0]>=  (pow(2.,numfilters) - pow(2., spIndex) - 1.) / 256. ){
   			selected = 0.;
   			//gl_Position = vec4(-0.,-2.,0.,0.);    	
@@ -65,8 +67,9 @@
       	float dist =  length(gl_PointCoord.xy, vec2(0.5,0.5)); 
       	
      	
-     	if (dist < 0.5 ) {
-     		gl_FragColor = vec4(1., 1./(1.+dist*2.) ,selected,1.);//col; 
+     	if (dist < 0.5 ) {     		
+     		gl_FragColor = vec4(1., 1./(0.1+dist*5.) ,selected,1.);//col; 
+     		//gl_FragColor = vec4(1., 0. ,0.,1.);
      	} else {
      		gl_FragColor = vec4(0., 0. ,0.,0.);//col; 
      	}

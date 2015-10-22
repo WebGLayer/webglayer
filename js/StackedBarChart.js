@@ -1,8 +1,25 @@
-StackedBarChart = function(m, div_id, x_label, id) {
+StackedBarChart = function(m, div_id, x_label, id, params) {
 	var type;
 	var div_id;
-	var w = 500;
-	var h = 200;
+	
+	var w;
+	var h;
+	var margin;
+	if (typeof(params)=='undefined'){
+		w = 500;
+		h = 200;
+		margin = {
+			top : 20,
+			right : 20,
+			bottom : 50,
+			left : 60
+			};
+	} else {
+		w=params.w;
+		h=params.h;
+		margin=params.margin;
+	}
+	
 	var dataset;
 	var xScale;
 	var yScale;
@@ -13,12 +30,7 @@ StackedBarChart = function(m, div_id, x_label, id) {
 	var svg;
 	var chart;
 	var active_group = 2;
-	var margin = {
-		top : 20,
-		right : 20,
-		bottom : 50,
-		left : 60
-	};
+	
 	var width = w - margin.left - margin.right;
 	var height = h - margin.top - margin.bottom;
 	var dataset = null;

@@ -44,7 +44,7 @@ HeatMapLegend = function(div_id) {
 	
 	svg.append("rect").attr("fill", "url(#legend)")
 					  .attr("x", 0)
-	                  .attr("y", 10)
+	                  .attr("y", 0)
 	                  .attr("width", 50)
 	                  .attr("height", height);
 	

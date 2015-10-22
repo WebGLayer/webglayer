@@ -79,13 +79,7 @@ function MaxCalculator(w, h){
 	
 		gl.disable(gl.DEPTH_TEST);
 		//gl.disable(gl.BLEND);
-		gl.disable(gl.BLEND);		
-		
-		
-	
-		
-		
-				
+		gl.disable(gl.BLEND);				
 	}	
 	this.render = function(texture) {
 		
