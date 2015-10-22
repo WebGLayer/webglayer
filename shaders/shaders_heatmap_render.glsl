@@ -31,11 +31,13 @@
   		 
 	
 
-  		if (fdata[0] > 0.  && fdata[2]> 0.5) {  			
+  		if (fdata[0] > 0.  && fdata[2]> 0.5) {  	
+  			//data are selected including spatial filter		
   			float val = fdata[1]/(max/2.);
   			col = vec4(val, 1.-val , 0. , 0.0+val*3.);//vec4(1.,0.,0.,0.);
   			}
-  		else if (fdata[0] > 0.  && fdata[2] < 0.5) {  		
+  		else if (fdata[0] > 0.  && fdata[2] < 0.5) {
+  			//data are seleted but not with spatial filter  		
   			float val = fdata[1]/(max/2.);
   			col = vec4(val, 1.-val , 0.2 , 0.0+val*1.5);//vec4(1.,0.,0.,0.);
   		}	else {

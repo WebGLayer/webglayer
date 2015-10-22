@@ -1,26 +1,25 @@
 
 function ParallelCoordinates(manager, div){
 
-	/*var test_data  = new Float32Array([0.0, 0.1, 0.0, 0.0, 
-	                                   0.1, 0.2, 0.1, 0.2, ]);
+	this.elRect = this.mapdiv = document.getElementById(div).getBoundingClientRect();
 	
-	var test_index = new Float32Array([-1,-0.5,0,0.5,-1,-0.5,0,0.5]);
-	//manager.addDataBuffer(test_data, 1, 'td');
-	//manager.addDataBuffer(test_index, 1, 'ti');
-	
+	var margin = this.elRect.margin;
+	var svg = d3.select("#" + div).append("svg").attr("width",
+			this.elRect.width).attr("height",
+			this.elRect.height).append("g");
 
-	
-	//this.createBuffer(data, index);
-	*/
-	/*var indices = [0,1,1,2,4,5,5,6,7,8,8,9];
-	var pcIndexBuffer = gl.createBuffer();
-	    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, pcIndexBuffer);
-	    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW);
-	    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);*/
+	var yScale = d3.scale.linear().domain([ 0, 10]).range(
+			[ this.elRect.height, 0 ]);
+	var yAxis = d3.svg.axis().scale(yScale).orient("left");
+
+	svg.append("g").attr("class", "y axis").call(yAxis).attr("transform","translate(30)").append("text")
+			.attr("transform", "rotate(270)").attr("y", "-4.5em").attr("x",
+					"-2em").style("text-anchor", "end").text("number of items [1000]");
+
 	   
 	    
 	
-	this.elRect = this.mapdiv = document.getElementById(div).getBoundingClientRect();
+
 		
 	this.glProgram = GLU.compileShaders('pc_vShader', 'pc_fShader', this);
 		

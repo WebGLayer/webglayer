@@ -20,12 +20,12 @@
       void main() {	
   		bool fil[4];
 		vec4 p =  mapMatrix * wPoint;
-  		   	     
-  		 vec4 thatval = texture2D(indexText , vec2((index[0] +1.)/2. , (index[1]+1.)/2.));    
-  		float val =  thatval[0];	
-  		float spat = 0.;
-		 // if data are in the map window 
-		//if (-1. <= p[0] && p[0]<=1. && -1. <= p[1] && p[1]<=1.){
+  		
+  		// value in the filter texture before this filter is applied   	     
+  		vec4 thatval = texture2D(indexText , vec2((index[0] +1.)/2. , (index[1]+1.)/2.));   
+  		 
+  		//float val =  thatval[0];	
+  		float spat = 0.;		
 		vec4 at1;
 			if (isspatial == 0.0) {
 				/*consider one row fitler*/
@@ -38,11 +38,12 @@
   				  		
   			
 			// if data are selected  			
-  			if ( at1[0] > 0. ){ //|| thatval[0] > 0.){ //&&  polyb[0] > 0.){  				  			
-  				col = vec4( val + pow(2.,(filterid))/256., 0., spat, thatval[3]);
+  			if ( at1[0] > 0. ){ 	  			
+				//calculates final value, third number indicates if it is selected by spatial filter or not  																	
+  				col = vec4(thatval[0] + pow(2.,(filterid))/256., 0., thatval[2]+spat, thatval[3]);
   			} else {  	
-  				// data are not selected  		   
-  		    	col = vec4(val , 0., 0., thatval[3]); 	  		  
+  				// data are not selected by this filter   
+  		    	col = vec4(thatval[0] , 0., 0., thatval[3]); 	  		  
   			}
   			
   		//} else {
