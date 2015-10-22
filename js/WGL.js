@@ -24,8 +24,6 @@ WGL = function(data, url){
 	var mainFilter = new Filter(manager);
 	var polyFilter;
 	
-	
-	
 	var index = [];
 	for (var i= 0; i<numrec; i++){
 		index[i]=rasterer.calc(i);	
@@ -78,11 +76,14 @@ WGL = function(data, url){
 		manager.dimnum =  Object.keys(oneDDim).length;
 	}
 	
+	
 	this.addMultiDim = function(d){
 		 var ta = [];		
-		 
+		 /* add multiple dimension*/
 		for (var i in d){
+			
 			var dim = d[i];
+			//create typedarray of every dimension /
 			if (dim.type=='ordinal'){
 				ta[i] = array2TANormOrdinal(dim);
 			} else if (dim.type =='linear'){
@@ -92,24 +93,24 @@ WGL = function(data, url){
 			}
 		}
 
+		/*data array*/
 		var td = [];
+		
+		/*artificially generated coordinates of each column*/
 		var ti = [];
-		var indicies =[];
+		
+		/*index of each row*/
 		var index_pc = [];
 
+		/*connects all typed array to one big array*/
 		for (var j in ta[0]){
 			for(var i in ta){
-				i =  parseInt(i);
-				//if (i < (ta.length-1)){
-				//	var ii =  parseInt(i);
-				//	indicies.push(ta.length*j + ii);
-				//	indicies.push(ta.length*j + ii+1);
-				//}
+				i =  parseInt(i);				
 				index_pc.push(index[parseInt(j)]);
 				td.push(ta[i][j]);
 				ti.push(i / d.length + 1/ (d.length*2));
 			
-				/*if not end point add twice*/
+				/*if not end point add twice to connect each line*/
 				 if( !(i==0 || i==(ta.length-1)) ){
 					 index_pc.push(index[parseInt(j)]);
 					 td.push(ta[i][j]);
@@ -199,19 +200,8 @@ WGL = function(data, url){
 		this.render();
 		this.updateCharts();
 	}
-
-	/*this.filterByPoly = function(id, polygons){
-		var f = dimensions[id].filter;
-		f.createFilteringData(polygons);
-		f.renderFilter();
-		manager.mapFilterTexture = f.filterTexture;
-		mainFilter.render(dimensions);
-		this.render();
-		this.updateCharts();
-	}*/
-
-
 	
+
 	this.filterDim = function(id, filter){
 		var f = dimensions[id].filter;
 		
@@ -278,21 +268,12 @@ WGL = function(data, url){
 		//mainFilter.switchTextures();
 		this.render();
 		this.updateCharts();
-		mainFilter.switchTextures();
-		
-		/*us all selection as that filter*/
-
-		/*aplly this as aggregation of both*/
+		mainFilter.switchTextures();	
 	}
 
 	this.filterDeleted = function(newf){
-		/*apply all filter and set current to empty selected all the features*/		
-	
-		
 		dimensions[newf].filter.isActive=false;	 	
 		manager.filternum = getNumberOfActiveFilters();
-		
-		
 		
 		mainFilter.render(dimensions);
 		
@@ -300,10 +281,6 @@ WGL = function(data, url){
 		this.filterByExt();
 		this.updateCharts();
 		mainFilter.switchTextures();
-		
-		/*us all selection as that filter*/
-
-		/*aplly this as aggregation of both*/
 	}
 
 	function getNumberOfActiveFilters(){
