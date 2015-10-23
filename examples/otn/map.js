@@ -11,11 +11,17 @@ initMap = function() {
 			  function(){
 		 		initGLDimensions();		 		
 		 		mcontroller.resize(div.offsetWidth, div.offsetHeight);
-		 		mcontroller.zoommove(map.zoom, GLU.getTopLeftTC());		 		
+		 		mcontroller.zoommove(map.zoom, getTopLeftTC());		 		
 		 		
 			  }) ;
 	 
-	
+
+	  map.events.register("mousemove", map, function(e) {
+          var position = this.events.getMousePosition(e);
+     //     console.log(position);
+      });
+	  
+	  
     var layer = new OpenLayers.Layer.OSM('', null, {
         eventListeners: {
             tileloaded: function(evt) {
@@ -35,6 +41,9 @@ initMap = function() {
     });
 
     map.addLayer(layer);
+    
+	
+	 
 	// allow testing of specific renderers via "?renderer=Canvas", etc
 	var renderer = OpenLayers.Util.getParameters(window.location.href).renderer;
 	renderer = (renderer) ? [ renderer ]
@@ -73,7 +82,8 @@ initMap = function() {
 
 	map.addLayers([ vectors ]);
 	
-
+	var con = map.getControlsByClass("OpenLayers.Control.Navigation")[0]; 
+	//con.deactivate();
 	var polygons = [];
 
 	var m_id;
@@ -176,7 +186,7 @@ initMap = function() {
 		map.addControl(controls[key]);
 	}
 
-	var lonlat = new OpenLayers.LonLat(4.4,51.21).transform(new OpenLayers.Projection("EPSG:4326"),new OpenLayers.Projection("EPSG:900913"));
+	var lonlat = new OpenLayers.LonLat(17.15,49.6).transform(new OpenLayers.Projection("EPSG:4326"),new OpenLayers.Projection("EPSG:900913"));
 	map.setCenter(lonlat);
 	map.zoomTo(10);
 }

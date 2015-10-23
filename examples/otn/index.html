@@ -5,10 +5,192 @@
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<title>Traffic volume visualization</title>
+<title>Modify Feature</title>
 
-<link rel="stylesheet" type="text/css" href="otn_style.css">
+<style type="text/css">
+html,body {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	font-family: Verdana, Arial, sans-serif;
+}
+div.olMapViewport {
+	 top: 0;
+	 position: relative;
+     z-index: 0;     
+}
 
+
+#view {
+	position: relative;
+}
+
+#map {
+	 top: 0;
+	margin-right: 36em;
+	padding: 0;
+	height:100%;	
+}
+#legend {
+	position: fixed;
+	bottom: 2em;
+	left: 4em;
+	height: 3em;
+	width: 30em;
+	padding: 0.3em;
+	 z-index:2000;
+	background-color: rgba(255, 255, 255, 0);
+}
+#right {
+	position: fixed;
+	overflow-y:auto;
+	overflow-x:hidden;		
+	right: 0;
+	top: 0;
+	width: 36em;
+	height: 100%;
+	font-size: 1em;
+	moz-box-shadow: 0px 0px 10px black;
+	webkit-box-shadow: 0px 0px 9px black;
+	box-shadow: -1px 0px 6px black;
+	z-index: 10000;
+}
+
+#controls {
+	position: fixed;
+	top: 0em;
+	left: 3em;
+	width: 512px;
+	z-index:2000;
+	background-color: rgba(255, 255, 255, 0.2);
+}
+
+#about {
+	margin: 1em;
+}
+
+#controlToggle {
+	padding-left: 1em;
+}
+
+#controlToggle li {
+	list-style: none;
+}
+
+#test {
+	top: 0;
+	opacity: 1;
+	z-index: 1000;
+	pointer-events: none;
+	position: absolute;
+	top: 0px;
+}
+
+#svgcanvas {
+	top: 0;
+	opacity: 1;
+	z-index: 1000;
+	pointer-events: none; 
+ 	position: absolute;
+	top: 0px;
+}
+
+
+
+
+#chart_container {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+}
+.chart rect {
+  fill: steelblue;
+}
+
+.chart text {
+  fill: white;
+  font: 10px sans-serif;
+  text-anchor: end;
+}
+
+.brush{
+ fill: grey;
+ stroke: #ff8c00;
+ stroke-opacity: 0.8;
+ stroke-width: 1;
+}
+
+.selected.bar {
+fill: #ff8c00;
+}
+
+.unselected.bar {
+fill: #7b6888;
+}
+
+.out.bar {
+fill: #98abc5;
+}
+
+.axis text {
+  font: 10px sans-serif;
+}
+.l text {
+  font: 10px sans-serif;
+}
+
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
+}
+
+.line {
+fill: none;
+stroke: steelblue;
+stroke-width: 2px;
+shape-rendering: optimizeSpeed ;
+ 
+}
+
+.point {
+	
+	stroke-width: 0.0005px;
+	z-index: 2000;
+ 	fill: #000;
+  	fill-opacity: .8;
+  	stroke: #fff; 
+}
+
+.l {
+ cursor: pointer;
+ stroke: #000; 
+}
+.grid-background {
+  fill: #ddd;
+}
+
+.grid line,
+.grid path {
+  fill: none;path{
+
+}
+
+}
+
+
+.brush .extent {
+  
+  fill-opacity: .125;
+  shape-rendering: crispEdges;
+}
+</style>
 <script src="javascripts/ol/lib/OpenLayers.js"></script>
 <script src="javascripts/jquery-1.9.1.min.js"></script>
 <script src="javascripts/jquery-ui.js"></script>
@@ -18,54 +200,46 @@
 
 
 <script src="map.js"></script>
-<script src="OtnDataLoader.js"></script>
-
-<script src="vl/js/GLUtils.js"></script>
-
-<script src="vl/js/Dimension.js"></script>
-<script src="vl/js/Manager.js"></script>
-<script src="vl/js/OneDDimension.js"></script>
-<script src="vl/js/InterpolationDimension.js"></script>
-<script src="vl/js/InterpolationRenderer.js"></script>
-<script src="vl/js/MapDimension.js"></script>
-<script src="vl/js/MapLineDimension.js"></script>
-<script src="vl/js/HistogramDimension.js"></script>
-<script src="vl/js/Dimension.js"></script>
-<script src="vl/js/Utils.js"></script>
-<script src="vl/js/MapController.js"></script>
-<script src="vl/js/StackedBarChart.js"></script>
-<script src="vl/js/FloatRasterReader.js"></script>
-<script src="vl/js/d3.svg.multibrush.js"></script>
-<script src="vl/js/Filter.js"></script>
-<script src="vl/js/HistFilterRender.js"></script>
+<script src="js/DataLoader.js"></script>
 
 
+<script src="http://localhost:9999/js/webglayer/js/GLUtils.js"></script>
+<script src="http://localhost:9999/js/webglayer/js/Dimension.js"></script>
+<script src="http://localhost:9999/js/webglayer/js/Manager.js"></script>
+<script src="http://localhost:9999/js/webglayer/js/OneDDimension.js"></script>
+<script src="http://localhost:9999/js/webglayer/js/InterpolationDimension.js"></script>
+<script src="http://localhost:9999/js/webglayer/js/InterpolationRenderer.js"></script>
+<script src="http://localhost:9999/js/webglayer/js/MapDimension.js"></script>
+<script src="http://localhost:9999/js/webglayer/js/MapLineDimension.js"></script>
+<script src="http://localhost:9999/js/webglayer/js/HistogramDimension.js"></script>
+<script src="http://localhost:9999/js/webglayer/js/Dimension.js"></script>
+<script src="http://localhost:9999/js/webglayer/js/Utils.js"></script>
+<script src="http://localhost:9999/js/webglayer/js/MapController.js"></script>
+<script src="http://localhost:9999/js/webglayer/js/StackedBarChart.js"></script>
+<script src="http://localhost:9999/js/webglayer/js/FloatRasterReader.js"></script>
+<script src="http://localhost:9999/js/webglayer/js/d3.svg.multibrush.js"></script>
+<script src="http://localhost:9999/js/webglayer/js/Filter.js"></script>
+<script src="http://localhost:9999/js/webglayer/js/HistFilterRender.js"></script>
+<script src="http://localhost:9999/js/webglayer/js/LineChartDimension.js"></script>
+<script src="http://localhost:9999/js/webglayer/js/SDLineChartDimension.js"></script>
+<script src="http://localhost:9999/js/webglayer/js/LineChart.js"></script>
+<script src="http://localhost:9999/js/webglayer/js/SVGCanvas.js"></script>
 
 <script type="text/javascript">
   
-	var map, vectors, controls;
-	var at1 = "data/2009_att.json";
-	var li1 = "data/2009_links.json";
-	var at2 = "data/2020_att.json";
-	var li2 = "data/2020_links.json";
-	
+	var map, vectors, controls, pts; 
 
-		function init() {	
-					
-		GLU.loadShaders();
+		function init() { 
+			 
 		metadata = [];
 		initMap();
-		
+		GLU.loadShaders();
 		utils = new Utils();
 		//r_count = 1 * Math.pow(10, 5);
-		manager = new Manager("test", "map");
+		manager = new Manager("map");
 		mcontroller = new MapController(manager);
 
-		canvas.setAttribute("width", div.offsetWidth);
-		canvas.setAttribute("height", div.offsetHeight);
-		manager.width=div.offsetWidth;
-		manager.height=div.offsetHeight;
-		
+		svgc = new SVGCanvas();
 
 		wgs = new OpenLayers.Projection("EPSG:4326"); // Transform from WGS 1984
 		merc = new OpenLayers.Projection("EPSG:900913");
@@ -73,136 +247,51 @@
 		/*Importat global variables*/
 		tlwgs = (new OpenLayers.LonLat(-180, 90)).transform(wgs, merc);	
 		tl = GLU.getTopLeftTC();
-		
-		
-		/*Configure speed dimension*/
-		metadata[0] = {max : 1, num_bins : 30, name: "attr100"};					
-		metadata.max_bins =metadata[0].num_bins;
-		
-		charts = [];
-		charts[0] = new StackedBarChart(metadata[0].max, 0, "speed_chart","traffic intensity");
 	
-		
-		
-		var data = new OtnDataLoader();
-		//var rastersize = data.loadPosData("data/queryid1.json","data/queryid2.json");
-		//var rastersize = data.loadPosData("rest/query?id=1","rest/query?id=2");
-		var rastersize = data.loadPosData(li1,at1,li2,at2);
-		//var rastersize = data.loadPosData("data/queryid1.json","data/queryid2.json");
-		//var rastersize = data.loadPosData("data/pos.json");
-		//data.loadObsData("data/obs.json")
-		
-		//var rastersize = data.loadTextData("data/"+datafile);
-		
-		
+		var data = new DataLoader();
+		var rastersize = data.loadPosData("data/pos2.json","data/obs5k4_5.json");
 
 	}
 
-	function render(){
-		 if (manager.year == 0){
-			 allDataFilter09.render();
-			 manager.filterTexture = 	allDataFilter09.filterTexture;
-		 } else {
-			 allDataFilter20.render();
-			 manager.filterTexture = 	allDataFilter20.filterTexture;
-		 }
-		
-		 dimLineMap.render(manager.num_rec);	
-		 histDim.render(manager.num_rec);
-		 var readout = histDim.readPixels();
-		 if (typeof readout != 'undefined') {
-				for ( var i in charts) {
-					charts[i].update(readout[i]);
-				}
-		 }
-	}
 	function visualize(data){	
-		manager.year=0;
-		manager.time=0;
-		$("#speed_chart").text("");
+		pts = data.ptsxy;
+		chart = new LineChart("line_chart1",pts, [new Date(data.timemin*1000), new Date(data.timemax *1000)]);
+		chart_det = new LineChart("line_chart_det",pts, [new Date(data.timemin*1000), new Date(data.timemax *1000)]);
 		
+		svgc.addPoints(pts);
 		 $(function() {
-			 $( "#slider" ).slider({min:0, max:data.y2009.attributes.length-1});
+			 $( "#slider" ).slider({min:0, max:data.attributes.length});
 			 });
-		 $( "#slider" ).on( "slide", function( event, ui ) {			 			
-			 dimLineMap.buf_id = ui.value;
-			 manager.time = ui.value;
-			 metadata[0].name = "attr1"+manager.year+manager.time;
-			 render();
-			 });
-		 
-		// A slider with a step of 1
-		 $("#slider")
-		 .each(function() {
-		     // Add labels to slider whose values 
-		     // are specified by min, max
-		     // Get the options for this slider (specified above)
-		     var opt = $(this).data().uiSlider.options;
-		     // Get the number of possible values
-		     var vals = opt.max - opt.min;
-		     // Position the labels
-		     var labels= {0:"7:00", 1:"8:00", 2:"12:00", 3:"15:00", 4:"16:00", 5:"17:00"};
-		     for (var i = 0; i <= vals; i++) {
-		         // Create a new element and position it with percentages
-		         var el = $('<label>' + labels[i] + '</label>').css('left', (i/vals*100) + '%');
-
-		         // Add the element inside #slider
-		        $("#slider").append(el);
-
-		     }
-
-		 });
-
-		
-		 $(function() {
-			 $( "#slider_y" ).slider({min:0, max:1});
-			 });
-		 $( "#slider_y" ).on( "slide", function( event, ui ) {			 			
-			 dimLineMap.y_id = ui.value;
-			 manager.year = ui.value;
-			 metadata[0].name = "attr1"+manager.year+manager.time;
-			 manager.num_rec = manager["num_rec"+ui.value];		
-			 manager.index = "index"+ui.value;
-			 render();
+		 $( "#slider" ).on( "slide", function( event, ui ) {
+		//	 console.log(ui.value);			 			 
+			 dimMap.buf_id = ui.value;
+			 dimMap.render(manager.num_rec);	
 			 });
 		 
 		 
-		
-		manager.num_rec0 = data.y2009.num_rec;	
-		/**init*/
-		manager.num_rec = data.y2009.num_rec;
-		
-		manager.index = "index0";
-		manager.addDataBuffer(data.y2009.points, 2, 'wPoint0');	
-		manager.addDataBuffer(data.y2009.index, 2, 'index0');
-		manager.addDataBuffer(data.y2009.indexLine, 2, 'index0Line');	
-		
-		
-		for (var i = 0; i < data.y2009.attributes.length; i++){
-			manager.addDataBuffer(data.y2009.attributes[i], 1, "attr0"+i);
-			manager.addDataBuffer(data.y2009.attributes1[i], 1, "attr10"+i);
-		}
-		
-		manager.num_rec1 = data.y2020.num_rec;	
-		manager.addDataBuffer(data.y2020.points, 2, 'wPoint1');	
-		manager.addDataBuffer(data.y2020.index, 2, 'index1');	
-		manager.addDataBuffer(data.y2020.indexLine, 2, 'index1Line');	
-		
-		
-		for (var i = 0; i < data.y2020.attributes.length; i++){
-			manager.addDataBuffer(data.y2020.attributes[i], 1, "attr1"+i);
-			manager.addDataBuffer(data.y2020.attributes1[i], 1, "attr11"+i);
-		}
+		 $("#speed_chart").text("");
+		manager.num_rec = data.num_rec;
+		manager.num_frames = data.findex.length;
+		/**init geo buffer*/
+		manager.addDataBuffer(data.points, 2, 'wPoint');
+		manager.addDataBuffer(data.pointsxy, 2, 'xy');
 		/*init first attribute buffer*/			
-										
+		
+		for (var i = 0; i < data.attributes.length; i++){
+			manager.addDataBuffer(data.attributes[i], 1, "attr"+i);
+		}
+		
+		for (var i = 0; i < data.attributes_line.length; i++){
+			manager.addDataBuffer(data.attributes_line[i],1, "attr_line"+i);
+		}
+	
+		manager.addDataBuffer(data.findex,1, "findex");
+				
 		/* init index buffer*/
-		//manager.addDataBuffer(data.index, 2, 'index');
-		manager.r_size_2009 = data.y2009.raster_size;
-		manager.r_size_2020 = data.y2020.raster_size;
-		initGLDimensions();
-		
+		manager.addDataBuffer(data.index, 2, 'index');
+		allDataFilter = new Filter(data.num_rec, data.raster_size, manager); 
 		data = null;
-		
+		initGLDimensions();
 		//util.createFilteringData(generateOneTriangle());
 		
 		map.events.register("move", map, onMove);
@@ -217,59 +306,87 @@
 		canvas.setAttribute("width", div.offsetWidth);
 		canvas.setAttribute("height", div.offsetHeight);
 		
-		dimLineMap = new MapLineDimension(manager);
-		dimLineMap.name = "map";
-		dimLineMap.setProgram('mapline_vShader', 'mapline_fShader', 'map');
-		dimLineMap.buf_id = "1";
-		dimLineMap.y_id = "0";			
+		dimMap = new InterpolationDimension(manager);
+		dimMap.name = "map";
+		dimMap.setProgram('map_interpolation_vShader', 'map_interpolation_fShader', 'map');
+	
+			
+		dimLineChart = new LineChartDimension(manager, 400);
 		
-	 	histDim = new HistogramDimension(manager);
-	 	allDataFilter09 = new Filter(manager.r_size_2009 , manager);
-	 	allDataFilter20 = new Filter(manager.r_size_2020 , manager);	 
-	 	
-		histFilterRender = new HistFilterRender(manager);	
-		
+		SDLineChart = new SDLineChartDimension(manager,10);
+			
+			
 		mcontroller.resize(div.offsetWidth, div.offsetHeight);
 		mcontroller.zoommove(map.zoom, tl, render);
+		renderChart();
 
+	}
+	
+	function render(){
+		dimMap.render(manager.num_rec);
+		var read = dimMap.readPixel();
+		console.log(read);
+	
+		
+	}
+	
+	function renderChart(){
+		for (var i=0; i < pts.length; i++){
+			//var i=2;
+				dimLineChart.render("attr_line"+i,1,0);
+				//SDLineChart.lineChartTexture=dimLineChart.lineTexture;
+				
+				//SDLineChart.render();
+				var readout = dimLineChart.readPixels();
+				pts[i].data=readout;
+			//	var readout = SDLineChart.readPixels()			    				
+			}
+		chart.update(pts);	
 	
 	}
 	
+	function renderDetChart(zoom,trans, start, end){
+		
+		for (var i=0; i < pts.length; i++){			
+				dimLineChart.render("attr_line"+i,zoom,trans);				
+				var readout = dimLineChart.readPixels();
+			
+				pts[i].data=readout;
+			}
+		chart_det.updatePart(pts, start,end);	
+	}
+
+	
+	
 	onMove = function() {
 		mcontroller.zoommove(map.getZoom(), GLU.getTopLeftTC(), render);
+		
+		svgc.transform(map.getZoom(),GLU.getTopLeftTC());
+		
 	}
 	
 	onZoom = function() {
 		mcontroller.zoommove(map.getZoom(), GLU.getTopLeftTC(), render);
-	}
 	
-		
+		svgc.transform(map.getZoom(),GLU.getTopLeftTC());
+	}
+
+	
+
 
 </script>
-
 </head>
 <body onload="init()">
 
 	<div id="map">
-			<canvas id="test">Your browser does not support HTML5</canvas>
 	</div>
 	<div id="right">
 		
 		
-			<div style="margin:1em">Time:<div style="margin:1em" id = "slider"> </div></div>
-			
-				
-			<div style="margin:1em; padding-top:1em">Year (2009 - 2020)	 <div style="margin:1em; width: 3em""  id = "slider_y"> </div></div>
-			
-			<div id = "speed_chart"></div>
-	 		<div id = "hour_chart"></div> 
+			<div style="margin:1em"><div id = "slider"> </div></div>
+			<div id = "line_chart1"></div>
+			<div id = "line_chart_det"></div>
 	 		
-	 				<div id = "about">
-	 		This demo shows the traffic volumes for the city of Antwerp based on the road network from 2009 and 2020.
-	 		The data are provided by <a href="http://www.opentransportnet.eu/">OpenTransportNet</a> project. 
-	 		Make a selection in the histogram to highlight the specific parts of the road network.
-	 		The visualization is based on  <a href="http://jezekjan.github.io/webglayer/">WebGLayer</a> library.
-	 	    </div> 		 	
 	 		
 	</div>
 	<div id="controls">
@@ -277,6 +394,8 @@
 		
 		
 	</div>
-
+	<div id='legend' style="padding:1em">
+		<object data="legend2.svg" />
+	</div>
 </body>
 </html>
