@@ -13,7 +13,7 @@ function visualize(data){
 		/**
 		 * initialize WGL with link to data, the relative path to the shader folder, and id of the map div
 		 */
-		WGL = new WGL(data,'../../', 'map');		
+		WGL = new WGL(data.num,'../../', 'map');		
 		
 		/**
 		 * map is global variable from Open Layers, we set our onMove 

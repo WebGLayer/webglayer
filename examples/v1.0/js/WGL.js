@@ -1,7 +1,7 @@
-WGL = function(data, url, divid){
+WGL = function(num, url, divid){
 	
 	GLU.loadShaders(url);
-	var numrec = data.num;
+	var numrec = num;
 	var manager  = new Manager(divid); 	
 	var rasterer = new Rasterer(numrec);
 	var metadata = [];
