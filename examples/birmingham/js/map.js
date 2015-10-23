@@ -13,7 +13,17 @@ initMap = function() {
 	};
 	
 	map = new OpenLayers.Map('map', options);
-	
+	 map.events.register('updatesize', map, 
+			  function(){
+		 		//initGLDimensions();	
+		 		WGL.mcontroller.manager.updateMapSize();
+		 		WGL.mcontroller.resize();	
+		 		//WGL.render();
+		 		//WGL.mcontroller.resize(div.offsetWidth, div.offsetHeight);
+		 		WGL.mcontroller.zoommove(map.zoom, getTopLeftTC());		 		
+		 		
+			  }) ;
+	 
 	  
     var layer = new OpenLayers.Layer.OSM('', null, {
         eventListeners: {
