@@ -10,7 +10,7 @@ function DataLoader() {
 	this.loadPosData = function(file) {
 
 			var pts = [];
-			var dayes = [];
+			var days = [];
 			var hours = [];
 			var date = [];
 			var sev = [];
@@ -44,7 +44,7 @@ function DataLoader() {
 									
 					var d =  (new Date(val.timestamp*1000));																				
 					//index[i] = rasterer.calc(i);	
-					dayes[i] =  weekday[d.getDay()]; //d.getDay();		
+					days[i] =  weekday[d.getDay()]; //d.getDay();		
 										
 					
 					hours[i] = d.getHours() + d.getMinutes()/60;		
@@ -55,7 +55,7 @@ function DataLoader() {
 					road_type[i] = val.road_type;
 					speed_limit[i] = val.speed_limit;
 					
-					if (typeof(dayes[i]) == 'undefined' || typeof(hours[i]) == 'undefined' || typeof(sev[i]) == 'undefined')  {
+					if (typeof(days[i]) == 'undefined' || typeof(hours[i]) == 'undefined' || typeof(sev[i]) == 'undefined')  {
 						console.error('error id data');
 					}
 				
@@ -64,7 +64,7 @@ function DataLoader() {
 			
 			
 			visualize({pts: pts, 
-				dayes: dayes, 
+				days: days, 
 				hours :hours, 
 				sev : sev, 
 				road_type: road_type, 

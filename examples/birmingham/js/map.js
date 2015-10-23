@@ -1,5 +1,7 @@
-		var	wgs = new OpenLayers.Projection("EPSG:4326"); // Transform from WGS 1984
-	var merc = new OpenLayers.Projection("EPSG:900913");
+
+var	wgs = new OpenLayers.Projection("EPSG:4326"); // Transform from WGS 1984
+var merc = new OpenLayers.Projection("EPSG:900913");
+	
 initMap = function() {
 
 	var	wgs = new OpenLayers.Projection("EPSG:4326"); // Transform from WGS 1984
@@ -9,25 +11,9 @@ initMap = function() {
 		projection : "EPSG:900913",
 		zoomMethod: null
 	};
+	
 	map = new OpenLayers.Map('map', options);
-//	map.addLayer(new OpenLayers.Layer.OSM());
-	 map.events.register('updatesize', map, 
-			  function(){
-		 		//initGLDimensions();	
-		 		WGL.mcontroller.manager.updateMapSize();
-		 		WGL.mcontroller.resize();	
-		 		//WGL.render();
-		 		//WGL.mcontroller.resize(div.offsetWidth, div.offsetHeight);
-		 		WGL.mcontroller.zoommove(map.zoom, getTopLeftTC());		 		
-		 		
-			  }) ;
-	 
-
-	  map.events.register("mousemove", map, function(e) {
-          var position = this.events.getMousePosition(e);
-     //     console.log(position);
-      });
-	  
+	
 	  
     var layer = new OpenLayers.Layer.OSM('', null, {
         eventListeners: {
@@ -49,8 +35,6 @@ initMap = function() {
     map.addLayer(layer);
     
 	
-	 
-	// allow testing of specific renderers via "?renderer=Canvas", etc
 	var renderer = OpenLayers.Util.getParameters(window.location.href).renderer;
 	renderer = (renderer) ? [ renderer ]
 			: OpenLayers.Layer.Vector.prototype.renderers;
@@ -95,9 +79,7 @@ initMap = function() {
 	var m_id;
 	function report(event) {
 		if (event.type!="sketchcomplete"){
-		// console.log(event.type, event.feature ? event.feature.id :
-		 //event.components);
-		// console.log(event.feature.geometry.components[0].components);
+		
 		/**
 		 * Trianglution goes on here..........
 		 */
@@ -169,10 +151,7 @@ initMap = function() {
 		                console.log("deleteing "+feature.id);
 		                delete polygons[feature.id];
 		                vectors.removeFeatures( [ feature ] );
-		              
-		                //mapFilterRender.createFilteringData(polygons);
-		                //console.log( polygons);
-						//mapFilter();
+		              		              
 						//*deactivate filter*/
 						var l = 0;
 						for (var i in polygons){
@@ -222,25 +201,7 @@ function trianglesToArray(trig) {
 function update() {
 	// reset modification mode
 	controls.modify.mode = OpenLayers.Control.ModifyFeature.RESHAPE;
-/*	var rotate = document.getElementById("rotate").checked;
-	if (rotate) {
-		controls.modify.mode |= OpenLayers.Control.ModifyFeature.ROTATE;
-	}
-	var resize = document.getElementById("resize").checked;
-	if (resize) {
-		controls.modify.mode |= OpenLayers.Control.ModifyFeature.RESIZE;
-		var keepAspectRatio = document.getElementById("keepAspectRatio").checked;
-		if (keepAspectRatio) {
-			controls.modify.mode &= ~OpenLayers.Control.ModifyFeature.RESHAPE;
-		}
-	}
-	var drag = document.getElementById("drag").checked;
-	if (drag) {
-		controls.modify.mode |= OpenLayers.Control.ModifyFeature.DRAG;
-	}
-	if (rotate || drag) {
-		controls.modify.mode &= ~OpenLayers.Control.ModifyFeature.RESHAPE;
-	}*/
+
 	var dragEvent = document.getElementById("dragEvent").checked;
 	if (dragEvent) {
 		controls.modify.deactivate();
@@ -270,8 +231,7 @@ function transform(x, y) {
 	var p = new OpenLayers.LonLat(y, x);
 	p.transform(wgs, map.projection);
 	var v = map.getViewPortPxFromLonLat(p);
-	// var v = map.getViewPortPxFromLonLat( new OpenLayers.LonLat(90,0));
-
+	
 	var v0 = toLevel0(v, tl, map.getZoom());
 	return v0;
 }
