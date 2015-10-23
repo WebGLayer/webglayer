@@ -43,20 +43,20 @@ function visualize(data){
 		var sev   = {data: data.sev,  domain: ['1','2','3'] ,  name: 'sev', type:'ordinal' };	
 		WGL.addOrdinalHistDimension(sev);
 		WGL.addLinearFilter(sev,3, 'sevF');
-		charts['sev']   = new StackedBarChart(sev, "chart3", "accident servelity",'sev');
+		charts['sev']   = new StackedBarChart(sev, "chart3", "accident servelity");
 		
 		
 		/** Histogram for days*/
 		var days = {data: data.days,  domain: data.daysarray,  name: 'days', type:'ordinal'};			
 		WGL.addOrdinalHistDimension(days);
 		WGL.addLinearFilter(days,7, 'daysF');		
-		charts['days'] = new StackedBarChart(days, "chart1", "day of the week", 'days');
+		charts['days'] = new StackedBarChart(days, "chart1", "day of the week");
 		
 		/** Histogram for hours*/
 		var hours = {data: data.hours,  min:0, max:24, num_bins: 24, name: 'hours',type:'linear'} ;
 		WGL.addLinearHistDimension(hours);
 		WGL.addLinearFilter(hours, 24*10, 'hoursF');
-		charts['hours'] = new StackedBarChart(hours, "chart2", "hour of the day", 'hours');
+		charts['hours'] = new StackedBarChart(hours, "chart2", "hour of the day");
 		
 		/**
 		 * Addin all charts
