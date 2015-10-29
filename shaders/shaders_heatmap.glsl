@@ -14,8 +14,7 @@
        
       varying vec4 aPos;  
       varying float selected;
-     
-       
+            
       void main() {
 		  	  
   		float p_size = radius;
@@ -33,7 +32,7 @@
 			gl_PointSize = p_size;
   			  
   			  /*test if the data are selected without considering spatial index*/	
-  		} else if ( fdata[0]>=  (pow(2.,numfilters) - pow(2., spIndex) - 1.) / 256. ){
+  		} else if (spIndex !=-1. && (fdata[0]>=  (pow(2.,numfilters) - pow(2., spIndex) - 1. ) / 256.) ){
   			selected = 0.;
   			//gl_Position = vec4(-0.,-2.,0.,0.);    	
 			//gl_PointSize = 0.;

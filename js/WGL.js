@@ -56,10 +56,7 @@ WGL = function(num, url, divid){
 		dimensions[id] = dim;
 	}
 	
-	this.addParallelCoordinates = function(div, data){
-		for (var i in data){
-			var dim = data[i];
-		}
+	this.addParallelCoordinates = function(div, data){		
 		var dim = new ParallelCoordinates(manager,div);
 		dimensions[div] = dim;
 	}
@@ -115,13 +112,13 @@ WGL = function(num, url, divid){
 				i =  parseInt(i);				
 				index_pc.push(index[parseInt(j)]);
 				td.push(ta[i][j]);
-				ti.push(i / d.length + 1/ (d.length*2));
+				ti.push(i / d.length) ;
 			
 				/*if not end point add twice to connect each line*/
 				 if( !(i==0 || i==(ta.length-1)) ){
 					 index_pc.push(index[parseInt(j)]);
 					 td.push(ta[i][j]);
-					 ti.push(i / d.length + 1/ (d.length*2));
+					 ti.push(i / d.length);
 				 }
 				
 			}
@@ -314,10 +311,12 @@ WGL = function(num, url, divid){
 						manager.spIndex = num;
 					}
 					num++;								
-					}
+				}
 					else {
-						//d.filter.index = -1;
+						if (d.isSpatial){
+						manager.spIndex = -1.; // index for nonspatial filter
 					}
+				}
 			} 
 		}
 		return num;

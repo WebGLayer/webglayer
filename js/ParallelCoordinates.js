@@ -4,15 +4,27 @@ function ParallelCoordinates(manager, div){
 	this.elRect = this.mapdiv = document.getElementById(div).getBoundingClientRect();
 	
 	var margin = this.elRect.margin;
+	
+	var margin = {
+			top : 20,
+			right : 20,
+			bottom : 50,
+			left : 40
+			};
+
+	
+	var top_margin =30;
+	
+	
 	var svg = d3.select("#" + div).append("svg").attr("width",
 			this.elRect.width).attr("height",
-			this.elRect.height).append("g");
+			this.elRect.height).attr("z-index",3000).append("g");
 
 	var yScale = d3.scale.linear().domain([ 0, 10]).range(
 			[ this.elRect.height, 0 ]);
 	var yAxis = d3.svg.axis().scale(yScale).orient("left");
 
-	svg.append("g").attr("class", "y axis").call(yAxis).attr("transform","translate(30)").append("text")
+	svg.append("g").attr("class", "y axis").call(yAxis).attr("transform","translate("+margin.left+")").append("text")
 			.attr("transform", "rotate(270)").attr("y", "-4.5em").attr("x",
 					"-2em").style("text-anchor", "end").text("number of items [1000]");
 
@@ -38,7 +50,7 @@ function ParallelCoordinates(manager, div){
 		gl.uniform1f(this.glProgram.numfilters, manager.filternum );	
 		
 		gl.bindFramebuffer(gl.FRAMEBUFFER, null);	
-		gl.viewport(this.elRect.left, manager.body_height-this.elRect.bottom, this.elRect.width, this.elRect.height);
+		gl.viewport(this.elRect.left+margin.left, manager.body_height-this.elRect.bottom, this.elRect.width, this.elRect.height);
 		gl.clearColor(0.0, 0.0, 0.0, 0.0);
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 		
