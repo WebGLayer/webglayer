@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Simple heat map example</title>
+
+<style type="text/css">
+html,body {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	font-family: Verdana, Arial, sans-serif;
+}
+
+#view {
+	position: relative;
+}
+
+#map {
+	display: block;
+	position: absolute;
+	height: auto;
+	bottom: 0;
+	top: 0;
+	left: 0;
+	right: 0;
+	margin-top: 0px;
+	margin-bottom: 0em;
+	margin-right: 32em;
+	margin-left: 0px;
+	z-index: 100;
+}
+
+
+
+#wgl {
+	bottom: 0;
+	padding: 1em;
+	height: 3empt;
+	margin-right: 48em;
+	z-index: 99999;
+	position: absolute;
+	right: 2em;
+	background-color: rgba(255, 255, 255, 0.1);
+	font: 12px sans-serif;
+}
+
+
+
+#right {
+	position: fixed;
+	overflow-y: auto;
+	overflow-x: hidden;
+	right: 0;
+	top: 0;
+	width: 32em;
+	height: 100%;
+	font-size: 1em;
+	moz-box-shadow: 0px 0px 10px black;
+	webkit-box-shadow: 0px 0px 9px black;
+	box-shadow: -1px 0px 6px black;
+	z-index: 10000;
+}
+
+.control {
+	position: relative;
+	margin: 1em;
+	
+	
+}
+
+#about {
+	margin: 1em;
+}
+
+
+.slider {
+	position:absolute;
+	right:0em;
+	top:0em;	
+	width: 30em;
+}
+
+.st_label {
+	position:absolute;
+	left:0em;
+	margin: 0.5em;
+	width: 10em;
+}
+
+</style>
+
+<!-- Third party libraries -->
+<script src="http://home.zcu.cz/~jezekjan/js/ol/lib/OpenLayers.js"></script>
+<script src="http://home.zcu.cz/~jezekjan/js/jquery-1.9.1.min.js"></script>
+<script src="http://home.zcu.cz/~jezekjan/js/poly2tri.js"></script>
+
+<script src="http://home.zcu.cz/~jezekjan/js/d3.v3.min.js"></script>
+
+
+<!-- Local configuration -->
+<script src="js/map.js"></script>
+<script src="js/DataLoader.js"></script>
+<script src="js/init.js"></script>
+
+<!-- WebGLayer -->
+<script src="../../js/GLUtils.js"></script>
+<script src="../../js/Dimension.js"></script>
+<script src="../../js/Manager.js"></script>
+<script src="../../js/OneDDimension.js"></script>
+<script src="../../js/MapDimension.js"></script>
+<script src="../../js/MapLineDimension.js"></script>
+<script src="../../js/HistogramDimension.js"></script>
+<script src="../../js/Dimension.js"></script>
+<script src="../../js/MapController.js"></script>
+<script src="../../js/StackedBarChart.js"></script>
+<script src="../../js/FloatRasterReader.js"></script>
+<script src="../../js/d3.svg.multibrush.js"></script>
+<script src="../../js/Filter.js"></script>
+<script src="../../js/HistFilterRender.js"></script>
+<script src="../../js/HeatMapDimension.js"></script>
+<script src="../../js/WGL.js"></script>
+<script src="../../js/HeatMapRenderer.js"></script>
+<script src="../../js/MaxCalculator.js"></script>
+<script src="../../js/FloatReaderHistogram.js"></script>
+<script src="../../js/HeatMapHistogram.js"></script>
+<script src="../../js/HistDimension.js"></script>
+<script src="../../js/LinearFilter.js"></script>
+<script src="../../js/HeatMapLegend.js"></script>
+<script src="../../js/MapPolyFilter.js"></script>
+<script src="../../js/ExtentFilter.js"></script>
+<script src="../../js/WGL.js"></script>
+<script src="../../js/ParallelCoordinates.js"></script>
+
+
+
+</head>
+<body onload="init()">
+
+
+	<div id="map">
+		<div id="legend"></div>
+
+		<div id="wgl">
+			Visualization made by <a href="http://jezekjan.github.io/webglayer/">
+				WebGLayer </a>
+		</div>
+	</div>
+	
+	
+	<div id="right">
+	
+		<div class="control">
+			<div class="sl_label">Radius:</div>		
+			<input class="slider" id="slider_radius" type="range" name="points" min="8" max="20" id="c_size">
+		</div>
+		
+		<div class="control">	
+			<div class="sl_label">Max:</div>		
+			<input class="slider" id="slider_max" type="range" name="points" min="1" max="20" id="c_size">
+		</div>
+	</div>
+	
+
+
+</body>
+</html>
