@@ -53,11 +53,17 @@ WGL = function(num, url, divid){
 		};
 		
 		var dim = new HeatMapDimension(manager);
-		dimensions[id] = dim;
+		dimensions[id] = dim;		
+		
 	}
 	
+	this.getDimensions = function(){
+		return dimensions;
+	}
+	
+	
 	this.addParallelCoordinates = function(div, data){		
-		var dim = new ParallelCoordinates(manager,div);
+		var dim = new ParallelCoordinates(manager,div, data);
 		dimensions[div] = dim;
 	}
 	

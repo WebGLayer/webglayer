@@ -1,6 +1,7 @@
 
-function ParallelCoordinates(manager, div){
+function ParallelCoordinates(manager, div, data){
 
+		//WGL.addMultiDim(data);
 	this.elRect = this.mapdiv = document.getElementById(div).getBoundingClientRect();
 	
 	var margin = this.elRect.margin;

@@ -6,13 +6,19 @@ function HeatMapDimension(manager){
 	
 	
 	this.glProgram = GLU.compileShaders('heatmap_vShader', 'heatmap_fShader', this);
+	this.maxcal = new MaxCalculator(Math.floor(manager.w/6),Math.floor(manager.h/6));
 	var framebuffer = gl.createFramebuffer();
 	
 	
-	// default radiusFunc
+	/* default radiusFunc*/
 	this.radiusFunction = function(z){
 		return z*z / 7;
 	};
+	
+	/*default getMax function*/
+	this.maxFunction = function(max){
+		return max;
+	}
 		
 	this.createMapFramebuffer = function(){
 		framebuffer.width = manager.w;	
@@ -75,7 +81,7 @@ function HeatMapDimension(manager){
 	gl.uniform1f(this.glProgram.numfilters, 3);		
 	gl.useProgram(null);
 	var	renderer = new HeatMapRenderer(manager);
-	var	maxcal = new MaxCalculator(Math.floor(manager.w/6),Math.floor(manager.h/6));
+	//var	maxcal = new MaxCalculator(Math.floor(manager.w/6),Math.floor(manager.h/6));
 	
 	
 	this.setup = function() {
@@ -125,7 +131,7 @@ function HeatMapDimension(manager){
 	    
 	    //var max = maxcale.getMax(this.heatTexture);
 
-	    manager.max = maxcal.getMax(this.heatTexture);
+	    manager.max = this.maxFunction(this.maxcal.getMax(this.heatTexture));
 	    renderer.heatTexture = 	this.heatTexture;	
 	    renderer.render(  manager.max);
 	    
