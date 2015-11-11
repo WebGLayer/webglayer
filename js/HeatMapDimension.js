@@ -19,6 +19,12 @@ function HeatMapDimension(manager){
 	this.maxFunction = function(max){
 		return max;
 	}
+	/*default getMin function*/
+	this.minFunction = function(max){
+		return 0;
+	}
+	
+	
 		
 	this.createMapFramebuffer = function(){
 		framebuffer.width = manager.w;	
@@ -130,10 +136,11 @@ function HeatMapDimension(manager){
 		gl.bindTexture(gl.TEXTURE_2D, null);
 	    
 	    //var max = maxcale.getMax(this.heatTexture);
-
-	    manager.max = this.maxFunction(this.maxcal.getMax(this.heatTexture));
+		var max=this.maxcal.getMax(this.heatTexture);
+	    manager.max = this.maxFunction(max);
+	    manager.min = this.minFunction(max);
 	    renderer.heatTexture = 	this.heatTexture;	
-	    renderer.render(  manager.max);
+	    renderer.render( manager.min, manager.max);
 	    
 		
 	     			

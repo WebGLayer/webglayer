@@ -6,6 +6,7 @@ function HeatMapRenderer(manager){
 	var texCoordLocation = gl.getAttribLocation(this.glProgram, "v_texCoord");
 	var rasterLoc = 	   gl.getUniformLocation(this.glProgram, "heatmap_raster" );
 	manager.storeUniformLoc(this.glProgram, "max");
+	manager.storeUniformLoc(this.glProgram, "min");
 	//var legend = new HeatMapLegend('legend');
 
 	  // provide texture coordinates for the rectangle.
@@ -44,12 +45,13 @@ function HeatMapRenderer(manager){
 		gl.blendFunc( gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA  );
 
 	}	
-	this.render = function(max) {
+	this.render = function(min, max) {
 		//legend.updateMax(max);
 		this.setup();
 	
 		
 	    gl.uniform1f(this.glProgram.max, max);	
+	    gl.uniform1f(this.glProgram.min, min);	
 		gl.drawArrays(gl.TRIANGLES, 0, 6);	
 		gl.bindTexture(gl.TEXTURE_2D, null);
 	    gl.useProgram(null);
