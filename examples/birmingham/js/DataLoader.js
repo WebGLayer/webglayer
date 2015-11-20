@@ -37,12 +37,14 @@ function DataLoader() {
 		
 		var dateminmax ;
 
+		/*set timezone shift. The data are GMT +1 */
+		var dt = (new Date()).getTimezoneOffset()*60*1000 +60000;
 			data.forEach(function(val, i) {
 							
 					pts[j++] = parseFloat(val.x);
 					pts[j++] = parseFloat(val.y);
 									
-					var d =  (new Date(val.timestamp*1000));																				
+					var d =  (new Date(val.timestamp*1000+ dt ));																				
 					//index[i] = rasterer.calc(i);	
 					days[i] =  weekday[d.getDay()]; //d.getDay();		
 										

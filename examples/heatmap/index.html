@@ -29,7 +29,7 @@ html,body {
 	right: 0;
 	margin-top: 0px;
 	margin-bottom: 0em;
-	margin-right: 32em;
+	margin-right: 0em;
 	margin-left: 0px;
 	z-index: 100;
 }
@@ -50,25 +50,11 @@ html,body {
 
 
 
-#right {
-	position: fixed;
-	overflow-y: auto;
-	overflow-x: hidden;
-	right: 0;
-	top: 0;
-	width: 32em;
-	height: 100%;
-	font-size: 1em;
-	moz-box-shadow: 0px 0px 10px black;
-	webkit-box-shadow: 0px 0px 9px black;
-	box-shadow: -1px 0px 6px black;
-	z-index: 10000;
-}
 
 .control {
 	position: relative;
 	margin: 1em;
-	
+	z-index: 1000;
 	
 }
 
@@ -77,18 +63,31 @@ html,body {
 }
 
 
-.slider {
+.pannel {
 	position:absolute;
 	right:0em;
 	top:0em;	
 	width: 30em;
+	color: white;
+	z-index: 1000;
 }
 
-.st_label {
+.slider {
 	position:absolute;
+	right:0em;
+	top:0em;	
+	width: 26em;
+}
+
+.sl_label {	
+	
 	left:0em;
-	margin: 0.5em;
-	width: 10em;
+	margin: 0.5em;	
+}
+#test{
+	position: absolute;
+	cursor: pointer;
+	right: 1em;
 }
 
 </style>
@@ -151,19 +150,30 @@ html,body {
 	</div>
 	
 	
-	<div id="right">
+	<div class="pannel">
 	
 		<div class="control">
 			<div class="sl_label">Radius:</div>		
-			<input class="slider" id="slider_radius" type="range" name="points" min="8" max="20" id="c_size">
+			<input class="slider" id="slider_radius" type="range" name="points" min="2" max="20"/>
+		</div>
+		
+		<div class="control">
+			<div class="sl_label">Gradient:</div>		
+			<input class="slider" id="slider_gradient" type="range" name="points" min="1" max="8"/ >
 		</div>
 		
 		<div class="control">	
 			<div class="sl_label">Max:</div>		
-			<input class="slider" id="slider_max" type="range" name="points" min="1" max="20" id="c_size">
+			<input class="slider" id="slider_max" type="range" name="points" min="1" max="50" />
 		</div>
-	</div>
+		
+		<div class="control">	
+			<div class="sl_label">Min:</div>		
+			<input class="slider" id="slider_min" type="range" name="points" min="0" max="200"/>
+		</div>
+		<div id="test" >TEST!</div>
 	
+	</div>
 
 
 </body>

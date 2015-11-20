@@ -7,6 +7,13 @@ function HeatMapRenderer(manager){
 	var rasterLoc = 	   gl.getUniformLocation(this.glProgram, "heatmap_raster" );
 	manager.storeUniformLoc(this.glProgram, "max");
 	manager.storeUniformLoc(this.glProgram, "min");
+	manager.storeUniformLoc(this.glProgram, "colors");
+	
+	this.colors =  new Float32Array(16);
+	this.colors.set([ 1, 0, 0, 1, 
+		              1, 1, 0, 1, 
+		              0, 1, 0, 1,
+		              0, 0, 0, 1 ]);
 	//var legend = new HeatMapLegend('legend');
 
 	  // provide texture coordinates for the rectangle.
@@ -19,6 +26,7 @@ function HeatMapRenderer(manager){
 	       1.0,  1.0,
 	       1.0, -1.0,
 	      -1.0,  1.0]), gl.STATIC_DRAW);
+	
 	
 	  
 	this.setup = function() {
@@ -40,7 +48,7 @@ function HeatMapRenderer(manager){
 		//gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 	
 		gl.disable(gl.DEPTH_TEST);
-		//gl.disable(gl.BLEND);
+		gl.disable(gl.BLEND);
 		gl.enable(gl.BLEND);		
 		gl.blendFunc( gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA  );
 
@@ -52,6 +60,8 @@ function HeatMapRenderer(manager){
 		
 	    gl.uniform1f(this.glProgram.max, max);	
 	    gl.uniform1f(this.glProgram.min, min);	
+	    gl.uniformMatrix4fv(this.glProgram.colors, false, this.colors);
+	    
 		gl.drawArrays(gl.TRIANGLES, 0, 6);	
 		gl.bindTexture(gl.TEXTURE_2D, null);
 	    gl.useProgram(null);

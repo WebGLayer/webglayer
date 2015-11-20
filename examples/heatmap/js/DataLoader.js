@@ -44,37 +44,17 @@ function DataLoader() {
 					pts[j++] = parseFloat(val.x);
 					pts[j++] = parseFloat(val.y);
 									
-					var d =  (new Date(val.timestamp*1000+ dt ));																				
-					//index[i] = rasterer.calc(i);	
-					days[i] =  weekday[d.getDay()]; //d.getDay();		
-										
+				
 					
-					hours[i] = d.getHours() + d.getMinutes()/60;		
-					date[i] = Math.round(d.getTime()/(1000*60*60));						
-					dateminmax = getMinMax(date[i], dateminmax);
 					
-					sev[i] = val.accident_severity;
-					road_type[i] = val.road_type;
-					speed_limit[i] = val.speed_limit;
-					
-					if (typeof(days[i]) == 'undefined' || typeof(hours[i]) == 'undefined' || typeof(sev[i]) == 'undefined')  {
-						console.error('error id data');
-					}
 				
 				});
 		
 			
 			
 			visualize({pts: pts, 
-				days: days, 
-				hours :hours, 
-				sev : sev, 
-				road_type: road_type, 
-				speed_limit: speed_limit,
-				date:date, 
-				dmm :dateminmax , 
-				num : data.length,
-				daysarray: weekarray});
+				num : data.length
+				});
 			});
 	}
 	

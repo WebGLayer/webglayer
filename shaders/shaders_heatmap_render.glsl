@@ -4,6 +4,7 @@
 		
 	//uniform sampler2D inter_raster;
 	
+	
 	varying vec4 var_texCoord;
 
 	void main() {
@@ -23,18 +24,37 @@
 	  uniform float min;
 	  varying vec4 var_texCoord;
 	// varying vec2 v_texCoord;
+	  uniform mat4 colors;	
 	
       void main() {
+          	
+      
 	 	float x = (var_texCoord[0]+1.)/2.;
 	 	float y =  (var_texCoord[1] +1.)/2.;
   		vec4 fdata = texture2D(heatmap_raster, vec2(x, y));
   		vec4 col;
-  		 
+  		float r = 0.;
 		float val = (fdata[1]-min)/(max);
+		float rangeval;
 
   		if (fdata[0] > 0.  && fdata[2]> 0.5) {  	
-  			//data are selected including spatial filter		  			
-  			col = vec4(val, 1.-val , 0. , 0.0+val*2.);//vec4(1.,0.,0.,0.);
+  			//data are selected including spatial filter		
+  			 //= floor(val*4./4.);
+  			vec4 col1;
+  			vec4 col2;  
+  			if (val >= 0.5){
+  				col1 = colors[0];
+  				col2 = colors[1];
+  				rangeval = (val - 0.5)*2.;
+  				
+  			} else {
+  				col1 = colors[1];
+  				col2 = colors[2];
+  				rangeval = val *2.;
+  			
+  			}			
+  			col =  col1*rangeval + col2*(1.-rangeval);//vec4(val, 1.-val , 0. , 0.0+val*2.);//vec4(1.,0.,0.,0.);
+  			col[3] = val*1.2;
   			}
   		else if (fdata[0] > 0.  && fdata[2] < 0.5) {
   			//data are seleted but not with spatial filter  		

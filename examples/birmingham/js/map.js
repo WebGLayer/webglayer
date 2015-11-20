@@ -87,6 +87,7 @@ initMap = function() {
 	var polygons = [];
 
 	var m_id;
+	
 	function report(event) {
 		if (event.type!="sketchcomplete"){
 		
@@ -175,6 +176,7 @@ initMap = function() {
 		        }   
 		    } 
 			);
+
 			
 			
 	controls = {

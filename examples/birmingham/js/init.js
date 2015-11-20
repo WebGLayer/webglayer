@@ -6,7 +6,14 @@ function init() {
 		/*Load the data*/
 		var data = new DataLoader();
 		data.loadPosData("data/birmingham_5a.json");
+			
+				
 	}
+function circleSelection(element){
+	if (element.checked){
+		console.log("cvvv");
+	}
+}
 
 function visualize(data){	
 	
@@ -70,7 +77,22 @@ function visualize(data){
 		
 		/** Drawing the map fist time */
 		WGL.mcontroller.zoommove(map.getZoom(), getTopLeftTC());
-		//WGL.render();	
+		//WGL.render();
+		
+		
+		var radius = 10.;		
+		
+		/*define radius fucntion*/
+		WGL.getDimensions()['heatmap'].radiusFunction = function(z){			
+			var res = Math.pow(radius / 5,(z-8));
+			//console.log(res);
+			return  res ;
+			};
+		$("#slider_radius").on("input", function(){			
+			radius = this.value;			
+			WGL.render();			
+		}
+	);
 	}
 			
 	

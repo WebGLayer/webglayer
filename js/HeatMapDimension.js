@@ -17,11 +17,15 @@ function HeatMapDimension(manager){
 	
 	/*default getMax function*/
 	this.maxFunction = function(max){
-		return max;
+		return max/2;
 	}
 	/*default getMin function*/
 	this.minFunction = function(max){
 		return 0;
+	}
+	
+	this.gradFunction = function(){
+		return 2;
 	}
 	
 	
@@ -74,11 +78,13 @@ function HeatMapDimension(manager){
 	var numfilters = 'numfilters';
 	var spIndex =    'spIndex'
 		
-	var radius =     'radius';	
+	var radius =   'radius';
+	var grad =     'grad';	
 	
 	gl.useProgram(this.glProgram);
 	
 	manager.storeUniformLoc(this.glProgram, radius);
+	manager.storeUniformLoc(this.glProgram, grad);
 	manager.storeUniformLoc(this.glProgram, drawselect);
 	manager.storeUniformLoc(this.glProgram, numfilters);
 	manager.storeUniformLoc(this.glProgram, spIndex);
@@ -124,6 +130,7 @@ function HeatMapDimension(manager){
 		gl.useProgram(this.glProgram);	
 		gl.uniform1f(this.glProgram[numfilters], manager.filternum);			
 		gl.uniform1f(this.glProgram[radius], this.radiusFunction(manager.zoom));
+		gl.uniform1f(this.glProgram[grad], this.gradFunction());
 		gl.uniform1f(this.glProgram[spIndex], manager.spIndex);			
 		//gl.uniform1f(this.glProgram[drawselect], 0);
 		//gl.drawArrays(gl.POINTS, 0, num);	
