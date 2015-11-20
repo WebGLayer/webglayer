@@ -60,7 +60,7 @@ function MapPolyFilter(manager){
 		gl.bindTexture(gl.TEXTURE_2D, this.filterTexture);
 		gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
 		
-		gl.viewport(0, 0, manager.w, manager.h);
+		gl.viewport(manager.l, manager.b, manager.w, manager.h);
 		
 		gl.clearColor(0.0, 0.0, 0.0, 0.0);
 	
