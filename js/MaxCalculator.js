@@ -4,7 +4,7 @@ function MaxCalculator(w, h){
 	
 	var framebuffer = gl.createFramebuffer();
 	
-	framebuffer.width = w;//manager.w;
+	framebuffer.width  = w;//manager.w;
 	framebuffer.height = h;//manager.h;
 
 	var renderbuffer = gl.createRenderbuffer();
@@ -127,12 +127,17 @@ function MaxCalculator(w, h){
 	}
 	function arrayMax(arr) {
 		  var len = arr.length, max = -Infinity;
+		  var heap = new Heap(function(a,b){return a.val > b.val});
 		  while (len--) {
-		    if (arr[len] > max) {
-		      max = arr[len];
-		    }
+			  var item = [];
+			  item.val = arr[len];
+			  item.x = len;
+			  heap.push(item);
+		  //  if (item > max) {
+		  //    max = item;
+		 //   }
 		  }
-		  return max;
+		  return heap.pop().val;
 		};
 	
 		

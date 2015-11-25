@@ -154,6 +154,15 @@ WGL = function(num, url, divid){
 		var polyFilter = new MapPolyFilter(manager);//res);
 		d.filter = polyFilter;
 	}
+	
+	this.addColorFilter = function(name, id){
+		var d = dimensions[name];
+			if (typeof(d) == 'undefined'){
+			throw ('Cant set fitler to not defined dimension '+name);
+		}
+		var colorFilter = new MapColorFilter(manager);//res);
+		d.filter = colorFilter;
+	}
 
 	this.addExtentFilter = function(){
 		var isspatial=false;

@@ -83,7 +83,7 @@ html,body {
 }
 
 #controlToggle li {
-	list-style: none;
+	list-style: none;/225
 }
 
 #test {
@@ -123,11 +123,13 @@ html,body {
 }
 
 .unselected.bar {
-	fill: #7b6888;
+ 	fill: #7b6888; 
+	/*fill: #756bb1; */
 }
 
 .out.bar {
 	fill: #98abc5;
+	/* fill: #deebf7;*/
 }
 
 .axis text {
@@ -245,6 +247,8 @@ html,body {
 <script src="../../js/ExtentFilter.js"></script>
 <script src="../../js/WGL.js"></script>
 <script src="../../js/ParallelCoordinates.js"></script>
+<script src="../../js/MapColorFilter.js"></script>
+<script src="../../js/Heap.js"></script>
 
 
 
@@ -272,8 +276,8 @@ html,body {
 		</div>
 		
 		<div class="control">
-			<div class="sl_label">Gradient:</div>		
-			<input class="slider" id="slider_gradient" type="range" name="points" min="1" max="8"/ >
+			<div class="sl_label">Color f.:</div>		
+			<input class="slider" id="slider_color" type="range" name="points" min="1" max="200"/ >
 		</div>
 
 	</div>

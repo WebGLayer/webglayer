@@ -56,6 +56,8 @@
       precision mediump float;  
  	  varying vec4 aPos;   
 	  varying float selected;
+	  
+	  // kernel wight coeficient
  	  uniform float grad;  
 
    		float length(vec2 a, vec2 b){

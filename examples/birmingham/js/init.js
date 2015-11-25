@@ -33,7 +33,8 @@ function visualize(data){
 		 */
 		WGL.addHeatMapDimension(data.pts, 'heatmap');
 		WGL.addMapDimension(data.pts, 'themap');
-		WGL.addPolyBrushFilter('themap','polybrush');
+		//WGL.addPolyBrushFilter('themap','polybrush');
+		WGL.addColorFilter('themap','polybrush');
 		
 		/**
 		 * Adding fitering by map extent
@@ -91,8 +92,11 @@ function visualize(data){
 		$("#slider_radius").on("input", function(){			
 			radius = this.value;			
 			WGL.render();			
-		}
-	);
+		});
+		
+		$("#slider_color").on("input", function(){						
+			WGL.filterDim('themap',this.value);			
+		});
 	}
 			
 	

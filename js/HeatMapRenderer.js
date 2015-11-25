@@ -8,12 +8,19 @@ function HeatMapRenderer(manager){
 	manager.storeUniformLoc(this.glProgram, "max");
 	manager.storeUniformLoc(this.glProgram, "min");
 	manager.storeUniformLoc(this.glProgram, "colors");
+	manager.storeUniformLoc(this.glProgram, "unselcolors");
 	
 	this.colors =  new Float32Array(16);
 	this.colors.set([ 1, 0, 0, 1, 
 		              1, 1, 0, 1, 
 		              0, 1, 0, 1,
 		              0, 0, 0, 1 ]);
+	
+	this.unselcolors =  new Float32Array(16);
+	this.unselcolors.set([  49/256, 130/256, 189/256, 1,
+	                       158/256, 202/256, 225/256, 1, 
+	                       222/256, 235/256, 247/256, 1, 
+	                       0, 0, 0, 1 ]);
 	//var legend = new HeatMapLegend('legend');
 
 	  // provide texture coordinates for the rectangle.
@@ -26,7 +33,11 @@ function HeatMapRenderer(manager){
 	       1.0,  1.0,
 	       1.0, -1.0,
 	      -1.0,  1.0]), gl.STATIC_DRAW);
-	
+	  
+	  gl.useProgram(this.glProgram);		
+	  gl.uniformMatrix4fv(this.glProgram.colors, false, this.colors);
+	  gl.uniformMatrix4fv(this.glProgram.unselcolors, false, this.unselcolors);
+	  gl.useProgram(null);		
 	
 	  
 	this.setup = function() {
@@ -60,7 +71,7 @@ function HeatMapRenderer(manager){
 		
 	    gl.uniform1f(this.glProgram.max, max);	
 	    gl.uniform1f(this.glProgram.min, min);	
-	    gl.uniformMatrix4fv(this.glProgram.colors, false, this.colors);
+	   
 	    
 		gl.drawArrays(gl.TRIANGLES, 0, 6);	
 		gl.bindTexture(gl.TEXTURE_2D, null);

@@ -147,6 +147,7 @@ function HeatMapDimension(manager){
 	    manager.max = this.maxFunction(max);
 	    manager.min = this.minFunction(max);
 	    renderer.heatTexture = 	this.heatTexture;	
+	    manager.heatTexture = this.heatTexture;	
 	    renderer.render( manager.min, manager.max);
 	    
 		
