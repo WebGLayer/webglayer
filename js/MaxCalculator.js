@@ -127,17 +127,18 @@ function MaxCalculator(w, h){
 	}
 	function arrayMax(arr) {
 		  var len = arr.length, max = -Infinity;
-		  var heap = new Heap(function(a,b){return a.val > b.val});
+		//  var heap = new Heap(function(a,b){return a.val > b.val});
 		  while (len--) {
-			  var item = [];
-			  item.val = arr[len];
-			  item.x = len;
-			  heap.push(item);
-		  //  if (item > max) {
-		  //    max = item;
-		 //   }
+		//	  var item = [];
+	//		  item.val = arr[len];
+				var item = arr[len];
+	//		  item.x = len;
+	//		  heap.push(item);
+		    if (item > max) {
+		      max = item;
+		    }
 		  }
-		  return heap.pop().val;
+		  return max;//heap.pop().val;
 		};
 	
 		

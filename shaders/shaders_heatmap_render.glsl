@@ -63,11 +63,11 @@
   			 //= floor(val*4./4.);
   			
   			col =   getColor(val, colors);//col1*rangeval + col2*(1.-rangeval);//vec4(val, 1.-val , 0. , 0.0+val*2.);//vec4(1.,0.,0.,0.);
-  			col[3] = val*1.2;
+  			col[3] = val*1.2+0.02;
   			}
   		else if (fdata[0] > 0.  && fdata[2] < 0.5) {
   			//data are seleted but not with spatial filter 
-  			col =  getColor(val*2., unselcolors);
+  			col =  getColor(val, unselcolors);
   			col[3] =  val*1.2;		
   			//col = vec4(val, 1.-val , 0.2 , 0.6);//vec4(1.,0.,0.,0.);
   		}	else {

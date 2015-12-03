@@ -183,7 +183,7 @@ WGL = function(num, url, divid){
 		return manager;
 	}		
 
-	this.render = function(){	
+	this.render = function(){			
 		for (var i in dimensions){
 			dimensions[i].render(numrec);
 		}
@@ -400,7 +400,7 @@ WGL = function(num, url, divid){
 				val = 0.//-99999.			
 				} 
 			else {
-				val =  ( (m.data[i] - m.min) / (m.max - m.min) ) *  m.num_bins /max_bins +  (1 /(2*max_bins)) ;
+				val =  ( (m.data[i] - m.min) / (m.max - m.min) ) *  m.num_bins /max_bins ;//+  (1 /(2*max_bins)) ;
 			}
 			pts_ar[i] = val;
 			//pts[i] = null;
