@@ -100,13 +100,14 @@ Filter = function(manager) {
 	/*evaluate all filters*/
 	this.applyFilterAll = function(dimensions) {
 
-		/*update filtering data if (important for polybrush filter)*/
+		/*update filtering data (important for polybrush filter)*/
 		for (var i in dimensions) {
-			var d = dimensions[i];		
-			if (typeof(d.filter) != 'undefined'){
-					if(d.filter.isActive){					
-						d.filter.updateFilter(); // update filering texture if needed;
+			for (var f in dimensions[i].filters) {
+			var d = dimensions[i].filters[f];						
+					if(d.isActive){					
+						d.updateFilter(); // update filering texture if needed;
 					}	
+				
 			}
 		}
 		gl.useProgram(this.filterProgram);			
@@ -137,15 +138,14 @@ Filter = function(manager) {
 	
 	
 		for (var i in dimensions) {
+			for (var f in dimensions[i].filters) {
 			/* traverse all filters and evalut tham */
-			var d = dimensions[i];		
+			var d = dimensions[i].filters[f];		
 			/*Filter texture*/
-		
-			if (typeof(d.filter) != 'undefined'){
-				if(d.filter.isActive){										
-					/* Activate filter texture*/
+			if(d.isActive){										
+				/* Activate filter texture*/
 					gl.activeTexture(gl.TEXTURE0);
-					gl.bindTexture(gl.TEXTURE_2D, d.filter.filterTexture);
+					gl.bindTexture(gl.TEXTURE_2D, d.filterTexture);
 					gl.uniform1i(this.filterProgram.histLoc , 0);	
 									
 					/*Activate index texture*/
@@ -153,20 +153,20 @@ Filter = function(manager) {
 					gl.bindTexture(gl.TEXTURE_2D, filterTexture[thatID]);
 					gl.uniform1i(this.filterProgram.indexText, 1);	
 					
-					gl.uniform1f(this.filterProgram.filterid, d.filter.index);
-				   	gl.uniform1f(this.filterProgram.isspatial, d.filter.isspatial);
+					gl.uniform1f(this.filterProgram.filterid, d.index);
+				   	gl.uniform1f(this.filterProgram.isspatial, d.isspatial);
 				 //  	console.log("filter num "+manager.filternum);
 				
-					if (d.filter.isspatial == 0.0){
+					if (d.isspatial == 0.0){
 						/*this fitler is not spatial - bind 1d attribute*/
-						manager.enableBufferForName(this.filterProgram, d.name, "attr1");
+						manager.enableBufferForName(this.filterProgram, dimensions[i].name, "attr1");
 					} else {
 						/*this filter is spatial - bind the wPoint*/
 						manager.enableBufferForName(this.filterProgram, "wPoint", "wPoint");
-					}
+						}
 		 			gl.drawArrays(gl.POINTS, 0, manager.num_rec);			
-				}
-			}								
+					}					
+			}							
 		}			
 		//this.readPixels(activeID, 'active');
     	//this.readPixels(thatID, 'pasive');
@@ -182,8 +182,8 @@ Filter = function(manager) {
     	gl.bindFramebuffer(gl.FRAMEBUFFER, null);	
 	}
 
-/*Render filter for particular dimesnion*/
-	this.applyFilterDim = function(dim) {
+/*Render filter for particular dimension*/
+	this.applyFilterDim = function(dim,filterId) {
 		gl.useProgram(this.filterProgram);					
 		//console.log("binding framebuffer to "+activeID);	
 		gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer[activeID]);
@@ -206,7 +206,7 @@ Filter = function(manager) {
 	
 		/* Activate filtering texture*/
 		gl.activeTexture(gl.TEXTURE0);
-		gl.bindTexture(gl.TEXTURE_2D, dim.filter.filterTexture);
+		gl.bindTexture(gl.TEXTURE_2D, dim.filters[filterId].filterTexture);
 		gl.uniform1i(this.filterProgram.histLoc , 0);	
 
 		/*Activate index texture*/
@@ -215,11 +215,11 @@ Filter = function(manager) {
 		gl.uniform1i(this.filterProgram.indexText, 1);	
 				
 		//console.log("index "+ dim.filter.index);
-		gl.uniform1f(this.filterProgram.filterid, dim.filter.index);
+		gl.uniform1f(this.filterProgram.filterid, dim.filters[filterId].index);
 		
-		gl.uniform1f(this.filterProgram.isspatial, dim.filter.isspatial);
+		gl.uniform1f(this.filterProgram.isspatial, dim.filters[filterId].isspatial);
 				   
-		if (dim.filter.isspatial == 0.0){
+		if (dim.filters[filterId].isspatial == 0.0){
 			manager.enableBufferForName(this.filterProgram, dim.name, "attr1");
 		} else {
 			manager.enableBufferForName(this.filterProgram, "wPoint", "wPoint");
@@ -236,7 +236,7 @@ Filter = function(manager) {
 		gl.bindRenderbuffer(gl.RENDERBUFFER, null);
     	gl.bindFramebuffer(gl.FRAMEBUFFER, null);	
     	
-    	//this.readPixels(activeID, 'active');
+    	this.readPixels(activeID, 'active');
 		//this.readPixels(thatID, 'pasive');
 	}
 

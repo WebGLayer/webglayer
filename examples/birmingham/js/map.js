@@ -115,7 +115,7 @@ initMap = function() {
 			//	console.log(polygons);
 				//WGL.filterByPoly('map',polygons);
 				polygons.length =  Object.keys(polygons).length;
-				WGL.filterDim('themap',polygons);
+				WGL.filterDim('themap','polybrush',polygons);
 			} catch (e) {
 				console.log(e);
 			}
@@ -171,7 +171,7 @@ initMap = function() {
 							} 
 						}
 						polygons.length = l;//Object.keys(polygons).length;;
-		               	WGL.filterDim('themap',polygons);
+		               	WGL.filterDim('themap','polybrush',polygons);
 		            }
 		        }   
 		    } 

@@ -1,22 +1,36 @@
-function MapPolyFilter(manager){	
+function MapColorFilter(manager){	
 	var manager = manager;
 	
 	this.isspatial = 1.0;
 	var pointsSize = 0;	
-	this.filterProgram = GLU.compileShaders("mapFilter_vShader",  "mapFilter_fShader", this);
-	/***
+	
+	this.glProgram = GLU.compileShaders("mapColorFilter_vShader",  "mapColorFilter_fShader", this);
+	
+	/**
 	 * Buffers
 	 */
-	var posBuffer = gl.createBuffer();
-	posBuffer.attr="poly";
+	  // provide texture coordinates for the rectangle.
+	 var texCoordBuffer = gl.createBuffer();
+	 gl.bindBuffer(gl.ARRAY_BUFFER, texCoordBuffer);
+	 gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+	      -1.0, -1.0,
+	       1.0, -1.0,
+	      -1.0,  1.0,
+	       1.0,  1.0,
+	       1.0, -1.0,
+	      -1.0,  1.0]), gl.STATIC_DRAW);
+	gl.bindBuffer(gl.ARRAY_BUFFER, null);
 	
 	var framebuffer = gl.createFramebuffer();			
 	var renderbuffer = gl.createRenderbuffer();
-
-	var saved_polygons;
 	
 	this.filterTexture = gl.createTexture();
-	this.filterTexture.name = "filter texture";
+	this.filterTexture.name = "color filter texture";
+	
+	var texCoordLocation = gl.getAttribLocation(this.glProgram, "v_texCoord");
+	var rasterLoc = 	   gl.getUniformLocation(this.glProgram, "heatmap_raster" );
+	manager.storeUniformLoc(this.glProgram, "val");
+	
 		
 	this.createMapFramebuffer = function(){ 
 		
@@ -54,68 +68,57 @@ function MapPolyFilter(manager){
 	
 	this.createMapFramebuffer();
 	
-	this.renderFilter = function(){		
-		gl.useProgram(this.filterProgram);
-		manager.bindMapMatrix(this.filterProgram);
-		gl.bindTexture(gl.TEXTURE_2D, this.filterTexture);
-		gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
-		
+	this.setup = function() {
+		 gl.useProgram(this.glProgram);		
+		 gl.bindBuffer(gl.ARRAY_BUFFER, texCoordBuffer);
+		 gl.enableVertexAttribArray(texCoordLocation);
+		 gl.vertexAttribPointer(texCoordLocation, 2, gl.FLOAT, false, 0, 0);
+		//gl.useProgram(this.glProgram);
+		/** add specific buffer and uniforms */
+		 gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+	     gl.uniform1i(rasterLoc , 0);		   
+		 gl.activeTexture(gl.TEXTURE0);
+		 gl.bindTexture(gl.TEXTURE_2D, manager.heatTexture);
+	
+	
+		 gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
+					
 		gl.viewport(manager.l, manager.b, manager.w, manager.h);
-		
-		gl.clearColor(0.0, 0.0, 0.0, 1.0);
-	
-		
+		gl.clearColor(0.0, 0.0, 0.0, 0.0);
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-				
-		gl.disable(gl.BLEND);
-		gl.disable(gl.DEPTH_TEST);
-		
 	
-		gl.bindBuffer(gl.ARRAY_BUFFER, posBuffer);
+		gl.disable(gl.DEPTH_TEST);
+		gl.disable(gl.BLEND);
+					
+
+	}	
+	this.renderFilter = function(min, max) {
+		//legend.updateMax(max);
+		this.setup();
+	
 		
-		
-		if (this.filterProgram[posBuffer.attr] == null){
-			this.filterProgram[posBuffer.attr] = gl.getAttribLocation(this.filterProgram, posBuffer.attr);
-		}		
-		if (this.filterProgram[posBuffer.attr] >= 0){
-			gl.enableVertexAttribArray(this.filterProgram[posBuffer.attr]);
-			gl.vertexAttribPointer(this.filterProgram[posBuffer.attr], 2, gl.FLOAT, false, 0, 0);
-		} else {
-			console.error("Error binding buffer: "+posBuffer);
-			return;
-		}	
-		
-		gl.drawArrays(gl.TRIANGLES, 0, pointsSize);		
-		
-		gl.bindBuffer(gl.ARRAY_BUFFER, null);
-		gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+	    //gl.uniform1f(this.glProgram.max, max);	
+	    //gl.uniform1f(this.glProgram.min, min);	
+	   
+	    
+		gl.drawArrays(gl.TRIANGLES, 0, 6);	
 		gl.bindTexture(gl.TEXTURE_2D, null);
+	    gl.useProgram(null);
+	   
 		
 	}
-	
 	this.updateFilter = function(points){
-		this.createFilteringData(saved_polygons);
+		// set uniform
+		
 		this.renderFilter();
 	}
 	
-	this.createFilteringData = function(polygons){	
-		saved_polygons = polygons;
-		//console.log(polygons);
-		//console.log("...........")
-		var points = new Array();		
-		for (var pol in polygons){
-			points.push.apply(points,polygons[pol]);
-		}
-		//console.log(points);
-		var p = new Float32Array(points);
-		gl.bindBuffer(gl.ARRAY_BUFFER, posBuffer);
-		gl.bufferData(gl.ARRAY_BUFFER, p, gl.STATIC_DRAW);	
-		gl.bindBuffer(gl.ARRAY_BUFFER, null);
-		pointsSize = points.length/2;
-		
-		
-	}
 	
+	this.createFilteringData = function(v){
+		 gl.useProgram(this.glProgram);		
+		 gl.uniform1f(this.glProgram.val, v);	
+		 		
+	}
 	this.readPixels = function() {
 		
 	//	console.time("reading filter");

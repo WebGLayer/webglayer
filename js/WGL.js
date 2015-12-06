@@ -143,7 +143,9 @@ WGL = function(num, url, divid){
 			console.error('Cant set fitler to not defined dimension '+m.name);
 		}
 		var f = new LinearFilter(manager, m, res, id);//res);
-		d.filter = f;
+		//d.filter = f;
+		
+		addFilter(m.name, id, f);
 	}
 	
 	this.addPolyBrushFilter = function(name, id){
@@ -152,18 +154,34 @@ WGL = function(num, url, divid){
 			throw ('Cant set fitler to not defined dimension '+name);
 		}
 		var polyFilter = new MapPolyFilter(manager);//res);
-		d.filter = polyFilter;
+		addFilter(name, id, polyFilter);
+		
+		//d.filter = polyFilter;
 	}
 	
 	this.addColorFilter = function(name, id){
-		var d = dimensions[name];
-			if (typeof(d) == 'undefined'){
-			throw ('Cant set fitler to not defined dimension '+name);
-		}
+		
 		var colorFilter = new MapColorFilter(manager);//res);
-		d.filter = colorFilter;
+		addFilter(name, id, colorFilter);
+		
+		//d.filter = colorFilter;
 	}
 
+	/**
+	 * adds a fitler to dimensiton
+	 */
+	var addFilter = function(dimid, filterid, filter){
+		var d = dimensions[dimid];
+		if (typeof(d) == 'undefined'){
+			throw ('Cant set fitler to not defined dimension '+name);
+		}
+		
+		if (d.filters == null) {
+			d.filters = [];
+		}
+		d.filters[filterid] = filter; 
+		
+	}
 	this.addExtentFilter = function(){
 		var isspatial=false;
 		for (i in dimensions){
@@ -228,8 +246,8 @@ WGL = function(num, url, divid){
 	}
 	
 
-	this.filterDim = function(id, filter){
-		var f = dimensions[id].filter;
+	this.filterDim = function(id, filterId, filter){
+		var f = dimensions[id].filters[filterId];
 		
 	
 		if (filter.length >0){
@@ -239,31 +257,32 @@ WGL = function(num, url, divid){
 		//	this.filterChanged(f);
 		}				
 		
-		manager.filternum = getNumberOfActiveFilters();
-	
+		//manager.filternum = getNumberOfActiveFilters();
+		setFiltersTrasholds();
+		
 
 		if (typeof(thisfilter)=='undefined' && filter.length>0){
-			thisfilter = id;	
-			this.filterChanged(thisfilter);				
+			thisfilter =  filterId;	
+			this.filterChanged(id, thisfilter);				
 		} 
-		else if (id!=thisfilter){
+		else if ( filterId!=thisfilter){
 			//console.log('filter changed');
 			//thatfilter = thisfilter;			
-			thisfilter = id;
-			this.filterChanged(thisfilter);						
+			thisfilter =  filterId;
+			this.filterChanged(id, thisfilter);						
 		} 
-		else if  (id==thisfilter && filter.length==0){
+		else if  ( filterId==thisfilter && filter.length==0){
 			//console.log("filter deleted");
-			this.filterDeleted(thisfilter);	
+			this.filterDeleted(id, thisfilter);	
 			thisfilter = undefined;		
 		}
 
 		
 		f.createFilteringData(filter);
 		f.renderFilter();
-					//f.readPixels();
+		//f.readPixels();
 
-		mainFilter.applyFilterDim(dimensions[id]);		
+		mainFilter.applyFilterDim(dimensions[id],filterId);		
 		this.render();
 		this.updateCharts();
 		
@@ -278,15 +297,16 @@ WGL = function(num, url, divid){
 		console.log(top);*/		
 	}
 	
-	this.filterChanged = function(newf){
+	this.filterChanged = function(id, newf){
 		/*apply all filter and set current to empty selected all the features*/		
 	
 		
-		dimensions[newf].filter.isActive=true;	 	
-		manager.filternum = getNumberOfActiveFilters();
-
+		dimensions[id].filters[newf].isActive=true;	 	
+		//manager.filternum = getNumberOfActiveFilters();
+		setFiltersTrasholds();
+		//getFiltersTrasholds();
 		/*render with this filter not active*/
-		dimensions[newf].filter.isActive=false;	
+		dimensions[id].filters[newf].isActive=false;	
 		
 		
 		mainFilter.applyFilterAll(dimensions);	
@@ -301,9 +321,10 @@ WGL = function(num, url, divid){
 		mainFilter.switchTextures();	
 	}
 
-	this.filterDeleted = function(newf){
-		dimensions[newf].filter.isActive=false;	 	
-		manager.filternum = getNumberOfActiveFilters();
+	this.filterDeleted = function(id, newf){
+		dimensions[id].filters[newf].isActive=false;	 	
+		//manager.filternum = getNumberOfActiveFilters();
+		setFiltersTrasholds();
 		
 		mainFilter.applyFilterAll(dimensions);
 		
@@ -313,48 +334,65 @@ WGL = function(num, url, divid){
 		mainFilter.switchTextures();
 	}
 
-	function getNumberOfActiveFilters(){
+	function setFiltersTrasholds(){
+		var  trasholds = {allsum: 0.0, spatsum: 0.0};
 		var  num = 0;
 		for (var i in dimensions){
-			var d =dimensions[i];
-			if (typeof(d.filter)!='undefined')
-			{ 
-				if (d.filter.isActive) {		
+			//if (typeof(d.filter)!='undefined')
+			for (var f in dimensions[i].filters){
+				var f =dimensions[i].filters[f];			
+				{ 
+				if (f.isActive) {		
 					//console.log("active filter on dim "+d.name+" "+num);
-					d.filter.index = num;	
-					if (d.isSpatial){
+					f.index = num;	
+					trasholds.allsum = trasholds.allsum + Math.pow(2,num);
+					if (dimensions[i].isSpatial){
+						trasholds.spatsum = trasholds.spatsum + Math.pow(2,num);
 						manager.spIndex = num;
 					}
 					num++;								
 				}
 					else {
-						if (d.isSpatial){
+						if (dimensions[i].isSpatial){
 						manager.spIndex = -1.; // index for nonspatial filter
 					}
 				}
 			} 
 		}
-		return num;
+		}
+		//console.log(trasholds);
+		manager.trasholds = trasholds;
+		//return trasholds;
 	}
 	
-	function getNumberOfNonSpatiolFilters(){
+	function getNumberOfActiveFilters(){
 		var  num = 0;
 		for (var i in dimensions){
-			var d =dimensions[i];
-			if (typeof(d.filter)!='undefined')
+			//if (typeof(d.filter)!='undefined')
+			for (var f in dimensions[i].filters){
+			var f =dimensions[i].filters[f];
+			
 			{ 
-				if (d.filter.isActive && !d.isSpatial) {		
+				if (f.isActive) {		
 					//console.log("active filter on dim "+d.name+" "+num);
-					//d.filter.index = num;	
+					f.index = num;	
+					if (dimensions[i].isSpatial){
+						manager.spIndex = num;
+					}
 					num++;								
-					}
+				}
 					else {
-						//d.filter.index = -1;
+						if (dimensions[i].isSpatial){
+						manager.spIndex = -1.; // index for nonspatial filter
 					}
+				}
 			} 
+		}
 		}
 		return num;
 	}
+	
+	
 	
 	/**
 	 * calculates the value to max pixels between -1 -1;

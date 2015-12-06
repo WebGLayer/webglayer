@@ -23,7 +23,7 @@ function MapDimension(manager){
 		/** add specific buffer and uniforms */
 		gl.useProgram(this.glProgram);
 		
-		gl.uniform1f(this.glProgram.numfilters, manager.filternum );		
+		gl.uniform1f(this.glProgram.numfilters, manager.trasholds.allsum );		
 		manager.bindMapMatrix(this.glProgram);
 		manager.enableBufferForName(this.glProgram, "wPoint", "wPoint");
 		manager.enableBufferForName(this.glProgram, "index", "index");	
@@ -35,8 +35,9 @@ function MapDimension(manager){
 		//gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 	
 		gl.disable(gl.DEPTH_TEST);
-		gl.disable(gl.BLEND);
-	
+		
+		gl.enable(gl.BLEND);
+		//gl.blendFunc(gl.ONE, gl.ONE);
 		gl.blendFunc( gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA  );
 		//gl.enable(gl.BLEND);
 		//gl.blendFunc(gl.ONE, gl.ONE);

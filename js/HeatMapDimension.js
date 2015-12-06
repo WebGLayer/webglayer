@@ -76,7 +76,7 @@ function HeatMapDimension(manager){
 	
 	var drawselect = 'drawselect';
 	var numfilters = 'numfilters';
-	var spIndex =    'spIndex'
+	var spatsum =    'spatsum'
 		
 	var radius =   'radius';
 	var grad =     'grad';	
@@ -87,7 +87,7 @@ function HeatMapDimension(manager){
 	manager.storeUniformLoc(this.glProgram, grad);
 	manager.storeUniformLoc(this.glProgram, drawselect);
 	manager.storeUniformLoc(this.glProgram, numfilters);
-	manager.storeUniformLoc(this.glProgram, spIndex);
+	manager.storeUniformLoc(this.glProgram, spatsum);
 	
 	
 	gl.uniform1f(this.glProgram.numfilters, 3);		
@@ -128,10 +128,12 @@ function HeatMapDimension(manager){
 		this.setup();		
 	
 		gl.useProgram(this.glProgram);	
-		gl.uniform1f(this.glProgram[numfilters], manager.filternum);			
+		gl.uniform1f(this.glProgram[numfilters], manager.trasholds.allsum );
+		console.log(manager.filternum);
+		
 		gl.uniform1f(this.glProgram[radius], this.radiusFunction(manager.zoom));
 		gl.uniform1f(this.glProgram[grad], this.gradFunction());
-		gl.uniform1f(this.glProgram[spIndex], manager.spIndex);			
+		gl.uniform1f(this.glProgram[spatsum], manager.trasholds.spatsum );			
 		//gl.uniform1f(this.glProgram[drawselect], 0);
 		//gl.drawArrays(gl.POINTS, 0, num);	
 		

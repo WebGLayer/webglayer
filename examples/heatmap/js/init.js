@@ -5,7 +5,8 @@ function init() {
 		
 		/*Load the data*/
 		var data = new DataLoader();
-		data.loadPosData("data/birmingham_5a.json");
+		//data.loadPosData("data/birmingham_5a.json");
+		data.loadPosData("data/xy250k.json");
 
 
 	}
@@ -29,19 +30,21 @@ function visualize(data){
 		WGL.addHeatMapDimension(data.pts, 'heatmap');
 
 		var radius = 10.;		
-		
+		var zoom = 0;
 		/*define radius fucntion*/
 		WGL.getDimensions()['heatmap'].radiusFunction = function(z){			
-			var res = Math.pow(radius / 5,(z-8));
+			zoom = z;
+			var res =  radius;//Math.pow(radius / 5,(z-8));
 			//console.log(res);
 			return  res ;
 			};
 		
 		$("#slider_radius").on("input", function(){
-				console.time("radius");
+				//console.time("radius");
+			
 				radius = this.value;			
 				WGL.render();
-				console.timeEnd("radius");
+				//console.timeEnd("radius");
 			}
 		);
 
@@ -85,17 +88,16 @@ function visualize(data){
 		);
 			
 		var i = 0;
-		var draw = function(){
-			if (i<10){
-				radius = i
-				WGL.render();
-				requestAnimationFrame(draw);
-				i++;
-			} 
-		}
-		$("#test").on("click", function(){
-			i= 0;
-			draw();		
+		
+		
+		$("#test ").on("click", function(){
+			drawindex = 0;
+			numdraw = 30;	
+			//for (var i= 3; i<24; i++){
+			//	radius = i;
+				draw();	
+			//}		
+						
 		});
 			
 		/**
@@ -106,8 +108,32 @@ function visualize(data){
 		/** Drawing the map fist time */
 		WGL.mcontroller.zoommove(map.getZoom(), getTopLeftTC());
 		//WGL.render();	
-	}
-			
+
+/*speed test*/
+	var sum = 0;
+	var draw = function(i){
+			if (drawindex <	numdraw){
+				//radius = 10;		
+				console.time('setmax');
+				var start = new Date().getTime();
+				WGL.render();
+				var end = new Date().getTime();
+				sum = sum +(end-start);
+				console.timeEnd('setmax');
+				drawindex ++;			
+				requestAnimationFrame(draw);				
+			} else {
+				console.log("average: "+sum/numdraw);
+				console.log("radius: "+radius);
+				console.log("zoom: "+zoom);
+				console.log("num: " +data.num);
+				sum = 0;
+			}
+	}	
+	
+}
+		
+
 	
 
 	

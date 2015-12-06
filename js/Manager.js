@@ -1,5 +1,7 @@
 function Manager(mapid) {
 
+	this.trasholds = {allsum: 0, spatsum:0};
+	
 	this.updateMapSize = function(){
 		this.mapdiv = document.getElementById(mapid);
 		var body = document.getElementsByTagName('body')[0];		
