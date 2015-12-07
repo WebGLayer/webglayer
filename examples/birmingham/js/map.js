@@ -243,7 +243,6 @@ function transform(x, y) {
 	var p = new OpenLayers.LonLat(y, x);
 	p.transform(wgs, map.projection);
 	var v = map.getViewPortPxFromLonLat(p);
-	
 	var v0 = toLevel0(v, tl, map.getZoom());
 	return v0;
 }
