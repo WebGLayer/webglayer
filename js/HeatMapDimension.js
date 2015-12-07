@@ -129,7 +129,7 @@ function HeatMapDimension(manager){
 	
 		gl.useProgram(this.glProgram);	
 		gl.uniform1f(this.glProgram[numfilters], manager.trasholds.allsum );
-		console.log(manager.filternum);
+		//console.log(manager.filternum);
 		
 		gl.uniform1f(this.glProgram[radius], this.radiusFunction(manager.zoom));
 		gl.uniform1f(this.glProgram[grad], this.gradFunction());

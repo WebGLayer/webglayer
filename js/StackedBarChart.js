@@ -1,4 +1,4 @@
-StackedBarChart = function(m, div_id, x_label, filterId) {
+StackedBarChart = function(m, div_id, x_label, filterId, params) {
 	var type;
 	var div_id;
 	

@@ -50,8 +50,7 @@ WGL = function(num, url, divid){
 		try { manager.addDataBuffer(array2TA(data), 2, 'wPoint');}
 		catch(err) {
 			console.warn(err);
-		};
-		
+		};		
 		var dim = new HeatMapDimension(manager);
 		dimensions[id] = dim;		
 		
