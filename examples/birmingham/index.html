@@ -115,7 +115,7 @@ html,body {
 	fill: grey;
 	stroke: #ff8c00;
 	stroke-opacity: 0.8;
-	stroke-width: 1;
+	stroke-width: 2;
 }
 
 .selected.bar {
@@ -276,8 +276,17 @@ html,body {
 		</div>
 		
 		<div class="control">
-			<div class="sl_label">Color f.:</div>		
-			<input class="slider" id="slider_color" type="range" name="points" min="0" max="200"/ >
+			<div class="sl_label">Color min:</div>		
+			<input class="slider" id="slider_color_min" type="range" name="points" min="0" max="200"/ >
+		</div>
+		<div class="control">
+			<div class="sl_label">Color max:</div>		
+			<input class="slider" id="slider_color_max" type="range" name="points" min="0" max="200"/ >
+		</div>
+		
+		<div class="control">
+			<div id="color_axis"></div>		
+			
 		</div>
 
 	</div>

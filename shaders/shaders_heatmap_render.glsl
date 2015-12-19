@@ -56,18 +56,19 @@
   		vec4 fdata = texture2D(heatmap_raster, vec2(x, y));
   		vec4 col;
   		float r = 0.;
-		float val = (fdata[1]-min)/(max);	
+		float val;
 
-  		if (fdata[0] > 0.  && fdata[2]> 0.5) {  	
+  		if (fdata[3] > 0.  && fdata[2]> 0.5) {  	
   			//data are selected including spatial filter		
   			 //= floor(val*4./4.);
-  			
+  			val = (fdata[0]-min)/(max);	
   			col =   getColor(val, colors);//col1*rangeval + col2*(1.-rangeval);//vec4(val, 1.-val , 0. , 0.0+val*2.);//vec4(1.,0.,0.,0.);
-  			col[3] = val*1.2+0.02;
+  			col[3] = val*1.2+0.1;
   			}
-  		else if (fdata[0] > 0.  && fdata[2] < 0.5) {
+  		else if (fdata[3] > 0.  && fdata[2] < 0.5) {
   			//data are seleted but not with spatial filter 
-  			col =  getColor(val, unselcolors);
+  			val = (fdata[1]-min)/(max);	
+  			col =  getColor(val, unselcolors);  			
   			col[3] =  val*1.2;		
   			//col = vec4(val, 1.-val , 0.2 , 0.6);//vec4(1.,0.,0.,0.);
   		}	else {

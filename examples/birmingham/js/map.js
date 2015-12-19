@@ -25,6 +25,9 @@ initMap = function() {
 			  }) ;
 	 
 	  
+	var layer2 = new  OpenLayers.Layer.OSM('osm', 'http://${s}.basemaps.cartocdn.com/dark_all/${z}/${x}/${y}.png', {});
+	       
+	        
     var layer = new OpenLayers.Layer.OSM('', null, {
         eventListeners: {
             tileloaded: function(evt) {
@@ -42,7 +45,7 @@ initMap = function() {
         }
     });
 
-    map.addLayer(layer);
+    map.addLayer(layer2);
     
 	
 	var renderer = OpenLayers.Util.getParameters(window.location.href).renderer;

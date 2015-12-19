@@ -18,7 +18,8 @@
   <script id="mapColorFilter_fShader" type="x-shader/x-vertex">
           precision mediump float;  
       
-      uniform float val;
+      uniform float val_min;
+      uniform float val_max;
       uniform sampler2D heatmap_raster;      
       varying vec4 var_texCoord;
       
@@ -29,7 +30,7 @@
 	 	float y =  (var_texCoord[1] +1.)/2.;
   		vec4 fdata = texture2D(heatmap_raster, vec2(x, y));
   		float v;
-  		if (fdata[1] > val ){
+  		if (fdata[1] > val_min && fdata[1] < val_max ){
   			v = 1.;
   		}	else {
   			v=0.;

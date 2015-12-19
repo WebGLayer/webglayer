@@ -21,7 +21,7 @@ function MapColorFilter(manager){
 	      -1.0,  1.0]), gl.STATIC_DRAW);
 	gl.bindBuffer(gl.ARRAY_BUFFER, null);
 	
-	var framebuffer = gl.createFramebuffer();			
+	var framebuffer  = gl.createFramebuffer();			
 	var renderbuffer = gl.createRenderbuffer();
 	
 	this.filterTexture = gl.createTexture();
@@ -29,7 +29,8 @@ function MapColorFilter(manager){
 	
 	var texCoordLocation = gl.getAttribLocation(this.glProgram, "v_texCoord");
 	var rasterLoc = 	   gl.getUniformLocation(this.glProgram, "heatmap_raster" );
-	manager.storeUniformLoc(this.glProgram, "val");
+	manager.storeUniformLoc(this.glProgram, "val_min");
+	manager.storeUniformLoc(this.glProgram, "val_max");
 	
 		
 	this.createMapFramebuffer = function(){ 
@@ -115,10 +116,14 @@ function MapColorFilter(manager){
 	
 	
 	this.createFilteringData = function(v){
-		 gl.useProgram(this.glProgram);		
-		 gl.uniform1f(this.glProgram.val, v);	
-		 		
+		console.log("filter: "+v );
+			 gl.useProgram(this.glProgram);		
+			 gl.uniform1f(this.glProgram.val_min, v[0]);
+			 gl.uniform1f(this.glProgram.val_max, v[1]);
+			
 	}
+	
+	
 	this.readPixels = function() {
 		
 	//	console.time("reading filter");

@@ -16,6 +16,7 @@ WGL = function(num, url, divid){
 	this.mcontroller.resize();
 	
 	var dimensions = [];
+	var legends = [];
 	var oneDDim = [];
 	var thisfilter;
 	var extf;
@@ -46,6 +47,10 @@ WGL = function(num, url, divid){
 		dimensions[id] = dim;
 	}
 	
+	this.addLegend = function(l){
+		legends.push(l);
+	}
+	
 	this.addHeatMapDimension = function(data, id){
 		try { manager.addDataBuffer(array2TA(data), 2, 'wPoint');}
 		catch(err) {
@@ -58,6 +63,10 @@ WGL = function(num, url, divid){
 	
 	this.getDimensions = function(){
 		return dimensions;
+	}
+	
+	this.getDimension = function(name){
+		return dimensions[name];
 	}
 	
 	
@@ -200,11 +209,40 @@ WGL = function(num, url, divid){
 		return manager;
 	}		
 
-	this.render = function(){			
-		for (var i in dimensions){
+	
+	this.render = function(){		
+	//renderr();	
+		for (var i in dimensions){			
 			dimensions[i].render(numrec);
-		}
+			};
+		WGL.updateCharts();
+		
+		for (var i in legends){			
+			legends[i].update();
+			};
+				
 	}
+	
+	var dim_ids;
+	var dim_iter = 0;
+	
+	var renderr = function(){	
+		if (dim_ids ==null){
+			dim_ids = Object.keys(dimensions);
+		}
+	
+		if (dim_iter < dim_ids.length){			
+			dimensions[dim_ids[dim_iter]].render(numrec);	
+			console.log("rendering "+dim_ids[dim_iter]);
+			dim_iter++;
+			requestAnimationFrame(renderr);
+		} else {
+			//WGL.updateCharts();
+			WGL.updateCharts();
+			dim_iter = 0;
+		}		
+	}
+	
 	this.initFilters = function(){
 			mainFilter.applyFilterAll(dimensions);	
 	}
@@ -241,7 +279,7 @@ WGL = function(num, url, divid){
 			thisfilter = undefined;	
 		}
 		this.render();
-		this.updateCharts();
+		
 	}
 	
 
@@ -283,7 +321,7 @@ WGL = function(num, url, divid){
 
 		mainFilter.applyFilterDim(dimensions[id],filterId);		
 		this.render();
-		this.updateCharts();
+		//this.updateCharts();
 		
 		/** geting top k elemnts*/
 		/* var sel = mainFilter.readPixels();

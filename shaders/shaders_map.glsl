@@ -6,19 +6,18 @@
       uniform mat4 rasterMatrix;
       uniform float zoom;
  	  uniform float drawselect;   
-       
+      
       uniform sampler2D filter;
-      uniform float numfilters;
-       
-  
+      uniform float numfilters;       
+ 
       varying vec4 col;
       void main() {
 		
 		float p_size = 1.;
+		
 		if (zoom > 12.) {
-			p_size = zoom / 8.+2.;
-			}
-  	  	  		
+			p_size = zoom / 12.+2.;		
+		}  	  	  		
   	    	   
   		vec4 p =  mapMatrix * wPoint;
   		//float n_speed = (speed+1.)/2.;
@@ -34,12 +33,12 @@
 			gl_PointSize = p_size;
   			
   		} else if ((fdata[0] < ( numfilters / 256.)  || numfilters == 0.) && drawselect<0.5) {  	
-  		   // If not selected then use blue color	   
+  		   //If not selected then use blue color	   
   		   //p_size = p_size-3.;
   		   col = vec4(0., 0. , 1., 0.4);
   		   //col = vec4(0.482, 0.408, 0.533, 0.95); 	
   		   //p_size = 4.;
-  		  // col = vec4(0.0,0.,0.,0.75);
+  		   //col = vec4(0.0,0.,0.,0.75);
   		  	gl_Position = p;    	
 			gl_PointSize =  p_size;
   		} else {

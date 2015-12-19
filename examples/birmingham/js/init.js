@@ -48,12 +48,20 @@ function visualize(data){
 		 * Configuring the histograms and charts
 		 */
 		var charts = [];
-		
+		var params = [];
+		params.w = 500;
+		params.h = 120;
+		params.margin = {
+			top : 20,
+			right : 20,
+			bottom : 50,
+			left : 60
+			};
 		/** Histogram for severity */
 		var sev   = {data: data.sev,  domain: ['1','2','3'] ,  name: 'sev', type:'ordinal' };	
 		WGL.addOrdinalHistDimension(sev);
 		WGL.addLinearFilter(sev,3, 'sevF');
-		charts['sev']   = new StackedBarChart(sev, "chart3", "accident servelity","sevF");
+		charts['sev']   = new StackedBarChart(sev, "chart3", "accident servelity","sevF", params);
 		
 		
 		/** Histogram for days*/
@@ -68,10 +76,13 @@ function visualize(data){
 		WGL.addLinearFilter(hours, 24*10, 'hoursF');
 		charts['hours'] = new StackedBarChart(hours, "chart2", "hour of the day","hoursF");
 		
+		
+		var legend = new HeatMapLegend('color_axis', 'heatmap');
 		/**
 		 * Addin all charts
 		 */		
 		WGL.addCharts(charts);
+		WGL.addLegend(legend);
 		
 		/**
 		 * Initilizing all the filters
@@ -96,8 +107,16 @@ function visualize(data){
 			WGL.render();			
 		});
 		
-		$("#slider_color").on("input", function(){						
-			WGL.filterDim('themap',"colorbrush",this.value);			
+		var min = 0;
+		var max = 1000000;
+		$("#slider_color_min").on("input", function(){						
+			min = this.value;
+			WGL.filterDim('themap',"colorbrush",[min,max]);			
+		});
+
+		$("#slider_color_max").on("input", function(){	
+			max= this.value;					
+			WGL.filterDim('themap',"colorbrush",[min,max]);			
 		});
 	}
 			

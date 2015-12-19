@@ -68,7 +68,7 @@ function HeatMapRenderer(manager){
 		//legend.updateMax(max);
 		this.setup();
 	
-		
+		console.log(max);
 	    gl.uniform1f(this.glProgram.max, max);	
 	    gl.uniform1f(this.glProgram.min, min);	
 	   

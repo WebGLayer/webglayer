@@ -6,7 +6,7 @@ function init() {
 		/*Load the data*/
 		var data = new DataLoader();
 		//data.loadPosData("data/birmingham_5a.json");
-		data.loadPosData("data/xy250k.json");
+		data.loadPosData("data/xy100k.json");
 
 
 	}
@@ -92,12 +92,8 @@ function visualize(data){
 		
 		$("#test ").on("click", function(){
 			drawindex = 0;
-			numdraw = 30;	
-			//for (var i= 3; i<24; i++){
-			//	radius = i;
-				draw();	
-			//}		
-						
+			numdraw = 30;				
+			draw();										
 		});
 			
 		/**
@@ -110,6 +106,11 @@ function visualize(data){
 		//WGL.render();	
 
 /*speed test*/
+	$("#test ").on("click", function(){
+			drawindex = 0;
+			numdraw = 30;				
+			draw();										
+		});
 	var sum = 0;
 	var draw = function(i){
 			if (drawindex <	numdraw){
