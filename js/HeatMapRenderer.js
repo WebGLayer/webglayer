@@ -7,6 +7,8 @@ function HeatMapRenderer(manager){
 	var rasterLoc = 	   gl.getUniformLocation(this.glProgram, "heatmap_raster" );
 	manager.storeUniformLoc(this.glProgram, "max");
 	manager.storeUniformLoc(this.glProgram, "min");
+	manager.storeUniformLoc(this.glProgram, "max_filter");
+	manager.storeUniformLoc(this.glProgram, "min_filter");
 	manager.storeUniformLoc(this.glProgram, "colors");
 	manager.storeUniformLoc(this.glProgram, "unselcolors");
 	
@@ -64,13 +66,15 @@ function HeatMapRenderer(manager){
 		gl.blendFunc( gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA  );
 
 	}	
-	this.render = function(min, max) {
+	this.render = function(min, max, min_f, max_f) {
 		//legend.updateMax(max);
 		this.setup();
 	
 		console.log(max);
 	    gl.uniform1f(this.glProgram.max, max);	
-	    gl.uniform1f(this.glProgram.min, min);	
+	    gl.uniform1f(this.glProgram.min, min);
+	    gl.uniform1f(this.glProgram.max_filter, max_f);	
+	    gl.uniform1f(this.glProgram.min_filter, min_f);	
 	   
 	    
 		gl.drawArrays(gl.TRIANGLES, 0, 6);	

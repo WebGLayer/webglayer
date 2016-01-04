@@ -145,13 +145,19 @@ function HeatMapDimension(manager){
 		gl.bindTexture(gl.TEXTURE_2D, null);
 	    
 	    //var max = maxcale.getMax(this.heatTexture);
-		var max=this.maxcal.getMax(this.heatTexture);
+		var max=this.maxcal.getMax(this.heatTexture, 1);
 	    manager.max = this.maxFunction(max);
 	    manager.min = this.minFunction(max);
 	    this.maxall = max;
 	    renderer.heatTexture = 	this.heatTexture;	
 	    manager.heatTexture = this.heatTexture;	
-	    renderer.render( manager.min, manager.max);
+
+	    if (typeof(this.filter) !='undefined') {
+	    	 renderer.render( manager.min, manager.max, this.filter[0], this.filter[1]);
+	    } else {
+	    	 renderer.render( manager.min, manager.max, manager.min, manager.max);
+	    }
+	   
 	    
 		
 	     			

@@ -20,8 +20,15 @@
 	  
  	// uniform mat4 rasterMatrix;	
 	  uniform sampler2D heatmap_raster;
+	  
+	  //min max for whole data
 	  uniform float max;
 	  uniform float min;
+	  
+	  //min max for selected data
+	  uniform float max_filter;
+	  uniform float min_filter;
+	  
 	  varying vec4 var_texCoord;
 	// varying vec2 v_texCoord;
 	  uniform mat4 colors;
@@ -61,13 +68,13 @@
   		if (fdata[3] > 0.  && fdata[2]> 0.5) {  	
   			//data are selected including spatial filter		
   			 //= floor(val*4./4.);
-  			val = (fdata[0]-min)/(max);	
+  			val = (fdata[0]-min_filter)/(max_filter-min_filter);	
   			col =   getColor(val, colors);//col1*rangeval + col2*(1.-rangeval);//vec4(val, 1.-val , 0. , 0.0+val*2.);//vec4(1.,0.,0.,0.);
   			col[3] = val*1.2+0.1;
   			}
   		else if (fdata[3] > 0.  && fdata[2] < 0.5) {
   			//data are seleted but not with spatial filter 
-  			val = (fdata[1]-min)/(max);	
+  			val = (fdata[1]-min)/(max-min);	
   			col =  getColor(val, unselcolors);  			
   			col[3] =  val*1.2;		
   			//col = vec4(val, 1.-val , 0.2 , 0.6);//vec4(1.,0.,0.,0.);

@@ -80,8 +80,13 @@ HeatMapLegend = function(div_id, heatDimension) {
 		svg.select("#grad")
 		 .attr("y",  yScale(brush.extent()[1]))     
         .attr("height", yScale(brush.extent()[0]) - yScale(brush.extent()[1]) );		
-        	
-		WGL.filterDim('themap',"colorbrush",brush.extent());				
+        
+        var f = brush.extent();
+        if (f.length == 2 && f[0]==f[1]){
+        	f=[];
+        }
+		WGL.filterDim('themap',"colorbrush",brush.extent());
+		WGL.getDimension(heatDimension).filter =brush.extent(); 				
 	}
 	
 	
@@ -111,7 +116,7 @@ HeatMapLegend = function(div_id, heatDimension) {
 	 }
 	 
 	 this.update = function(){
-		// this.updateMax(WGL.getDimension(heatDimension).maxall);
+		 this.updateMax(WGL.getDimension(heatDimension).maxall);
 	 }
 
 }

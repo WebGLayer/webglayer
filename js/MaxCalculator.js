@@ -91,9 +91,9 @@ function MaxCalculator(w, h){
 	   
 		
 	}
-	this.getMax = function(texture){
+	this.getMax = function(texture, band){
 		this.render(texture);
-		return this.readPixels();
+		return this.readPixels(band);
 	}
 	
 	
@@ -110,12 +110,9 @@ function MaxCalculator(w, h){
 		manager.mapMatrix=matrix;
 	}
 
-	this.readPixels = function() {
+	this.readPixels = function(band) {
 		
-	
-		
-		
-		this.floatReader.render(this.maxTexture,0);
+		this.floatReader.render(this.maxTexture,band);
 		
 		var readf = this.floatReader.readPixels();
 		var max = arrayMax(readf);
