@@ -94,11 +94,11 @@ function visualize(data){
 		//WGL.render();
 		
 		
-		var radius = 10.;		
+		var radius = 1.;		
 		
 		/*define radius fucntion*/
 		WGL.getDimensions()['heatmap'].radiusFunction = function(z){			
-			var res = radius* (z-10);
+			var res = radius * Math.pow(2,z)/5000;
 			//console.log(res);
 			return  res ;
 			};

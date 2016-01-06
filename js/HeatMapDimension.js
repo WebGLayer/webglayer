@@ -3,7 +3,7 @@ function HeatMapDimension(manager){
 	//this.manager = manager;
 	//Dimension.call(this, manager);
 	this.isSpatial = true;
-	
+	this.lockScale = false;
 	
 	this.glProgram = GLU.compileShaders('heatmap_vShader', 'heatmap_fShader', this);
 	this.maxcal = new MaxCalculator(Math.floor(manager.w/6),Math.floor(manager.h/6));
@@ -12,12 +12,12 @@ function HeatMapDimension(manager){
 	
 	/* default radiusFunc*/
 	this.radiusFunction = function(z){
-		return z*z / 7;
+		return Math.pow(z,2) ;
 	};
 	
 	/*default getMax function*/
 	this.maxFunction = function(max){
-		return max/2;
+		return max;
 	}
 	/*default getMin function*/
 	this.minFunction = function(max){
@@ -144,10 +144,12 @@ function HeatMapDimension(manager){
 	   
 		gl.bindTexture(gl.TEXTURE_2D, null);
 	    
-	    //var max = maxcale.getMax(this.heatTexture);
-		var max=this.maxcal.getMax(this.heatTexture, 1);
-	    manager.max = this.maxFunction(max);
-	    manager.min = this.minFunction(max);
+	    //var max = maxcale.getMax(this.heatTexture);		
+		if (!this.lockScale){
+			var max=this.maxcal.getMax(this.heatTexture, 1);
+	    	manager.max = this.maxFunction(max);
+	    	manager.min = this.minFunction(max);
+		}
 	    this.maxall = max;
 	    renderer.heatTexture = 	this.heatTexture;	
 	    manager.heatTexture = this.heatTexture;	

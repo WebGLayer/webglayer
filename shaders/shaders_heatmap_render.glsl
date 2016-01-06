@@ -65,18 +65,29 @@
   		float r = 0.;
 		float val;
 
-  		if (fdata[3] > 0.  && fdata[2]> 0.5) {  	
+		float t =min_filter/6. ;
+		float tx =max_filter/6. ;
+		//val = (fdata[0]-min_filter)/(max_filter-min_filter);	
+		
+		if ( fdata[2] > 0. && (fdata[1] <= (min_filter) && fdata[1]>= (min_filter - t) ) || (fdata[1] >= (max_filter) && fdata[1] <= (max_filter+tx  ))){
+		 col = vec4(1.,0.549019608,0.,1.);
+		}
+  		else if (fdata[2] > 0. && fdata[3]>0. &&  fdata[1] >= min_filter && fdata[1]<= max_filter ) {  	
   			//data are selected including spatial filter		
   			 //= floor(val*4./4.);
-  			val = (fdata[0]-min_filter)/(max_filter-min_filter);	
+ 			val =  	(fdata[0] -	min_filter)  / (max_filter - min_filter); 
   			col =   getColor(val, colors);//col1*rangeval + col2*(1.-rangeval);//vec4(val, 1.-val , 0. , 0.0+val*2.);//vec4(1.,0.,0.,0.);
-  			col[3] = val*1.2+0.1;
-  			}
-  		else if (fdata[3] > 0.  && fdata[2] < 0.5) {
+
+  			col[3] = val*1.5+0.3;
+  		//} else if (fdata[0] == min_filter && fdata[0] == max_filter){
+  		//		col=vec4(1.,0.,0.,1.);
+  		//}
+  		}
+  		else if ( fdata[3]>0. ) {
   			//data are seleted but not with spatial filter 
   			val = (fdata[1]-min)/(max-min);	
   			col =  getColor(val, unselcolors);  			
-  			col[3] =  val*1.2;		
+  			col[3] =  val*2. +.1;		
   			//col = vec4(val, 1.-val , 0.2 , 0.6);//vec4(1.,0.,0.,0.);
   		}	else {
   			

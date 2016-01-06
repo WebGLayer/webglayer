@@ -8,6 +8,7 @@ HeatMapLegend = function(div_id, heatDimension) {
 			bottom : 10,
 			left : 40
 	};
+	var lockscale = false;
 	var width = w - margin.left - margin.right;
 	var height = h - margin.top - margin.bottom;
 
@@ -24,7 +25,15 @@ HeatMapLegend = function(div_id, heatDimension) {
 			"transform",
 			"translate(" + margin.left + "," + margin.top + ")");
 
-	 
+	d3.select("#" + div_id).append("label")
+	.text("lock scale")
+	.append("input")
+	.attr("type","checkbox")
+	.attr("id","scale")
+	.on("click", function(d,i){
+		 lockscale = this.checked;
+		 WGL.getDimension(heatDimension).lockScale = this.checked;
+		}); 
 	 
 	svg.append("defs").append("linearGradient")
 				.attr("id", "legend")
@@ -34,9 +43,9 @@ HeatMapLegend = function(div_id, heatDimension) {
 				.attr("y2","100%")
 				.selectAll("stop")
 				.data([
-				       {offset: "0%", color: "red"},
-				       {offset: "50%", color: "yellow"},	
-				       {offset: "100%", color: "green"}
+				       {offset: "0%", color: "rgba(255, 0, 0,1)"},
+				       {offset: "50%", color: "rgba(255, 255, 0,0.8)"},	
+				       {offset: "100%", color: "rgba(0, 255, 0,0.6)"}
 				       ])
 				 .enter().append("stop")
 				 	.attr("offset", function(d) { return d.offset; })
@@ -50,12 +59,20 @@ HeatMapLegend = function(div_id, heatDimension) {
 		.attr("y2","100%")
 		.selectAll("stop")
 		.data([
-	       {offset: "0%", color: "blue"},	      
-	       {offset: "100%", color: "white"}
+	       {offset: "0%", color:"rgba(59, 130, 189,1)"},	      
+	       {offset: "50%", color: "rgba(158, 202,225,0.6)"},
+	       {offset: "100%", color: "rgba(222, 235,247,0.3)"}
 	       ])
 	 .enter().append("stop")
 	 	.attr("offset", function(d) { return d.offset; })
 	 	.attr("stop-color", function(d) { return d.color; });
+	
+	svg.append("rect").attr("fill", "black")
+	  .attr("id","grad_bacground")
+	  .attr("x", 0)
+    .attr("y", 0)
+    .attr("width", 50)
+    .attr("height", height);
 	
 	svg.append("rect").attr("fill", "url(#legend_blue)")
 	  	.attr("id","grad_b")
@@ -64,8 +81,15 @@ HeatMapLegend = function(div_id, heatDimension) {
     	.attr("width", 50)
     	.attr("height", height);
 	
+	svg.append("rect").attr("fill", "black")
+	  .attr("class","grad")
+	  .attr("x", 0)
+    .attr("y", 0)
+    .attr("width", 50)
+    .attr("height", height);
+
 	svg.append("rect").attr("fill", "url(#legend)")
-					  .attr("id","grad")
+					  .attr("class","grad")
 					  .attr("x", 0)
 	                  .attr("y", 0)
 	                  .attr("width", 50)
@@ -73,11 +97,11 @@ HeatMapLegend = function(div_id, heatDimension) {
 	
 
 	
-	var brushed = function(r){
+	var brushed = function(){
 		
 	
 		console.log(brush.extent());
-		svg.select("#grad")
+		svg.selectAll(".grad")
 		 .attr("y",  yScale(brush.extent()[1]))     
         .attr("height", yScale(brush.extent()[0]) - yScale(brush.extent()[1]) );		
         
@@ -116,7 +140,21 @@ HeatMapLegend = function(div_id, heatDimension) {
 	 }
 	 
 	 this.update = function(){
-		 this.updateMax(WGL.getDimension(heatDimension).maxall);
+		 
+	 	 if (!lockscale){
+	 	 	var m = WGL.getDimension(heatDimension).maxall;	 	 	
+	 	 	var min = brush.extent()[0];
+	 	 	var max = brush.extent()[1];
+		 	this.updateMax(m+ m*0.2);
+		 	
+			svg.selectAll(".grad")
+			 .attr("y",  yScale(max))     
+	        .attr("height", yScale(min) - yScale(max) );	
+			svg.selectAll(".extent")
+			 .attr("y",  yScale(max))     
+	        .attr("height", yScale(min) - yScale(max) );
+	 	 }
+		
 	 }
 
 }

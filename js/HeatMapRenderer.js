@@ -76,6 +76,7 @@ function HeatMapRenderer(manager){
 	    gl.uniform1f(this.glProgram.max_filter, max_f);	
 	    gl.uniform1f(this.glProgram.min_filter, min_f);	
 	   
+	   console.log("max a min " +  min_f + " " +max_f )
 	    
 		gl.drawArrays(gl.TRIANGLES, 0, 6);	
 		gl.bindTexture(gl.TEXTURE_2D, null);

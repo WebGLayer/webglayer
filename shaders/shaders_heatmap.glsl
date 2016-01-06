@@ -27,6 +27,7 @@
   		
   		gl_Position = p; //vec4(-0.,-2.,0.,0.);    	
 		gl_PointSize = p_size;
+		
   		// if data are selected  
   		if ( fdata[0]>= ( numfilters / 256.)  || numfilters==0.){
   				selected = 1.;  			  
