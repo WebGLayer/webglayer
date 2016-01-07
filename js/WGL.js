@@ -107,7 +107,7 @@ WGL = function(num, url, divid){
 			} else if (dim.type =='linear'){
 				ta[i] = array2TANormLinear(dim , dim.num_bins);
 			} else {
-				console.error('Dimension type miising or unknown for dim '+d);
+				console.error('Dimension type missing or unknown for dim '+d);
 			}
 		}
 
@@ -274,6 +274,23 @@ WGL = function(num, url, divid){
 	
 	
 	this.filterByExt = function(){		
+		
+
+		/** update spatial filer */
+		for (var i in dimensions){
+			if (dimensions[i].isSpatial){
+				for (var j in dimensions[i].filters){
+					var f = dimensions[i].filters[j];
+					if (f.isActive){
+							f.updateFilter();
+						//f.createFilteringData();
+						//f.renderFilter();
+						//mainFilter.applyFilterDim(dimensions[i],j);		
+					}
+				}
+			}
+		}
+
 		if (typeof(extf)!='undefined'){
 			extf.render();
 			thisfilter = undefined;	
@@ -302,7 +319,7 @@ WGL = function(num, url, divid){
 			thisfilter =  filterId;	
 			this.filterChanged(id, thisfilter);				
 		} 
-		else if ( filterId!=thisfilter){
+		else if ( filterId!=thisfilter && filter.length!=0){
 			//console.log('filter changed');
 			//thatfilter = thisfilter;			
 			thisfilter =  filterId;
@@ -335,7 +352,7 @@ WGL = function(num, url, divid){
 	}
 	
 	this.filterChanged = function(id, newf){
-		/*apply all filter and set current to empty selected all the features*/		
+		/*apply all filters and set current to empty to select all the features*/		
 	
 		
 		dimensions[id].filters[newf].isActive=true;	 	
@@ -397,7 +414,7 @@ WGL = function(num, url, divid){
 			} 
 		}
 		}
-		//console.log(trasholds);
+		console.log("trasholds "+trasholds.spatsum);
 		manager.trasholds = trasholds;
 		//return trasholds;
 	}
