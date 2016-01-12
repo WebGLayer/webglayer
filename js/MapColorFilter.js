@@ -3,7 +3,7 @@ function MapColorFilter(manager){
 	
 	this.isspatial = 1.0;
 	var pointsSize = 0;	
-	
+	var saved_filter;
 	this.glProgram = GLU.compileShaders("mapColorFilter_vShader",  "mapColorFilter_fShader", this);
 	
 	/**
@@ -31,6 +31,8 @@ function MapColorFilter(manager){
 	var rasterLoc = 	   gl.getUniformLocation(this.glProgram, "heatmap_raster" );
 	manager.storeUniformLoc(this.glProgram, "val_min");
 	manager.storeUniformLoc(this.glProgram, "val_max");
+	
+	this.filter_val = [-Infinity, Infinity];
 	
 		
 	this.createMapFramebuffer = function(){ 
@@ -93,8 +95,8 @@ function MapColorFilter(manager){
 					
 
 	}	
-	this.renderFilter = function(min, max) {
-		//legend.updateMax(max);
+	this.renderFilter = function() {
+		//legend.updateMax(max);		
 		this.setup();
 	
 		
@@ -108,14 +110,17 @@ function MapColorFilter(manager){
 	   
 		
 	}
-	this.updateFilter = function(points){
+
+
+	this.updateFilter = function(){
 		// set uniform
-		
+		this.createFilteringData(saved_filter);
 		this.renderFilter();
 	}
 	
 	
 	this.createFilteringData = function(v){
+	 	saved_filter = v;
 		console.log("filter: "+v );
 			 gl.useProgram(this.glProgram);		
 			 gl.uniform1f(this.glProgram.val_min, v[0]);

@@ -108,9 +108,13 @@ HeatMapLegend = function(div_id, heatDimension) {
         var f = brush.extent();
         if (f.length == 2 && f[0]==f[1]){
         	f=[];
+        	WGL.getDimension(heatDimension).filter = undefined; 
+        } else {
+        	WGL.getDimension(heatDimension).filter =f; 
         }
-		WGL.filterDim('themap',"colorbrush",brush.extent());
-		WGL.getDimension(heatDimension).filter =brush.extent(); 				
+      	
+		WGL.filterDim('themap',"colorbrush",f);
+					
 	}
 	
 	

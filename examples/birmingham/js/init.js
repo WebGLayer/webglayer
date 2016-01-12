@@ -33,6 +33,14 @@ function visualize(data){
 		 * Adding heatmap, point map and polybrush interactions
 		 */
 		WGL.addHeatMapDimension(data.pts, 'heatmap');
+		/*define radius function*/
+		var radius = 12.;		
+
+		WGL.getDimensions()['heatmap'].radiusFunction = function(z){			
+			var res = radius * Math.pow(2,z)/5000;
+			//console.log(res);
+			return  res ;
+			};
 		WGL.addMapDimension(data.pts, 'themap');
 		WGL.addColorFilter('themap','colorbrush');
 		WGL.addPolyBrushFilter('themap','polybrush');
@@ -49,8 +57,8 @@ function visualize(data){
 		 */
 		var charts = [];
 		var params = [];
-		params.w = 500;
-		params.h = 120;
+		params.w = 200;
+		params.h = 160;
 		params.margin = {
 			top : 20,
 			right : 20,
@@ -94,30 +102,15 @@ function visualize(data){
 		//WGL.render();
 		
 		
-		var radius = 1.;		
 		
-		/*define radius fucntion*/
-		WGL.getDimensions()['heatmap'].radiusFunction = function(z){			
-			var res = radius * Math.pow(2,z)/5000;
-			//console.log(res);
-			return  res ;
-			};
+		
 		$("#slider_radius").on("input", function(){			
 			radius = this.value;			
 			WGL.render();			
 		});
 		
-		var min = 0;
-		var max = 1000000;
-		$("#slider_color_min").on("input", function(){						
-			min = this.value;
-			WGL.filterDim('themap',"colorbrush",[min,max]);			
-		});
-
-		$("#slider_color_max").on("input", function(){	
-			max= this.value;					
-			WGL.filterDim('themap',"colorbrush",[min,max]);			
-		});
+		
+		
 	}
 			
 	
@@ -129,7 +122,6 @@ function visualize(data){
  * @returns {___anonymous_res}
  */	
 function getTopLeftTC() {
-
 	
 	var tlwgs = (new OpenLayers.LonLat(-180, 90)).transform(
 			new OpenLayers.Projection("EPSG:4326"),

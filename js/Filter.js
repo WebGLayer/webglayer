@@ -105,7 +105,7 @@ Filter = function(manager) {
 			for (var f in dimensions[i].filters) {
 			var d = dimensions[i].filters[f];						
 					if(d.isActive){					
-						d.updateFilter(); // update filering texture if needed;
+					//	d.updateFilter(); // update filering texture if needed;
 					}	
 				
 			}
@@ -236,7 +236,7 @@ Filter = function(manager) {
 		gl.bindRenderbuffer(gl.RENDERBUFFER, null);
     	gl.bindFramebuffer(gl.FRAMEBUFFER, null);	
     	
-    	this.readPixels(activeID, 'active');
+    	//this.readPixels(activeID, 'active');
 		//this.readPixels(thatID, 'pasive');
 	}
 

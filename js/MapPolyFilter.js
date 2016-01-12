@@ -93,7 +93,7 @@ function MapPolyFilter(manager){
 		
 	}
 	
-	this.updateFilter = function(points){
+	this.updateFilter = function(){
 		this.createFilteringData(saved_polygons);
 		this.renderFilter();
 	}

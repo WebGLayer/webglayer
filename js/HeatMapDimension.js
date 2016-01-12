@@ -12,7 +12,7 @@ function HeatMapDimension(manager){
 	
 	/* default radiusFunc*/
 	this.radiusFunction = function(z){
-		return Math.pow(z,2) ;
+		return Math.pow(z,2)/10 ;
 	};
 	
 	/*default getMax function*/
@@ -133,7 +133,9 @@ function HeatMapDimension(manager){
 		
 		gl.uniform1f(this.glProgram[radius], this.radiusFunction(manager.zoom));
 		gl.uniform1f(this.glProgram[grad], this.gradFunction());
-		gl.uniform1f(this.glProgram[spatsum], manager.trasholds.spatsum );			
+		gl.uniform1f(this.glProgram[spatsum], manager.trasholds.spatsum );		
+		console.log("spatsum "+manager.trasholds.spatsum)	;
+		console.log("allsum "+manager.trasholds.allsum)	;
 		//gl.uniform1f(this.glProgram[drawselect], 0);
 		//gl.drawArrays(gl.POINTS, 0, num);	
 		
