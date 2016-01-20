@@ -220,6 +220,7 @@ WGL = function(num, url, divid){
 		for (var i in legends){			
 			legends[i].update();
 			};
+			console.log("render");
 				
 	}
 	
@@ -274,26 +275,28 @@ WGL = function(num, url, divid){
 	
 	
 	this.filterByExt = function(){		
-		
-
+		this.render();
+		//dimensions['heatmap'].render(numrec);
 		/** update spatial filer */
 		for (var i in dimensions){
 			if (dimensions[i].isSpatial){
 				for (var j in dimensions[i].filters){
 					var f = dimensions[i].filters[j];
 					if (f.isActive){
-							f.updateFilter();
+					//	f.updateFilter();
 						//f.createFilteringData();
 						//f.renderFilter();
-						//mainFilter.applyFilterDim(dimensions[i],j);		
+						//this.filterDim(i,j,f.saved_filter);
+					//	mainFilter.applyFilterDim(dimensions[i],j);		
 					}
 				}
 			}
 		}
 
+		logFilterStatus();
 		if (typeof(extf)!='undefined'){
 			extf.render();
-			thisfilter = undefined;	
+			//thisfilter = undefined;	
 		}
 		this.render();
 		
@@ -305,29 +308,26 @@ WGL = function(num, url, divid){
 		
 	
 		if (filter.length >0){
-			f.isActive = true;				
+			//f.isActive = true;				
 		} else {
-			f.isActive = false;		
+			//f.isActive = false;		
 		//	this.filterChanged(f);
 		}				
 		
 		//manager.filternum = getNumberOfActiveFilters();
-		setFiltersTrasholds();
+		//setFiltersTrasholds();
 		
 
-		if (typeof(thisfilter)=='undefined' && filter.length>0){
-			thisfilter =  filterId;	
-			this.filterChanged(id, thisfilter);				
-		} 
-		else if ( filterId!=thisfilter && filter.length!=0){
+		
+		if ( (filterId!=thisfilter && filter.length>0) || (typeof(thisfilter)=='undefined' && filter.length>0)){
 			//console.log('filter changed');
 			//thatfilter = thisfilter;			
 			thisfilter =  filterId;
 			this.filterChanged(id, thisfilter);						
 		} 
-		else if  ( filterId==thisfilter && filter.length==0){
+		else if  ( filter.length==0){
 			//console.log("filter deleted");
-			this.filterDeleted(id, thisfilter);	
+			this.filterDeleted(id, filterId);	
 			thisfilter = undefined;		
 		}
 
@@ -336,6 +336,7 @@ WGL = function(num, url, divid){
 		f.renderFilter();
 		//f.readPixels();
 
+	 logFilterStatus();
 		mainFilter.applyFilterDim(dimensions[id],filterId);		
 		this.render();
 		//this.updateCharts();
@@ -354,14 +355,13 @@ WGL = function(num, url, divid){
 	this.filterChanged = function(id, newf){
 		/*apply all filters and set current to empty to select all the features*/		
 	
-		
-		dimensions[id].filters[newf].isActive=true;	 	
+		 logFilterStatus();
 		//manager.filternum = getNumberOfActiveFilters();
+		dimensions[id].filters[newf].isActive=true;	
 		setFiltersTrasholds();
 		//getFiltersTrasholds();
 		/*render with this filter not active*/
 		dimensions[id].filters[newf].isActive=false;	
-		
 		
 		mainFilter.applyFilterAll(dimensions);	
 
@@ -370,9 +370,10 @@ WGL = function(num, url, divid){
 		}
 		
 		//mainFilter.switchTextures();
-		this.render();
-		this.updateCharts();
+				
 		mainFilter.switchTextures();	
+		dimensions[id].filters[newf].isActive=true;	
+		//setFiltersTrasholds(); 
 	}
 
 	this.filterDeleted = function(id, newf){
@@ -380,11 +381,13 @@ WGL = function(num, url, divid){
 		//manager.filternum = getNumberOfActiveFilters();
 		setFiltersTrasholds();
 		
+		logFilterStatus();
 		mainFilter.applyFilterAll(dimensions);
 		
-		this.render();
-		this.filterByExt();
-		this.updateCharts();
+		
+		//this.filterByExt();
+		///this.render();
+		//this.updateCharts();
 		mainFilter.switchTextures();
 	}
 
@@ -418,6 +421,28 @@ WGL = function(num, url, divid){
 		manager.trasholds = trasholds;
 		//return trasholds;
 	}
+	
+	function logFilterStatus(){
+		var el = document.getElementById("log");
+		var t ="";
+		for (var i in dimensions){		
+				for (var j in dimensions[i].filters){
+					var f = dimensions[i].filters[j];		
+					
+					  t = t + "-----<br/> dim "+ i + " filter " + j+"<br/>"
+					  +  "index: "+f.index+ "<br/>"
+					  +  "is active: "+f.isActive+ "<br/>"
+					  +  "is spatial: "+f.isspatial+ "<br/>";
+					
+
+						
+					}
+				}
+		t = t + "trasholds "+manager.trasholds.allsum+ " " +manager.trasholds.spatsum;
+		el.innerHTML = t;
+			
+	}
+	
 	
 	function getNumberOfActiveFilters(){
 		var  num = 0;

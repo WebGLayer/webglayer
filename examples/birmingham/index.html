@@ -71,7 +71,7 @@ html,body {
 	left: 3em;
 	width: 512px;
 	z-index: 2000;
-	background-color: rgba(255, 255, 255, 0.2);
+	background-color: rgba(255, 255, 255, 0.4);
 }
 
 #about {
@@ -99,6 +99,10 @@ html,body {
 	position: absolute;
 	top: 0px;
 	right: 0px;
+}
+
+.selectionlabel {
+	color:white;
 }
 
 .chart rect {
@@ -266,18 +270,19 @@ html,body {
 	</div>
 	
 	<div id="right">
-
-		<div id="chart1"></div>
-		<div id="chart2"></div>
+		<div>
+		<div id="chart1" style="float:left"></div>
+		<div id="chart2" style="float:left"></div>
+		</div>
 		<div id="chart3"></div>
 		<div class="control">
 			<div class="sl_label">Radius:</div>		
 			<input class="slider" id="slider_radius" type="range" name="points" min="2" max="24"/>
 		</div>
-		
+		<div id="log">
+		</div>
 		<div class="control">
-			<div id="color_axis"></div>		
-			
+			<div id="color_axis"></div>					
 		</div>
 
 	</div>
@@ -287,20 +292,16 @@ html,body {
 
 			<input type="radio" name="type" value="polygon" id="polygonToggle"
 				onclick="toggleControl(this);" />
-			<label for="polygonToggle">sketch polygon</label>
+			<label class="selectionlabel" for="polygonToggle">sketch polygon</label>
 
 			<input type="radio" name="type" value="modify" id="createVertices"
 				onclick="toggleControl(this);" />
-			<label for="createVertices">modify polygon</label>
+			<label class="selectionlabel" for="createVertices">modify polygon</label>
 
 			<input type="radio" name="type" value="remove" id="removePolygon"
 				onclick="toggleControl(this);" />
-			<label for="removePolygon">remove polygon</label>
+			<label class="selectionlabel" for="removePolygon">remove polygon</label>
 			
-			<input type="radio" name="type" value="circle" id="circleSelection"
-				onclick="circleSelection(this);" />
-			<label for="circleSelection">Circle selection</label>
-
 		</ul>
 
 	</div>

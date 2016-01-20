@@ -154,8 +154,8 @@ StackedBarChart = function(m, div_id, x_label, filterId, params) {
 		 * div_id+d.name});
 		 */
 		function brushLinear() {
-			var f = brush1.extent();				
-			WGL.filterDim(m.name, filterId, f);
+			var f = brush1.extent();							
+			WGL.filterDim(m.name, filterId, f);			
 			//console.log(brush1.extent()[0][0]+' '+brush1.extent()[0][1]);
 		}
 

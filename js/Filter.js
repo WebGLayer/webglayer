@@ -272,7 +272,7 @@ Filter = function(manager) {
 			//if (readout[i]>1) {selected.push(i/4)};
 		}
 
-		//console.log(label+" buffer: "+selected);		
+		console.log(label+" buffer: "+selected);		
 		return selected;// readout;
 	}
 	

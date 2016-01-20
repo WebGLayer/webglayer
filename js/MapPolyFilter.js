@@ -13,7 +13,7 @@ function MapPolyFilter(manager){
 	var framebuffer = gl.createFramebuffer();			
 	var renderbuffer = gl.createRenderbuffer();
 
-	var saved_polygons;
+	//var saved_filter;
 	
 	this.filterTexture = gl.createTexture();
 	this.filterTexture.name = "filter texture";
@@ -94,12 +94,12 @@ function MapPolyFilter(manager){
 	}
 	
 	this.updateFilter = function(){
-		this.createFilteringData(saved_polygons);
+		this.createFilteringData(this.saved_filter);
 		this.renderFilter();
 	}
 	
 	this.createFilteringData = function(polygons){	
-		saved_polygons = polygons;
+		this.saved_filter = polygons;
 		//console.log(polygons);
 		//console.log("...........")
 		var points = new Array();		

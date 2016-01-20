@@ -16,7 +16,7 @@
 		float p_size = 1.;
 		
 		if (zoom > 12.) {
-			//p_size = zoom / 12.+2.;		
+			p_size = zoom / 12.+2.;		
 		}  	  	  		
   	    	   
   		vec4 p =  mapMatrix * wPoint;

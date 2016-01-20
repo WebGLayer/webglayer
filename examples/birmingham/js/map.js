@@ -66,11 +66,11 @@ initMap = function() {
 		var temporary = new OpenLayers.Style({
 			  'pointRadius': 7,
 			  'fillColor': "white",
-			  'fillOpacity':0.4,
+			  'fillOpacity':.2,
 			  'strokeColor': "#ff8c00", 
               'strokeOpacity': 1, 
-              'strokeWidth': 1, 
-              'z-index':-10
+              'strokeWidth': 6, 
+              'z-index': 100000000
 			});
 
 	var styleMap = new OpenLayers.StyleMap({'default': temporary,

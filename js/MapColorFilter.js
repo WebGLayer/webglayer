@@ -3,7 +3,7 @@ function MapColorFilter(manager){
 	
 	this.isspatial = 1.0;
 	var pointsSize = 0;	
-	var saved_filter;
+	//var saved_filter;
 	this.glProgram = GLU.compileShaders("mapColorFilter_vShader",  "mapColorFilter_fShader", this);
 	
 	/**
@@ -114,13 +114,13 @@ function MapColorFilter(manager){
 
 	this.updateFilter = function(){
 		// set uniform
-		this.createFilteringData(saved_filter);
+		this.createFilteringData(this.saved_filter);
 		this.renderFilter();
 	}
 	
 	
 	this.createFilteringData = function(v){
-	 	saved_filter = v;
+	 	this.saved_filter = v;
 		console.log("filter: "+v );
 			 gl.useProgram(this.glProgram);		
 			 gl.uniform1f(this.glProgram.val_min, v[0]);
