@@ -9,14 +9,13 @@ ExtentFilter = function(manager){
 		
 	
 		this.render = function() {
-			var framebuffer = manager.indexFB;
+			var framebuffer = manager.getFilter().getActiveFB();
+			
 			//this.readPixels();
 			gl.useProgram(this.filterProgram);			
 			
 			gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
 			gl.viewport(0, 0, framebuffer.width,framebuffer.height);	
-
-		
 
 			gl.disable(gl.DEPTH_TEST);
 			gl.enable(gl.BLEND);

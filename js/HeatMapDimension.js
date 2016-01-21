@@ -134,8 +134,8 @@ function HeatMapDimension(manager){
 		gl.uniform1f(this.glProgram[radius], this.radiusFunction(manager.zoom));
 		gl.uniform1f(this.glProgram[grad], this.gradFunction());
 		gl.uniform1f(this.glProgram[spatsum], manager.trasholds.spatsum );		
-		console.log("spatsum "+manager.trasholds.spatsum)	;
-		console.log("allsum "+manager.trasholds.allsum)	;
+		//console.log("spatsum "+manager.trasholds.spatsum)	;
+		//console.log("allsum "+manager.trasholds.allsum)	;
 		//gl.uniform1f(this.glProgram[drawselect], 0);
 		//gl.drawArrays(gl.POINTS, 0, num);	
 		

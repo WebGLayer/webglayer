@@ -1,6 +1,15 @@
 function Manager(mapid) {
 
 	this.trasholds = {allsum: 0, spatsum:0};
+	var filter = null;
+	
+	this.setFilter = function(f){
+		filter = f;
+	}
+
+	this.getFilter = function(){
+		return filter;
+	}
 	
 	this.updateMapSize = function(){
 		this.mapdiv = document.getElementById(mapid);
@@ -274,16 +283,18 @@ function Manager(mapid) {
 	
 	this.enableFilterTexture = function(prog){
 	//	gl.useProgram(prog);
-		
+		//this.readPixels();
 		if (prog.rasterLoc == null){
 			prog.rasterLoc = this.getUniformLoc(prog, 'filter'); 	
 		}
 			 
 		gl.uniform1i(prog.rasterLoc , 0);		   
 		gl.activeTexture(gl.TEXTURE0);
-		gl.bindTexture(gl.TEXTURE_2D, this.filterTexture);
+		gl.bindTexture(gl.TEXTURE_2D, filter.getActiveTexture());
+		
 	}
 	
+
 	this.getUniformLoc = function(prog, name){
 		var loc = gl.getUniformLocation(prog, name);
 		if (loc==null){

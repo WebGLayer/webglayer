@@ -1,8 +1,8 @@
 Filter = function(manager) {
 
-	
+	manager.setFilter(this);
 	this.rastersize = manager.r_size ;
-	this.manager = manager;	
+	
 	this.lastDim ="";
 	
 	this.filterProgram = GLU.compileShaders("filter_vShader", "filter_fShader",
@@ -37,9 +37,11 @@ Filter = function(manager) {
 
 	framebuffer[0].width = this.rastersize;
 	framebuffer[0].height = this.rastersize;
+	framebuffer[0].id = 0;
 
 	framebuffer[1].width = this.rastersize;
 	framebuffer[1].height = this.rastersize;
+	framebuffer[1].id = 1;
 	var activeID =0 ;
 	var thatID = 1;
 	/** Framebuffer */
@@ -50,7 +52,7 @@ Filter = function(manager) {
 	
 	confFrameBufferTexture(1);
 	confFrameBufferTexture(0);
-	manager.indexFB = framebuffer[activeID];
+	
 	
 	function confFrameBufferTexture(tid){
 		/** Texture */
@@ -171,7 +173,7 @@ Filter = function(manager) {
 		//this.readPixels(activeID, 'active');
     	//this.readPixels(thatID, 'pasive');
 		//this.filterTexture = filterTexture[activeID];
-		manager.filterTexture = filterTexture[activeID];
+		//manager.filterTexture = filterTexture[activeID];
 		//console.log("returnunt texture "+activeID);
 
 		//this.readPixels(activeID, 'active');
@@ -229,17 +231,29 @@ Filter = function(manager) {
 		gl.drawArrays(gl.POINTS, 0, manager.num_rec);																			
 		
 		//this.filterTexture = filterTexture[activeID];
-		manager.filterTexture = filterTexture[activeID];
+		//manager.filterTexture = filterTexture[activeID];
 	
 				
 		gl.useProgram(null);
 		gl.bindRenderbuffer(gl.RENDERBUFFER, null);
     	gl.bindFramebuffer(gl.FRAMEBUFFER, null);	
     	
-    	//this.readPixels(activeID, 'active');
-		//this.readPixels(thatID, 'pasive');
+    	this.readPixels(activeID, 'active');
+		this.readPixels(thatID, 'pasive');
+		
+	}
+	
+	this.getActiveTexture = function(){
+		return filterTexture[activeID];
 	}
 
+	this.getActiveFB = function(){
+		return framebuffer[activeID];
+	}
+	this.getPassiveFB = function(){
+		return framebuffer[thatID];
+	}
+	
 	this.switchTextures = function() {		
 		if (activeID == 0){
 			activeID = 1;
@@ -247,8 +261,9 @@ Filter = function(manager) {
 		} else {
 			activeID = 0;
 			thatID =  1;
-		}	   
-		manager.indexFB = framebuffer[activeID];     		
+		}
+
+		//manager.indexFB = framebuffer[activeID];     		
 	}
 
 	this.readPixels = function(id, label) {
