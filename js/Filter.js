@@ -107,7 +107,7 @@ Filter = function(manager) {
 			for (var f in dimensions[i].filters) {
 			var d = dimensions[i].filters[f];						
 					if(d.isActive){					
-					//	d.updateFilter(); // update filering texture if needed;
+						d.updateFilter(); // update filering texture if needed;
 					}	
 				
 			}
@@ -196,7 +196,7 @@ Filter = function(manager) {
 
 		gl.disable(gl.DEPTH_TEST);
 		gl.enable(gl.BLEND);
-		gl.blendFuncSeparate(gl.ONE, gl.ZERO, gl.ONE, gl.ZERO
+		gl.blendFuncSeparate(gl.ONE, gl.ZERO, gl.ONE, gl.ONE
 			)
 		//gl.blendFunc(gl.ONE, gl.ONE);
 
@@ -238,8 +238,8 @@ Filter = function(manager) {
 		gl.bindRenderbuffer(gl.RENDERBUFFER, null);
     	gl.bindFramebuffer(gl.FRAMEBUFFER, null);	
     	
-    	this.readPixels(activeID, 'active');
-		this.readPixels(thatID, 'pasive');
+    	//this.readPixels();
+	
 		
 	}
 	
@@ -265,6 +265,10 @@ Filter = function(manager) {
 
 		//manager.indexFB = framebuffer[activeID];     		
 	}
+	this.readPixelsAll = function() {
+		this.readPixels(thatID,   "pasive id:");
+		this.readPixels(activeID, "active id:")
+	}	
 
 	this.readPixels = function(id, label) {
 		/**

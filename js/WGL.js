@@ -212,8 +212,8 @@ WGL = function(num, url, divid){
 	
 	this.render = function(){		
 	//renderr();	
-	mainFilter.readPixels(0, "0: ");
-	mainFilter.readPixels(1, "1: ");
+	//mainFilter.readPixelsAll();
+
 		for (var i in dimensions){			
 			dimensions[i].render(numrec);
 			};
@@ -222,7 +222,7 @@ WGL = function(num, url, divid){
 		for (var i in legends){			
 			legends[i].update();
 			};
-			console.log("render");
+			//console.log("render");
 				
 	}
 	
@@ -359,13 +359,16 @@ WGL = function(num, url, divid){
 		
 		
 		mainFilter.applyFilterAll(dimensions);	
-		if (typeof(extf)!='undefined'){
-			extf.render();
-		}	
-				
+
+			
 		mainFilter.switchTextures();	
 		dimensions[id].filters[newf].isActive=true;
 		
+	
+		if (typeof(extf)!='undefined'){
+			extf.render();
+		}	
+			
 			
 		//setFiltersTrasholds(); 
 	}
