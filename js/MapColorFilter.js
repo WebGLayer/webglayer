@@ -1,4 +1,5 @@
-function MapColorFilter(manager){	
+function MapColorFilter(manager, dim){	
+	
 	var manager = manager;
 	
 	this.isspatial = 1.0;
@@ -114,6 +115,7 @@ function MapColorFilter(manager){
 
 	this.updateFilter = function(){
 		// set uniform
+		dim.update();
 		this.createFilteringData(this.saved_filter);
 		this.renderFilter();
 	}

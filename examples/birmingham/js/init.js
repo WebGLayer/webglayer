@@ -5,9 +5,9 @@ function init() {
 		
 		/*Load the data*/
 		var data = new DataLoader();
-		data.loadPosData("data/birmin_3a.json");
+		//data.loadPosData("data/birmin_3a.json");
 		//data.loadPosData("data/test.json");
-			
+		data.loadPosData("data/xybirm5a.json");	
 				
 	}
 function circleSelection(element){
@@ -42,7 +42,7 @@ function visualize(data){
 			return  res ;
 			};
 		WGL.addMapDimension(data.pts, 'themap');
-		WGL.addColorFilter('themap','colorbrush');
+		WGL.addColorFilter('heatmap','colorbrush');
 		WGL.addPolyBrushFilter('themap','polybrush');
 		
 		/**
@@ -88,7 +88,7 @@ function visualize(data){
 		 * Addin all charts
 		 */		
 		WGL.addCharts(charts);
-		//WGL.addLegend(legend);
+		WGL.addLegend(legend);
 		
 		/**
 		 * Initilizing all the filters
@@ -97,7 +97,7 @@ function visualize(data){
 		
 		/** Drawing the map fist time */
 		WGL.mcontroller.zoommove(map.getZoom(), getTopLeftTC());
-		//WGL.render();
+		WGL.render();
 		
 		
 		

@@ -113,7 +113,7 @@ HeatMapLegend = function(div_id, heatDimension) {
         	WGL.getDimension(heatDimension).filter =f; 
         }
       	
-		WGL.filterDim('themap',"colorbrush",f);
+		WGL.filterDim('heatmap',"colorbrush",f);
 					
 	}
 	

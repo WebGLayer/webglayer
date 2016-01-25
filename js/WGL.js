@@ -169,7 +169,7 @@ WGL = function(num, url, divid){
 	
 	this.addColorFilter = function(name, id){
 		
-		var colorFilter = new MapColorFilter(manager);//res);
+		var colorFilter = new MapColorFilter(manager, dimensions[name]);//res);
 		addFilter(name, id, colorFilter);
 		
 		//d.filter = colorFilter;
@@ -213,7 +213,7 @@ WGL = function(num, url, divid){
 	this.render = function(){		
 	//renderr();	
 	//mainFilter.readPixelsAll();
-
+	//logFilterStatus();
 		for (var i in dimensions){			
 			dimensions[i].render(numrec);
 			};
@@ -277,24 +277,11 @@ WGL = function(num, url, divid){
 	
 	
 	this.filterByExt = function(){		
-		console.log("filter by ext triggerd");
+		//console.log("filter by ext triggerd");
 		//this.render();
 		//dimensions['heatmap'].render(numrec);
 		/** update spatial filer */
-		for (var i in dimensions){
-			if (dimensions[i].isSpatial){
-				for (var j in dimensions[i].filters){
-					var f = dimensions[i].filters[j];
-					if (f.isActive){
-					//	f.updateFilter();
-						//f.createFilteringData();
-						//f.renderFilter();
-						//this.filterDim(i,j,f.saved_filter);
-					//	mainFilter.applyFilterDim(dimensions[i],j);		
-					}
-				}
-			}
-		}
+		
 
 		//logFilterStatus();
 		if (typeof(extf)!='undefined'){
@@ -302,22 +289,40 @@ WGL = function(num, url, divid){
 			//thisfilter = undefined;	
 		}
 
+		
+		
+		for (var i in dimensions){
+			if (dimensions[i].isSpatial){
+				for (var j in dimensions[i].filters){
+					var f = dimensions[i].filters[j];
+					if (f.isActive){
+						//dimensions['heatmap'].render(numrec);
+						f.updateFilter();
+						//f.createFilteringData();
+						//f.renderFilter();
+						this.filterDim(i,j,f.saved_filter, false);
+						//mainFilter.applyFilterDim(dimensions[i],j);		
+					} 
+				}
+			}
+		}
 		this.render();
 		
 	}
 	
 
-	this.filterDim = function(id, filterId, filter){
+
+	this.filterDim = function(id, filterId, filter, dorendering){
 		var f = dimensions[id].filters[filterId];		
 		
 		if  ( filter.length==0){
-			console.log("filter deleted");
+			//console.log("filter deleted");
 			this.filterDeleted(id, filterId);	
 			thisfilter = undefined;					
 			return;
 			
 		} else if ( filter.length>0 && (filterId!=thisfilter || typeof(thisfilter)=='undefined' )){
-			console.log('filter changed');
+			//console.log('filter changed');
 			//thatfilter = thisfilter;			
 			thisfilter =  filterId;
 			this.filterChanged(id, thisfilter);						
@@ -331,9 +336,12 @@ WGL = function(num, url, divid){
 
 		//logFilterStatus();
 		mainFilter.applyFilterDim(dimensions[id],filterId);		
-		console.log("filtering...:"+filter);
-		this.render();
-		this.updateCharts();
+		//console.log("filtering...:"+filter);
+
+		if (dorendering==undefined || dorendering==true){
+			this.render();
+			this.updateCharts();
+		}
 		
 		/** geting top k elemnts*/
 		/* var sel = mainFilter.readPixels();
@@ -349,7 +357,7 @@ WGL = function(num, url, divid){
 	this.filterChanged = function(id, newf){
 		/*apply all filters and set current to empty to select all the features*/		
 	
-		logFilterStatus();
+		//logFilterStatus();
 		//manager.filternum = getNumberOfActiveFilters();
 		dimensions[id].filters[newf].isActive=true;	
 		setFiltersTrasholds();
@@ -379,7 +387,7 @@ WGL = function(num, url, divid){
 		//manager.filternum = getNumberOfActiveFilters();
 		setFiltersTrasholds();
 		
-		logFilterStatus();
+		//logFilterStatus();
 		mainFilter.applyFilterAll(dimensions);
 		
 		if (typeof(extf)!='undefined'){
@@ -418,7 +426,7 @@ WGL = function(num, url, divid){
 			} 
 		}
 		}
-		console.log("trasholds "+trasholds.spatsum);
+		//console.log("trasholds "+trasholds.spatsum);
 		manager.trasholds = trasholds;
 		//return trasholds;
 	}

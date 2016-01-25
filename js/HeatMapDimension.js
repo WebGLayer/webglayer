@@ -8,7 +8,7 @@ function HeatMapDimension(manager){
 	this.glProgram = GLU.compileShaders('heatmap_vShader', 'heatmap_fShader', this);
 	this.maxcal = new MaxCalculator(Math.floor(manager.w/6),Math.floor(manager.h/6));
 	var framebuffer = gl.createFramebuffer();
-	
+	var last_num;
 	
 	/* default radiusFunc*/
 	this.radiusFunction = function(z){
@@ -123,8 +123,8 @@ function HeatMapDimension(manager){
 		manager.enableFilterTexture(this.glProgram);		
 				
 	}	
-	this.render = function(num) {
-
+	this.renderData = function(num) {
+		last_num = num;
 		this.setup();		
 	
 		gl.useProgram(this.glProgram);	
@@ -145,6 +145,13 @@ function HeatMapDimension(manager){
 	    gl.useProgram(null);
 	   
 		gl.bindTexture(gl.TEXTURE_2D, null);
+		
+		renderer.heatTexture = 	this.heatTexture;	
+		manager.heatTexture = this.heatTexture;	
+	}
+	this.render = function(num) {
+		
+		this.renderData(num);
 	    
 	    //var max = maxcale.getMax(this.heatTexture);		
 		if (!this.lockScale){
@@ -153,20 +160,18 @@ function HeatMapDimension(manager){
 	    	manager.min = this.minFunction(max);
 		}
 	    this.maxall = max;
-	    renderer.heatTexture = 	this.heatTexture;	
-	    manager.heatTexture = this.heatTexture;	
+	 
 
 	    if (typeof(this.filter) !='undefined') {
 	    	 renderer.render( manager.min, manager.max, this.filter[0], this.filter[1]);
 	    } else {
 	    	 renderer.render( manager.min, manager.max, manager.min, manager.max);
-	    }
-	   
-	    
-		
-	     			
+	    }	   			
 	}
 
+	this.update = function() {
+		this.renderData(last_num);
+	}
 	this.tearDown = function(){
 		gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 		gl.bindTexture(gl.TEXTURE_2D, null);
