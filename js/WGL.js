@@ -211,6 +211,9 @@ WGL = function(num, url, divid){
 
 	
 	this.render = function(){		
+		gl.viewport(0,0, manager.w, manager.h);
+		gl.clearColor(0.0, 0.0, 0.0, 0.0);
+		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 	//renderr();	
 	//mainFilter.readPixelsAll();
 	//logFilterStatus();
@@ -283,29 +286,35 @@ WGL = function(num, url, divid){
 		/** update spatial filer */
 		
 
-		//logFilterStatus();
-		if (typeof(extf)!='undefined'){
-			extf.render();
-			//thisfilter = undefined;	
-		}
-
+	
 		
-		
+		var needfilter = false;
 		for (var i in dimensions){
+			
 			if (dimensions[i].isSpatial){
 				for (var j in dimensions[i].filters){
 					var f = dimensions[i].filters[j];
 					if (f.isActive){
 						//dimensions['heatmap'].render(numrec);
 						f.updateFilter();
+						needfilter = true;
 						//f.createFilteringData();
 						//f.renderFilter();
-						this.filterDim(i,j,f.saved_filter, false);
+						//this.filterDim(i,j,f.saved_filter, false);
 						//mainFilter.applyFilterDim(dimensions[i],j);		
 					} 
 				}
+				if (needfilter) {setFiltersTrasholds()
+					mainFilter.applyFilterAll(dimensions);	
+				};
 			}
 		}
+		//logFilterStatus();
+		if (typeof(extf)!='undefined'){
+			extf.render();
+			//thisfilter = undefined;	
+		}
+
 		this.render();
 		
 	}

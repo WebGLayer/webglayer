@@ -5,6 +5,7 @@ function MapDimension(manager){
 	this.glProgram = GLU.compileShaders('map_vShader', 'map_fShader', this);
 	
 	this.name = "map";
+	
 	var zoom = 'zoom';
 	var drawselect = 'drawselect';
 	var numfilters = 'numfilters';
@@ -16,6 +17,10 @@ function MapDimension(manager){
 	
 	gl.useProgram(null);
 	
+	var visible = true;
+	this.setVisible = function(v){
+		visible = v;
+	}
 
 	this.setup = function() {
 		
@@ -57,6 +62,10 @@ function MapDimension(manager){
 				
 	}	
 	this.render = function(num) {
+		
+		if (visible == false){		
+			return;
+		}
 
 		this.setup();	
 		manager.enableFilterTexture(this.glProgram);
@@ -94,7 +103,7 @@ function MapDimension(manager){
 
 	this.readPixels = function() {
 		
-		//gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+	//	gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 		var readout = new Uint8Array(4);
 	//	console.time("reading_pix");
 		gl.readPixels(0, 0, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, readout);

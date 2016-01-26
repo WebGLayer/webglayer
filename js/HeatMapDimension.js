@@ -10,6 +10,11 @@ function HeatMapDimension(manager){
 	var framebuffer = gl.createFramebuffer();
 	var last_num;
 	
+	var visible = true;
+	this.setVisible = function(v){
+		visible = v;
+	}
+	
 	/* default radiusFunc*/
 	this.radiusFunction = function(z){
 		return Math.pow(z,2)/10 ;
@@ -150,6 +155,11 @@ function HeatMapDimension(manager){
 		manager.heatTexture = this.heatTexture;	
 	}
 	this.render = function(num) {
+
+		if (visible == false){
+			
+			return;
+		}
 		
 		this.renderData(num);
 	    
