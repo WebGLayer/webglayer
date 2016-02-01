@@ -87,7 +87,7 @@ function MapColorFilter(manager, dim){
 	
 		 gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
 					
-		gl.viewport(manager.l, manager.b, manager.w, manager.h);
+		 gl.viewport(0, 0, manager.w, manager.h);
 		gl.clearColor(0.0, 0.0, 0.0, 0.0);
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 	
