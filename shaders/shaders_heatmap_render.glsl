@@ -70,7 +70,9 @@
 		//val = (fdata[0]-min_filter)/(max_filter-min_filter);	
 		
 		if ( fdata[2] > 0. && (fdata[1] < (min_filter) && fdata[1]>= (min_filter - t) ) || (fdata[1] > (max_filter) && fdata[1] <= (max_filter+tx  ))){
-		 col = vec4(1.,0.549019608,0.,1.);
+		
+			// orange color to create the selection border
+			col = vec4(1.,0.549019608,0.,1.);
 		}
   		else if (fdata[2] > 0. && fdata[3]>0. &&  fdata[1] >= min_filter && fdata[1]<= max_filter ) {  	
   			//data are selected including spatial filter		
