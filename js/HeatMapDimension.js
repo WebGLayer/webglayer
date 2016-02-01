@@ -94,12 +94,15 @@ function HeatMapDimension(manager){
 	manager.storeUniformLoc(this.glProgram, numfilters);
 	manager.storeUniformLoc(this.glProgram, spatsum);
 	
-	
-	gl.uniform1f(this.glProgram.numfilters, 3);		
 	gl.useProgram(null);
 	var	renderer = new HeatMapRenderer(manager);
 	//var	maxcal = new MaxCalculator(Math.floor(manager.w/6),Math.floor(manager.h/6));
+	var the_filter;
 	
+	this.setFilter = function(f){
+		the_filter=f;
+	}
+
 	
 	this.setup = function() {
 		//this.createFramebuffer(); 
@@ -172,10 +175,10 @@ function HeatMapDimension(manager){
 	    this.maxall = max;
 	 
 
-	    if (typeof(this.filter) !='undefined') {
-	    	 renderer.render( manager.min, manager.max, this.filter[0], this.filter[1]);
+	    if (typeof(the_filter) !='undefined') {
+	    	 renderer.render( manager.min, manager.max, the_filter[0], the_filter[1]);
 	    } else {
-	    	 renderer.render( manager.min, manager.max, manager.min, manager.max);
+	    	 renderer.render( manager.min, manager.max, 0, 0);
 	    }	   			
 	}
 

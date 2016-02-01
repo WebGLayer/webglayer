@@ -5,9 +5,10 @@ function init() {
 		
 		/*Load the data*/
 		var data = new DataLoader();
-		//data.loadPosData("data/birmin_3a.json");
-		//data.loadPosData("data/test.json");
-		data.loadPosData("data/xybirm5a.json");	
+		data.loadPosData("data/birmin_3a.json");
+		//data.loadPosData("data/test.json");xyall3a500k.json
+		//data.loadPosData("data/xybirm5a.json");
+		//data.loadPosData("data/xyall3a1000k.json");	
 				
 	}
 function circleSelection(element){
@@ -44,6 +45,7 @@ function visualize(data){
 		WGL.addMapDimension(data.pts, 'themap');
 		WGL.addColorFilter('heatmap','colorbrush');
 		WGL.addPolyBrushFilter('themap','polybrush');
+		
 		
 		/**
 		 * Adding fitering by map extent
@@ -83,7 +85,7 @@ function visualize(data){
 		charts['hours'] = new StackedBarChart(hours, "chart3", "hour of the day","hoursF");
 		
 		
-		var legend = new HeatMapLegend('color_axis', 'heatmap');
+		var legend = new HeatMapLegend('heatlegend', 'heatmap','colorbrush');
 		/**
 		 * Addin all charts
 		 */		
@@ -104,6 +106,17 @@ function visualize(data){
 		
 		$("#slider_radius").on("input", function(){			
 			radius = this.value;			
+			WGL.render();			
+		});
+		
+		$("#points_visible").click(function(){
+			var l = WGL.getDimension(this.name);
+			l.setVisible(this.checked);					
+			WGL.render();			
+		});
+		$("#heatmap_visible").click(function(){
+			var l = WGL.getDimension(this.name);
+			l.setVisible(this.checked);					
 			WGL.render();			
 		});
 		

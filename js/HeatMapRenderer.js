@@ -66,6 +66,8 @@ function HeatMapRenderer(manager){
 		gl.blendFunc( gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA  );
 
 	}	
+	
+
 	this.render = function(min, max, min_f, max_f) {
 		//legend.updateMax(max);
 		this.setup();

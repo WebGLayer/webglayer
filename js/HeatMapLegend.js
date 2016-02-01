@@ -1,4 +1,4 @@
-HeatMapLegend = function(div_id, heatDimension) {
+HeatMapLegend = function(div_id, heatDimension, filterId) {
 	
 	var w = 100;
 	var h = 200;
@@ -107,17 +107,17 @@ HeatMapLegend = function(div_id, heatDimension) {
         
         var f = brush.extent();
         if (f.length == 2 && f[0]==f[1]){
+        	/*pass the filter parameter to the dimension to render to colors properly*/
         	f=[];
-        	WGL.getDimension(heatDimension).filter = undefined; 
+        	WGL.getDimension(heatDimension).setFilter(undefined); 
         } else {
-        	WGL.getDimension(heatDimension).filter =f; 
+        	WGL.getDimension(heatDimension).setFilter(f); 
         }
       	
-		WGL.filterDim('heatmap',"colorbrush",f);
+		WGL.filterDim(heatDimension,filterId,f);
 					
 	}
-	
-	
+		
 	var brush = d3.svg.brush()		
 	    .y(yScale)
 	    .on("brush", brushed);

@@ -3,35 +3,58 @@ function ParallelCoordinates(manager, div, data){
 
 		//WGL.addMultiDim(data);
 	this.elRect = this.mapdiv = document.getElementById(div).getBoundingClientRect();
-	
-	var margin = this.elRect.margin;
+		
+	var w = document.getElementById(div).clientWidth;
+	var h =document.getElementById(div).clientHeight;
 	
 	var margin = {
-			top : 20,
+			top : 50,
 			right : 20,
-			bottom : 50,
-			left : 40
+			bottom : 20,
+			left : 60
 			};
 
 	
-	var top_margin =30;
+	var width = w - margin.left - margin.right;
+	var height = h - margin.top - margin.bottom;
 	
 	
 	var svg = d3.select("#" + div).append("svg").attr("width",
-			this.elRect.width).attr("height",
-			this.elRect.height).attr("z-index",3000).append("g");
-
-	var yScale = d3.scale.linear().domain([ 0, 10]).range(
-			[ this.elRect.height, 0 ]);
-	var yAxis = d3.svg.axis().scale(yScale).orient("left");
-
-	svg.append("g").attr("class", "y axis").call(yAxis).attr("transform","translate("+margin.left+")").append("text")
-			.attr("transform", "rotate(270)").attr("y", "-4.5em").attr("x",
-					"-2em").style("text-anchor", "end").text("number of items [1000]");
-
-	   
-	    
+			width + margin.left + margin.right).attr("height",
+			height + margin.top + margin.bottom).append("g").attr(
+			"transform",
+			"translate(" + margin.left + "," + margin.top + ")").attr("z-index",3000).append("g");
 	
+	
+
+	
+
+	var offset = width / data.length;    
+	for (var i in data){
+		var d = data[i];
+		var yScale;
+		
+		if (d.type == "linear"){
+			var yScale = d3.scale.linear().domain([d.min, d.max]).range(
+				[ height, 0 ]);
+			
+		} else if (d.type=="ordinal"){
+			yScale = d3.scale.ordinal().domain(d.domain).rangeRoundBands([ height, 0 ],0.03);
+		}
+		var yAxis = d3.svg.axis().scale(yScale).orient("left");
+
+		svg.append("g").attr("class", "y axis").call(yAxis).attr("transform","translate("+offset*i+")").append("text")
+			.attr("y", "-2em").attr("x",
+					"0em").style("text-anchor", "middle").text(d.label);
+		
+		var brush = d3.svg.brush()
+	    .y(yScale)
+	    .on("brushend", function(){console.log("brushed")});
+		
+		 svg.append("g").attr("class", "brush").call(brush)
+			.selectAll("rect").attr("width", width);
+		
+	}
 
 		
 	this.glProgram = GLU.compileShaders('pc_vShader', 'pc_fShader', this);
@@ -51,9 +74,11 @@ function ParallelCoordinates(manager, div, data){
 		gl.uniform1f(this.glProgram.numfilters, manager.trasholds.allsum );			
 		
 		gl.bindFramebuffer(gl.FRAMEBUFFER, null);	
-		gl.viewport(this.elRect.left+margin.left, manager.body_height-this.elRect.bottom, this.elRect.width, this.elRect.height);
-		gl.clearColor(0.0, 0.0, 0.0, 0.0);
-		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+		//gl.viewport(this.elRect.left+margin.left, manager.body_height-this.elRect.bottom, this.elRect.width, this.elRect.height);
+		gl.viewport(this.elRect.left+margin.left, manager.body_height-this.elRect.bottom+margin.bottom, width, height);
+		
+		//gl.clearColor(0.0, 0.0, 0.0, 0.0);
+		//gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 		
 		gl.disable(gl.DEPTH_TEST);
 		gl.enable(gl.BLEND);
@@ -102,6 +127,7 @@ function ParallelCoordinates(manager, div, data){
 		}
 		
 	}
+	
 }
 
 	
