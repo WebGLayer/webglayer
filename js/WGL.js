@@ -139,6 +139,7 @@ WGL = function(num, url, divid){
 		}
 		
 		var ai=array2TA2D(index_pc);
+		manager.num_of_attrib = d.length;
 		manager.addDataBuffer(ai, 2, 'indexpc');
 		//manager.addElementBuffer(new Uint16Array(indicies),1, 'indicies');
 		manager.addDataBuffer(new Float32Array(td), 1, 'td');
@@ -186,8 +187,10 @@ WGL = function(num, url, divid){
 		
 		if (d.filters == null) {
 			d.filters = [];
+		    d.filtersids=[];
 		}
 		d.filters[filterid] = filter; 
+		 d.filtersids.push(filterid);
 		
 	}
 	this.addExtentFilter = function(){

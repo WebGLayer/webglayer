@@ -1,6 +1,47 @@
 
 function ParallelCoordinates(manager, div, data){
 
+	function ParallelAxis(d){
+		var yScale;
+		var yAxis;
+		var dim = WGL.getDimension(d.name);
+		var brush = d3.svg.brush();	 
+		if (d.type == "linear"){
+			yScale = d3.scale.linear().domain([d.min, d.max]).range(
+				[ height, 0 ]);			
+			
+			brush.y(yScale).on("brush", function(){	    		    	
+		    	var f = d3.event.target;			    					
+		    	var p = [];
+		    	p[0]= f.extent();
+				WGL.filterDim(d.name, dim.filters[dim.filtersids[0]].id,p);	
+			  });
+		} else if (d.type=="ordinal"){
+			yScale = d3.scale.ordinal().domain(d.domain).rangeRoundBands([ height, 0 ],0.03);
+			var l = yScale.domain().length;	
+			brush.y(yScale).on("brush", function(){	    		    
+		    	var f = d3.event.target.extent();	
+		    	var of = [];						
+				of[0] = [];
+				of[0][0] =  l- ( f[0] /height * l); 
+				of[0][1] =  l- ( f[1] /height * l);  									
+				WGL.filterDim(d.name, dim.filters[dim.filtersids[0]].id,of);	
+			 });
+		}
+		
+		yAxis = d3.svg.axis().scale(yScale).orient("left");
+
+		svg.append("g").attr("class", "y axis").call(yAxis).attr("transform","translate("+offset*i+")").append("text")
+			.attr("y", "-2em").attr("x",
+					"0em").style("text-anchor", "middle").text(d.label);		
+		
+		
+		
+	  
+		 svg.append("g").attr("class", "brush").call(brush)
+			.selectAll("rect").attr("width", "40").attr("transform","translate("+(offset*i-20)+")");
+	}
+
 		//WGL.addMultiDim(data);
 	this.elRect = this.mapdiv = document.getElementById(div).getBoundingClientRect();
 		
@@ -25,34 +66,15 @@ function ParallelCoordinates(manager, div, data){
 			"transform",
 			"translate(" + margin.left + "," + margin.top + ")").attr("z-index",3000).append("g");
 	
-	
+	var offset = width / data.length;   
+	var axis = [];
 
-	
-
-	var offset = width / data.length;    
 	for (var i in data){
 		var d = data[i];
-		var yScale;
+	
+		axis[i] = new ParallelAxis(d);
 		
-		if (d.type == "linear"){
-			var yScale = d3.scale.linear().domain([d.min, d.max]).range(
-				[ height, 0 ]);
-			
-		} else if (d.type=="ordinal"){
-			yScale = d3.scale.ordinal().domain(d.domain).rangeRoundBands([ height, 0 ],0.03);
-		}
-		var yAxis = d3.svg.axis().scale(yScale).orient("left");
-
-		svg.append("g").attr("class", "y axis").call(yAxis).attr("transform","translate("+offset*i+")").append("text")
-			.attr("y", "-2em").attr("x",
-					"0em").style("text-anchor", "middle").text(d.label);
-		
-		var brush = d3.svg.brush()
-	    .y(yScale)
-	    .on("brushend", function(){console.log("brushed")});
-		
-		 svg.append("g").attr("class", "brush").call(brush)
-			.selectAll("rect").attr("width", width);
+	
 		
 	}
 
@@ -91,7 +113,7 @@ function ParallelCoordinates(manager, div, data){
 
 		gl.lineWidth(1);
       //  gl.drawElements(gl.LINES, manager.num_rec*4, gl.UNSIGNED_SHORT,0);
-       	gl.drawArrays(gl.LINES, 0, manager.num_rec*4);
+       	gl.drawArrays(gl.LINES, 0, manager.num_rec*(manager.num_of_attrib*2-2));
 				
 	    gl.useProgram(null);
 	   
@@ -129,5 +151,6 @@ function ParallelCoordinates(manager, div, data){
 	}
 	
 }
+
 
 	

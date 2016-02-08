@@ -247,10 +247,6 @@ StackedBarChart = function(m, div_id, x_label, filterId, params) {
 			//console.log(xScale.domain()[j]+' '+brush1.extent()[0][1]);
 			
 		}
-
-	
-
-
 	}
 	
 
