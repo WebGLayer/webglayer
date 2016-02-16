@@ -24,7 +24,7 @@
   		
   				// data are selected						
 				gl_Position = vec4(ti*2.-1., td*2.-1.,0.,1.);    
-				//col = vec4(1./256.,0.,0.,1./256.);
+				//col = vec4(1.,0.,0.,1./2.);
 				col = vec4(1./256.,0.,0.,1./256.);		
 				
 			} else {

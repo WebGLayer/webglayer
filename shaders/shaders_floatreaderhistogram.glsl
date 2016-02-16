@@ -13,12 +13,12 @@
 
 	void main() {
 			
-			float row_id = floor(ras_vert[1] / 3.); 
-			float band = ras_vert[1] - row_id*3.;
+			float row_id = floor(ras_vert[1] / 4.); 
+			float band = ras_vert[1] - row_id*4.;
 			
 			// normalise			
 			float x = (ras_vert[0] + 0.5) / width;
-			float y = (row_id + 0.5) / (height/3.);
+			float y = (row_id + 0.5) / (height/4.);
 			
 			vec4 fdata = texture2D(floatRaster, vec2(x, y));
 		
@@ -28,6 +28,7 @@
 			if      (band == 0.){col = fdata[0];} //selected
 			else if (band == 1.){col = fdata[1];} // in in window
 			else if (band == 2.){col = fdata[2];} // unselected
+			else if (band == 3.){col = fdata[3];} // unselected
 			else col=0.;	
 			//col = 	 fdata[0];
 	}

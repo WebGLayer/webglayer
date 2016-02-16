@@ -21,10 +21,15 @@ function ParallelCoordinates(manager, div, data){
 			var l = yScale.domain().length;	
 			brush.y(yScale).on("brush", function(){	    		    
 		    	var f = d3.event.target.extent();	
+		    	
 		    	var of = [];						
 				of[0] = [];
 				of[0][0] =  l- ( f[0] /height * l); 
-				of[0][1] =  l- ( f[1] /height * l);  									
+				of[0][1] =  l- ( f[1] /height * l);  
+				if (of[0][0]==of[0][1]){
+		    			/*filter is deleted*/
+		    			of = [];
+		    	}									
 				WGL.filterDim(d.name, dim.filters[dim.filtersids[0]].id,of);	
 			 });
 		}

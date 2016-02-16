@@ -4,7 +4,7 @@ function FloatReaderHistogram(raster, width, height) {
 	this.bin_count=width;
 	this.height = height
 		
-	var rows = 3 * height;
+	var rows =4 * height;
     /*Initialise offscreen buffer*/
 		
 	this.floatProgram = GLU.compileShaders("floathist_vShader",  "floathist_fShader", this);

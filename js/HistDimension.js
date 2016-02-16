@@ -1,16 +1,52 @@
 /**/
 function HistDimension(manager, meta) {
+	
 	this.isSpatial = false;
+	
 	var valcalc = function(i){
-		return meta.min + i * (meta.max -meta.min) / (meta.num_bins)
+		return meta.min + i * (meta.max -meta.min) / (meta.num_bins);
+		};
+
+	var valcalcMeta = function(i, metaData){
+		if (metaData ==undefined){
+			return i;
+			} else {
+				return metaData.min + i * (metaData.max -metaData.min) ;
+			}
 		};
 			
-	var metadata = meta;
+	
+	
+	/*metadata for value array*/
+	var valueMetadata ;
 	this.name = meta.name;
+	
 	this.program = GLU.compileShaders("linearhist_vShader", "linearhist_fShader", this);
 
+	/** default function to calculate final value */
+	this.valFunction = function(val, count){
+		return val;		
+	}
+
+	
+	/** default blending function*/
+	this.reduceFunction = function(gl){
+		gl.blendFunc(gl.ONE, gl.ONE);
+	}
+	
+	/** default blending function*/
+	this.setValueData = function(data){
+		this.program = GLU.compileShaders("linearhist_param_vShader", "linearhist_param_fShader", this);
+		valueMetadata = data;			
+		
+		gl.useProgram(this.program);
+		manager.storeUniformLoc(this.program, "numfilters");
+		gl.useProgram(null);
+	}
+	
 	gl.useProgram(this.program);
 	manager.storeUniformLoc(this.program, "numfilters");
+	gl.useProgram(null);
 	
 	var framebuffer = gl.createFramebuffer();
 	framebuffer.width = meta.num_bins;
@@ -65,9 +101,10 @@ function HistDimension(manager, meta) {
 
 		gl.disable(gl.DEPTH_TEST);
 		gl.enable(gl.BLEND);
-		gl.blendFunc(gl.ONE, gl.ONE);
-
-
+		
+		/*set blending according*/
+		this.reduceFunction(gl);
+		
 		manager.enableBufferForName(this.program,  "index", "index");	
 		manager.enableFilterTexture(this.program);	
 	//	manager.bindRasterMatrix(this.program);
@@ -76,6 +113,13 @@ function HistDimension(manager, meta) {
 		//console.log("Filter num "+manager.filternum);
 			
 		manager.enableBufferForName(this.program, meta.name, "attr");
+	
+		
+	    /*bind value buffer if defined*/ 
+	    if (valueMetadata!=undefined){
+	    	manager.enableBufferForName(this.program, valueMetadata.name, "value");
+	    }
+		
 		gl.drawArrays(gl.POINTS, 0, manager.num_rec);
 
 		gl.bindBuffer(gl.ARRAY_BUFFER, null);
@@ -122,13 +166,20 @@ function HistDimension(manager, meta) {
 		res.sum_selected = 0;
 	
 		
+
 		for (var i = 0; i < meta.num_bins; i++) {								
-							
+					
+				var count =  readout[i + 3 *  meta.num_bins];
+				
+				var sel   = valcalcMeta(readout[i], valueMetadata);
+				var unsel = valcalcMeta(readout[i + 1 *  meta.num_bins], valueMetadata);
+				var out   = valcalcMeta(readout[i + 2 *  meta.num_bins], valueMetadata);	
+
 				var d = {					
 					val : valcalc(i) ,
-					selected : readout[i],
-					unselected : readout[i + 1 *  meta.num_bins],
-					out : readout[i + 2 *  meta.num_bins]
+					selected : this.valFunction(sel,count),
+					unselected :this.valFunction(unsel,count),
+					out : this.valFunction(out,count)						
 				};
 				
 				if (d.selected > res.max[0]){res.max[0] = d.selected};
@@ -144,4 +195,3 @@ function HistDimension(manager, meta) {
 	}
 
 }
-

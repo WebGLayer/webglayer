@@ -19,6 +19,7 @@ HeatMapLegend = function(div_id, heatDimension, filterId) {
     .scale(yScale)
     .orient("left");
 	
+	
 	svg = d3.select("#" + div_id).append("svg").attr("width",
 			width + margin.left + margin.right).attr("height",
 			height + margin.top + margin.bottom).append("g").attr(
@@ -95,17 +96,20 @@ HeatMapLegend = function(div_id, heatDimension, filterId) {
 	                  .attr("width", 50)
 	                  .attr("height", height);
 	
-
-	
 	var brushed = function(){
 		
 	
-		console.log(brush.extent());
+		//console.log(parseFloat(yScale.domain()[1]-100))+ " vs "+  parseFloat(yScale(brush.extent()[1]));
+		   var f = brush.extent();
+		if (parseFloat(yScale.domain()[1]) <=  parseFloat(brush.extent()[1])){
+			f[1] =9999999;
+			console.log("setting to maximum.");
+		}
 		svg.selectAll(".grad")
 		 .attr("y",  yScale(brush.extent()[1]))     
         .attr("height", yScale(brush.extent()[0]) - yScale(brush.extent()[1]) );		
         
-        var f = brush.extent();
+     
         if (f.length == 2 && f[0]==f[1]){
         	/*pass the filter parameter to the dimension to render to colors properly*/
         	f=[];
@@ -138,9 +142,11 @@ HeatMapLegend = function(div_id, heatDimension, filterId) {
 
 	 
 	 this.updateMax = function(max){
+		 
 		 yScale.domain([0, max]);
 		 svg.selectAll('.y.axis')
 			.call(yAxis);
+		 
 	 }
 	 
 	 this.update = function(){

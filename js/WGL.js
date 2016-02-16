@@ -76,12 +76,17 @@ WGL = function(num, url, divid){
 	}
 	
 	this.addLinearHistDimension = function(m){
-		var ta = array2TANormLinear(m , m.num_bins);
-		manager.addDataBuffer(ta, 1, m.name);
+		this.addData(m);
 		var dim = new HistDimension(manager, m);
 		dimensions[m.name] = dim;
 		oneDDim[m.name]  = dim;
 		manager.dimnum =  Object.keys(oneDDim).length;
+		return dim;
+	}
+	
+	this.addData = function(m){
+		var ta = array2TANormLinear(m , m.num_bins);
+		manager.addDataBuffer(ta, 1, m.name, m.min, m.max);
 	}
 	
 	this.addOrdinalHistDimension = function(m){
@@ -92,6 +97,7 @@ WGL = function(num, url, divid){
 		dimensions[m.name] = dim;
 		oneDDim[m.name]  = dim;
 		manager.dimnum =  Object.keys(oneDDim).length;
+		return dim;
 	}
 	
 	

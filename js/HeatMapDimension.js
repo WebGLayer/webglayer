@@ -178,7 +178,8 @@ function HeatMapDimension(manager){
 	    if (typeof(the_filter) !='undefined') {
 	    	 renderer.render( manager.min, manager.max, the_filter[0], the_filter[1]);
 	    } else {
-	    	 renderer.render( manager.min, manager.max, 0, 0);
+	    	// renderer.render( manager.min, manager.max, 0, 0);
+	    	 renderer.render( manager.min, manager.max, manager.min, manager.max);
 	    }	   			
 	}
 

@@ -80,6 +80,10 @@ function GLUtils() {
 			$("head").append(data);
 		});
 		
+		$.get(domain+'shaders/shaders_linearhist_param.glsl', function(data) {
+			$("head").append(data);
+		});
+		
 		$.get(domain+'shaders/shaders_filtermap.glsl', function(data) {
 			$("head").append(data);
 		});

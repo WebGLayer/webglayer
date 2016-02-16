@@ -5,8 +5,8 @@ function init() {
 		
 		/*Load the data*/
 		var data = new DataLoader();
-		data.loadPosData("data/birmin_3a.json");
-		//data.loadPosData("data/test.json");xyall3a500k.json
+		//data.loadPosData("data/birmin_3a.json");
+		data.loadPosData("data/test.json");
 		//data.loadPosData("data/xybirm5a.json");
 		//data.loadPosData("data/xyall3a1000k.json");	
 				
@@ -72,18 +72,20 @@ function visualize(data){
 		charts['sev']   = new StackedBarChart(sev, "chart1", "accident servelity","sevF", params);
 		
 		
-		//** Histogram for days*//
-		var days = {data: data.days,  domain: data.daysarray,  name: 'days', type:'ordinal'};			
-		WGL.addOrdinalHistDimension(days);
-		WGL.addLinearFilter(days,7, 'daysF');		
-		charts['days'] = new StackedBarChart(days, "chart2", "day of the week","daysF", params);
-		
 		/** Histogram for hours*/
 		var hours = {data: data.hours,  min:0, max:24, num_bins: 24, name: 'hours',type:'linear'} ;
-		WGL.addLinearHistDimension(hours);
+		WGL.addLinearHistDimension(hours);			
 		WGL.addLinearFilter(hours, 24*10, 'hoursF');
 		charts['hours'] = new StackedBarChart(hours, "chart3", "hour of the day","hoursF");
 		
+			
+		//** Histogram for days*//
+		var days = {data: data.days,  domain: data.daysarray,  name: 'days', type:'ordinal'};			
+		var dim = WGL.addOrdinalHistDimension(days);
+		dim.setValueData(hours);
+		WGL.addLinearFilter(days,7, 'daysF');		
+		charts['days'] = new StackedBarChart(days, "chart2", "day of the week","daysF", params);
+	
 		
 		var legend = new HeatMapLegend('heatlegend', 'heatmap','colorbrush');
 		/**

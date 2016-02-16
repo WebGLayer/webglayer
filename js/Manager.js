@@ -67,9 +67,8 @@ function Manager(mapid) {
 	
 
 	gl = this.canvas.getContext('webgl', 
-			{preservedrawingbuffer: true}) || this.canvas.getContext('experimental-webgl', 
-			{preservedrawingbuffer: true},
-			{ alpha: false }
+			{preservedrawingbuffer: true, antialias: false}) || this.canvas.getContext('experimental-webgl', 
+			{preservedrawingbuffer: true, antialias: false}
 			);
 
 	  if (!gl) {
@@ -128,7 +127,7 @@ function Manager(mapid) {
 	/**
 	 * Creates a data buffer object. itemSize is a dimension of the data
 	 */
-	this.addDataBuffer = function(data, itemSize, name) {
+	this.addDataBuffer = function(data, itemSize, name, min, max) {
 		 
 		if (typeof(this.databuffers[name])!='undefined'){
 			throw 'buffer '+name+' already exists';
@@ -140,6 +139,8 @@ function Manager(mapid) {
 		buffer.itemSize = itemSize;
 		buffer.numItems = data.length / itemSize;
 		buffer.name = name;
+		buffer.min = min;
+		buffer.max = max;
 		gl.bindBuffer(gl.ARRAY_BUFFER, null);
 		this.databuffers[name] = buffer;		
 	}
