@@ -7,7 +7,7 @@ function ParallelCoordinates(manager, div, data){
 	var viewport = [];		
 	var margin = {
 			top : 50,
-			right : 20,
+			right : 60,
 			bottom : 20,
 			left : 60
 			};
@@ -24,19 +24,19 @@ function ParallelCoordinates(manager, div, data){
 	
 	this.setViewport();
 
-	var svg = d3.select("#" + div).append("svg").attr("width",
+	var svg = d3.select("#" + div).append("svg").attr("id", "pc_svg").attr("width",
 			viewport.width + margin.left + margin.right).attr("height",
 			viewport.height + margin.top + margin.bottom).append("g").attr(
 			"transform",
 			"translate(" + margin.left + "," + margin.top + ")").attr("z-index",3000)		
 			.append("g");
 	
-	var offset = viewport.width / data.length;   
+	var offset = viewport.width / (data.length-1);   
 	var axis = [];
 
 	for (var i in data){
 		var d = data[i];
-		axis[i] = new ParallelAxis(d);
+		axis[i] = new ParallelAxis(d, i);
 	}
 
 	
@@ -87,6 +87,15 @@ function ParallelCoordinates(manager, div, data){
 		gl.bindTexture(gl.TEXTURE_2D, null);
 	}
 		
+
+	this.resize = function() {
+		this.setViewport();		
+		for (var i in axis){
+			axis[i].update();			
+		}
+		this.createPCFramebuffer();
+	}
+	
 	this.createPCFramebuffer(); 
 
 	this.render = function() {
@@ -103,6 +112,9 @@ function ParallelCoordinates(manager, div, data){
 		//gl.bindFramebuffer(gl.FRAMEBUFFER, null);	
 		//gl.viewport(viewport.tlx, viewport.tly, viewport.width, viewport.height);
 		gl.viewport(0,0, viewport.width, viewport.height);
+		
+		console.log(viewport.width);
+
 		
 		gl.clearColor(0.0, 0.0, 0.0, 0.0);
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -157,7 +169,7 @@ function ParallelCoordinates(manager, div, data){
 		
 	}
 	
-	function ParallelAxis(d){
+	function ParallelAxis(d, i){
 		var yScale;
 		var yAxis;
 		var dim = WGL.getDimension(d.name);
@@ -196,14 +208,22 @@ function ParallelCoordinates(manager, div, data){
 		
 		yAxis = d3.svg.axis().scale(yScale).orient("left");
 
-		svg.append("g").attr("class", "axis_pc").call(yAxis).attr("transform","translate("+offset*i+")")
-	
+		svg.append("g").attr("class", "axis_pc axis_"+i).call(yAxis).attr("transform","translate("+offset*i+")")	
 		.append("text")
 			.attr("y", "-2em").attr("x",
 					"0em").style("text-anchor", "middle").text(d.label);		
 	  
-		 svg.append("g").attr("class", "brush").call(brush)
+		 svg.append("g").attr("class", "brush brush_"+i).call(brush)
 			.selectAll("rect").attr("width", "40").attr("transform","translate("+(offset*i-20)+")");
+		
+		 
+		 this.update = function(){
+			 offset = viewport.width / (data.length-1);   
+			 svg.select("#pc_svg", viewport.width + margin.left + margin.right);
+			 svg.select( '.axis_'+i).attr("transform","translate("+offset*i+")")	
+			 svg.select('.brush_'+i).selectAll("rect").attr("transform","translate("+(offset*i-20)+")")	
+			
+		 }
 	}
 
 	

@@ -47,6 +47,17 @@ WGL = function(num, url, divid){
 		dimensions[id] = dim;
 	}
 	
+	this.resize = function(){
+		for (var i in dimensions){
+			var d = dimensions[i];
+			if (d.resize != undefined){				
+					d.resize()				
+			}
+		}
+		
+		WGL.render();
+	}
+	
 	this.addLegend = function(l){
 		legends.push(l);
 	}
@@ -72,7 +83,7 @@ WGL = function(num, url, divid){
 	
 	this.addParallelCoordinates = function(div, data){		
 		var dim = new ParallelCoordinates(manager,div, data);
-		dimensions[div] = dim;
+		dimensions[div] = dim;		
 	}
 	
 	this.addLinearHistDimension = function(m){
@@ -132,13 +143,13 @@ WGL = function(num, url, divid){
 				i =  parseInt(i);				
 				index_pc.push(index[parseInt(j)]);
 				td.push(ta[i][j]);
-				ti.push(i / d.length) ;
+				ti.push(i / (d.length-1)) ;
 			
 				/*if not end point add twice to connect each line*/
 				 if( !(i==0 || i==(ta.length-1)) ){
 					 index_pc.push(index[parseInt(j)]);
 					 td.push(ta[i][j]);
-					 ti.push(i / d.length);
+					 ti.push(i / (d.length-1));
 				 }
 				
 			}
