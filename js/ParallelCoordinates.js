@@ -1,94 +1,93 @@
 
 function ParallelCoordinates(manager, div, data){
-
-	function ParallelAxis(d){
-		var yScale;
-		var yAxis;
-		var dim = WGL.getDimension(d.name);
-		var brush = d3.svg.brush();	 
-		if (d.type == "linear"){
-			yScale = d3.scale.linear().domain([d.min, d.max]).range(
-				[ height, 0 ]);			
-			
-			brush.y(yScale).on("brush", function(){	    		    	
-		    	var f = d3.event.target;			    					
-		    	var p = [];
-		    	p[0]= f.extent();
-				WGL.filterDim(d.name, dim.filters[dim.filtersids[0]].id,p);	
-			  });
-		} else if (d.type=="ordinal"){
-			yScale = d3.scale.ordinal().domain(d.domain).rangeRoundBands([ height, 0 ],0.03);
-			var l = yScale.domain().length;	
-			brush.y(yScale).on("brush", function(){	    		    
-		    	var f = d3.event.target.extent();	
-		    	
-		    	var of = [];						
-				of[0] = [];
-				of[0][0] =  l- ( f[0] /height * l); 
-				of[0][1] =  l- ( f[1] /height * l);  
-				if (of[0][0]==of[0][1]){
-		    			/*filter is deleted*/
-		    			of = [];
-		    	}									
-				WGL.filterDim(d.name, dim.filters[dim.filtersids[0]].id,of);	
-			 });
-		}
-		
-		yAxis = d3.svg.axis().scale(yScale).orient("left");
-
-		svg.append("g").attr("class", "y axis").call(yAxis).attr("transform","translate("+offset*i+")").append("text")
-			.attr("y", "-2em").attr("x",
-					"0em").style("text-anchor", "middle").text(d.label);		
-		
-		
-		
-	  
-		 svg.append("g").attr("class", "brush").call(brush)
-			.selectAll("rect").attr("width", "40").attr("transform","translate("+(offset*i-20)+")");
-	}
-
-		//WGL.addMultiDim(data);
-	this.elRect = this.mapdiv = document.getElementById(div).getBoundingClientRect();
-		
-	var w = document.getElementById(div).clientWidth;
-	var h =document.getElementById(div).clientHeight;
 	
+	var pcdiv =  document.getElementById(div);
+	
+	
+	var viewport = [];		
 	var margin = {
 			top : 50,
 			right : 20,
 			bottom : 20,
 			left : 60
 			};
+	
+	this.setViewport = function(){
+		var elRect = pcdiv.getBoundingClientRect();
+		var w = pcdiv.clientWidth;
+		var h =pcdiv.clientHeight;
+		viewport.width = w - margin.left - margin.right;
+		viewport.height = h - margin.top - margin.bottom;
+		viewport.tlx = elRect.left+margin.left;
+		viewport.tly = manager.body_height- elRect.bottom+margin.bottom;			
+	}
+	
+	this.setViewport();
 
-	
-	var width = w - margin.left - margin.right;
-	var height = h - margin.top - margin.bottom;
-	
-	
 	var svg = d3.select("#" + div).append("svg").attr("width",
-			width + margin.left + margin.right).attr("height",
-			height + margin.top + margin.bottom).append("g").attr(
+			viewport.width + margin.left + margin.right).attr("height",
+			viewport.height + margin.top + margin.bottom).append("g").attr(
 			"transform",
-			"translate(" + margin.left + "," + margin.top + ")").attr("z-index",3000).append("g");
+			"translate(" + margin.left + "," + margin.top + ")").attr("z-index",3000)		
+			.append("g");
 	
-	var offset = width / data.length;   
+	var offset = viewport.width / data.length;   
 	var axis = [];
 
 	for (var i in data){
 		var d = data[i];
-	
 		axis[i] = new ParallelAxis(d);
-		
-	
-		
 	}
 
+	
 		
 	this.glProgram = GLU.compileShaders('pc_vShader', 'pc_fShader', this);
 		
+	var	renderer = new ParallelCoordinatesRenderer(manager);
 	var numfilters ="numfilters";
+	var framebuffer = gl.createFramebuffer();
 	manager.storeUniformLoc(this.glProgram, numfilters);
 	
+
+	this.createPCFramebuffer = function(){
+		framebuffer.width = viewport.width;	
+		framebuffer.height = viewport.height;
+
+		var renderbuffer = gl.createRenderbuffer();
+
+		this.pcTexture = gl.createTexture();
+		this.pcTexture.name = "pc texture";
+
+		if (!gl.getExtension("OES_texture_float")) {
+			console.log("OES_texture_float not availble -- this is legal");
+		}
+		/** Framebuffer */
+		gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
+
+		/** Texture */
+		gl.bindTexture(gl.TEXTURE_2D, this.pcTexture);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); // Prevents
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, framebuffer.width,
+			framebuffer.height, 0, gl.RGBA, gl.FLOAT, null);
+
+		/** Render buffer */
+		gl.bindRenderbuffer(gl.RENDERBUFFER, renderbuffer);
+		gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT16,
+			framebuffer.width, framebuffer.height);
+
+		gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0,
+			gl.TEXTURE_2D, this.pcTexture, 0);
+		gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT,
+			gl.RENDERBUFFER, renderbuffer);
+
+		gl.bindTexture(gl.TEXTURE_2D, null);
+	}
+		
+	this.createPCFramebuffer(); 
 
 	this.render = function() {
 			
@@ -100,12 +99,13 @@ function ParallelCoordinates(manager, div, data){
 		
 		gl.uniform1f(this.glProgram.numfilters, manager.trasholds.allsum );			
 		
-		gl.bindFramebuffer(gl.FRAMEBUFFER, null);	
-		//gl.viewport(this.elRect.left+margin.left, manager.body_height-this.elRect.bottom, this.elRect.width, this.elRect.height);
-		gl.viewport(this.elRect.left+margin.left, manager.body_height-this.elRect.bottom+margin.bottom, width, height);
+		gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
+		//gl.bindFramebuffer(gl.FRAMEBUFFER, null);	
+		//gl.viewport(viewport.tlx, viewport.tly, viewport.width, viewport.height);
+		gl.viewport(0,0, viewport.width, viewport.height);
 		
-		//gl.clearColor(0.0, 0.0, 0.0, 0.0);
-		//gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+		gl.clearColor(0.0, 0.0, 0.0, 0.0);
+		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 		
 		gl.disable(gl.DEPTH_TEST);
 		gl.enable(gl.BLEND);
@@ -121,6 +121,8 @@ function ParallelCoordinates(manager, div, data){
        	gl.drawArrays(gl.LINES, 0, manager.num_rec*(manager.num_of_attrib*2-2));
 				
 	    gl.useProgram(null);
+		renderer.heatTexture = 	this.pcTexture;	
+	    renderer.render(viewport, 0, 300, 0, 300);
 	   
 		
 	}	
@@ -154,6 +156,56 @@ function ParallelCoordinates(manager, div, data){
 		}
 		
 	}
+	
+	function ParallelAxis(d){
+		var yScale;
+		var yAxis;
+		var dim = WGL.getDimension(d.name);
+		var brush = d3.svg.brush();	 
+		if (d.type == "linear"){
+			yScale = d3.scale.linear().domain([d.min, d.max]).range(
+				[ viewport.height, 0 ]);			
+			
+			brush.y(yScale).on("brush", function(){	    		    	
+		    	var f = d3.event.target;			    					
+		    	var of = [];
+		    	of[0]= f.extent();
+		    	if (of[0][0]==of[0][1]){
+		    			/*filter is deleted*/
+		    			of = [];
+		    	}	
+				WGL.filterDim(d.name, dim.filters[dim.filtersids[0]].id,of);	
+			  });
+		} else if (d.type=="ordinal"){
+			yScale = d3.scale.ordinal().domain(d.domain).rangeRoundBands([ viewport.height, 0 ],0.03);
+			var l = yScale.domain().length;	
+			brush.y(yScale).on("brush", function(){	    		    
+		    	var f = d3.event.target.extent();	
+		    	
+		    	var of = [];						
+				of[0] = [];
+				of[0][0] =  l- ( f[0] /viewport.height * l); 
+				of[0][1] =  l- ( f[1] /viewport.height * l);  
+				if (of[0][0]==of[0][1]){
+		    			/*filter is deleted*/
+		    			of = [];
+		    	}									
+				WGL.filterDim(d.name, dim.filters[dim.filtersids[0]].id,of);	
+			 });
+		}
+		
+		yAxis = d3.svg.axis().scale(yScale).orient("left");
+
+		svg.append("g").attr("class", "axis_pc").call(yAxis).attr("transform","translate("+offset*i+")")
+	
+		.append("text")
+			.attr("y", "-2em").attr("x",
+					"0em").style("text-anchor", "middle").text(d.label);		
+	  
+		 svg.append("g").attr("class", "brush").call(brush)
+			.selectAll("rect").attr("width", "40").attr("transform","translate("+(offset*i-20)+")");
+	}
+
 	
 }
 

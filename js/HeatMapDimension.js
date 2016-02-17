@@ -128,9 +128,10 @@ function HeatMapDimension(manager){
 		gl.enable(gl.BLEND);
 		gl.blendFunc(gl.ONE, gl.ONE);
 		
-		manager.enableFilterTexture(this.glProgram);		
-				
+		manager.enableFilterTexture(this.glProgram);						
 	}	
+	
+	
 	this.renderData = function(num) {
 		last_num = num;
 		this.setup();		
