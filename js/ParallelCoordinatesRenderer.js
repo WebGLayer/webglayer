@@ -8,6 +8,7 @@ function ParallelCoordinatesRenderer(manager){
 	manager.storeUniformLoc(this.glProgram, "maximum");	
 	manager.storeUniformLoc(this.glProgram, "colors");
 	manager.storeUniformLoc(this.glProgram, "unselcolors");
+	manager.storeUniformLoc(this.glProgram, "u_textureSize");
 	
 	this.colors =  new Float32Array(16);
 	this.colors.set([ 1, 0, 0, 1, 
@@ -50,7 +51,7 @@ function ParallelCoordinatesRenderer(manager){
 	     gl.uniform1i(rasterLoc , 0);		   
 		 gl.activeTexture(gl.TEXTURE0);
 		 gl.bindTexture(gl.TEXTURE_2D, this.heatTexture);
-	
+		 gl.generateMipmap(gl.TEXTURE_2D);
 	
 		gl.bindFramebuffer(gl.FRAMEBUFFER,null);	
 	//	gl.viewport(manager.l, manager.b, manager.w, manager.h);
@@ -60,14 +61,7 @@ function ParallelCoordinatesRenderer(manager){
 		gl.scissor(viewport.tlx, viewport.tly, viewport.width, viewport.height);
 		gl.clearColor(0.0, 0.0, 0.0, 0.0);
 		gl.clear(gl.COLOR_BUFFER_BIT );
-	
-		
-
-
-		// clear.
-	
-		//gl.disable(gl.DEPTH_TEST);
-		//gl.disable(gl.BLEND);
+			
 		gl.enable(gl.BLEND);		
 		gl.blendFunc( gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA  );
 
@@ -80,7 +74,7 @@ function ParallelCoordinatesRenderer(manager){
 	
 		//console.log(max);
 	    gl.uniform1f(this.glProgram.maximum, max);	
-	   
+	    gl.uniform2f(this.glProgram.u_textureSize, viewport.width, viewport.height);
 	   //console.log("max a min filter " +  min_f + " " +max_f )
 	   //console.log("max a min        " +  min + " " +max )
 	    

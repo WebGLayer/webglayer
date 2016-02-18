@@ -63,14 +63,18 @@ function ParallelCoordinates(manager, div, data){
 
 		if (!gl.getExtension("OES_texture_float")) {
 			console.log("OES_texture_float not availble -- this is legal");
+		}		
+		
+		if (!gl.getExtension("OES_texture_float_linear")) {
+			console.log("OES_texture_float not availble -- this is legal");
 		}
 		/** Framebuffer */
 		gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
 
 		/** Texture */
 		gl.bindTexture(gl.TEXTURE_2D, this.pcTexture);
-		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); // Prevents
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 
@@ -121,7 +125,7 @@ function ParallelCoordinates(manager, div, data){
 		gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
 		//gl.bindFramebuffer(gl.FRAMEBUFFER, null);	
 		//gl.viewport(viewport.tlx, viewport.tly, viewport.width, viewport.height);
-		gl.viewport(0,0, viewport.width, viewport.height);
+		gl.viewport(0,0, framebuffer.width, framebuffer.height);
 		
 		gl.clearColor(0.0, 0.0, 0.0, 0.0);
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -135,13 +139,13 @@ function ParallelCoordinates(manager, div, data){
 	//	manager.bindElementBuffer("indicies");	
 		manager.enableFilterTexture(this.glProgram);
 
-		gl.lineWidth(1);
+		gl.lineWidth(3);
       //  gl.drawElements(gl.LINES, manager.num_rec*4, gl.UNSIGNED_SHORT,0);
        	gl.drawArrays(gl.LINES, 0, manager.num_rec*(manager.num_of_attrib*2-2));
 				
 	    gl.useProgram(null);
 		renderer.heatTexture = 	this.pcTexture;	
-		
+	
 	    renderer.render(viewport, maximum);
 	   
 		
