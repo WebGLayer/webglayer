@@ -1,4 +1,3 @@
-
 function MapDimension(manager){
 	
 	this.isSpatial = true;
@@ -119,5 +118,3 @@ function MapDimension(manager){
 	}
 	
 }
-
-	

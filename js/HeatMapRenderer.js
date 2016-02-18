@@ -2,7 +2,7 @@
 function HeatMapRenderer(manager){
 	
 	this.glProgram = GLU.compileShaders("heatmap_render_vShader",  "heatmap_render_fShader");
-	
+	gl.useProgram(this.glProgram);	
 	var texCoordLocation = gl.getAttribLocation(this.glProgram, "v_texCoord");
 	var rasterLoc = 	   gl.getUniformLocation(this.glProgram, "heatmap_raster" );
 	manager.storeUniformLoc(this.glProgram, "max");

@@ -2,12 +2,12 @@
 function ParallelCoordinates(manager, div, data){
 	
 	var pcdiv =  document.getElementById(div);
-	
-	
+	var maximum = 500;
+
 	var viewport = [];		
 	var margin = {
 			top : 50,
-			right : 60,
+			right : 120,
 			bottom : 20,
 			left : 60
 			};
@@ -45,8 +45,11 @@ function ParallelCoordinates(manager, div, data){
 		
 	var	renderer = new ParallelCoordinatesRenderer(manager);
 	var numfilters ="numfilters";
+	
+	
 	var framebuffer = gl.createFramebuffer();
 	manager.storeUniformLoc(this.glProgram, numfilters);
+	
 	
 
 	this.createPCFramebuffer = function(){
@@ -98,6 +101,12 @@ function ParallelCoordinates(manager, div, data){
 	
 	this.createPCFramebuffer(); 
 
+	this.reRender = function(max){
+		  
+		  maximum = max;
+		  renderer.render(viewport, maximum);
+	}
+	
 	this.render = function() {
 			
 		gl.useProgram(this.glProgram);
@@ -106,15 +115,13 @@ function ParallelCoordinates(manager, div, data){
 		manager.enableBuffer(this.glProgram, "td");
 		manager.enableBuffer(this.glProgram, "ti");	
 		
-		gl.uniform1f(this.glProgram.numfilters, manager.trasholds.allsum );			
+		gl.uniform1f(this.glProgram.numfilters, manager.trasholds.allsum );
+		
 		
 		gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
 		//gl.bindFramebuffer(gl.FRAMEBUFFER, null);	
 		//gl.viewport(viewport.tlx, viewport.tly, viewport.width, viewport.height);
 		gl.viewport(0,0, viewport.width, viewport.height);
-		
-		console.log(viewport.width);
-
 		
 		gl.clearColor(0.0, 0.0, 0.0, 0.0);
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -134,7 +141,8 @@ function ParallelCoordinates(manager, div, data){
 				
 	    gl.useProgram(null);
 		renderer.heatTexture = 	this.pcTexture;	
-	    renderer.render(viewport, 0, 300, 0, 300);
+		
+	    renderer.render(viewport, maximum);
 	   
 		
 	}	

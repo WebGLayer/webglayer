@@ -45,6 +45,7 @@ WGL = function(num, url, divid){
 		};
 		var dim = new MapDimension(manager);
 		dimensions[id] = dim;
+		return dim;
 	}
 	
 	this.resize = function(){
@@ -68,7 +69,8 @@ WGL = function(num, url, divid){
 			console.warn(err);
 		};		
 		var dim = new HeatMapDimension(manager);
-		dimensions[id] = dim;		
+		dimensions[id] = dim;	
+		return dim;
 		
 	}
 	
@@ -83,7 +85,8 @@ WGL = function(num, url, divid){
 	
 	this.addParallelCoordinates = function(div, data){		
 		var dim = new ParallelCoordinates(manager,div, data);
-		dimensions[div] = dim;		
+		dimensions[div] = dim;	
+		return dim;
 	}
 	
 	this.addLinearHistDimension = function(m){

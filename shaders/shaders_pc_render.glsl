@@ -20,13 +20,9 @@
  	// uniform mat4 rasterMatrix;	
 	  uniform sampler2D heatmap_raster;
 	  
-	  //min max for whole data
-	  uniform float max;
-	  uniform float min;
-	  
-	  //min max for selected data
-	  uniform float max_filter;
-	  uniform float min_filter;
+	  //min for whole data	 
+	  uniform float maximum;
+	  	
 	  
 	  varying vec4 var_texCoord;
 	// varying vec2 v_texCoord;
@@ -66,8 +62,8 @@
 		if (fdata[0] == 0.) {
 			col = vec4(0.,0.,0.,0.);
 		} else {
-			col =  getColor(fdata[0] /4000., colors);  		
-			col[3] =  fdata[0] /4000. +.1;	
+			col =  getColor(fdata[0] /maximum, colors);  		
+			col[3] =  fdata[0] /maximum +.1;	
 		}
 		
   			

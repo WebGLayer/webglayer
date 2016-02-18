@@ -187,6 +187,10 @@ function HeatMapDimension(manager){
 	this.update = function() {
 		this.renderData(last_num);
 	}
+
+	this.reRender = function() {
+		this.render(last_num);
+	}
 	this.tearDown = function(){
 		gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 		gl.bindTexture(gl.TEXTURE_2D, null);

@@ -2,13 +2,10 @@
 function ParallelCoordinatesRenderer(manager){
 	
 	this.glProgram = GLU.compileShaders("pc_render_vShader",  "pc_render_fShader");
-	
+	gl.useProgram(this.glProgram);	
 	var texCoordLocation = gl.getAttribLocation(this.glProgram, "v_texCoord");
 	var rasterLoc = 	   gl.getUniformLocation(this.glProgram, "heatmap_raster" );
-	manager.storeUniformLoc(this.glProgram, "max");
-	manager.storeUniformLoc(this.glProgram, "min");
-	manager.storeUniformLoc(this.glProgram, "max_filter");
-	manager.storeUniformLoc(this.glProgram, "min_filter");
+	manager.storeUniformLoc(this.glProgram, "maximum");	
 	manager.storeUniformLoc(this.glProgram, "colors");
 	manager.storeUniformLoc(this.glProgram, "unselcolors");
 	
@@ -58,26 +55,31 @@ function ParallelCoordinatesRenderer(manager){
 		gl.bindFramebuffer(gl.FRAMEBUFFER,null);	
 	//	gl.viewport(manager.l, manager.b, manager.w, manager.h);
 		gl.viewport(viewport.tlx, viewport.tly, viewport.width, viewport.height);
-	//	gl.clearColor(0.0, 0.0, 0.0, 0.0);
-	//	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+		gl.enable(gl.SCISSOR_TEST);
+		// set the scissor rectangle.
+		gl.scissor(viewport.tlx, viewport.tly, viewport.width, viewport.height);
+		gl.clearColor(0.0, 0.0, 0.0, 0.0);
+		gl.clear(gl.COLOR_BUFFER_BIT );
 	
-		gl.disable(gl.DEPTH_TEST);
-		gl.disable(gl.BLEND);
+		
+
+
+		// clear.
+	
+		//gl.disable(gl.DEPTH_TEST);
+		//gl.disable(gl.BLEND);
 		gl.enable(gl.BLEND);		
 		gl.blendFunc( gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA  );
 
 	}	
 	
 
-	this.render = function(viewport, min, max, min_f, max_f) {
+	this.render = function(viewport, max) {
 		//legend.updateMax(max);
 		this.setup(viewport);
 	
 		//console.log(max);
-	    gl.uniform1f(this.glProgram.max, max);	
-	    gl.uniform1f(this.glProgram.min, min);
-	    gl.uniform1f(this.glProgram.max_filter, max_f);	
-	    gl.uniform1f(this.glProgram.min_filter, min_f);	
+	    gl.uniform1f(this.glProgram.maximum, max);	
 	   
 	   //console.log("max a min filter " +  min_f + " " +max_f )
 	   //console.log("max a min        " +  min + " " +max )
@@ -85,6 +87,7 @@ function ParallelCoordinatesRenderer(manager){
 		gl.drawArrays(gl.TRIANGLES, 0, 6);	
 		gl.bindTexture(gl.TEXTURE_2D, null);
 	    gl.useProgram(null);
+	    gl.disable(gl.SCISSOR_TEST);
 	   
 		
 	}

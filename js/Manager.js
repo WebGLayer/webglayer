@@ -67,8 +67,8 @@ function Manager(mapid) {
 	
 
 	gl = this.canvas.getContext('webgl', 
-			{preservedrawingbuffer: true, antialias: false}) || this.canvas.getContext('experimental-webgl', 
-			{preservedrawingbuffer: true, antialias: false}
+			{preserveDrawingBuffer: true}) || this.canvas.getContext('experimental-webgl', 
+			{preserveDrawingBuffer: true}
 			);
 
 	  if (!gl) {
@@ -97,7 +97,7 @@ function Manager(mapid) {
 		
 		//div = canvas.parentElement;
 		
-		gl = this.canvas.getContext('webgl', {preservedrawingbuffer: true}) || this.canvas.getContext('experimental-webgl', {preservedrawingbuffer: true});
+		gl = this.canvas.getContext('webgl', {preserveDrawingBuffer: true}) || this.canvas.getContext('experimental-webgl', {preservedrawingbuffer: true});
 
 		  if (!gl) {
 			  alert("Could not initialise WebGL, sorry :-(. Are you using Chrome?");
