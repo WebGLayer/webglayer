@@ -93,7 +93,9 @@ function MaxCalculator(w, h){
 	}
 	this.getMax = function(texture, band){
 		this.render(texture);
-		return this.readPixels(band);
+		var m = this.readPixels(band);
+		console.log("heatmap max "+m);
+		return m;
 	}
 	
 	

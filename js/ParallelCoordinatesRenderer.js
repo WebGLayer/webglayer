@@ -51,7 +51,7 @@ function ParallelCoordinatesRenderer(manager){
 	     gl.uniform1i(rasterLoc , 0);		   
 		 gl.activeTexture(gl.TEXTURE0);
 		 gl.bindTexture(gl.TEXTURE_2D, this.heatTexture);
-		 gl.generateMipmap(gl.TEXTURE_2D);
+	//	 gl.generateMipmap(gl.TEXTURE_2D);
 	
 		gl.bindFramebuffer(gl.FRAMEBUFFER,null);	
 	//	gl.viewport(manager.l, manager.b, manager.w, manager.h);

@@ -244,12 +244,16 @@ WGL = function(num, url, divid){
 			dimensions[i].render(numrec);
 			};
 		WGL.updateCharts();
+		this.updateLegends();
 		
+			//console.log("render");
+				
+	}
+
+	this.updateLegends = function(){
 		for (var i in legends){			
 			legends[i].update();
 			};
-			//console.log("render");
-				
 	}
 	
 	var dim_ids;
@@ -339,6 +343,7 @@ WGL = function(num, url, divid){
 		}
 
 		this.render();
+		//this.updateLegends();
 		
 	}
 	
