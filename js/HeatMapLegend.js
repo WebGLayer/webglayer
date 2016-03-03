@@ -1,6 +1,6 @@
-HeatMapLegend = function(div_id, heatDimension, filterId) {
+HeatMapLegend = function(div_id, filterId) {
 	
-	var w = 100;
+	var w = 150;
 	var h = 200;
 	var margin = {
 			top : 10,
@@ -18,24 +18,74 @@ HeatMapLegend = function(div_id, heatDimension, filterId) {
 	var yAxis = d3.svg.axis()
     .scale(yScale)
     .orient("left");
+
+    var yScaleSel = d3.scale.linear().domain([ 0, 200]).range(
+			[ height, 0 ]);
 	
+	var yAxisSel = d3.svg.axis()
+    .scale(yScaleSel)
+    .orient("right");
+    
 	
-	svg = d3.select("#" + div_id).append("svg").attr("width",
-			width + margin.left + margin.right).attr("height",
-			height + margin.top + margin.bottom).append("g").attr(
+	var limitByMax = true;
+	var heatDimension;
+	
+	this.setDimension = function(dim){
+		//console.log("setDimension not imeplemented!");
+		heatDimension = dim;
+	}
+
+	this.drawWithoutFilter = function(){
+		svg.select("#grad_b").attr("fill", "url(#legend)");
+	}
+
+	var selectionMax = 0;
+	this.drawWithFilter = function(m){
+		selectionMax = m;
+		svg.select("#grad_b").attr("fill", "url(#legend_blue)");
+	}
+	
+	svg = d3.select("#" + div_id).append("svg")
+		.attr("width",  w)
+		.attr("height", h)
+		.append("g").attr(
 			"transform",
 			"translate(" + margin.left + "," + margin.top + ")");
 
-	d3.select("#" + div_id).append("label")
+	/** Adding axis**/
+
+	 svg.append("g")
+     .attr("class", "y axis all")
+     .call(yAxis)
+     .append("text")
+     .attr("transform", "rotate(-90)")
+     .attr("y", 6)
+     .attr("dy", ".71em")
+     .style("text-anchor", "end")
+     .text("Number of accidents");
+
+  	 svg.append("g")
+     .attr("class", "y axis sel")
+     .call(yAxisSel)
+      .attr("transform",
+		   "translate(60,0)")	
+       
+	 
+	
+	d3.select("#" + div_id).append("label").style({bottom: "5px", position: "absolute", left: "5px" })
 	.text("lock scale")
-	.append("input")
+	.append("input")	
 	.attr("type","checkbox")
-	.attr("id","scale")
+	.attr("id","scale")	
 	.on("click", function(d,i){
 		 lockscale = this.checked;
-		 WGL.getDimension(heatDimension).lockScale = this.checked;
+		 heatDimension.lockScale = this.checked;
 		}); 
+	  
 	 
+
+	 /*Adding gradients*/
+
 	svg.append("defs").append("linearGradient")
 				.attr("id", "legend")
 				.attr("x1","0%")
@@ -68,101 +118,133 @@ HeatMapLegend = function(div_id, heatDimension, filterId) {
 	 	.attr("offset", function(d) { return d.offset; })
 	 	.attr("stop-color", function(d) { return d.color; });
 	
+	/*addig color rectangeles*/
 	svg.append("rect").attr("fill", "black")
 	  .attr("id","grad_bacground")
 	  .attr("x", 0)
     .attr("y", 0)
-    .attr("width", 50)
+    .attr("width", 30)
     .attr("height", height);
 	
 	svg.append("rect").attr("fill", "url(#legend_blue)")
 	  	.attr("id","grad_b")
 	  	.attr("x", 0)
 	  	.attr("y", 0)
-    	.attr("width", 50)
+    	.attr("width", 30)
     	.attr("height", height);
 	
 	svg.append("rect").attr("fill", "black")
 	  .attr("class","grad")
-	  .attr("x", 0)
+	  .attr("x", 30)
     .attr("y", 0)
-    .attr("width", 50)
-    .attr("height", height);
+    .attr("width", 30)
+    .attr("height", 0);
 
 	svg.append("rect").attr("fill", "url(#legend)")
 					  .attr("class","grad")
-					  .attr("x", 0)
+					  .attr("x", 30)
 	                  .attr("y", 0)
-	                  .attr("width", 50)
-	                  .attr("height", height);
+	                  .attr("width", 30)
+	                  .attr("height", 0);
 	
+
 	var brushed = function(){
+		if (parseFloat(yScale.domain()[1]) <=  parseFloat(brush.extent()[1])){
+			//f[1] =9999999;
+			limitByMax= false;
+			console.log("setting to maximum.");
+		} else {
+			limitByMax= true;
+		}
+		doBrush(brush.extent())
+	}
+	
+	var doBrush = function(f){
 		
 	
 		//console.log(parseFloat(yScale.domain()[1]-100))+ " vs "+  parseFloat(yScale(brush.extent()[1]));
-		   var f = brush.extent();
-		if (parseFloat(yScale.domain()[1]) <=  parseFloat(brush.extent()[1])){
-			f[1] =9999999;
-			console.log("setting to maximum.");
-		}
+		  // var f = brush.extent();
+		
 		svg.selectAll(".grad")
-		 .attr("y",  yScale(brush.extent()[1]))     
-        .attr("height", yScale(brush.extent()[0]) - yScale(brush.extent()[1]) );		
+		 .attr("y",  yScale(f[1]))     
+        .attr("height", yScale(f[0]) - yScale(f[1]) );		
         
      
         if (f.length == 2 && f[0]==f[1]){
         	/*pass the filter parameter to the dimension to render to colors properly*/
         	f=[];
-        	WGL.getDimension(heatDimension).setFilter(undefined); 
+        	heatDimension.setFilter(undefined); 
         } else {
-        	WGL.getDimension(heatDimension).setFilter(f); 
+        	heatDimension.setFilter(f); 
         }
       	
-		WGL.filterDim(heatDimension,filterId,f);
+		WGL.filterDim(heatDimension.id,filterId,f);
 					
 	}
+	
+	
 		
 	var brush = d3.svg.brush()		
 	    .y(yScale)
 	    .on("brush", brushed);
 	
-	 svg.append("g")
-     .attr("class", "y axis")
-     .call(yAxis)
-     .append("text")
-     .attr("transform", "rotate(-90)")
-     .attr("y", 6)
-     .attr("dy", ".71em")
-     .style("text-anchor", "end")
-     .text("Number of accidents");
-	 
+	
 	 
 	  svg.append("g").attr("class", "brush").call(brush)
-		.selectAll("rect").attr("width", width);
+		.selectAll("rect").attr("width", 60);
 
 	 
-	 this.updateMax = function(max){
-		 
+	 this.updateMaxAll = function(max){
+		 var filter = brush.extent();
+	 	 	 	 	
 		 yScale.domain([0, max]);
-		 svg.selectAll('.y.axis')
+		
+		 svg.selectAll('.y.axis.all')
 			.call(yAxis);
+			if (filter[0]!=filter[1]){
+				this.update(filter);
+			} else {
+				this.update([0,0]);
+			}
+		
 		 
 	 }
 	 
-	 this.update = function(){
+	 this.showSelection = function(){
+	 	svg.selectAll(".grad")
+		 .attr("y",  0)     
+        .attr("height", yScale(f[0]) - yScale(f[1]) );	
+	 }
+
+	 this.update = function(filter){
 		 
 	 	 if (!lockscale){
-	 	 	var m = WGL.getDimension(heatDimension).maxall;	 	 	
-	 	 	var min = brush.extent()[0];
-	 	 	var max = brush.extent()[1];
-		 	this.updateMax(m+ m*0.2);
+	 	 	var min = filter[0];
+	 	 	var max = filter[1];
+		 	//this.updateMax(m+ m*0.2);
 		 	
+		 	var y =  yScale(max);
+		 	var h =  yScale(min) - yScale(max);
 			svg.selectAll(".grad")
-			 .attr("y",  yScale(max))     
-	        .attr("height", yScale(min) - yScale(max) );	
+			 .attr("y",  y)     
+	        .attr("height", h );	
 			svg.selectAll(".extent")
-			 .attr("y",  yScale(max))     
-	        .attr("height", yScale(min) - yScale(max) );
+			 .attr("y",  y)     
+	        .attr("height", h );			
+
+ 			
+	
+			svg.selectAll('.y.axis.sel').attr("transform",
+		   "translate(60,"+y+")");	
+			
+			yScaleSel.domain([0,selectionMax]).range([h, 0 ]);
+			yAxisSel.ticks(h/15);
+ 			svg.selectAll('.y.axis.sel')
+			.call(yAxisSel);
+
+	         if (!limitByMax){
+		 		//doBrush([min,m]);
+			 }
 	 	 }
 		
 	 }
