@@ -1,18 +1,25 @@
 
-function HeatMapDimension(manager){
+function HeatMapDimension(manager, id){
+	this.id = id;
 	//this.manager = manager;
 	//Dimension.call(this, manager);
 	this.isSpatial = true;
 	this.lockScale = false;
 	
 	this.glProgram = GLU.compileShaders('heatmap_vShader', 'heatmap_fShader', this);
-	this.maxcal = new MaxCalculator(Math.floor(manager.w/6),Math.floor(manager.h/6));
+	this.maxcal = new MaxCalculator(Math.floor(manager.w/5),Math.floor(manager.h/5));
 	var framebuffer = gl.createFramebuffer();
 	var last_num;
 	
 	var visible = true;
+	var doGetMax = true;
+	var legend;
 	this.setVisible = function(v){
 		visible = v;
+	}
+	
+	this.setDoGetMax = function(m){
+		doGetMax = m;
 	}
 	
 	/* default radiusFunc*/
@@ -22,10 +29,13 @@ function HeatMapDimension(manager){
 	
 	/*default getMax function*/
 	this.maxFunction = function(max){
+		if (max==undefined){
+			return 99999999;
+		}
 		return max;
 	}
 	/*default getMin function*/
-	this.minFunction = function(max){
+	this.minFunction = function(min){
 		return 0;
 	}
 	
@@ -33,7 +43,10 @@ function HeatMapDimension(manager){
 		return 2;
 	}
 	
-	
+	this.addLegend = function(thelegend){
+		legend = thelegend;
+		legend.setDimension(this);
+	}
 		
 	this.createMapFramebuffer = function(){
 		framebuffer.width = manager.w;	
@@ -117,8 +130,7 @@ function HeatMapDimension(manager){
 		
 		gl.bindTexture(gl.TEXTURE_2D, this.heatTexture);
 		gl.bindFramebuffer(gl.FRAMEBUFFER,framebuffer );	
-		
-		
+				
 		gl.viewport(0,0, manager.w, manager.h);
 		gl.clearColor(0.0, 0.0, 0.0, 0.0);
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -158,30 +170,61 @@ function HeatMapDimension(manager){
 		renderer.heatTexture = 	this.heatTexture;	
 		manager.heatTexture = this.heatTexture;	
 	}
+
 	this.render = function(num) {
 
-		if (visible == false){
-			
+		if (visible == false){	
 			return;
 		}
 		
 		this.renderData(num);
 	    
 	    //var max = maxcale.getMax(this.heatTexture);		
+	    var renderMin;
+	    var renderMax;
 		if (!this.lockScale){
-			var max=this.maxcal.getMax(this.heatTexture, 1);
-	    	manager.max = this.maxFunction(max);
-	    	manager.min = this.minFunction(max);
+			
+			if ( doGetMax){
+				 if (legend!= undefined){
+				 	this.maxall = this.maxcal.getMax(this.heatTexture, 1);
+	    			legend.updateMaxAll(this.maxall);
+	    			
+	    			if ( manager.trasholds.spatsum >0){
+	    			this.maxsel = this.maxcal.getMax(this.heatTexture, 0);
+	    			}
+	    		}
+				
+			}
+
+					
+		
+	    	renderMax = this.maxFunction(this.maxall);
+	    	renderMin = this.minFunction(this.maxall);
 		}
-	    this.maxall = max;
+	    
 	 
 
-	    if (typeof(the_filter) !='undefined') {
-	    	 renderer.render( manager.min, manager.max, the_filter[0], the_filter[1]);
+	  //  if (typeof(the_filter) !='undefined') {
+	  	 if (manager.trasholds.spatsum >0){
+	    	  var maxsel = this.maxcal.getMax(this.heatTexture, 0);
+	    	  if (typeof(the_filter) !='undefined'){
+	    	  /*there is a color filter applied*/ 
+	    	 renderer.render( renderMin, renderMax, the_filter[0], the_filter[1],this.maxsel );
+	    	  } else {
+	    	  	 renderer.render( renderMin, renderMax, renderMin, renderMax,this.maxsel );
+	    
+	    	  }
+	    	
+	    	 legend.drawWithFilter(maxsel);
+	    	 //legend.updateMaxSel(this.maxall);
 	    } else {
-	    	// renderer.render( manager.min, manager.max, 0, 0);
-	    	 renderer.render( manager.min, manager.max, manager.min, manager.max);
-	    }	   			
+	    	// renderer.render( renderMin, renderMax, 0, 0);
+	    	 renderer.render( renderMin, renderMax, renderMin, renderMax, renderMax );	    	
+	    	 legend.drawWithoutFilter();
+	    	 
+	    }	
+	    
+	   
 	}
 
 	this.update = function() {

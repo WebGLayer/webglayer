@@ -97,7 +97,7 @@ function Manager(mapid) {
 		
 		//div = canvas.parentElement;
 		
-		gl = this.canvas.getContext('webgl', {preserveDrawingBuffer: true}) || this.canvas.getContext('experimental-webgl', {preservedrawingbuffer: true});
+		gl = this.canvas.getContext('webgl', {preserveDrawingBuffer: true, antialias: true}) || this.canvas.getContext('experimental-webgl', {preserveDrawingBuffer: true});
 
 		  if (!gl) {
 			  alert("Could not initialise WebGL, sorry :-(. Are you using Chrome?");

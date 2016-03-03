@@ -1,5 +1,6 @@
-function MapDimension(manager){
+function MapDimension(manager, id){
 	
+	this.id = id;
 	this.isSpatial = true;
 	this.glProgram = GLU.compileShaders('map_vShader', 'map_fShader', this);
 	

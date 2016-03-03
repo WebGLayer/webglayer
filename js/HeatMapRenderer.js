@@ -11,6 +11,8 @@ function HeatMapRenderer(manager){
 	manager.storeUniformLoc(this.glProgram, "min_filter");
 	manager.storeUniformLoc(this.glProgram, "colors");
 	manager.storeUniformLoc(this.glProgram, "unselcolors");
+	manager.storeUniformLoc(this.glProgram, "reduceSelection");
+	
 	
 	this.colors =  new Float32Array(16);
 	this.colors.set([ 1, 0, 0, 1, 
@@ -68,7 +70,7 @@ function HeatMapRenderer(manager){
 	}	
 	
 
-	this.render = function(min, max, min_f, max_f) {
+	this.render = function(min, max, min_f, max_f, reduceSelection) {
 		//legend.updateMax(max);
 		this.setup();
 	
@@ -76,7 +78,9 @@ function HeatMapRenderer(manager){
 	    gl.uniform1f(this.glProgram.max, max);	
 	    gl.uniform1f(this.glProgram.min, min);
 	    gl.uniform1f(this.glProgram.max_filter, max_f);	
-	    gl.uniform1f(this.glProgram.min_filter, min_f);	
+	    gl.uniform1f(this.glProgram.min_filter, min_f);
+	    gl.uniform1f(this.glProgram.reduceSelection, reduceSelection);
+	   
 	   
 	   //console.log("max a min filter " +  min_f + " " +max_f )
 	   //console.log("max a min        " +  min + " " +max )

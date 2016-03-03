@@ -28,6 +28,7 @@
 	  //min max for selected data
 	  uniform float max_filter;
 	  uniform float min_filter;
+	  uniform float reduceSelection;
 	  
 	  varying vec4 var_texCoord;
 	// varying vec2 v_texCoord;
@@ -69,15 +70,18 @@
 		float tx =max_filter/6. ;
 		//val = (fdata[0]-min_filter)/(max_filter-min_filter);	
 		
+		// fdata[1] 
 		if ( fdata[2] > 0. && (fdata[1] < (min_filter) && fdata[1]>= (min_filter - t) ) || (fdata[1] > (max_filter) && fdata[1] <= (max_filter+tx  ))){
 		
 			// orange color to create the selection border
 			col = vec4(1.,0.549019608,0.,1.);
 		}
+		
   		else if (fdata[2] > 0. && fdata[3]>0. &&  fdata[1] >= min_filter && fdata[1]<= max_filter ) {  	
   			//data are selected including spatial filter		
   			 //= floor(val*4./4.);
- 			val =  	(fdata[0] -	min_filter)  / (max_filter - min_filter); 
+ 			//val =  	(fdata[0] -	min_filter)  / (max_filter - min_filter);
+ 			val =  	fdata[0] / reduceSelection; 
   			col =   getColor(val, colors);//col1*rangeval + col2*(1.-rangeval);//vec4(val, 1.-val , 0. , 0.0+val*2.);//vec4(1.,0.,0.,0.);
 
   			col[3] = val*1.5+0.1;

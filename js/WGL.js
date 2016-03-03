@@ -43,7 +43,7 @@ WGL = function(num, url, divid){
 		catch(err) {
 			console.warn(err);
 		};
-		var dim = new MapDimension(manager);
+		var dim = new MapDimension(manager, id);
 		dimensions[id] = dim;
 		return dim;
 	}
@@ -68,8 +68,8 @@ WGL = function(num, url, divid){
 		catch(err) {
 			console.warn(err);
 		};		
-		var dim = new HeatMapDimension(manager);
-		dimensions[id] = dim;	
+		var dim = new HeatMapDimension(manager, id);
+		dimensions[id] = dim;		
 		return dim;
 		
 	}
@@ -193,6 +193,7 @@ WGL = function(num, url, divid){
 		var colorFilter = new MapColorFilter(manager, dimensions[name]);//res);
 		addFilter(name, id, colorFilter);
 		
+		return colorFilter;
 		//d.filter = colorFilter;
 	}
 
@@ -244,7 +245,7 @@ WGL = function(num, url, divid){
 			dimensions[i].render(numrec);
 			};
 		WGL.updateCharts();
-		this.updateLegends();
+		//this.updateLegends();
 		
 			//console.log("render");
 				
@@ -350,7 +351,7 @@ WGL = function(num, url, divid){
 
 
 	this.filterDim = function(id, filterId, filter, dorendering){
-		var f = dimensions[id].filters[filterId];		
+		var f = dimensions[id].filters[filterId];	
 		
 		if  ( filter.length==0){
 			//console.log("filter deleted");

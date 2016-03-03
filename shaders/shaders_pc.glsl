@@ -17,8 +17,9 @@
   			//if (fdata[0]>= ( (pow(2.,numfilters-1.)) / 256.) && numfilters != 0. ){
   			if (fdata[3]>0.){
 				// data are out of the window
+				gl_Position = vec4(-2., -2., 0.,0.); 
   				col = vec4(0., 0. , 1., 0.);
-  		  					
+  		  				
   			} 
   			else if (fdata[0]>=  ( (numfilters ) / 256.) && numfilters != 0. ){    
   		
