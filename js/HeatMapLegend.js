@@ -89,7 +89,7 @@ HeatMapLegend = function(div_id, filterId) {
 	svg.append("defs").append("linearGradient")
 				.attr("id", "legend_gradient")
 				.attr("x1","0%")
-				.attr("y1","0%")
+				.attr("y1","0%")cxvx
 				.attr("x2","0%")
 				.attr("y2","100%")
 				.selectAll("stop")
