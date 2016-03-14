@@ -65,16 +65,23 @@ function ParallelCoordinates(manager, div, data){
 			console.log("OES_texture_float not availble -- this is legal");
 		}		
 		
-		if (!gl.getExtension("OES_texture_float_linear")) {
-			console.log("OES_texture_float not availble -- this is legal");
-		}
+	
 		/** Framebuffer */
 		gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
 
 		/** Texture */
 		gl.bindTexture(gl.TEXTURE_2D, this.pcTexture);
-		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+		
+		if (!gl.getExtension("OES_texture_float_linear")) {
+			console.log("OES_texture_float not availble -- this is legal");
+			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+		} else {
+			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+		}
+		
+	
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); // Prevents
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 

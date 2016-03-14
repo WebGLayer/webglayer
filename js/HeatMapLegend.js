@@ -36,13 +36,13 @@ HeatMapLegend = function(div_id, filterId) {
 	}
 
 	this.drawWithoutFilter = function(){
-		svg.select("#grad_b").attr("fill", "url(#legend)");
+		svg.select("#grad_b").attr("fill", "url(#legend_gradient)");
 	}
 
 	var selectionMax = 0;
 	this.drawWithFilter = function(m){
 		selectionMax = m;
-		svg.select("#grad_b").attr("fill", "url(#legend_blue)");
+		svg.select("#grad_b").attr("fill", "url(#legend_blue_gradient)");
 	}
 	
 	svg = d3.select("#" + div_id).append("svg")
@@ -87,7 +87,7 @@ HeatMapLegend = function(div_id, filterId) {
 	 /*Adding gradients*/
 
 	svg.append("defs").append("linearGradient")
-				.attr("id", "legend")
+				.attr("id", "legend_gradient")
 				.attr("x1","0%")
 				.attr("y1","0%")
 				.attr("x2","0%")
@@ -103,7 +103,7 @@ HeatMapLegend = function(div_id, filterId) {
 				 	.attr("stop-color", function(d) { return d.color; });
 	
 	svg.append("defs").append("linearGradient")
-		.attr("id", "legend_blue")
+		.attr("id", "legend_blue_gradient")
 		.attr("x1","0%")	 
 		.attr("y1","0%")
 		.attr("x2","0%")
@@ -126,7 +126,7 @@ HeatMapLegend = function(div_id, filterId) {
     .attr("width", 30)
     .attr("height", height);
 	
-	svg.append("rect").attr("fill", "url(#legend_blue)")
+	svg.append("rect").attr("fill", "url(#legend_blue_gradient)")
 	  	.attr("id","grad_b")
 	  	.attr("x", 0)
 	  	.attr("y", 0)
@@ -140,7 +140,7 @@ HeatMapLegend = function(div_id, filterId) {
     .attr("width", 30)
     .attr("height", 0);
 
-	svg.append("rect").attr("fill", "url(#legend)")
+	svg.append("rect").attr("fill", "url(#legend_gradient)")
 					  .attr("class","grad")
 					  .attr("x", 30)
 	                  .attr("y", 0)
