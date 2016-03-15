@@ -9,6 +9,7 @@ HeatMapLegend = function(div_id, filterId) {
 			left : 40
 	};
 	var lockscale = false;
+	var filterVal = [];
 	var width = w - margin.left - margin.right;
 	var height = h - margin.top - margin.bottom;
 
@@ -89,7 +90,7 @@ HeatMapLegend = function(div_id, filterId) {
 	svg.append("defs").append("linearGradient")
 				.attr("id", "legend_gradient")
 				.attr("x1","0%")
-				.attr("y1","0%")cxvx
+				.attr("y1","0%")
 				.attr("x2","0%")
 				.attr("y2","100%")
 				.selectAll("stop")
@@ -149,6 +150,7 @@ HeatMapLegend = function(div_id, filterId) {
 	
 
 	var brushed = function(){
+		 filterVal = brush.extent();
 		if (parseFloat(yScale.domain()[1]) <=  parseFloat(brush.extent()[1])){
 			//f[1] =9999999;
 			limitByMax= false;
@@ -175,6 +177,7 @@ HeatMapLegend = function(div_id, filterId) {
         	f=[];
         	heatDimension.setFilter(undefined); 
         } else {
+        	 filterVal = f;
         	heatDimension.setFilter(f); 
         }
       	
@@ -195,7 +198,7 @@ HeatMapLegend = function(div_id, filterId) {
 
 	 
 	 this.updateMaxAll = function(max){
-		 var filter = brush.extent();
+		 var filter =  filterVal ;
 	 	 	 	 	
 		 yScale.domain([0, max]);
 		
@@ -219,8 +222,8 @@ HeatMapLegend = function(div_id, filterId) {
 	 this.update = function(filter){
 		 
 	 	 if (!lockscale){
-	 	 	var min = filter[0];
-	 	 	var max = filter[1];
+	 	 	var min =  filterVal [0];
+	 	 	var max =  filterVal [1];
 		 	//this.updateMax(m+ m*0.2);
 		 	
 		 	var y =  yScale(max);
