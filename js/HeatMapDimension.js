@@ -185,13 +185,12 @@ function HeatMapDimension(manager, id){
 		if (!this.lockScale){
 			
 			if ( doGetMax){
-				 if (legend!= undefined){
-				 	this.maxall = this.maxcal.getMax(this.heatTexture, 1);
-	    			legend.updateMaxAll(this.maxall);
-	    			
-	    			if ( manager.trasholds.spatsum >0){
+				this.maxall = this.maxcal.getMax(this.heatTexture, 1);
+	    		if ( manager.trasholds.spatsum >0){
 	    			this.maxsel = this.maxcal.getMax(this.heatTexture, 0);
-	    			}
+	    		}
+				 if (legend!= undefined){
+				     legend.updateMaxAll(this.maxall);	    			
 	    		}
 				
 			}
@@ -219,8 +218,11 @@ function HeatMapDimension(manager, id){
 	    	 //legend.updateMaxSel(this.maxall);
 	    } else {
 	    	// renderer.render( renderMin, renderMax, 0, 0);
-	    	 renderer.render( renderMin, renderMax, renderMin, renderMax, renderMax );	    	
-	    	 legend.drawWithoutFilter();
+	    	 renderer.render( renderMin, renderMax, renderMin, renderMax, renderMax );	 
+	    	 if (legend!= undefined)  {
+	    	 	legend.drawWithoutFilter();
+	    	 }	
+	    	 
 	    	 
 	    }	
 	    
