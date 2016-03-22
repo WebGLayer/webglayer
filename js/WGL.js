@@ -4,7 +4,6 @@ WGL = function(num, url, divid){
 	var numrec = num;
 	var manager  = new Manager(divid); 	
 	var rasterer = new Rasterer(numrec);
-	var metadata = [];
 
 	manager.num_rec = numrec;
 	manager.index = "index";
@@ -33,7 +32,7 @@ WGL = function(num, url, divid){
 	var indexta = array2TA2D(index);
 
 	manager.addDataBuffer(indexta, 2, 'index');
-	GLU.manager = manager;
+	this.manager = manager;
 	
 	/*
 	 * 
@@ -235,6 +234,7 @@ WGL = function(num, url, divid){
 
 	
 	this.render = function(){		
+		gl.bindFramebuffer(gl.FRAMEBUFFER,null);
 		gl.viewport(0,0, manager.w, manager.h);
 		gl.clearColor(0.0, 0.0, 0.0, 0.0);
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -289,10 +289,13 @@ WGL = function(num, url, divid){
 				d.createMapFramebuffer();
 			}
 
-			if (typeof(d.filter) !='undefined'){
-				if (typeof(d.filter.createMapFramebuffer) !='undefined'){
-					d.filter.createMapFramebuffer();
+			if (typeof(d.filters) !='undefined'){
+				for (var i in d.filters){
+					if (typeof(d.filters[i].createMapFramebuffer) !='undefined'){
+					d.filters[i].createMapFramebuffer();
 				}
+				}
+				
 			}
 		}
 	}
