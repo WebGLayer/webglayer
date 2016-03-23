@@ -10,7 +10,7 @@
   		vec4 p =  v_texCoord;		  		
         gl_Position =  p;    	
 		gl_PointSize = 1.0;
-		var_texCoord =  v_texCoord;
+		var_texCoord =  v_texCoord; 		
  		
       }
   </script>

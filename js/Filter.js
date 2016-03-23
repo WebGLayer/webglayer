@@ -186,7 +186,8 @@ Filter = function(manager) {
 
 /*Render filter for particular dimension*/
 	this.applyFilterDim = function(dim,filterId) {
-		gl.useProgram(this.filterProgram);					
+		gl.useProgram(this.filterProgram);			
+				
 		//console.log("binding framebuffer to "+activeID);	
 		gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer[activeID]);
 
@@ -238,7 +239,7 @@ Filter = function(manager) {
 		gl.bindRenderbuffer(gl.RENDERBUFFER, null);
     	gl.bindFramebuffer(gl.FRAMEBUFFER, null);	
     	
-    	//this.readPixels();
+    	//this.readPixelsAll();
 	
 		
 	}

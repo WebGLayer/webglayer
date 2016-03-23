@@ -191,7 +191,7 @@ function ParallelCoordinates(manager, div, data){
 	function ParallelAxis(d, i){
 		var yScale;
 		var yAxis;
-		var dim = WGL.getDimension(d.name);
+		var dim = manager.wgl.getDimension(d.name);
 		var brush = d3.svg.brush();	 
 		if (d.type == "linear"){
 			yScale = d3.scale.linear().domain([d.min, d.max]).range(
@@ -221,7 +221,7 @@ function ParallelCoordinates(manager, div, data){
 		    			/*filter is deleted*/
 		    			of = [];
 		    	}									
-				WGL.filterDim(d.name, dim.filters[dim.filtersids[0]].id,of);	
+				GLU.manager.wgl.filterDim(d.name, dim.filters[dim.filtersids[0]].id,of);	
 			 });
 		}
 		

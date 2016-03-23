@@ -32,7 +32,7 @@ WGL = function(num, url, divid){
 	var indexta = array2TA2D(index);
 
 	manager.addDataBuffer(indexta, 2, 'index');
-	this.manager = manager;
+	GLU.manager = manager;
 	
 	/*
 	 * 
@@ -55,7 +55,7 @@ WGL = function(num, url, divid){
 			}
 		}
 		
-		WGL.render();
+		this.render();
 	}
 	
 	this.addLegend = function(l){
@@ -244,7 +244,7 @@ WGL = function(num, url, divid){
 		for (var i in dimensions){			
 			dimensions[i].render(numrec);
 			};
-		WGL.updateCharts();
+		this.updateCharts();
 		//this.updateLegends();
 		
 			//console.log("render");

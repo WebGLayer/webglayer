@@ -1,4 +1,4 @@
-HeatMapLegend = function(div_id, filterId) {
+HeatMapLegend = function(div_id, filterId, manager) {
 	
 	var w = 150;
 	var h = 200;
@@ -181,7 +181,7 @@ HeatMapLegend = function(div_id, filterId) {
         	heatDimension.setFilter(f); 
         }
       	
-		WGL.filterDim(heatDimension.id,filterId,f);
+		GLU.manager.wgl.filterDim(heatDimension.id,filterId,f);
 					
 	}
 	

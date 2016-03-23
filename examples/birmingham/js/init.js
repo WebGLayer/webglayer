@@ -9,13 +9,8 @@ function init() {
 		data.loadPosData("data/test.json");
 		//data.loadPosData("data/xybirm5a.json");
 		//data.loadPosData("data/xyall3a1000k.json");	
-				
+			
 	}
-function circleSelection(element){
-	if (element.checked){
-		console.log("cvvv");
-	}
-}
 
 function visualize(data){	
 	
@@ -120,15 +115,9 @@ function visualize(data){
 			var l = WGL.getDimension(this.name);
 			l.setVisible(this.checked);					
 			WGL.render();			
-		});
-		
-		
-		
+		});	
 	}
-			
-	
 
-	
 
 /**
  * Function to calculate top left corner of the map in pixels for zoom 0

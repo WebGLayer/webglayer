@@ -6,7 +6,7 @@ function init() {
 		/*Load the data*/
 		var data = new DataLoader();
 		//data.loadPosData("data/birmingham_5a.json");
-		data.loadPosData("data/xy100k.json");
+		data.loadPosData("data/xy1000k.json");
 
 
 	}

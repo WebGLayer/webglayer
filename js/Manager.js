@@ -60,7 +60,7 @@ function Manager(mapid) {
 	var mapparentdiv = document.getElementById(mapid).parentElement;
 	this.canvas = document.createElement('canvas');
 	this.updateMapSize();
-	
+		
 
 	
 	mapparentdiv.appendChild(this.canvas);
@@ -304,7 +304,5 @@ function Manager(mapid) {
 			return loc;
 		}			
 	}
-	
-	
 	
 }

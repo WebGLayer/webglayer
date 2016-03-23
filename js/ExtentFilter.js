@@ -11,7 +11,7 @@ ExtentFilter = function(manager){
 		this.render = function() {
 			var framebuffer = manager.getFilter().getActiveFB();
 			
-			//this.readPixels();
+		
 			gl.useProgram(this.filterProgram);			
 			
 			gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
@@ -40,7 +40,7 @@ ExtentFilter = function(manager){
 			/**
 			 * bind restexture as uniform, render, and read
 			 */
-			var framebuffer = manager.indexFB;
+			var framebuffer = manager.getFilter().getActiveFB();//manager.indexFB;
 			gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
 			// console.time("reading_pix");
 			var readout = new Uint8Array( framebuffer.width * framebuffer.height* 4);
