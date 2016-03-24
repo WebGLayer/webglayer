@@ -157,23 +157,6 @@ function Manager(mapid) {
 	}
 
 	
-	/**
-	 * traverse all dimensions and renders them
-	 */
-
-	this.render = function() {
-		/* bind array buffers */
-		 
-		for (var i = 0; i < this.dimensions.length; i++) {
-			d = this.dimensions[i];
-			d.setup();
-			this.enableBuffersAndCommonUniforms(d.glProgram);
-			this.enableFilterTexture(d.glProgram);			
-			d.render(this.num_rec);
-			d.tearDown();
-		}
-		
-	}
 	
 	/**
 	 * 
