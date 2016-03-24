@@ -76,8 +76,6 @@ function Manager(mapid) {
       }
 
 	
-	this.dimensions = [];
-	
 	/**
 	 * Common databuffers for all dimensions
 	 */
@@ -119,10 +117,7 @@ function Manager(mapid) {
 	this.matrices[this.rMatrix.name]= this.rMatrix;
 
 
-	
-	this.addDimension = function(d){
-		this.dimensions.push(d);
-	}
+
 
 	/**
 	 * Creates a data buffer object. itemSize is a dimension of the data
