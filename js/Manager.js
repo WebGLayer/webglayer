@@ -1,3 +1,7 @@
+
+/**
+ * Stores and manage common objects for WebGL such as data buffers, common uniforms and matrixes
+ */
 function Manager(mapid) {
 
 	this.trasholds = {allsum: 0, spatsum:0};
@@ -81,11 +85,7 @@ function Manager(mapid) {
 	 */
 	this.databuffers = [];
 	this.matrices = [];
-	
-	this.filters = [];
-	
-	this.mapController = new MapController(this);
-	
+		
 	
 	this.update = function(){
 		/**
