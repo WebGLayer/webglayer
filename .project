@@ -5,7 +5,13 @@
 	<projects>
 	</projects>
 	<buildSpec>
+		<buildCommand>
+			<name>fr.trevidos.GLShaderTools.cgTools.cgBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
 	</buildSpec>
 	<natures>
+		<nature>fr.trevidos.GLShaderTools.cgTools.cgCompiler</nature>
 	</natures>
 </projectDescription>

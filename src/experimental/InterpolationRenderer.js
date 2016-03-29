@@ -1,5 +1,5 @@
 
-function InterpolationRenderer(){
+WGL.experiments.InterpolationRenderer = function(){
 	
 	this.glProgram = GLU.loadShaders("interpolation_vShader",  "interpolation_fShader");
 	

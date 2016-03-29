@@ -1,5 +1,5 @@
 /**/
-function LineChartDimension(manager, width) {
+WGL.experimental.LineChartDimension = function(manager, width) {
 	var manager = manager;
 
 	this.program = GLU.compileShaders("lineChart_vShader", "lineChart_fShader", this);

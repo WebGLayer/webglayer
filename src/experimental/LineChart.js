@@ -1,4 +1,4 @@
-function LineChart(div_id, timesdomain, enablebrush) {
+function WGL.experimental.LineChart(div_id, timesdomain, enablebrush) {
 	
 	var dataset = null;
 	
