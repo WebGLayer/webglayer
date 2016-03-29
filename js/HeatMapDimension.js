@@ -1,5 +1,8 @@
 
-function HeatMapDimension(manager, id){
+WGL.dimension.HeatMapDimension = function(id){
+	
+	var manager = WGL.getManager();
+	var GLU = WGL.internal.GLUtils;
 	this.id = id;
 	//this.manager = manager;
 	//Dimension.call(this, manager);
@@ -7,7 +10,7 @@ function HeatMapDimension(manager, id){
 	this.lockScale = false;
 	
 	this.glProgram = GLU.compileShaders('heatmap_vShader', 'heatmap_fShader', this);
-	this.maxcal = new MaxCalculator(Math.floor(manager.w/5),Math.floor(manager.h/5));
+	this.maxcal = new WGL.internal.MaxCalculator(Math.floor(manager.w/5),Math.floor(manager.h/5));
 	var framebuffer = gl.createFramebuffer();
 	var last_num;
 	
@@ -108,7 +111,7 @@ function HeatMapDimension(manager, id){
 	manager.storeUniformLoc(this.glProgram, spatsum);
 	
 	gl.useProgram(null);
-	var	renderer = new HeatMapRenderer(manager);
+	var	renderer = new  WGL.dimension.HeatMapRenderer(manager);
 	//var	maxcal = new MaxCalculator(Math.floor(manager.w/6),Math.floor(manager.h/6));
 	var the_filter;
 	

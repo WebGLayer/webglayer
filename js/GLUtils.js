@@ -1,7 +1,7 @@
 
-function GLUtils() {
+WGL.internal.GLUtils = {
 
-	this.loadShaders = function(dom) {
+	loadShaders : function(dom) {
 		
 		var domain;
 		
@@ -107,13 +107,13 @@ function GLUtils() {
 		$.ajaxSetup({
 			async : true
 		});
-	}
+	},
 
 
 		
 
 
-	this.compileShaders = function(vs, fs){	
+	compileShaders : function(vs, fs){	
 		var vertexSrc = document.getElementById(vs).text;
 		var vertexShader = gl.createShader(gl.VERTEX_SHADER);
 		gl.shaderSource(vertexShader, vertexSrc);
@@ -142,12 +142,6 @@ function GLUtils() {
 		gl.linkProgram(pointProgram);
 		return pointProgram;
 	}
-	
-
-	
-
-
 
 }
 
-var GLU = new GLUtils();

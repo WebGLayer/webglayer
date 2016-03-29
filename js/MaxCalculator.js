@@ -1,6 +1,6 @@
-function MaxCalculator(w, h){
+WGL.internal.MaxCalculator = function(w, h){
 	
-	this.glProgram = GLU.compileShaders("max_calculator_vShader",  "max_calculator_fShader",this);
+	this.glProgram = WGL.internal.GLUtils.compileShaders("max_calculator_vShader",  "max_calculator_fShader",this);
 	
 	var framebuffer = gl.createFramebuffer();
 	
@@ -11,7 +11,7 @@ function MaxCalculator(w, h){
 
 	this.maxTexture = gl.createTexture();
 	this.maxTexture.name = "max";
-	this.floatReader = new FloatRasterReader(
+	this.floatReader = new WGL.internal.FloatRasterReader(
 			framebuffer.width, framebuffer.height);
 
 	if (!gl.getExtension("OES_texture_float")) {

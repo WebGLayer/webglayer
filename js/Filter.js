@@ -1,5 +1,8 @@
-Filter = function(manager) {
+WGL.internal.Filter = function() {
 
+	var manager = WGL.getManager();
+	var GLU = WGL.internal.GLUtils;
+	
 	manager.setFilter(this);
 	this.rastersize = manager.r_size ;
 	
@@ -22,8 +25,8 @@ Filter = function(manager) {
 	var framebuffer = [];
 	var renderbuffer  = [];
 	var filterTexture = [];
-	framebuffer.width = this.rastersize;
-	framebuffer.height = this.rastersize;
+	framebuffer.width = WGL.getRasterSize();
+	framebuffer.height = WGL.getRasterSize();
 	
 
 

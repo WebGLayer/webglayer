@@ -1,6 +1,7 @@
-function MapColorFilter(manager, dim){	
+WGL.filter.MapColorFilter = function(dim){	
 	
-	var manager = manager;
+	var manager = WGL.getManager();
+	var GLU = WGL.internal.GLUtils;
 	
 	this.isspatial = 1.0;
 	var pointsSize = 0;	

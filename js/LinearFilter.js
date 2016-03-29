@@ -1,5 +1,6 @@
-LinearFilter = function(manager, meta, width, id){	
-	
+WGL.filter.LinearFilter = function(meta, width, id){	
+	var manager = WGL.getManager();
+	var GLU = WGL.internal.GLUtils;
 	this.isspatial = 0.0;//'OneD'; 
 	this.id = id;
 	var filters = new Float32Array([-1.1,0,1.1,0]);			

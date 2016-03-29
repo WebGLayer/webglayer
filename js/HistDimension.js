@@ -1,5 +1,8 @@
 /**/
-function HistDimension(manager, meta) {
+WGL.dimension.HistDimension = function(meta){
+	
+	var manager = WGL.getManager();
+	var GLU = WGL.internal.GLUtils;
 	
 	this.isSpatial = false;
 	
@@ -88,10 +91,10 @@ function HistDimension(manager, meta) {
 
 	gl.bindTexture(gl.TEXTURE_2D, null);
 
-	this.floatReader = new FloatReaderHistogram(this.histTexture,
+	this.floatReader = new WGL.internal.FloatReaderHistogram(this.histTexture,
 			framebuffer.width, framebuffer.height);
 
-	this.render = function() {
+	this.render = function(num_rec) {
 		gl.useProgram(this.program);
 		gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
 
@@ -120,7 +123,7 @@ function HistDimension(manager, meta) {
 	    	manager.enableBufferForName(this.program, valueMetadata.name, "value");
 	    }
 		
-		gl.drawArrays(gl.POINTS, 0, manager.num_rec);
+		gl.drawArrays(gl.POINTS, 0, num_rec);
 
 		gl.bindBuffer(gl.ARRAY_BUFFER, null);
 		gl.bindFramebuffer(gl.FRAMEBUFFER, null);

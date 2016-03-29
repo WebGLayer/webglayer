@@ -1,5 +1,5 @@
 /**/
-function SDLineChartDimension(manager, width) {
+WGL.experiment.SDLineChartDimension = function(manager, width) {
 	var manager = manager;
 
 	this.program = utils.loadShaders("sdlineChart_vShader", "sdlineChart_fShader", this);

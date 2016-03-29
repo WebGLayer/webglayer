@@ -1,8 +1,8 @@
-function FloatRasterReader(w, h) {	
+WGL.internal.FloatRasterReader = function(w, h) {	
 		
     /*Initialise offscreen buffer*/
 		
-	this.glProgram = GLU.compileShaders("float_reader_vShader",  "float_reader_fShader", this);
+	this.glProgram = WGL.internal.GLUtils.compileShaders("float_reader_vShader",  "float_reader_fShader", this);
 	
 	var framebuffer = gl.createFramebuffer();
 	
@@ -47,7 +47,7 @@ function FloatRasterReader(w, h) {
 	var rasterLoc = 	   gl.getUniformLocation(this.glProgram, "raster" );
 	
 	var band = 'band';
-	GLU.manager.storeUniformLoc(this.glProgram, band);
+	WGL.getManager().storeUniformLoc(this.glProgram, band);
 
 	  // provide texture coordinates for the rectangle.
 	  var texCoordBuffer = gl.createBuffer();

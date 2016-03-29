@@ -1,4 +1,4 @@
-StackedBarChart = function(m, div_id, x_label, filterId, params) {
+ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
 	var type;
 	var div_id;
 	
@@ -155,7 +155,7 @@ StackedBarChart = function(m, div_id, x_label, filterId, params) {
 		 */
 		function brushLinear() {
 			var f = brush1.extent();							
-			GLU.manager.wgl.filterDim(m.name, filterId, f);			
+			WGL.filterDim(m.name, filterId, f);			
 			//console.log(brush1.extent()[0][0]+' '+brush1.extent()[0][1]);
 		}
 
@@ -168,7 +168,7 @@ StackedBarChart = function(m, div_id, x_label, filterId, params) {
 				of[i][0] = f[i][0] /width * l; 
 				of[i][1] = f[i][1] /width * l;  	
 			}
-			GLU.manager.wgl.filterDim(m.name,filterId, of);
+			WGL.filterDim(m.name,filterId, of);
 			//console.log(of[0][0]+' '+of[0][1]);
 			
 		}

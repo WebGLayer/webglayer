@@ -1,4 +1,7 @@
-function MapDimension(manager, id){
+WGL.dimension.MapDimension = function(id){
+	
+	var manager = WGL.getManager();
+	var GLU = WGL.internal.GLUtils;
 	
 	this.id = id;
 	this.isSpatial = true;

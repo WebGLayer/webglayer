@@ -1,5 +1,4 @@
-
-function MapLineDimension(manager){
+WGL.experiment.MapLineDimension = function(manager){
 	this.manager = manager;
 	Dimension.call(this, manager);
 	

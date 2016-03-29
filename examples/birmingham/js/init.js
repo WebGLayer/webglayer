@@ -17,7 +17,8 @@ function visualize(data){
 		/**
 		 * initialize WGL with link to data, the relative path to the shader folder, and id of the map div
 		 */
-		WGL = new WGL(data.num,'../../', 'map');		
+		
+		WGL.init(data.num,'../../', 'map');		
 		
 		/**
 		 * map is global variable from Open Layers, we set our onMove 
@@ -28,18 +29,19 @@ function visualize(data){
 		/**
 		 * Adding heatmap, point map and polybrush interactions
 		 */
-		WGL.addHeatMapDimension(data.pts, 'heatmap');
+		var hd = WGL.addHeatMapDimension(data.pts, 'heatmap');
 		//define radius function
-		var radius = 12.;		
+			
 
-		WGL.getDimensions()['heatmap'].radiusFunction = function(z){			
+		hd.radiusFunction = function(z){	
+			var radius = 12.;			
 			var res = radius * Math.pow(2,z)/5000;
 			//console.log(res);
 			return  res ;
 			};
 		WGL.addMapDimension(data.pts, 'themap');
-		WGL.addColorFilter('heatmap','colorbrush');
-		WGL.addPolyBrushFilter('themap','polybrush');
+		
+	
 		
 		
 		/**
@@ -64,14 +66,14 @@ function visualize(data){
 		var sev   = {data: data.sev,  domain: ['1','2','3'] ,  name: 'sev', type:'ordinal' };	
 		WGL.addOrdinalHistDimension(sev);
 		WGL.addLinearFilter(sev,3, 'sevF');
-		charts['sev']   = new StackedBarChart(sev, "chart1", "accident servelity","sevF", params);
+		charts['sev']   = new  WGL.ui.StackedBarChart(sev, "chart1", "accident servelity","sevF", params);
 		
 		
 		/** Histogram for hours*/
 		var hours = {data: data.hours,  min:0, max:24, num_bins: 24, name: 'hours',type:'linear'} ;
 		WGL.addLinearHistDimension(hours);			
 		WGL.addLinearFilter(hours, 24*10, 'hoursF');
-		charts['hours'] = new StackedBarChart(hours, "chart3", "hour of the day","hoursF");
+		charts['hours'] = new  WGL.ui.StackedBarChart(hours, "chart3", "hour of the day","hoursF");
 		
 			
 		//** Histogram for days*//
@@ -79,10 +81,10 @@ function visualize(data){
 		var dim = WGL.addOrdinalHistDimension(days);
 		dim.setValueData(hours);
 		WGL.addLinearFilter(days,7, 'daysF');		
-		charts['days'] = new StackedBarChart(days, "chart2", "day of the week","daysF", params);
+		charts['days'] = new  WGL.ui.StackedBarChart(days, "chart2", "day of the week","daysF", params);
 	
 		
-		var legend = new HeatMapLegend('heatlegend', 'heatmap','colorbrush');
+		var legend = new WGL.ui.HeatMapLegend('heatlegend', 'heatmap','colorbrush');
 		/**
 		 * Addin all charts
 		 */		

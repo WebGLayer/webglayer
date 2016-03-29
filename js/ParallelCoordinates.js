@@ -1,5 +1,6 @@
-
-function ParallelCoordinates(manager, div, data){
+WGL.dimension.ParallelCoordinates = function(div, data){
+	var manager = WGL.getManager();
+	var GLU = WGL.internal.GLUtils;
 	
 	var pcdiv =  document.getElementById(div);
 	var maximum = 500;
@@ -43,7 +44,7 @@ function ParallelCoordinates(manager, div, data){
 		
 	this.glProgram = GLU.compileShaders('pc_vShader', 'pc_fShader', this);
 		
-	var	renderer = new ParallelCoordinatesRenderer(manager);
+	var	renderer = new WGL.dimension.ParallelCoordinatesRenderer();
 	var numfilters ="numfilters";
 	
 	
@@ -191,7 +192,7 @@ function ParallelCoordinates(manager, div, data){
 	function ParallelAxis(d, i){
 		var yScale;
 		var yAxis;
-		var dim = manager.wgl.getDimension(d.name);
+		var dim =WGL.getDimension(d.name);
 		var brush = d3.svg.brush();	 
 		if (d.type == "linear"){
 			yScale = d3.scale.linear().domain([d.min, d.max]).range(
@@ -221,7 +222,7 @@ function ParallelCoordinates(manager, div, data){
 		    			/*filter is deleted*/
 		    			of = [];
 		    	}									
-				GLU.manager.wgl.filterDim(d.name, dim.filters[dim.filtersids[0]].id,of);	
+				WGL.filterDim(d.name, dim.filters[dim.filtersids[0]].id,of);	
 			 });
 		}
 		

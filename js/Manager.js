@@ -2,7 +2,7 @@
 /**
  * Stores and manage common objects for WebGL such as data buffers, common uniforms and matrixes
  */
-function Manager(mapid) {
+WGL.internal.Manager = function(mapid) {
 
 	this.trasholds = {allsum: 0, spatsum:0};
 	var filter = null;

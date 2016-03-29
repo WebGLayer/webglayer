@@ -1,5 +1,7 @@
 
-function ParallelCoordinatesRenderer(manager){
+WGL.dimension.ParallelCoordinatesRenderer = function(){
+	var manager = WGL.getManager();
+	var GLU = WGL.internal.GLUtils;
 	
 	this.glProgram = GLU.compileShaders("pc_render_vShader",  "pc_render_fShader");
 	gl.useProgram(this.glProgram);	

@@ -1,6 +1,9 @@
 
-function HeatMapRenderer(manager){
+WGL.dimension.HeatMapRenderer = function(){
 	
+	var manager = WGL.getManager();
+	var GLU = WGL.internal.GLUtils;
+
 	this.glProgram = GLU.compileShaders("heatmap_render_vShader",  "heatmap_render_fShader");
 	gl.useProgram(this.glProgram);	
 	var texCoordLocation = gl.getAttribLocation(this.glProgram, "v_texCoord");

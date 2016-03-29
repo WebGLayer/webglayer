@@ -1,5 +1,6 @@
-function MapPolyFilter(manager){	
-	var manager = manager;
+WGL.filter.MapPolyFilter = function(){	
+	var manager = WGL.getManager();
+	var GLU = WGL.internal.GLUtils;
 	
 	this.isspatial = 1.0;
 	var pointsSize = 0;	

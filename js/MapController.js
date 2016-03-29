@@ -1,5 +1,6 @@
-var MapController = function(manager) {
-	this.manager = manager;
+WGL.internal.MapController = function() {
+	
+	var manager =  WGL.getManager();
 	this.layers = [];
 	
 	this.matrix;
@@ -38,8 +39,9 @@ var MapController = function(manager) {
 		translateMatrix(this.matrix, -offset.x, -offset.y);			
 
 		this.updateMatrix();
-		manager.wgl.updateSizeOfMapDimensions();
-		manager.wgl.filterByExt();
+		//WGL.filterutils.updateSizeOfMapDimensions();
+		WGL.updateSizeOfMapDimensions();
+		WGL.filterByExt();
 		//func();
 		//manager.wgl.render();
 		//manager.wgl.updateCharts();

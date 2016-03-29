@@ -1,4 +1,8 @@
-function FloatReaderHistogram(raster, width, height) {	
+WGL.internal.FloatReaderHistogram = function(raster, width, height) {	
+	
+	var manager = WGL.getManager();
+	var GLU = WGL.internal.GLUtils;
+	
 	
 	this.raster = raster;
 	this.bin_count=width;

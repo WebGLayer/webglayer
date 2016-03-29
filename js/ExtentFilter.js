@@ -1,7 +1,9 @@
-ExtentFilter = function(manager){	
+WGL.filter.ExtentFilter = function(){	
 		
+		var manager = WGL.getManager();
+		var GLU = WGL.internal.GLUtils;
 		this.rastersize = manager.r_size ;
-		this.manager = manager;	
+		
 				
 		this.filterProgram = GLU.compileShaders("extent_vShader", "extent_fShader",
 				this);
@@ -49,7 +51,7 @@ ExtentFilter = function(manager){
 			// console.timeEnd("reading_pix");
 			gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 
-			//console.log(readout);
+			console.log(readout);
 
 			var selected = [];
 			for (var i = 0; i < readout.length; i=i+1){

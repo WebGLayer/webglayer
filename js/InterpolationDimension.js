@@ -1,5 +1,5 @@
 
-function InterpolationDimension(manager){
+WGL.experiments.InterpolationDimension(manager){
 	this.manager = manager;
 	this.buf_id = 0;
 	Dimension.call(this, manager);
