@@ -84,7 +84,7 @@ function visualize(data){
 		charts['days'] = new  WGL.ui.StackedBarChart(days, "chart2", "day of the week","daysF", params);
 	
 		
-		var legend = new WGL.ui.HeatMapLegend('heatlegend', 'heatmap','colorbrush');
+		var legend = new WGL.ui.HeatMapLegend('heatlegend','colorbrush');
 		/**
 		 * Addin all charts
 		 */		
