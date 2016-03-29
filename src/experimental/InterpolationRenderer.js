@@ -1,5 +1,5 @@
 
-WGL.experiments.InterpolationRenderer = function(){
+WGL.experimental.InterpolationRenderer = function(){
 	
 	this.glProgram = GLU.loadShaders("interpolation_vShader",  "interpolation_fShader");
 	
@@ -85,14 +85,4 @@ WGL.experiments.InterpolationRenderer = function(){
 	
 }
 
-InterpolationDimension.prototype.filter = function(raster) {
-	/*rendertriangel*/
-	
-	/*use result as uniform*/	
-}
-
-
-InterpolationDimension.prototype = Object.create(Dimension.prototype);
-
-InterpolationDimension.prototype.constructor = Dimension;
 	

@@ -1,5 +1,5 @@
 
-WGL.experiments.InterpolationDimension(manager){
+WGL.experimental.InterpolationDimension = function(manager){
 	this.manager = manager;
 	this.buf_id = 0;
 	Dimension.call(this, manager);
@@ -158,14 +158,5 @@ WGL.experiments.InterpolationDimension(manager){
 	}
 }
 
-InterpolationDimension.prototype.filter = function(raster) {
-	/*rendertriangel*/
-	
-	/*use result as uniform*/	
-}
 
-
-InterpolationDimension.prototype = Object.create(Dimension.prototype);
-
-InterpolationDimension.prototype.constructor = Dimension;
 	

@@ -1,4 +1,4 @@
-WGL = function(num, url, divid){
+WGL.experimental.WGLOld = function(num, url, divid){
 	
 	GLU.loadShaders(url);
 	var numrec = num;

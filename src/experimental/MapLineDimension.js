@@ -1,4 +1,4 @@
-WGL.experiment.MapLineDimension = function(manager){
+WGL.experimental.MapLineDimension = function(manager){
 	this.manager = manager;
 	Dimension.call(this, manager);
 	
@@ -112,8 +112,4 @@ WGL.experiment.MapLineDimension = function(manager){
 	
 }
 
-
-MapLineDimension.prototype = Object.create(Dimension.prototype);
-
-MapLineDimension.prototype.constructor = Dimension;
 	

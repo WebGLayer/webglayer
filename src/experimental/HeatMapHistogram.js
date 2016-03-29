@@ -1,4 +1,4 @@
-WGL.experiment.HeatMapHistogram = function(metadata){
+WGL.experimental.HeatMapHistogram = function(metadata){
 	
 	//input: colored heatmap, positions
 	//output: histogram raster coresponding to number of positions in each color.

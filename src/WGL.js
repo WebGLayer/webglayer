@@ -37,7 +37,7 @@ var WGL = (function() {
 		/*Filters package*/
 		filter :{},
 		/*Filters package*/
-		experiment : {},
+		experimental : {},
 		ui : {},
 		
 		/* */

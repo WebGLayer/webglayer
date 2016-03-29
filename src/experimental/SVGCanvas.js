@@ -1,4 +1,4 @@
-WGL.experiment.SVGCanvas(){
+WGL.experimental.SVGCanvas = function(){
 	
 	this.s = 100;
 	var svg = d3.select("body").append("svg")
