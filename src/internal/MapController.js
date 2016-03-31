@@ -16,8 +16,8 @@ WGL.internal.MapController = function() {
 			
 		this.initMatrix();
 			
-		this.updateMatrix();
-		
+		this.updateMatrix();		
+		WGL.updateSizeOfMapDimensions();
 		
 	}
 	this.initMatrix = function(){
@@ -38,9 +38,9 @@ WGL.internal.MapController = function() {
 		// translate to current view (vector from topLeft to 0,0)
 		translateMatrix(this.matrix, -offset.x, -offset.y);			
 
-		this.updateMatrix();
+		manager.setMapMatrix(this.matrix)
 		//WGL.filterutils.updateSizeOfMapDimensions();
-		WGL.updateSizeOfMapDimensions();
+	
 		WGL.filterByExt();
 		//func();
 		//manager.wgl.render();
