@@ -102,6 +102,9 @@ WGL.internal.GLUtils = {
 		$.get(domain+'shaders/shaders_pc_render.glsl', function(data) {
 			$("head").append(data);
 		});
+		$.get(domain+'shaders/shaders_fatline.glsl', function(data) {
+			$("head").append(data);
+		});
 		
 		
 		$.ajaxSetup({

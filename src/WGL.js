@@ -98,6 +98,25 @@ var WGL = (function() {
 			return dim;
 		},
 
+		addLineDimension : function(data, id) {
+		//	try {				
+
+				var triglines = u.array2TALines(data);
+				manager.addDataBuffer(triglines.pts, 2, 'wPoint');
+				manager.addDataBuffer(triglines.norm, 2, 'normals');
+
+			//} catch (err) {
+			//	console.warn(err);
+			//}
+			;
+			var dim = new WGL.dimension.LineDimension(id);
+
+			dim.num = triglines.num;
+			
+			this._dimensions[id] = dim;
+			return dim;
+		},
+		
 		addHeatMapDimension : function(data, id) {
 			try {
 				manager.addDataBuffer(u.array2TA(data), 2, 'wPoint');

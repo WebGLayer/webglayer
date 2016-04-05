@@ -14,7 +14,7 @@ WGL.utils = {
 	},
 	
 	array2TANormOrdinal : function(m) {
-		pts_ar = new Float32Array(m.data.length);
+		var pts_ar = new Float32Array(m.data.length);
 		var i = 0;
 		m.num_bins = m.domain.length;
 		m.min = 0.;
@@ -36,7 +36,7 @@ WGL.utils = {
 	},
 	
 	array2TANormLinear : function(m, max_bins) {
-		pts_ar = new Float32Array(m.data.length);
+		var pts_ar = new Float32Array(m.data.length);
 		var i = 0;
 		for (var i in m.data) {
 			if (isNaN(m.data[i])) {
@@ -53,7 +53,7 @@ WGL.utils = {
 
 	
 	array2TANorm : function(m, max_bins) {
-		pts_ar = new Float32Array(m.data.length);
+		var pts_ar = new Float32Array(m.data.length);
 		var i = 0;
 		for (var i in m.data) {
 			if (isNaN(m.data[i])) {
@@ -70,7 +70,7 @@ WGL.utils = {
 	
 	array2TA2D : function(pts) {
 
-		pts_ar = new Float32Array(pts.length * 2);
+		var pts_ar = new Float32Array(pts.length * 2);
 		var i = 0;
 		var j = 0;
 		for (var i = 0; i < pts.length; i++) {
@@ -83,7 +83,7 @@ WGL.utils = {
 	},
 	
 	array2TA : function(pts) {
-		pts_ar = new Float32Array(pts.length);
+		var pts_ar = new Float32Array(pts.length);
 		var i = 0;
 		for (var i = 0; i < pts.length; i++) {
 			pts_ar[i] = pts[i];
@@ -91,7 +91,138 @@ WGL.utils = {
 		}
 		return pts_ar;
 	},
+
+
+	/* converts lines to array renderable as triangles*/
+	array2TALines : function(lines) {
+
+		this.getLength = function(a,b){
+			return Math.sqrt(Math.pow(a.x-b.x, 2) + Math.pow(a.y-b.y,2))	;	
+		}
+
+		this.getAngleCos = function(a,b){
+			var numerator   = (a.x*b.x + a.y*b.y);
+			var denominator = Math.sqrt(a.x*a.x + a.y*a.y) * Math.sqrt(b.x*b.x + b.y*b.y);
+			
+			return numerator / denominator 	;	
+		}
+		//pts_ar = new Float32Array(pts.length);
+		//var trLines = [];
+
+		var pts_ar = new Float32Array((4-1)*6*2);
+		var normals_ar = new Float32Array((4-1)*6*2);
+
+		var m = 0;
+		var p = 0;	
+		for (var i = 0; i < lines.length; i++) {
+			var theline = lines[i];
+			/*calculate normals*/
+			var normals = [];
+			
+			for (var j = 0; j < theline.length; j++){
+				if (j == 0){
+					/*first point*/
+					var a = theline[j];
+					var b = theline[j+1];				
+					var l = this.getLength(a,b);
+					normals[j] = [];
+					normals[j].y = -(a.x-b.x) / l; 
+					normals[j].x = (a.y-b.y) / l;
+				}
+
+				else if ( j== (theline.length-1)){
+					/*last point*/
+					var a = theline[j-1];
+					var b = theline[j];				
+					var l = this.getLength(a,b);
+					normals[j] = [];
+					normals[j].y = -(a.x-b.x) / l; 
+					normals[j].x = (a.y-b.y) / l;
+					
+				} else {
+					
+					var a = theline[j-1];
+					var b = theline[j];
+					var c = theline[j+1];				
+					var lab = this.getLength(a,b);
+					var lac = this.getLength(b,c);
+					// first normalized vector
+					var v_ab_x = (a.x-b.x) / lab;
+					var v_ab_y = (a.y-b.y) / lab;
+					// second normalized vector					
+					var v_bc_x = (b.x-c.x) / lac;
+					var v_bc_y = (b.y-c.y) / lac;
+					
+					
+					var res_x =  v_ab_x + v_bc_x;
+					var res_y =  v_ab_y + v_bc_y;
+
+					var lres  = this.getLength({x:0,y:0}, {x:res_x, y:res_y});
+					var angle = this.getAngleCos({x: v_ab_x,y: v_ab_y}, {x:res_x, y:res_y});
+					
+					normals[j] = [];
+					normals[j].y = - (res_x / lres) /angle; 
+					normals[j].x =   (res_y / lres) /angle;
+				}
+			}
+			
+			/*order to triangles*/
+		
+			for (var j = 0; j < theline.length-1; j++){
+				var a = theline[j];				
+				var b = theline[j+1];		
+				var n_a = normals[j];
+				var n_b = normals[j+1];	
+				
+				pts_ar[m++] = a.x;
+				pts_ar[m++] = a.y;		
+				normals_ar[p++] = n_a.x;
+				normals_ar[p++] = n_a.y;
+											
+				pts_ar[m++] = a.x;
+				pts_ar[m++] = a.y;
+				normals_ar[p++] = -n_a.x;
+				normals_ar[p++] = -n_a.y;
+
+				pts_ar[m++] = b.x;
+				pts_ar[m++] = b.y;
+				normals_ar[p++] = n_b.x;
+				normals_ar[p++] = n_b.y;
+
+				pts_ar[m++] = a.x;
+				pts_ar[m++] = a.y;
+				normals_ar[p++] = -n_a.x;
+				normals_ar[p++] = -n_a.y;
+
+				pts_ar[m++] = b.x;
+				pts_ar[m++] = b.y;
+				normals_ar[p++] = n_b.x;
+				normals_ar[p++] = n_b.y;
+				
+				pts_ar[m++] = b.x;
+				pts_ar[m++] = b.y;
+				normals_ar[p++] = -n_b.x;
+				normals_ar[p++] = -n_b.y;
+			}
+			
+		}
+
+				
+		for (var p = 0; p < pts_ar.length; p=p+4){
+			/*starting point*/
+			if (p == 0){
+				
+			}
+			//normals_ar[p]   = 0;
+			//normals_ar[p+1] = 1;
+			//normals_ar[p+2] =0;
+			//normals_ar[p+3] = -1;
+		}
+		
+		return {pts:pts_ar , norm: normals_ar, num:normals_ar.length/2};
+	},
 	
+
 		
 	Rasterer : function(max){
 			this.size = Math.ceil(Math.sqrt(max));
