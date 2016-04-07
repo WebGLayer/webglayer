@@ -16,7 +16,7 @@ initMap = function() {
 	 map.events.register('updatesize', map, 
 			  function(){
 		 		//initGLDimensions();	
-		 		WGL.mcontroller.manager.updateMapSize();
+		 		WGL.getManager().updateMapSize();
 		 		WGL.mcontroller.resize();	
 		 		//WGL.render();
 		 		//WGL.mcontroller.resize(div.offsetWidth, div.offsetHeight);
