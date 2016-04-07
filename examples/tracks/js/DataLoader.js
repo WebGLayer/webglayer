@@ -40,30 +40,31 @@ function DataLoader() {
 
 		/*set timezone shift. The data are GMT +1 */
 		var dt = (new Date()).getTimezoneOffset()*60*1000 +60000;
+		
 			data.forEach(function(val, k) {
 							
-					var line = val.geom.split(",")
-					var numpoints = line.length;					
+					var line = val.geom.split(",");
+					
+					
 					lines[k] = [];
 					var  i = 0;
-						for (var m = 0; m < line.length; m++){
-							var p = line[m].split(" ");	
-							var point = [];
-							point.x = parseFloat(p[0]);
-							point.y = parseFloat(p[1]);
+			
+					for (var m = 0; m < line.length; m++){
+						var p = line[m].split(" ");	
+						var point = [];
+						point.x = parseFloat(p[0]);
+						point.y = parseFloat(p[1]);
 
-							lines[k][m] = point;												    						    	
+						lines[k][m] = point;												    						    	
 					}		
+					
 					//pts[j++] = parseFloat(val.x);
 					//pts[j++] = parseFloat(val.y);
-					
-				
-				});
+			});
 		
 			
 			
-			visualize({lines: lines, 
-				num : lines.length});
+			visualize({lines : lines});
 			});
 	}
 	

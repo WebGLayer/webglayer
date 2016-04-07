@@ -12,13 +12,13 @@
  
       varying vec4 col;
       void main() {
-		
+	
 		float p_size = 1.;
 		
 		if (zoom > 12.) {
 			p_size = zoom / 12.+2.;		
 		}  	  	  		
-  	    	   
+  	    	 
   		vec4 p =  mapMatrix * wPoint;
   		//float n_speed = (speed+1.)/2.;
   		

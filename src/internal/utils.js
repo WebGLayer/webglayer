@@ -109,16 +109,19 @@ WGL.utils = {
 		//pts_ar = new Float32Array(pts.length);
 		//var trLines = [];
 
-		var pts_ar = new Float32Array((4-1)*6*2);
-		var normals_ar = new Float32Array((4-1)*6*2);
+		var pts_ar = new Float32Array(lines.length* 4 * 4);
+		var normals_ar = new Float32Array(lines.length*4 *4 );
+		var indicies=[];
 
 		var m = 0;
-		var p = 0;	
+		var p = 0;
+		var edge_num = 0;	
 		for (var i = 0; i < lines.length; i++) {
 			var theline = lines[i];
 			/*calculate normals*/
 			var normals = [];
-			
+
+			edge_num = edge_num + theline.length-1;
 			for (var j = 0; j < theline.length; j++){
 				if (j == 0){
 					/*first point*/
@@ -128,6 +131,8 @@ WGL.utils = {
 					normals[j] = [];
 					normals[j].y = -(a.x-b.x) / l; 
 					normals[j].x = (a.y-b.y) / l;
+
+
 				}
 
 				else if ( j== (theline.length-1)){
@@ -168,58 +173,31 @@ WGL.utils = {
 			
 			/*order to triangles*/
 		
-			for (var j = 0; j < theline.length-1; j++){
-				var a = theline[j];				
-				var b = theline[j+1];		
-				var n_a = normals[j];
-				var n_b = normals[j+1];	
+			for (var j = 0; j < theline.length; j++){
+				var a = theline[j];							
+				var n_a = normals[j];				
+				
+				
 				
 				pts_ar[m++] = a.x;
 				pts_ar[m++] = a.y;		
 				normals_ar[p++] = n_a.x;
 				normals_ar[p++] = n_a.y;
-											
+				
+										
 				pts_ar[m++] = a.x;
 				pts_ar[m++] = a.y;
 				normals_ar[p++] = -n_a.x;
-				normals_ar[p++] = -n_a.y;
-
-				pts_ar[m++] = b.x;
-				pts_ar[m++] = b.y;
-				normals_ar[p++] = n_b.x;
-				normals_ar[p++] = n_b.y;
-
-				pts_ar[m++] = a.x;
-				pts_ar[m++] = a.y;
-				normals_ar[p++] = -n_a.x;
-				normals_ar[p++] = -n_a.y;
-
-				pts_ar[m++] = b.x;
-				pts_ar[m++] = b.y;
-				normals_ar[p++] = n_b.x;
-				normals_ar[p++] = n_b.y;
+				normals_ar[p++] = -n_a.y;		
+				var ii = m /2-2;
+				if (j <theline.length-1){
+					indicies.push(ii, ii+1,ii+2 , ii+1, ii+2, ii+3);
+				}
 				
-				pts_ar[m++] = b.x;
-				pts_ar[m++] = b.y;
-				normals_ar[p++] = -n_b.x;
-				normals_ar[p++] = -n_b.y;
-			}
-			
-		}
-
-				
-		for (var p = 0; p < pts_ar.length; p=p+4){
-			/*starting point*/
-			if (p == 0){
-				
-			}
-			//normals_ar[p]   = 0;
-			//normals_ar[p+1] = 1;
-			//normals_ar[p+2] =0;
-			//normals_ar[p+3] = -1;
-		}
+			}			
+		}	
 		
-		return {pts:pts_ar , norm: normals_ar, num:normals_ar.length/2};
+		return {pts:pts_ar , norm: normals_ar, indicies:new Uint16Array(indicies), num: indicies.length};
 	},
 	
 

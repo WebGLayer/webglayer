@@ -21,7 +21,7 @@
 		}  	  	  		
   	    	p_size = 20.;   
   	 
-  	    vec4 mp = vec4(wPoint[0] +normals[0]/100., wPoint[1] + normals[1]/100.,0,1.); 
+  	    vec4 mp = vec4(wPoint[0] +normals[0]/5., wPoint[1] + normals[1]/5.,0,1.); 
   		vec4 p =  mapMatrix *  mp; //wPoint;
   		//float n_speed = (speed+1.)/2.;
   		

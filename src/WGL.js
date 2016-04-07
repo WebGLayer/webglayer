@@ -104,6 +104,7 @@ var WGL = (function() {
 				var triglines = u.array2TALines(data);
 				manager.addDataBuffer(triglines.pts, 2, 'wPoint');
 				manager.addDataBuffer(triglines.norm, 2, 'normals');
+				manager.addElementBuffer(triglines.indicies, 1, 'indicies');
 
 			//} catch (err) {
 			//	console.warn(err);

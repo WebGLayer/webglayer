@@ -46,7 +46,7 @@
 	}
 
 	this.setOrdinalXScale = function(){
-		xScale = d3.scale.ordinal().domain(m.domain).rangeRoundBands([ 0, width ],0.03);
+		xScale = d3.scale.ordinal().domain(m.domain).rangeBands([ 0, width ],0.03,0.015);
 		var bw =xScale.rangeBand();
 		svgbw= "h"+bw+"V";
 		type = 'ordinal';

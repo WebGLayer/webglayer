@@ -34,6 +34,8 @@ WGL.dimension.LineDimension = function(id){
 		manager.bindMapMatrix(this.glProgram);
 		manager.enableBufferForName(this.glProgram, "wPoint", "wPoint");
 		manager.enableBufferForName(this.glProgram, "normals", "normals");
+		
+		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, manager.databuffers['indicies']);
 		//manager.enableBufferForName(this.glProgram, "index", "index");	
 	//	manager.bindRasterMatrix(this.glProgram);	
 		
@@ -82,7 +84,8 @@ WGL.dimension.LineDimension = function(id){
 		}
 		//gl.uniform1f(this.glProgram.drawselect, 0);
 		
-		gl.drawArrays(gl.TRIANGLES, 0, this.num);	
+		//gl.drawArrays(gl.TRIANGLES, 0, this.num);
+		gl.drawElements(gl.TRIANGLES,this.num,gl.UNSIGNED_SHORT,0);
 		
 		//gl.uniform1f(this.glProgram.drawselect, 1);
 		
