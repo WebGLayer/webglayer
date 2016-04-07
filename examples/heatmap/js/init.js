@@ -6,7 +6,7 @@ function init() {
 		/*Load the data*/
 		var data = new DataLoader();
 		//data.loadPosData("data/birmingham_5a.json");
-		data.loadPosData("data/xy1000k.json");
+		data.loadPosData("data/xy100k.json");
 
 
 	}
@@ -16,8 +16,10 @@ function visualize(data){
 		/**
 		 * initialize WGL with link to data, the relative path to the shader folder, and id of the map div
 		 */
-		WGL = new WGL(data.num,'../../', 'map');		
-		
+		WGL.init(data.num,'../../', 'map');		
+		window.onresize = function(){
+			WGL.resize();
+		}
 		/**
 		 * map is global variable from Open Layers, we set our onMove 
 		 * function to be called any time the map moves 
@@ -27,12 +29,12 @@ function visualize(data){
 		/**
 		 * Adding heatmap, point map and polybrush interactions
 		 */
-		WGL.addHeatMapDimension(data.pts, 'heatmap');
+		heatmap = WGL.addHeatMapDimension(data.pts, 'heatmap');
 
 		var radius = 10.;		
 		var zoom = 0;
 		/*define radius fucntion*/
-		WGL.getDimensions()['heatmap'].radiusFunction = function(z){			
+		heatmap.radiusFunction = function(z){			
 			zoom = z;
 			var res =  radius;//Math.pow(radius / 5,(z-8));
 			//console.log(res);
@@ -51,7 +53,7 @@ function visualize(data){
 		/*define maximums*/
 		
 		var maximum = 100;
-		WGL.getDimensions()['heatmap'].maxFunction = function(m){
+		heatmap.maxFunction = function(m){
 						return m/maximum;
 					};
 				
@@ -64,7 +66,7 @@ function visualize(data){
 
 		/*minimum*/
 		var minimum = 0;
-		WGL.getDimensions()['heatmap'].minFunction = function(m){
+		heatmap.minFunction = function(m){
 						return minimum;
 					};
 				
@@ -78,7 +80,7 @@ function visualize(data){
 		/*gradient*/
 		var gradient = 1;
 		
-		WGL.getDimensions()['heatmap'].gradFunction = function(m){
+		heatmap.gradFunction = function(m){
 						return gradient/8;
 					};
 		$("#slider_gradient").on("input", function(){
