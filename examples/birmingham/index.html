@@ -15,53 +15,95 @@ html,body {
 	font-family: Verdana, Arial, sans-serif;
 }
 
+
+
 #view {
 	position: relative;
 }
 
 #map {
+	
 	display: block;
-	position: absolute;
-	height: auto;
-	bottom: 0;
-	top: 0;
-	left: 0px;
-	right: 0;
-	margin-top: 0px;
-	margin-bottom: 0em;
-	margin-right: 32em;
-	margin-left: 0px;
-	z-index: 100;
+    position:absolute;
+    height:auto;
+    bottom:0;
+    top:0;
+    left:0;
+    right:0;
+    margin-top:0px;
+    margin-bottom:18em;
+    margin-right:32em;
+    margin-left:0px;
+    z-index:100;	
 }
 
+#pc_background{
+	background-color: rgb(14, 14, 14);		
+	z-index:1000;	
+}
 
+.pc_chart_div {
+	overflow-y:hidden;
+	overflow-x:hidden;		
+	background-color: none;	
+	position:absolute;
+	height: 18em;
+	left:0;
+	right:0;
+	border-top-width:0px;
+	border-top-style: solid;
+	border-top-color:white;
+	margin-right:32em;
+	bottom:0;
+	moz-box-shadow: 0px 0px 10px white;
+	webkit-box-shadow: 0px 0px 9px white;
+	box-shadow: -0px 0px 4px white;
+}
+
+#pc_chart {
+	z-index:2000;	
+}
 
 #wgl {
-	bottom: 0;
+	bottom: 0;	
 	padding: 1em;
-	height: 3empt;
+	height:3empt;
+	
 	margin-right: 48em;
-	z-index: 99999;
-	position: absolute;
-	right: 2em;
-	background-color: rgba(255, 255, 255, 0.1);
+	z-index:1000;	
+	position:absolute;
+	right:2em;
+	
+	background-color: rgba(255, 255, 255, 0.0);
 	font: 12px sans-serif;
+	
+}
+.selectionlabel {
+	color:white;
 }
 
-
-
+#legend {
+	position: absolute;
+	top: 5em;
+	left: 0em;
+	height: 250px;
+	width: 150px;
+	padding: 0em;
+	z-index:3000;
+	background-color: rgba(255, 255, 255, 0.8);
+}
 #right {
 	position: fixed;
-	overflow-y: auto;
-	overflow-x: hidden;
+	overflow-y:auto;
+	overflow-x:hidden;		
 	right: 0;
 	top: 0;
 	width: 32em;
 	height: 100%;
 	font-size: 1em;
 	moz-box-shadow: 0px 0px 10px black;
-	webkit-box-shadow: 0px 0px 9px black;
-	box-shadow: -1px 0px 6px black;
+	webkit-box-shadow: 0px 0px 9px  black;
+	box-shadow: -1px 0px 4px  black;
 	z-index: 10000;
 }
 
@@ -70,8 +112,8 @@ html,body {
 	top: 0em;
 	left: 3em;
 	width: 512px;
-	z-index: 2000;
-	background-color: rgba(255, 255, 255, 0.4);
+	z-index:2000;
+	background-color: rgba(255, 255, 255, 0.3);
 }
 
 #about {
@@ -83,7 +125,7 @@ html,body {
 }
 
 #controlToggle li {
-	list-style: none;/225
+	list-style: none;
 }
 
 #test {
@@ -95,105 +137,115 @@ html,body {
 	top: 0px;
 }
 
+
+
+
+
+
 #chart_container {
 	position: absolute;
 	top: 0px;
 	right: 0px;
 }
-
-.selectionlabel {
-	color:white;
-}
-
 .chart rect {
-	fill: steelblue;
+  fill: steelblue;
 }
 
 .chart text {
-	fill: white;
-	font: 10px sans-serif;
-	text-anchor: end;
+  fill: white;
+  font: 10px sans-serif;
+  text-anchor: end;
 }
 
-.brush {
-	fill: grey;
-	stroke: #ff8c00;
-	stroke-opacity: 0.8;
-	stroke-width: 2;
+.brush{
+ fill: grey;
+ stroke: #ff8c00;
+ stroke-opacity: 1.;
+ stroke-width: 2;
 }
 
 .selected.bar {
-	fill: #ff8c00;
+fill: #ff8c00;
 }
 
 .unselected.bar {
- 	fill: #7b6888; 
-	/*fill: #756bb1; */
+fill: #7b6888;http://home.zcu.cz/~jezekjan/ukaccidents2/
 }
 
 .out.bar {
-	fill: #98abc5;
-	/* fill: #deebf7;*/
+fill: #98abc5;
 }
 
 .axis text {
-	font: 10px sans-serif;
+  font: 10px sans-serif;
+}
+.axis_pc text {
+  font: 10px sans-serif;
+  fill: white;
+  stroke: none;
 }
 
 .l text {
-	font: 10px sans-serif;
+  font: 10px sans-serif;
 }
 
-.axis path,.axis line {
-	fill: none;
-	stroke: #000;
-	shape-rendering: crispEdges;
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+
+.axis_pc {
+  fill: none;
+  stroke: white;
+  shape-rendering: crispEdges;
+  font: 10px sans-serif;
 }
 
 .x.axis path {
-	display: none;
+  display: none;
 }
 
 .line {
-	fill: none;
-	stroke: steelblue;
-	stroke-width: 2px;
-	shape-rendering: optimizeSpeed;
+fill: none;
+stroke: steelblue;
+stroke-width: 2px;
+shape-rendering: optimizeSpeed ;
+ 
 }
 
 .point {
+	
 	stroke-width: 0.0005px;
 	z-index: 2000;
-	fill: #000;
-	fill-opacity: .8;
-	stroke: #fff;
+ 	fill: #000;
+  	fill-opacity: .8;
+  	stroke: #fff; 
 }
 
 .l {
-	cursor: pointer;
-	stroke: #000;
+ cursor: pointer;
+ stroke: #000; 
 }
-
 .grid-background {
-	fill: #ddd;
+  fill: #ddd;
 }
 
-.grid line,.grid path {
-	fill: none;
-	path
-	{
-}
+.grid line,
+.grid path {
+  fill: none;path{
 
 }
-.brush .extent {
-	fill-opacity: .125;
-	shape-rendering: crispEdges;
+
 }
 
 .control {
 	position: relative;
 	margin: 1em;
-	z-index: 1000;
+	z-index: 2000;
 	
 }
 .slider {
@@ -202,21 +254,21 @@ html,body {
 	top:0em;	
 	width: 26em;
 }
+.slider_v {
+	position:absolute;
+	right:1em;
+	top:1em;	
+	width: 1em;
+	height: 10em;
+	 -webkit-appearance: slider-vertical;
+}
 
-.sl_label {	
-	
-	left:0em;
-	margin: 0.5em;	
+.brush .extent {
+  
+  fill-opacity: .125;
+  shape-rendering: crispEdges;
 }
 </style>
-
-<!-- Third party libraries -->
-<!-- <script src="http://home.zcu.cz/~jezekjan/js/ol/lib/OpenLayers.js"></script>
-<script src="http://home.zcu.cz/~jezekjan/js/jquery-1.9.1.min.js"></script>
-<script src="http://home.zcu.cz/~jezekjan/js/poly2tri.js"></script>
-
-<script src="http://home.zcu.cz/~jezekjan/js/d3.v3.min.js"></script> -->
-
 <script src="../libs/OpenLayers.js"></script>
 <script src="../libs/jquery-1.9.1.min.js"></script>
 <script src="../libs/poly2tri.js"></script>
@@ -246,6 +298,7 @@ html,body {
 <script src="../../src/dimension/HeatMapRenderer.js"></script>
 <script src="../../src/dimension/HistDimension.js"></script>
 <script src="../../src/dimension/ParallelCoordinates.js"></script>
+<script src="../../src/dimension/ParallelCoordinatesRenderer.js"></script>
 
 <script src="../../src/filter/LinearFilter.js"></script>
 <script src="../../src/filter/MapPolyFilter.js"></script>
@@ -256,46 +309,53 @@ html,body {
 <script src="../../src/ui/HeatMapLegend.js"></script>
 <script src="../../src/ui/d3.svg.multibrush.js"></script>
 
-
-
-
-
 </head>
 <body onload="init()">
+<div id="legend"></div>
 
-
-	<div id="map">
-		<div id="legend"></div>
-
-		<div id="wgl">
-			Visualization made by <a href="http://jezekjan.github.io/webglayer/">
-				WebGLayer </a>
-		</div>
+	<div id="map">	
+		
+	
+	<div id="wgl">Visualization made by <a href="http://jezekjan.github.io/webglayer/"> WebGLayer </a></div>
 	</div>
 	
+	<div id ="pc">
+		<div id ="pc_background" class ="pc_chart_div"></div>
+		<div id ="pc_chart" class = "pc_chart_div">
+					
+					<input class="slider_v" id="slider_pc" type="range" name="points" min="1" max="5000"/>
+				
+		</div>
+	</div>
+
 	<div id="right">
-		<div>
-		<div id="chart1" style="float:left"></div>
-		<div id="chart2" style="float:left"></div>
-		</div>
-		<div id="chart3"></div>
-		<div class="control">
-			<div class="sl_label">Radius:</div>		
-			<input class="slider" id="slider_radius" type="range" name="points" min="2" max="500"/>
-		</div>
-		<div class="control">			
-			<label><input id="points_visible" type="checkbox" name="themap" checked="true"/>points</label>
-			<label><input id="heatmap_visible" type="checkbox" name="heatmap" checked="true"/>heatmap</label>
-		</div>
-		<div id="log">
-		</div>
+				
+			<div id = "chart0">
+				<div class="control">
+					<div class="sl_label">Radius:</div>		
+					<input class="slider" id="slider_radius" type="range" name="points" min="2" max="100"/>
+				</div>
+				<div class="control">			
+					<label><input id="points_visible" type="checkbox" name="themap" checked="true"/>points</label>
+					<label><input id="heatmap_visible" type="checkbox" name="heatmap" checked="true"/>heatmap</label>
+				</div>
+			</div>
+			<div id = "chart1"></div>
+			<div id = "chart2"></div>
+			<div id = "chart3"></div>
+			<div id = "chart4"></div>
+			<div id = "chart5"></div>
+			
 		<div class="control">
 			<div id="heatlegend"></div>					
+		</div>			
 		</div>
-
+	
+			
+				 		
 	</div>
 	<div id="controls">
-
+		
 		<ul id="controlToggle">
 
 			<input type="radio" name="type" value="polygon" id="polygonToggle"
@@ -311,9 +371,14 @@ html,body {
 			<label class="selectionlabel" for="removePolygon">remove polygon</label>
 			
 		</ul>
-
+		
+		
 	</div>
+		
+		
 	</div>
-
+<!-- 	<div id='legend' style="padding:1em"> -->
+<!-- 		<object data="legend2.svg" /> -->
+<!-- 	</div> -->
 </body>
 </html>
