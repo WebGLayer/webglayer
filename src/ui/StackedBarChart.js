@@ -1,4 +1,6 @@
- WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
+ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {	 	
+
+	 
 	var type;
 	var div_id;
 	

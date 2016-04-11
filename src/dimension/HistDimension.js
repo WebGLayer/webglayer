@@ -93,8 +93,19 @@ WGL.dimension.HistDimension = function(meta){
 
 	this.floatReader = new WGL.internal.FloatReaderHistogram(this.histTexture,
 			framebuffer.width, framebuffer.height);
-
+	
+	
+	this.visible = true;
+	this.setVisible = function(v){
+		this.visible = v;
+	}
 	this.render = function(num_rec) {
+		
+		if (this.visible == false){		
+			return;
+		}
+		
+		
 		gl.useProgram(this.program);
 		gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
 

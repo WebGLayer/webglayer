@@ -310,7 +310,7 @@ shape-rendering: optimizeSpeed ;
 <script src="../../src/ui/StackedBarChart.js"></script>
 <script src="../../src/ui/HeatMapLegend.js"></script>
 <script src="../../src/ui/d3.svg.multibrush.js"></script>
-<script src="../../src/ui/addChartDiv.js"></script>
+<script src="../../src/ui/ChartDiv.js"></script>
 
 </head>
 <body onload="init()">
@@ -339,16 +339,18 @@ shape-rendering: optimizeSpeed ;
 				Make a selection in barcharts, map legend, in parallel coordinates or in the map to explore the data! 
 				Watch the <a href = "https://www.youtube.com/watch?v=YcyNYfpGwz0">video</a> to see how to interact. 
 			</div>
-			
+			<hr/>
 			<div id = "chart0">
 				<div class="control">
 					<div class="sl_label">Radius:</div>		
 					<input class="slider" id="slider_radius" type="range" name="points" min="2" max="100"/>
 				</div>
+				<hr/>
 				<div class="control">			
 					<label><input id="points_visible" type="checkbox" name="themap" checked="true"/>points</label>
 					<label><input id="heatmap_visible" type="checkbox" name="heatmap" checked="true"/>heatmap</label>
 				</div>
+				<hr/>
 			</div>
 		
 			

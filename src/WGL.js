@@ -260,9 +260,11 @@ var WGL = (function() {
 		
 		updateCharts : function(){						
 			for ( var i in charts) {
-					var readout = this._dimensions[i].readPixels();
-					if (typeof readout != 'undefined') {
-					charts[i].update(readout);				
+					if (this._dimensions[i].visible){										
+						var readout = this._dimensions[i].readPixels();
+						if (typeof readout != 'undefined') {
+							charts[i].update(readout);		
+					}		
 				}
 			}		
 		},
