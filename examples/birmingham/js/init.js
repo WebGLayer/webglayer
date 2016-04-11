@@ -4,6 +4,12 @@ function init() {
 			 
 		initMap();
 	
+		
+		WGL.addChartDiv("right","ch1", "Day of the week");
+		WGL.addChartDiv("right","ch2", "Hour of the day");
+		WGL.addChartDiv("right","ch3", "Accident severity");
+		WGL.addChartDiv("right","ch4", "Speed Limit");	
+		
 		var data = new DataLoader();
 		//data.loadPosData("data/bermingham_acc.json");
 		data.loadPosData("data/xybirm5a.json");
@@ -48,7 +54,7 @@ function visualize(data){
 		var sev   = {data: data.sev,  domain: data.sevEnum ,  name: 'sev', type:'ordinal', label : "accident servelity"};	
 		WGL.addOrdinalHistDimension(sev);
 		WGL.addLinearFilter(sev,3, 'sevF');
-		charts['sev']   = new  WGL.ui.StackedBarChart(sev, "chart3", "accident severity",'sevF');
+		charts['sev']   = new  WGL.ui.StackedBarChart(sev, "ch3", "accident severity",'sevF');
 
 		//var road_surf = {data: data.road_surf, domain:['1','2','3','4','5'], name: 'road_surface'};
 		
@@ -58,14 +64,14 @@ function visualize(data){
 		//wgl.addLinearHistDimension(dayes);
 		WGL.addOrdinalHistDimension(days);
 		WGL.addLinearFilter(days,7, 'daysF');		
-		charts['days'] = new  WGL.ui.StackedBarChart(days, "chart1", "day of the week", 'daysF');
+		charts['days'] = new  WGL.ui.StackedBarChart(days, "ch1", "day of the week", 'daysF');
 		
 		/*HOURS*/
 		
 		var hours = {data: data.hours,  min:0, max:24, num_bins: 24*5, name: 'hours',type:'linear', label :"hour of the day"} ;
 		WGL.addLinearHistDimension(hours);
 		WGL.addLinearFilter(hours, 24*10, 'hoursF');
-		charts['hours'] = new  WGL.ui.StackedBarChart(hours, "chart2", "hour of the day", 'hoursF');
+		charts['hours'] = new  WGL.ui.StackedBarChart(hours, "ch2", "hour of the day", 'hoursF');
 		
 	
 		/*Date*/
@@ -85,7 +91,7 @@ function visualize(data){
 				name:'speedlimit', type:'ordinal', label : "Speed limit"};
 		WGL.addOrdinalHistDimension(sl);
 		WGL.addLinearFilter(sl, 13, 'slF');
-		charts['speedlimit'] = new  WGL.ui.StackedBarChart(sl, "chart5", "Speed limit", 'slF');
+		charts['speedlimit'] = new  WGL.ui.StackedBarChart(sl, "ch4", "Speed limit", 'slF');
 		
 	
 		var d =[];

@@ -6,6 +6,8 @@
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <title>Birmingham Accidents</title>
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"
+/>
 
 <style type="text/css">
 html,body {
@@ -308,6 +310,7 @@ shape-rendering: optimizeSpeed ;
 <script src="../../src/ui/StackedBarChart.js"></script>
 <script src="../../src/ui/HeatMapLegend.js"></script>
 <script src="../../src/ui/d3.svg.multibrush.js"></script>
+<script src="../../src/ui/addChartDiv.js"></script>
 
 </head>
 <body onload="init()">
@@ -347,11 +350,7 @@ shape-rendering: optimizeSpeed ;
 					<label><input id="heatmap_visible" type="checkbox" name="heatmap" checked="true"/>heatmap</label>
 				</div>
 			</div>
-			<div id = "chart1"></div>
-			<div id = "chart2"></div>
-			<div id = "chart3"></div>
-			<div id = "chart4"></div>
-			<div id = "chart5"></div>
+		
 			
 		<div class="control">
 			<div id="heatlegend"></div>					
