@@ -9,8 +9,8 @@ function init() {
 		
 		var data = new DataLoader();
 		//data.loadPosData("data/bermingham_acc.json");
-	//	data.loadPosData("data/xybirm5a.json");
-		data.loadPosData("data/xyall5a500k.json");
+		data.loadPosData("data/xybirm5a.json");
+	//	data.loadPosData("data/xyall5a500k.json");
 	//	data.loadPosData("data/xyall5a300k.json");
 	//	data.loadPosData("data/xyall5atest.json");
 	//	data.loadPosData("data/xyall5a400k.json");
@@ -75,10 +75,11 @@ function visualize(data){
 		charts['sev']   = new  WGL.ui.StackedBarChart(sev, "ch3", "accident severity",'sevF');
 	
 		/*Date*/
-		//var date =  {data: data.date,   min:data.dmm.min, max:data.dmm.max, num_bins: 50, name: 'date', type:'linear'} ;
-		//wgl.addLinearHistDimension(date);
-		//wgl.addLinearFilter(date,date.num_bins, 'dateF');
-		//charts['date']  = new StackedBarChart(date, "chart3", "Time", 'date');
+		var date =  {data: data.date,   min:data.dmm.min, max:data.dmm.max, num_bins: 100, name: 'date', type:'linear'} ;
+		var chd5 = new WGL.ChartDiv("right","ch5", "Time");
+		chd5.setDim(WGL.addLinearHistDimension(date));
+		WGL.addLinearFilter(date,date.num_bins, 'dateF');
+		charts['date']  = new WGL.ui.StackedBarChart(date, "ch5", "Time", 'dateF');
 
 		var roadtype = {data: data.road_type, domain: data.rtDom,  
 				name:'roadt', type:'ordinal', label : "road type"};
@@ -132,6 +133,45 @@ function visualize(data){
 		$("#slider_pc").on("input", function(){			
 			 //mapdim.render2(this.value);	
 			pc.reRender(this.value);		
+		});
+				
+		
+		$("#reset").on("click", function(){
+			WGL.resetFilters();
+		})
+		
+		$("#pc_header").click(function(){
+			$(".pc_chart_div").slideToggle();
+			var l = WGL.getDimension("pc_chart");
+			
+			var resize =  function(){	
+			 	WGL.getManager().updateMapSize();
+			 	WGL.mcontroller.resize();	
+			 	WGL.mcontroller.zoommove(map.getZoom(), getTopLeftTC());
+			 	WGL.render();
+				}
+			if (l.visible){		
+					l.setVisible(false);
+					$('#map').animate({ 'margin-bottom': '1em'},
+							{done: resize})			
+					$('#pc').animate({ 'height': '1em'},
+									{done: resize})	
+									
+					$('#butPC').removeClass("fa-chevron-down");  
+					$('#butPC').addClass("fa-chevron-up");
+			} else {
+				l.setVisible(true);
+				$('#map').animate({ 'margin-bottom': '18em'},
+						{done: resize})		
+				$('#pc').animate({ 'height': '18em'},
+								{done: resize})	
+				$('#butPC').removeClass("fa-chevron-up");  
+				$('#butPC').addClass("fa-chevron-down");
+			}
+			//WGL.resize();
+			//WGL.getManager().updateMapSize();
+	 		//WGL.mcontroller.resize();	
+	 				
 		});
 		
 		$("#points_visible").click(function(){

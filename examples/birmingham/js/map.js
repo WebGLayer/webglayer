@@ -45,7 +45,7 @@ initMap = function() {
         }
     });
 
-    map.addLayer(layer);
+    map.addLayer(layer2);
     
 	
 	var renderer = OpenLayers.Util.getParameters(window.location.href).renderer;

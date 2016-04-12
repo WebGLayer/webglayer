@@ -60,7 +60,7 @@ WGL.internal.Manager = function(mapid) {
 	 */
 	//canvas = document.getElementById(canvasid);
 	var canvasid = 'webglayer';
-	this.mapdiv = document.getElementById(mapid);
+	this.mapdiv = document.getElementById(mapid);	
 	var mapparentdiv = document.getElementById(mapid).parentElement;
 	this.canvas = document.createElement('canvas');
 	this.updateMapSize();

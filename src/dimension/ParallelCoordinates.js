@@ -24,7 +24,6 @@ WGL.dimension.ParallelCoordinates = function(div, data){
 	}
 	
 	this.setViewport();
-
 	var svg = d3.select("#" + div).append("svg").attr("id", "pc_svg").attr("width",
 			viewport.width + margin.left + margin.right).attr("height",
 			viewport.height + margin.top + margin.bottom).append("g").attr(
@@ -119,8 +118,17 @@ WGL.dimension.ParallelCoordinates = function(div, data){
 		  renderer.render(viewport, maximum);
 	}
 	
+	this.visible = true;
+	this.setVisible = function(v){
+		this.visible = v;
+	}
+	
 	this.render = function() {
-			
+		
+		if (this.visible == false){		
+			return;
+		}
+		
 		gl.useProgram(this.glProgram);
 		
 		manager.enableBuffer(this.glProgram, "indexpc");	

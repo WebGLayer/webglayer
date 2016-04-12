@@ -244,6 +244,15 @@ var WGL = (function() {
 			extf = new WGL.filter.ExtentFilter();
 		},
 
+		resetFilters : function() {
+			for (var i in this._dimensions) {
+				for (var f in this._dimensions[i].filters) {
+					this._dimensions[i].filters[f].isActive = false;											
+				}
+			}
+			this._mainFilter.applyFilterAll(this._dimensions);
+			this.render();
+		},
 		/* Adding UI */
 
 		addCharts : function(ch) {

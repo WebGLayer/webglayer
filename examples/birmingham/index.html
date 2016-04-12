@@ -37,14 +37,23 @@ html,body {
     margin-right:32em;
     margin-left:0px;
     z-index:100;	
+    border-bottom-width:1px;
+	border-bottom-style: solid;
+	border-bottom-color:white;
 }
 
-#pc_background{
-	background-color: rgb(14, 14, 14);		
-	z-index:1000;	
+.pc_background{
+	background-color: rgb(14, 14, 14);			
 }
 
-.pc_chart_div {
+.pc_chart_div {	
+	position:absolute;
+	height: 17em;
+	width:100%;
+	bottom:0;
+}
+
+.pc_chart_parent {
 	overflow-y:hidden;
 	overflow-x:hidden;		
 	background-color: none;	
@@ -52,7 +61,7 @@ html,body {
 	height: 18em;
 	left:0;
 	right:0;
-	border-top-width:0px;
+	border-top-width:1px;
 	border-top-style: solid;
 	border-top-color:white;
 	margin-right:32em;
@@ -61,6 +70,14 @@ html,body {
 	webkit-box-shadow: 0px 0px 9px white;
 	box-shadow: -0px 0px 4px white;
 }
+#pc_header{
+	 margin-left: 0.5em;
+	 margin-top: 0.1em;
+	 margin-bottom: 0.1em;
+	 height: 1em;
+	 color: white;
+}
+
 
 #pc_chart {
 	z-index:2000;	
@@ -322,19 +339,22 @@ shape-rendering: optimizeSpeed ;
 	<div id="wgl">Visualization made by <a href="http://jezekjan.github.io/webglayer/"> WebGLayer </a></div>
 	</div>
 	
-	<div id ="pc">
-		<div id ="pc_background" class ="pc_chart_div"></div>
-		<div id ="pc_chart" class = "pc_chart_div">
-					
+	<div>
+		<div id ="pc" class ="pc_chart_parent pc_background" >
+		
+ 		<div id = "pc_header" class='btn-minimize pc_background'  id=minPC >  
+ 		 <i id=butPC class='fa fa-chevron-down'></i> Parallel Coordinates</div> 
+ 		 
+		<div class ="pc_chart_div pc_background" ></div>
+		<div id ="pc_chart" class = "pc_chart_div">					
 					<input class="slider_v" id="slider_pc" type="range" name="points" min="1" max="5000"/>
-				
 		</div>
 	</div>
 
 	<div id="right">
 				
 			<div id = "about" style = "text-align:justify"><div id = "close" class = "about" >  </div> 
-				This app is showing 28 519 of car accidents that happened in the city of 
+				This visualization is showing 28 519 of car accidents that happened in the city of 
 				Birmingham during last years. 
 				Make a selection in barcharts, map legend, in parallel coordinates or in the map to explore the data! 
 				Watch the <a href = "https://www.youtube.com/watch?v=YcyNYfpGwz0">video</a> to see how to interact. 
@@ -344,11 +364,11 @@ shape-rendering: optimizeSpeed ;
 				<div class="control">
 					<div class="sl_label">Radius:</div>		
 					<input class="slider" id="slider_radius" type="range" name="points" min="2" max="100"/>
-				</div>
-				<hr/>
+				</div>				
 				<div class="control">			
 					<label><input id="points_visible" type="checkbox" name="themap" checked="true"/>points</label>
 					<label><input id="heatmap_visible" type="checkbox" name="heatmap" checked="true"/>heatmap</label>
+					<label id ='reset'> Reset </label>
 				</div>
 				<hr/>
 			</div>
