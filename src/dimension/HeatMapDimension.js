@@ -27,7 +27,7 @@ WGL.dimension.HeatMapDimension = function(id) {
 	}
 
 	/* default radiusFunc */
-	this.radiusFunction = function(z) {
+	this.radiusFunction = function(r, z) {
 		return Math.pow(z, 2) / 10;
 	};
 
@@ -101,7 +101,10 @@ WGL.dimension.HeatMapDimension = function(id) {
 	var spatsum = 'spatsum'
 
 	var radius = 'radius';
+	this.radiusValue = 5;
+	var radiusWordVal = 5;
 	var grad = 'grad';
+
 
 	gl.useProgram(this.glProgram);
 
@@ -121,6 +124,10 @@ WGL.dimension.HeatMapDimension = function(id) {
 		the_filter = f;
 	}
 
+	this.setRadius = function(r){
+		radiusWordVal = r;
+		
+	}
 	this.setup = function() {
 		// this.createFramebuffer();
 		// gl.useProgram(this.glProgram);
@@ -155,11 +162,14 @@ WGL.dimension.HeatMapDimension = function(id) {
 		gl.uniform1f(this.glProgram[numfilters], manager.trasholds.allsum);
 		// console.log(manager.filternum);
 
-		gl.uniform1f(this.glProgram[radius], this.radiusFunction(manager.zoom));
+		this.radiusValue =  this.radiusFunction(radiusWordVal, manager.zoom);		
+		legend.circle.attr("r", this.radiusValue);
+		
+		gl.uniform1f(this.glProgram[radius], this.radiusValue*2 );
 		gl.uniform1f(this.glProgram[grad], this.gradFunction());
 		gl.uniform1f(this.glProgram[spatsum], manager.trasholds.spatsum);
-		// console.log("spatsum "+manager.trasholds.spatsum) ;
-		// console.log("allsum "+manager.trasholds.allsum) ;
+		//console.log("spatsum "+manager.trasholds.spatsum) ;
+		//console.log("allsum "+manager.trasholds.allsum) ;
 		// gl.uniform1f(this.glProgram[drawselect], 0);
 		// gl.drawArrays(gl.POINTS, 0, num);
 
@@ -211,7 +221,7 @@ WGL.dimension.HeatMapDimension = function(id) {
 					renderer.render(renderMin, renderMax, renderMin, renderMax,
 							this.maxsel);
 					legend.drawWithoutFilter();
-					legend.updateMaxAll(this.maxsel);
+					legend.updateMaxAll(this.maxsel );
 
 				}
 

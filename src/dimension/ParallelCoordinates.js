@@ -14,8 +14,9 @@ WGL.dimension.ParallelCoordinates = function(div, data){
 			};
 	
 	this.setViewport = function(){
+		pcdiv =  document.getElementById(div);
 		var elRect = pcdiv.getBoundingClientRect();
-		var w = pcdiv.clientWidth;
+		var w =pcdiv.clientWidth;
 		var h =pcdiv.clientHeight;
 		viewport.width = w - margin.left - margin.right;
 		viewport.height = h - margin.top - margin.bottom;
@@ -104,9 +105,16 @@ WGL.dimension.ParallelCoordinates = function(div, data){
 
 	this.resize = function() {
 		this.setViewport();		
+		console.log(viewport.width);
+		d3.select("#pc_svg").attr("width",
+			viewport.width + margin.left + margin.right).attr("height",
+			viewport.height + margin.top + margin.bottom);	
+			
 		for (var i in axis){
 			axis[i].update();			
 		}
+
+
 		this.createPCFramebuffer();
 	}
 	

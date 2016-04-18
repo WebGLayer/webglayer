@@ -189,6 +189,7 @@
 					}
 
 				});
+		this.brush = brush1;
 
 		var brushNode = svg.append("g").attr("class", "brush").call(brush1)
 				.selectAll("rect").attr("height", height);

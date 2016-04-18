@@ -1,15 +1,23 @@
 var WGL = (function() {
 
+
+
 	/** private part* */
 
 	var manager, rasterer;
 	
-	var oneDDim = [];
-	var charts = [];
-	var legends = [];
-	var index = [];
+	var oneDDim;
+	var charts;
+	var legends;
+	var index;
 	var u;
 	
+	var setVars = function(){
+			oneDDim = [];
+			charts = [];
+			legends = [];
+			index = [];
+	}
 
 	var addFilter = function(dimid, filterid, filter) {
 		var d = WGL._dimensions[dimid];
@@ -47,7 +55,8 @@ var WGL = (function() {
 			
 
 		/* MAIN INTITAIZATION */
-		init : function(num, url, divid) {			
+		init : function(num, url, divid) {
+			setVars();			
 			u = this.utils;
 			manager = new WGL.internal.Manager(divid);			
 			WGL.internal.GLUtils.loadShaders(url);
@@ -245,11 +254,16 @@ var WGL = (function() {
 		},
 
 		resetFilters : function() {
+			for (var i in charts) {
+				var ch = charts[i];
+				ch.brush.clear();
+			}
 			for (var i in this._dimensions) {
 				for (var f in this._dimensions[i].filters) {
 					this._dimensions[i].filters[f].isActive = false;											
 				}
 			}
+			this.setFiltersTrasholds();
 			this._mainFilter.applyFilterAll(this._dimensions);
 			this.render();
 		},

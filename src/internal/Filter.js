@@ -236,15 +236,12 @@ WGL.internal.Filter = function() {
 		
 		//this.filterTexture = filterTexture[activeID];
 		//manager.filterTexture = filterTexture[activeID];
-	
 				
 		gl.useProgram(null);
 		gl.bindRenderbuffer(gl.RENDERBUFFER, null);
     	gl.bindFramebuffer(gl.FRAMEBUFFER, null);	
     	
     	//this.readPixelsAll();
-	
-		
 	}
 	
 	this.getActiveTexture = function(){

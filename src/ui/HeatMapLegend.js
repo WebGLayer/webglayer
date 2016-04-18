@@ -63,10 +63,10 @@ WGL.ui.HeatMapLegend = function(div_id, filterId) {
      .call(yAxis)
      .append("text")
      .attr("transform", "rotate(-90)")
-     .attr("y", 6)
+     .attr("y", -30)
      .attr("dy", ".71em")
      .style("text-anchor", "end")
-     .text("Number of accidents");
+     .text("Magnitude-per-unit within the radius ");
 
   	 svg.append("g")
      .attr("class", "y axis sel")
@@ -75,7 +75,20 @@ WGL.ui.HeatMapLegend = function(div_id, filterId) {
 		   "translate(60,0)")	
        
 	 
-	
+	this.circleLabel = d3.select("#" + div_id).append("label").style({bottom: "20px", position: "absolute", left: "5px" })
+	.text("Radius: ")
+
+	this.circle = svg.append("circle");
+  	 
+    this.circle.attr("cx", 80)
+    .attr("cy", 30)
+    .attr("r", 20)
+	.on("click", function(d,i){
+		 lockscale = this.checked;
+		 heatDimension.lockScale = this.checked;
+		});
+  	 
+  	 
 	d3.select("#" + div_id).append("label").style({bottom: "5px", position: "absolute", left: "5px" })
 	.text("lock scale")
 	.append("input")	
@@ -224,7 +237,7 @@ WGL.ui.HeatMapLegend = function(div_id, filterId) {
 
 	 this.update = function(filter){
 		 
-	 	 if (!lockscale){
+	 	 //if (!lockscale){
 	 	 	var min =  filterVal [0];
 	 	 	var max =  filterVal [1];
 		 	//this.updateMax(m+ m*0.2);
@@ -238,8 +251,6 @@ WGL.ui.HeatMapLegend = function(div_id, filterId) {
 			 .attr("y",  y)     
 	        .attr("height", h );			
 
- 			
-	
 			svg.selectAll('.y.axis.sel').attr("transform",
 		   "translate(60,"+y+")");	
 			
@@ -251,7 +262,7 @@ WGL.ui.HeatMapLegend = function(div_id, filterId) {
 	         if (!limitByMax){
 		 		//doBrush([min,m]);
 			 }
-	 	 }
+	 	 //}
 		
 	 }
 

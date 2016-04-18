@@ -75,7 +75,7 @@ WGL.filterByExt = function() {
 			if (needfilter) {
 				WGL.setFiltersTrasholds()
 				mainFilter.applyFilterAll(dimensions);
-				thisfilter = undefined;
+				mainFilter.thisfilter = undefined;
 			}
 			;
 		}
