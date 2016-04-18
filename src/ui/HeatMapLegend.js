@@ -9,7 +9,7 @@ WGL.ui.HeatMapLegend = function(div_id, filterId) {
 			top : 10,
 			right : 0,
 			bottom : 10,
-			left : 40
+			left : 45
 	};
 	var lockscale = false;
 	var filterVal = [];
@@ -63,10 +63,10 @@ WGL.ui.HeatMapLegend = function(div_id, filterId) {
      .call(yAxis)
      .append("text")
      .attr("transform", "rotate(-90)")
-     .attr("y", -30)
+     .attr("y", -38)
      .attr("dy", ".71em")
      .style("text-anchor", "end")
-     .text("Magnitude-per-unit within the radius ");
+     .text("Magnitude-per-area within the radius ");
 
   	 svg.append("g")
      .attr("class", "y axis sel")
@@ -236,7 +236,7 @@ WGL.ui.HeatMapLegend = function(div_id, filterId) {
 	 }
 
 	 this.update = function(filter){
-		 
+		  filterVal = filter;
 	 	 //if (!lockscale){
 	 	 	var min =  filterVal [0];
 	 	 	var max =  filterVal [1];

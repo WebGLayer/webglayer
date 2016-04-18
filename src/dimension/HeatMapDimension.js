@@ -204,6 +204,7 @@ WGL.dimension.HeatMapDimension = function(id) {
 					this.maxsel = this.maxcal.getMax(this.heatTexture, 0);
 				}
 			}
+		}
 
 			renderMax = this.maxFunction(this.maxall);
 			renderMin = this.minFunction(this.maxall);
@@ -239,10 +240,7 @@ WGL.dimension.HeatMapDimension = function(id) {
 				}
 
 			}
-		} else {
-			renderer.render(renderMin, renderMax, renderMin, renderMax,
-					renderMax);
-		}
+		
 
 	}
 

@@ -1,4 +1,5 @@
 
+
 var	wgs = new OpenLayers.Projection("EPSG:4326"); // Transform from WGS 1984
 var merc = new OpenLayers.Projection("EPSG:900913");
 	
@@ -91,6 +92,7 @@ initMap = function() {
 
 	var m_id;
 	
+
 	function report(event) {
 		if (event.type!="sketchcomplete"){
 		
@@ -256,3 +258,4 @@ function toLevel0(pt, tl, zoom) {
 	pt.y = pt.y / scale + tl.y;
 	return pt;
 }
+
