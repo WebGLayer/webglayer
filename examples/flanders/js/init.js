@@ -46,9 +46,9 @@ function visualize(data){
 		var heatmap = WGL.addHeatMapDimension(data.pts, 'heatmap');
 		//define radius function
 			
-		var mapdim = WGL.addMapDimension(data.pts, 'themap');
+		//var mapdim = WGL.addMapDimension(data.pts, 'themap');
 		WGL.addColorFilter('heatmap','colorbrush');
-		WGL.addPolyBrushFilter('themap','polybrush');
+		WGL.addPolyBrushFilter('heatmap','polybrush');
 		var legend = new  WGL.ui.HeatMapLegend('legend', 'colorbrush');
 		heatmap.addLegend(legend);
 		heatmap.radiusFunction = function(r, z){			
