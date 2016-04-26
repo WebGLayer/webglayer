@@ -175,7 +175,7 @@ initMap = function() {
 							} 
 						}
 						polygons.length = l;//Object.keys(polygons).length;;
-		               	WGL.filterDim('themap','polybrush',polygons);
+		               	WGL.filterDim('heatmap','polybrush',polygons);
 		            }
 		        }   
 		    } 
