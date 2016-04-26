@@ -85,6 +85,11 @@ function visualize(data){
 		WGL.addLinearFilter(date,date.num_bins, 'dateF');
 		charts['date']  = new WGL.ui.StackedBarChart(date, "ch5", "Time", 'dateF');
 
+		charts['date']  = new WGL.ui.StackedBarChart(date, "ch5", "Time", 'dateF');
+		charts['date'].xformat = function(d){
+			var data =  new Date(d*1000*60*60);
+			return (data.getDay()+1)+". "+ (data.getMonth()+1);
+		}
 		var roadtype = {data: data.road_type, domain: data.rtDom,  
 				name:'roadt', type:'ordinal', label : "road type"};
 		WGL.addOrdinalHistDimension(roadtype).setVisible(false);

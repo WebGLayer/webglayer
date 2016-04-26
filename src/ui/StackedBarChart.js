@@ -56,6 +56,9 @@
 	}
 
 
+	this.xformat = function(d){
+			return d;
+			 }
 	this.init = function() {
 		// xScale = d3.scale.ordinal().rangeRoundBands([0, width], .1);
 		// xScale = d3.scale.ordinal().rangeRoundBands([0, width], .1);
@@ -82,9 +85,9 @@
 		
 		
 		//to update label printing
-		var date_format = function(d){return d; }//new Date(d*1000).getYear()};
+		//new Date(d*1000).getYear()};
 		
-		xAxis = d3.svg.axis().scale(xScale).orient("bottom").tickFormat(date_format);;
+		xAxis = d3.svg.axis().scale(xScale).orient("bottom").tickFormat(this.xformat);;
 
 		yAxis = d3.svg.axis().scale(yScale).orient("left");
 
