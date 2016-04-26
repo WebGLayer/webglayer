@@ -3,7 +3,7 @@ WGL.ui.HeatMapLegend = function(div_id, filterId) {
 	var manager = WGL.getManager();
 	var GLU = WGL.internal.GLUtils;
 	
-	var w = 180;
+	var w = 190;
 	var h = 200;
 	var margin = {
 			top : 10,
