@@ -19,7 +19,7 @@ function init() {
 function visualize(data){	
 
 		//wgl = new WGL(data.num,'http://localhost:9999/js/webglayer/','map');	
-		WGL.init(data.num,'http://localhost:9999/js/webglayer/','map');	
+		WGL.init(data.num,'../../','map');	
 		window.onresize = function(){
 			WGL.resize();
 		}
