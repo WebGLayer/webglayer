@@ -118,7 +118,7 @@ initMap = function() {
 			//	console.log(polygons);
 				//WGL.filterByPoly('map',polygons);
 				polygons.length =  Object.keys(polygons).length;
-				WGL.filterDim('themap','polybrush',polygons);
+				WGL.filterDim('heatmap','polybrush',polygons);
 			} catch (e) {
 				console.log(e);
 			}
@@ -126,7 +126,8 @@ initMap = function() {
 		}
 		} else {
 			polygons[event.feature.id] = polygons[m_id];
-			delete polygons[m_id]; 
+			delete polygons[m_id]; rers;
+
 			//console.log("complete "+event.feature.id);
 		}
 
