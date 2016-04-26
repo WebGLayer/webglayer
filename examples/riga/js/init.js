@@ -90,7 +90,13 @@ function visualize(data){
 		WGL.addPolyBrushFilter('themap','polybrush');
 		var legend = new  WGL.ui.HeatMapLegend('legend', 'colorbrush');
 		heatmap.addLegend(legend);
-
+		heatmap.radiusFunction = function(r, z){			
+			var res = r/20000 * Math.pow(2,z);
+			//console.log(res);
+			var gpsize = map.getGeodesicPixelSize();
+			var pixelsize = (gpsize.h+gpsize.w)/2;
+			return  res ;
+			};
 
 		WGL.addExtentFilter();
 		
@@ -139,15 +145,12 @@ function visualize(data){
 		WGL.render();
 		
 		
-		var radius = 12.;	
+		//var radius = 12.;	
 		
-		heatmap.radiusFunction = function(z){			
-			var res = radius * Math.pow(2,z)/5000;
-			//console.log(res);
-			return  res ;
-			};
+		
 		$("#slider_radius").on("input", function(){			
-			radius = this.value;		
+			heatmap.setRadius(this.value);	
+			//$('#radius_label').html(this.value+"m ");
 			//heatmap.reRender();
 			WGL.render();			
 		});
