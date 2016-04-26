@@ -9,11 +9,11 @@
 	var margin;
 	if (typeof(params)=='undefined'){
 		w = 500;
-		h = 200;
+		h = 215;
 		margin = {
 			top : 20,
 			right : 20,
-			bottom : 50,
+			bottom : 65,
 			left : 60
 			};
 	} else {
@@ -202,8 +202,8 @@
 
 		legendRect.enter().append("rect").attr("id", function(d) {
 			return div_id+ d[0];
-		}).attr("x", w - 140).attr("y", function(d) {
-			return (1 + d[0] * 15)
+		}).attr("x", w - 150).attr("y", function(d) {
+			return (h - 63 + d[0] * 15)
 		}).attr("width", 12).attr("height", 12).attr("fill", function(d) {
 			return d[2];
 		}).on(
@@ -220,8 +220,8 @@
 
 		legendRect.enter().append("text").text(function(d) {
 			return d[1];
-		}).attr("x", w - 120).attr("y", function(d) {
-			return (d[0] * 15 + 12)
+		}).attr("x", w - 130).attr("y", function(d) {
+			return (h - 63 + d[0] * 15 + 12)
 		}).attr("width", 12).attr("height", 12).attr("stroke", "none");
 
 		function resizeExtent(selection) {

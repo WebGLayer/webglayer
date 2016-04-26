@@ -3,9 +3,9 @@
 function init() { 			 
 		initMap();	
 		var data = new DataLoader();
-		data.loadPosData("data/all13.json");
+	//	data.loadPosData("data/all13.json");
 	//	data.loadPosData("data/all13a14.json");
-	//	data.loadPosData("data/xybirm5a.json");
+		data.loadPosData("data/xybirm5a.json");
 	//	data.loadPosData("data/xyall5a500k.json");
 	//	data.loadPosData("data/xyall5a300k.json");
 	//	data.loadPosData("data/xyall5atest.json");
