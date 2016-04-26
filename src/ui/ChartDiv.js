@@ -1,7 +1,10 @@
 WGL.ChartDiv = function(parentdiv, divid, caption) {
 
-	var newhtml= "<div class=btn-minimize id=min"+divid+" style='margin: 0.5em'> <i id='but"+divid+"' class='fa fa-chevron-down'> "+caption+"</i></div>" +
-				" <div id = "+divid+" class = 'vis-div'></div>" +
+	var newhtml= "<div class='btn-minimize'  id=min"+divid+" style='margin: 0.5em'> <i id='but"+divid+"' class='fa fa-chevron-down'></i><text> "+caption+"</text></div>" +
+				
+
+				" <div id = "+divid+" class = 'vis-div' style='position: relative'></div>" +
+				
 				" <hr/>";
 	
 	$("#"+parentdiv).append(newhtml);

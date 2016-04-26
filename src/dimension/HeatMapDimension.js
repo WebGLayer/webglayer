@@ -100,9 +100,12 @@ WGL.dimension.HeatMapDimension = function(id) {
 	var numfilters = 'numfilters';
 	var spatsum = 'spatsum'
 
-	var radius = 'radius';
-	this.radiusValue = 5;
+	var radius = 'radius';	
+	
 	var radiusWordVal = 5;
+	var heatMapMaximim = 0;
+	var heatMapMinimum = 0;
+	
 	var grad = 'grad';
 
 
@@ -125,9 +128,10 @@ WGL.dimension.HeatMapDimension = function(id) {
 	}
 
 	this.setRadius = function(r){
-		radiusWordVal = r;
-		
-	}
+		radiusWordVal = r;		
+	}	
+	
+	
 	this.setup = function() {
 		// this.createFramebuffer();
 		// gl.useProgram(this.glProgram);
@@ -163,7 +167,7 @@ WGL.dimension.HeatMapDimension = function(id) {
 		// console.log(manager.filternum);
 
 		this.radiusValue =  this.radiusFunction(radiusWordVal, manager.zoom);		
-		legend.circle.attr("r", this.radiusValue);
+		//legend.circle.attr("r", this.radiusValue);
 		
 		gl.uniform1f(this.glProgram[radius], this.radiusValue*2 );
 		gl.uniform1f(this.glProgram[grad], this.gradFunction());
@@ -204,10 +208,17 @@ WGL.dimension.HeatMapDimension = function(id) {
 					this.maxsel = this.maxcal.getMax(this.heatTexture, 0);
 				}
 			}
-		}
-
 			renderMax = this.maxFunction(this.maxall);
 			renderMin = this.minFunction(this.maxall);
+			this.maxVal = this.maxall;
+			this.minVal= 0;
+		} 
+			
+		renderMax = this.maxFunction(this.maxVal);
+		renderMin = this.minFunction(this.minVal);
+		
+
+			
 
 			// if (typeof(the_filter) !='undefined') {
 			if (manager.trasholds.spatsum > 0) {

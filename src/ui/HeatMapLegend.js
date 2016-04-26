@@ -3,7 +3,7 @@ WGL.ui.HeatMapLegend = function(div_id, filterId) {
 	var manager = WGL.getManager();
 	var GLU = WGL.internal.GLUtils;
 	
-	var w = 150;
+	var w = 180;
 	var h = 200;
 	var margin = {
 			top : 10,
@@ -11,7 +11,7 @@ WGL.ui.HeatMapLegend = function(div_id, filterId) {
 			bottom : 10,
 			left : 45
 	};
-	var lockscale = false;
+	//var lockscale = false;
 	var filterVal = [];
 	var width = w - margin.left - margin.right;
 	var height = h - margin.top - margin.bottom;
@@ -75,29 +75,29 @@ WGL.ui.HeatMapLegend = function(div_id, filterId) {
 		   "translate(60,0)")	
        
 	 
-	this.circleLabel = d3.select("#" + div_id).append("label").style({bottom: "20px", position: "absolute", left: "5px" })
-	.text("Radius: ")
+	//this.circleLabel = d3.select("#" + div_id).append("label").style({bottom: "170px", position: "absolute", left: "120px" })
+	//.text("Kernel:")
 
-	this.circle = svg.append("circle");
+	//this.circle = svg.append("circle");
   	 
-    this.circle.attr("cx", 80)
-    .attr("cy", 30)
-    .attr("r", 20)
-	.on("click", function(d,i){
-		 lockscale = this.checked;
-		 heatDimension.lockScale = this.checked;
-		});
+    //this.circle.attr("cx", 100)
+   // .attr("cy", 10)
+   // .attr("stroke", "black")
+  //  .attr("stroke-width","1")
+   // .attr("fill","white")
+  //  .attr("r", 20);
+	
   	 
   	 
-	d3.select("#" + div_id).append("label").style({bottom: "5px", position: "absolute", left: "5px" })
-	.text("lock scale")
-	.append("input")	
-	.attr("type","checkbox")
-	.attr("id","scale")	
-	.on("click", function(d,i){
-		 lockscale = this.checked;
-		 heatDimension.lockScale = this.checked;
-		}); 
+//	d3.select("#" + div_id).append("label").style({bottom: "5px", position: "absolute", left: "5px" })
+//	.text("lock scale")
+//	.append("input")	
+//	.attr("type","checkbox")
+//	.attr("id","scale")	
+//	.on("click", function(d,i){
+//		// lockscale = this.checked;
+//		 heatDimension.lockScale = this.checked;
+//		}); 
 	  
 	 
 

@@ -1,28 +1,22 @@
 	
 	
-function init() { 
-			 
-		initMap();
-	
-		
-		
-		
+function init() { 			 
+		initMap();	
 		var data = new DataLoader();
-		//data.loadPosData("data/bermingham_acc.json");
+	//	data.loadPosData("data/bermingham_acc.json");
 		data.loadPosData("data/xybirm5a.json");
 	//	data.loadPosData("data/xyall5a500k.json");
 	//	data.loadPosData("data/xyall5a300k.json");
 	//	data.loadPosData("data/xyall5atest.json");
 	//	data.loadPosData("data/xyall5a400k.json");
-	   //data.loadPosData("data/test2.json");
+	//  data.loadPosData("data/test.json");
 	//	data.loadPosData("data/acc600k.json");
 				
 			
 
 	}
 
-function visualize(data){
-		
+function visualize(data){	
 
 		//wgl = new WGL(data.num,'http://localhost:9999/js/webglayer/','map');	
 		WGL.init(data.num,'http://localhost:9999/js/webglayer/','map');	
@@ -32,15 +26,23 @@ function visualize(data){
 		
 		map.events.register("move", map, onMove);							
 
-
+		var controlHM = new WGL.ChartDiv("right","chm", "Heat map controls");
 		var heatmap = WGL.addHeatMapDimension(data.pts, 'heatmap');
+		heatmap.radiusFunction = function(r, z){			
+			var res = r/20000 * Math.pow(2,z);
+			//console.log(res);
+			var gpsize = map.getGeodesicPixelSize();
+			var pixelsize = (gpsize.h+gpsize.w)/2;
+			return  res ;
+			};
+
+		 heatmap.setRadius(30);
 
 		var mapdim = WGL.addMapDimension(data.pts, 'themap');
-		WGL.addColorFilter('heatmap','colorbrush');
+	
 		WGL.addPolyBrushFilter('themap','polybrush');
-		var legend = new  WGL.ui.HeatMapLegend('legend', 'colorbrush');
-		heatmap.addLegend(legend);
-
+		
+		addHeatMapControl(heatmap,'chm');
 
 		WGL.addExtentFilter();
 	
@@ -48,6 +50,7 @@ function visualize(data){
 	
 		var charts = [];				
 
+	
 		//var road_surf = {data: data.road_surf, domain:['1','2','3','4','5'], name: 'road_surface'};
 		
 		/* DAYS*/
@@ -114,21 +117,13 @@ function visualize(data){
 		
 		WGL.initFilters();
 		//wgl.render();
-		WGL.mcontroller.zoommove(map.getZoom(), getTopLeftTC());
+	
 		//wgl.render();	
 		
-		var radius = 12.;		
+		//var radius = 12.;		
 
-		heatmap.radiusFunction = function(z){			
-			var res = radius * Math.pow(2,z)/5000;
-			//console.log(res);
-			return  res ;
-			};
-		$("#slider_radius").on("input", function(){			
-			radius = this.value;		
-			//heatmap.reRender();
-			WGL.render();			
-		});
+		
+	
 		
 		$("#slider_pc").on("input", function(){			
 			 //mapdim.render2(this.value);	
@@ -138,6 +133,9 @@ function visualize(data){
 		
 		$("#reset").on("click", function(){
 			WGL.resetFilters();
+			var lonlat = new OpenLayers.LonLat(-1.9,52.5).transform(new OpenLayers.Projection("EPSG:4326"),new OpenLayers.Projection("EPSG:900913"));
+			map.setCenter(lonlat);
+			map.zoomTo(11);
 		})
 		
 		$("#pc_header").click(function(){
@@ -152,21 +150,23 @@ function visualize(data){
 				}
 			if (l.visible){		
 					l.setVisible(false);
-					$('#map').animate({ 'margin-bottom': '1em'},
+					$('#map').animate({ 'margin-bottom': '1.5em'},
 							{done: resize})			
-					$('#pc').animate({ 'height': '1em'},
+					$('#pc').animate({ 'height': '1.5em'},
 									{done: resize})	
 									
 					$('#butPC').removeClass("fa-chevron-down");  
 					$('#butPC').addClass("fa-chevron-up");
+					setTimeout( function() { map.updateSize();}, 200);
 			} else {
 				l.setVisible(true);
-				$('#map').animate({ 'margin-bottom': '18em'},
+				$('#map').animate({ 'margin-bottom': '18.5em'},
 						{done: resize})		
-				$('#pc').animate({ 'height': '18em'},
+				$('#pc').animate({ 'height': '18.5em'},
 								{done: resize})	
 				$('#butPC').removeClass("fa-chevron-up");  
 				$('#butPC').addClass("fa-chevron-down");
+				setTimeout( function() { map.updateSize();}, 200);
 			}
 			//WGL.resize();
 			//WGL.getManager().updateMapSize();
@@ -185,6 +185,8 @@ function visualize(data){
 			// heatmap.reRender();
 			WGL.render();			
 		});
+
+		WGL.mcontroller.zoommove(map.getZoom(), getTopLeftTC());
 	}
 			
 	
@@ -206,6 +208,73 @@ function getTopLeftTC() {
 	
 function onMove() {			
 		WGL.mcontroller.zoommove(map.getZoom(), getTopLeftTC(), WGL.filterByExt);
+}
+
+function updateLabel(v){
+	console.log(v);
+}
+
+function addHeatMapControl(hm,divid){
+	
+	
+	$("#"+divid).append(
+	"<div id="+divid+"left style='top:0em; left:0em; width:40%'></div>"+
+	"<div id="+divid+"right style='top:0em; right:0em; width:60%; height:10em; position:absolute'></div>");
+		
+	
+	var thediv = $("#"+divid+"right");
+	 thediv.append(
+	"<div style='margin:0.5em'>"+
+	"<text>Radius: </text><text id='radius_label'></text>"+	 
+	"<input style='width: 60%; right:1em; position:absolute' type ='range' max='100' min='1'"+
+        				"step='1' name='points' id='slider_radius' value='30'></input> </div>");
+        				
+    
+	 thediv.append(
+				"<div style='margin:0.5em'>"+
+				"<text>Get maximum from data:</text>"+	 
+				"<input style='width: 60%; right:0em; position:absolute' type ='checkbox'"+
+			        				" default='true' id='max_checked' checked='true' ></input> </div>");
+	 thediv.append(
+			"<div style='margin:0.5em'>"+
+			"<text>Maximum:</text>"+	 
+			"<input style='width: 60%; right:1em; position:absolute' type ='range' max='300' min='1'"+
+		        				"step='1' name='points' id='hm_max' value='10' disabled></input> </div>");
+	
+
+	
+	
+   
+    
+    WGL.addColorFilter(hm.id,'colorbrush');
+	var legend = new  WGL.ui.HeatMapLegend(divid+"left", 'colorbrush');
+	hm.addLegend(legend);
+	
+	
+	$("#slider_radius").on("input", function(){		
+		
+		hm.setRadius(this.value);	
+		$('#radius_label').html(this.value+"m ");
+		//heatmap.reRender();
+		WGL.render();			
+	});
+	
+	$("#hm_max").on("input", function(){	
+		
+		hm.maxVal= this.value;		
+		//heatmap.reRender();
+		WGL.render();	
+		legend.updateMaxAll(this.value);		
+	});
+	
+	$("#max_checked").on("click", function(d,i){
+		
+			 hm.lockScale = !this.checked;
+			 //$("#hm_min").val(100);			 
+			 document.getElementById("hm_max").disabled = this.checked;
+					
+		 
+		}); 
 }
 	
 	
