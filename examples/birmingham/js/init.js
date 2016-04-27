@@ -230,19 +230,19 @@ function addHeatMapControl(hm,divid){
 	 thediv.append(
 	"<div style='margin:0.5em'>"+
 	"<text>Radius: </text><text id='radius_label'></text>"+	 
-	"<input style='width: 60%; right:1em; position:absolute' type ='range' max='100' min='1'"+
+	"<input style='width: 50%; right:1em; position:absolute' type ='range' max='100' min='1'"+
         				"step='1' name='points' id='slider_radius' value='30'></input> </div>");
         				
     
 	 thediv.append(
 				"<div style='margin:0.5em'>"+
 				"<text>Get maximum from data:</text>"+	 
-				"<input style='width: 60%; right:0em; position:absolute' type ='checkbox'"+
+				"<input style='width: 30%; right:0em; position:absolute' type ='checkbox'"+
 			        				" default='true' id='max_checked' checked='true' ></input> </div>");
 	 thediv.append(
 			"<div style='margin:0.5em'>"+
 			"<text>Maximum:</text>"+	 
-			"<input style='width: 60%; right:1em; position:absolute' type ='range' max='300' min='1'"+
+			"<input style='width: 50%; right:1em; position:absolute' type ='range' max='300' min='1'"+
 		        				"step='1' name='points' id='hm_max' value='10' disabled></input> </div>");
 	
 
