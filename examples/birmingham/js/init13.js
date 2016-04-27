@@ -79,13 +79,11 @@ function visualize(data){
 		charts['sev']   = new  WGL.ui.StackedBarChart(sev, "ch3", "accident severity",'sevF');
 	
 		/*Date*/
-		var date =  {data: data.date,   min:data.dmm.min, max:data.dmm.max, num_bins: 100, name: 'date', type:'linear'} ;
-		var chd5 = new WGL.ChartDiv("right","ch5", "Time");
+		var date =  {data: data.date,   min:data.dmm.min, max:data.dmm.max, num_bins: 365, name: 'date', type:'linear'} ;
+		var chd5 = new WGL.ChartDiv("right","ch5", "Date");
 		chd5.setDim(WGL.addLinearHistDimension(date));
 		WGL.addLinearFilter(date,date.num_bins, 'dateF');
-		charts['date']  = new WGL.ui.StackedBarChart(date, "ch5", "Time", 'dateF');
-
-		charts['date']  = new WGL.ui.StackedBarChart(date, "ch5", "Time", 'dateF');
+		charts['date']  = new WGL.ui.StackedBarChart(date, "ch5", "Date ", 'dateF');
 		charts['date'].xformat = function(d){
 			var data =  new Date(d*1000*60*60);
 			return (data.getDay()+1)+". "+ (data.getMonth()+1);

@@ -78,16 +78,7 @@ function visualize(data){
 		WGL.addLinearFilter(sev,3, 'sevF');
 		charts['sev']   = new  WGL.ui.StackedBarChart(sev, "ch3", "accident severity",'sevF');
 	
-		/*Date*/
-		var date =  {data: data.date,   min:data.dmm.min, max:data.dmm.max, num_bins: 100, name: 'date', type:'linear'} ;
-		var chd5 = new WGL.ChartDiv("right","ch5", "Time");
-		chd5.setDim(WGL.addLinearHistDimension(date));
-		WGL.addLinearFilter(date,date.num_bins, 'dateF');
-		charts['date']  = new WGL.ui.StackedBarChart(date, "ch5", "Time", 'dateF');
-		charts['date'].xformat = function(d){
-			var data =  new Date(d*1000*60*60);
-			return data.getMonth()+" - "+ data.getFullYear();
-		}
+	
 		var roadtype = {data: data.road_type, domain: data.rtDom,  
 				name:'roadt', type:'ordinal', label : "road type"};
 		WGL.addOrdinalHistDimension(roadtype).setVisible(false);
@@ -103,6 +94,18 @@ function visualize(data){
 		charts['speedlimit'] = new  WGL.ui.StackedBarChart(sl, "ch4", "Speed limit", 'slF');
 		
 	
+		/*Date*/
+		var date =  {data: data.date,   min:data.dmm.min, max:data.dmm.max, num_bins: 100, name: 'date', type:'linear'} ;
+		var chd5 = new WGL.ChartDiv("right","ch5", "Date");
+		chd5.setDim(WGL.addLinearHistDimension(date));
+		WGL.addLinearFilter(date,date.num_bins, 'dateF');
+		charts['date']  = new WGL.ui.StackedBarChart(date, "ch5", "Date (month - year)", 'dateF');
+		charts['date'].xformat = function(d){
+			var data =  new Date(d*1000*60*60);
+			return data.getMonth()+" - "+ data.getFullYear();
+		}
+		//charts['date'].setTicks(30);
+		
 		var d =[];
 		d[0]= hours;
 		d[1] = days;		

@@ -37,11 +37,12 @@
 	var height = h - margin.top - margin.bottom;
 	var dataset = null;
 	var svgbw = "";	
+	
 
 	this.setLinearXScale = function(){
 		xScale = new d3.scale.linear();
 		xScale = d3.scale.linear().domain([ m.min , m.max ]).range([ 0, width ]);
-		var bw = Math.floor(width / dataset.length -1);
+		var bw = Math.floor(width / dataset.length );
 		svgbw= "h"+bw+"V";
 		type = 'linear';
 		return this;
@@ -59,6 +60,14 @@
 	this.xformat = function(d){
 			return d;
 			 }
+	
+/*	this.setTicks = function(n){
+		xAxis.ticks(n) ;
+	}
+	
+	this.setTicksValues = function(v){
+		xAxis.ticksValues(v);
+	}*/
 	this.init = function() {
 		// xScale = d3.scale.ordinal().rangeRoundBands([0, width], .1);
 		// xScale = d3.scale.ordinal().rangeRoundBands([0, width], .1);
@@ -89,6 +98,7 @@
 		
 		xAxis = d3.svg.axis().scale(xScale).orient("bottom").tickFormat(this.xformat);;
 
+		
 		yAxis = d3.svg.axis().scale(yScale).orient("left");
 
 		// xScale.domain(this.dataset.map(function(d) {
@@ -336,4 +346,5 @@
 		}
 		return path.join("");
 	}
+	
 }
