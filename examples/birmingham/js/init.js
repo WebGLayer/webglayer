@@ -237,7 +237,7 @@ function addHeatMapControl(hm,divid){
 	 thediv.append(
 				"<div style='margin:0.5em'>"+
 				"<text>Get maximum from data:</text>"+	 
-				"<input style='width: 30%; right:0em; position:absolute' type ='checkbox'"+
+				"<input style='width: 20%; right:0em; position:absolute' type ='checkbox'"+
 			        				" default='true' id='max_checked' checked='true' ></input> </div>");
 	 thediv.append(
 			"<div style='margin:0.5em'>"+
