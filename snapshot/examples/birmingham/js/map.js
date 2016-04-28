@@ -39,14 +39,14 @@ initMap = function() {
                     for (var i = 0, n = pix.length; i < n; i += 4) {
                         pix[i] = pix[i + 1] = pix[i + 2] = (3 * pix[i] + 4 * pix[i + 1] + pix[i + 2]) / 20;                    }
                     ctx.putImageData(imgd, 0, 0);
-                    evt.tile.imgDiv.removeAttribute("crossorigin");
+                   // evt.tile.imgDiv.removeAttribute("crossorigin");
                     evt.tile.imgDiv.src = ctx.canvas.toDataURL();
                 }
             }
         }
     });
 
-    map.addLayer(layer);
+    map.addLayer(layer2);
     
 	
 	var renderer = OpenLayers.Util.getParameters(window.location.href).renderer;
