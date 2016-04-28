@@ -256,7 +256,7 @@ function addHeatMapControl(hm,divid){
     WGL.addColorFilter(hm.id,'colorbrush');
 	var legend = new  WGL.ui.HeatMapLegend(divid+"left", 'colorbrush');
 	hm.addLegend(legend);
-	
+	WGL.addLegend(legend);
 	
 	$("#slider_radius").on("input", function(){		
 		

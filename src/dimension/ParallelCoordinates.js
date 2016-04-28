@@ -205,43 +205,58 @@ WGL.dimension.ParallelCoordinates = function(div, data){
 		
 	}
 	
+	this.reset = function(){
+		for (i in axis){
+			var a = axis[i];
+			a.reset();
+		}
+	}
+	
 	function ParallelAxis(d, i){
 		var yScale;
 		var yAxis;
 		var dim =WGL.getDimension(d.name);
 		var brush = d3.svg.brush();	 
+		var brushed;
+		
+		var brushedlin  = function(){	    		    	
+	    	//var f = d3.event.target;			    					
+	    	var of = [];
+	    	of[0]= brush.extent();
+	    	if (of[0][0]==of[0][1]){
+	    			/*filter is deleted*/
+	    			of = [];
+	    	}	
+			WGL.filterDim(d.name, dim.filters[dim.filtersids[0]].id,of);	
+		  }
+		
+		var brushedOrd = function(){	    		    
+	    	var f = brush.extent();	
+	    	
+	    	var of = [];						
+			of[0] = [];
+			of[0][0] =  l- ( f[0] /viewport.height * l); 
+			of[0][1] =  l- ( f[1] /viewport.height * l);  
+			if (of[0][0]==of[0][1]){
+	    			/*filter is deleted*/
+	    			of = [];
+	    	}									
+			WGL.filterDim(d.name, dim.filters[dim.filtersids[0]].id,of);	
+		 }
+			
+			
 		if (d.type == "linear"){
 			yScale = d3.scale.linear().domain([d.min, d.max]).range(
 				[ viewport.height, 0 ]);			
 			
-			brush.y(yScale).on("brush", function(){	    		    	
-		    	var f = d3.event.target;			    					
-		    	var of = [];
-		    	of[0]= f.extent();
-		    	if (of[0][0]==of[0][1]){
-		    			/*filter is deleted*/
-		    			of = [];
-		    	}	
-				WGL.filterDim(d.name, dim.filters[dim.filtersids[0]].id,of);	
-			  });
+			brushed =  brushedlin;
 		} else if (d.type=="ordinal"){
 			yScale = d3.scale.ordinal().domain(d.domain).rangeRoundBands([ viewport.height, 0 ],0.03);
 			var l = yScale.domain().length;	
-			brush.y(yScale).on("brush", function(){	    		    
-		    	var f = d3.event.target.extent();	
-		    	
-		    	var of = [];						
-				of[0] = [];
-				of[0][0] =  l- ( f[0] /viewport.height * l); 
-				of[0][1] =  l- ( f[1] /viewport.height * l);  
-				if (of[0][0]==of[0][1]){
-		    			/*filter is deleted*/
-		    			of = [];
-		    	}									
-				WGL.filterDim(d.name, dim.filters[dim.filtersids[0]].id,of);	
-			 });
+			brushed =  brushedOrd;
 		}
 		
+		brush.y(yScale).on("brush", brushed);
 		yAxis = d3.svg.axis().scale(yScale).orient("left");
 
 		svg.append("g").attr("class", "axis_pc axis_"+i).call(yAxis).attr("transform","translate("+offset*i+")")	
@@ -259,6 +274,12 @@ WGL.dimension.ParallelCoordinates = function(div, data){
 			 svg.select( '.axis_'+i).attr("transform","translate("+offset*i+")")	
 			 svg.select('.brush_'+i).selectAll("rect").attr("transform","translate("+(offset*i-20)+")")	
 			
+		 }
+		 
+		 this.reset = function(){
+			 brush.clear();
+			 //brush.call("brush")
+			 brushed.call();
 		 }
 	}
 

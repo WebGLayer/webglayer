@@ -202,13 +202,17 @@ WGL.ui.HeatMapLegend = function(div_id, filterId) {
 	}
 	
 	
+	this.reset = function(){
+		brush.clear();
+		brushed.call();
 		
+	}	
+	
 	var brush = d3.svg.brush()		
 	    .y(yScale)
 	    .on("brush", brushed);
 	
-	
-	 
+		 
 	  svg.append("g").attr("class", "brush").call(brush)
 		.selectAll("rect").attr("width", 60);
 
