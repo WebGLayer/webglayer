@@ -254,13 +254,30 @@ var WGL = (function() {
 		},
 
 		resetFilters : function() {
+			
+			
 			for (var i in charts) {
 				var ch = charts[i];
 				ch.brush.clear();
 			}
+			
+			for (var i in legends) {
+				var l = legends[i];
+				l.reset();
+				//l.brush.clear();
+				//l.brush.call(l.brushed);
+				//try { 
+					//d3.selectAll(".brush").call(l.brush)
+					//}
+				//catch (err){console.log(err)};
+			}
 			for (var i in this._dimensions) {
+				if (this._dimensions[i].reset!= undefined){
+						this._dimensions[i].reset();
+					}	
 				for (var f in this._dimensions[i].filters) {
-					this._dimensions[i].filters[f].isActive = false;											
+					this._dimensions[i].filters[f].isActive = false;
+															
 				}
 			}
 			this.setFiltersTrasholds();
