@@ -49,6 +49,8 @@ WGL.dimension.HeatMapRenderer = function(){
 	  
 	this.setup = function() {
 		 gl.useProgram(this.glProgram);		
+		 gl.uniformMatrix4fv(this.glProgram.colors, false, this.colors);
+	  	 gl.uniformMatrix4fv(this.glProgram.unselcolors, false, this.unselcolors);
 		 gl.bindBuffer(gl.ARRAY_BUFFER, texCoordBuffer);
 		 gl.enableVertexAttribArray(texCoordLocation);
 		 gl.vertexAttribPointer(texCoordLocation, 2, gl.FLOAT, false, 0, 0);

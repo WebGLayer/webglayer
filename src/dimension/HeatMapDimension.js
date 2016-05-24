@@ -118,7 +118,7 @@ WGL.dimension.HeatMapDimension = function(id) {
 	manager.storeUniformLoc(this.glProgram, spatsum);
 
 	gl.useProgram(null);
-	var renderer = new WGL.dimension.HeatMapRenderer(manager);
+	this.renderer = new WGL.dimension.HeatMapRenderer(manager);
 	// var maxcal = new
 	// MaxCalculator(Math.floor(manager.w/6),Math.floor(manager.h/6));
 	var the_filter;
@@ -184,7 +184,7 @@ WGL.dimension.HeatMapDimension = function(id) {
 
 		gl.bindTexture(gl.TEXTURE_2D, null);
 
-		renderer.heatTexture = this.heatTexture;
+		this.renderer.heatTexture = this.heatTexture;
 		manager.heatTexture = this.heatTexture;
 	}
 
@@ -225,12 +225,12 @@ WGL.dimension.HeatMapDimension = function(id) {
 				// var maxsel = this.maxcal.getMax(this.heatTexture, 0);
 				if (typeof (the_filter) != 'undefined') {
 					/* there is a color filter applied */
-					renderer.render(renderMin, renderMax, the_filter[0],
+					this.renderer.render(renderMin, renderMax, the_filter[0],
 							the_filter[1], this.maxsel);
 					legend.updateMaxAll(this.maxall);
 					legend.drawWithFilter(this.maxsel);
 				} else {
-					renderer.render(renderMin, renderMax, renderMin, renderMax,
+					this.renderer.render(renderMin, renderMax, renderMin, renderMax,
 							this.maxsel);
 					legend.drawWithoutFilter();
 					legend.updateMaxAll(this.maxsel );
@@ -242,8 +242,8 @@ WGL.dimension.HeatMapDimension = function(id) {
 				}
 				// legend.updateMaxSel(this.maxall);
 			} else {
-				// renderer.render( renderMin, renderMax, 0, 0);
-				renderer.render(renderMin, renderMax, renderMin, renderMax,
+				// this.renderer.render( renderMin, renderMax, 0, 0);
+				this.renderer.render(renderMin, renderMax, renderMin, renderMax,
 						renderMax);
 				if (legend != undefined) {
 					legend.drawWithoutFilter();
