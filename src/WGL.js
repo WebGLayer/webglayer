@@ -55,10 +55,10 @@ var WGL = (function() {
 			
 
 		/* MAIN INTITAIZATION */
-		init : function(num, url, divid) {
+		init : function(num, url, divid, mapcontainerid) {
 			setVars();			
 			u = this.utils;
-			manager = new WGL.internal.Manager(divid);			
+			manager = new WGL.internal.Manager(divid,  mapcontainerid);			
 			WGL.internal.GLUtils.loadShaders(url);
 			
 			rasterer = new u.Rasterer(num);		

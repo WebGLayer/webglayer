@@ -5,9 +5,9 @@ function init() {
 		
 		/*Load the data*/
 		var data = new DataLoader();
+		data.loadPosData("data/big/test10k.json");
 		//data.loadPosData("data/all.json");
-		//data.loadPosData("data/all.json");
-		data.loadPosData("data/all_lines.json");
+		//data.loadPosData("data/all_lines.json");
 		//data.loadPosData("data/xybirm5a.json");
 		//data.loadPosData("data/xyall3a1000k.json");	
 			
@@ -51,6 +51,11 @@ function visualize(data){
 		WGL.addPolyBrushFilter('heatmap','polybrush');
 		var legend = new  WGL.ui.HeatMapLegend('legend', 'colorbrush');
 		heatmap.addLegend(legend);
+		heatmap.renderer.colors.set([ 1, 0, 1, 1, 
+		           		              1, 0, 1, 1, 
+		        		              0, 1, 1, 1,
+		        		              0, 0, 0, 1 ]);
+		
 		heatmap.radiusFunction = function(r, z){			
 			var res = r/20000 * Math.pow(2,z);
 			//console.log(res);
@@ -59,6 +64,8 @@ function visualize(data){
 			return  res ;
 			};
 			heatmap.setRadius(40);
+			
+		
 		WGL.addExtentFilter();
 		
 	
@@ -102,7 +109,7 @@ function visualize(data){
 		WGL.addOrdinalHistDimension( links );
 		WGL.addLinearFilter(links , 14 , 'linkf');
 		charts['links']   = new  WGL.ui.StackedBarChart(links, "ch4", "Link id","linkf");
-		 hours
+		
 		var d =[];
 		//d[0]= routetype;
 		d[0] = links;		

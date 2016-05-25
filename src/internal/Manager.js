@@ -2,7 +2,7 @@
 /**
  * Stores and manage common objects for WebGL such as data buffers, common uniforms and matrixes
  */
-WGL.internal.Manager = function(mapid) {
+WGL.internal.Manager = function(mapid, mapcontainer) {
 
 	this.trasholds = {allsum: 0, spatsum:0};
 	var filter = null;
@@ -33,17 +33,19 @@ WGL.internal.Manager = function(mapid) {
 		
 		var z = this.mapdiv.style.zIndex;
 	
-		z == "" ? z=1000 :z = parseInt(z)+1;
+		z == "" ? z=300 :z = parseInt(z)+1;
 		 	
 		this.canvas.setAttribute('id','webglayer');
 		this.canvas.setAttribute("width",  this.body_width);
 		this.canvas.setAttribute("height",this.body_height);
-		this.canvas.setAttribute("style", "position:absolute ; " +
+		this.canvas.setAttribute("style", "position:fixed ; " +
 						"top:"+0+"px ; " +
 						"left:"+0+"px; " +
-						"pointer-events: none;" +
-						"opacity: 1;" +
-						"z-index: " + z)
+						"pointer-events: none;" +						
+						"z-index: " + z + "; " +
+						"width: "+ this.body_width+"px; " +
+						"height: " + this.body_height+"px"
+						)
 		
 		/*this.canvas.setAttribute('id','webglayer');
 		this.canvas.setAttribute("width", this.w);
@@ -65,9 +67,14 @@ WGL.internal.Manager = function(mapid) {
 	this.canvas = document.createElement('canvas');
 	this.updateMapSize();
 		
-
+	if (mapcontainer!= null){
+		document.getElementById(mapcontainer).appendChild(this.canvas);
+	} else {
+		mapparentdiv.appendChild(this.canvas);
+	}
 	
-	mapparentdiv.appendChild(this.canvas);
+	//this.mapdiv.appendChild(this.canvas);
+	//mapparentdiv.appendChild(this.canvas);
 	
 
 	gl = this.canvas.getContext('webgl', 

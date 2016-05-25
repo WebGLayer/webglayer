@@ -71,8 +71,7 @@
 		//val = (fdata[0]-min_filter)/(max_filter-min_filter);	
 		
 		// fdata[1] 
-		if ( fdata[2] > 0. && (fdata[1] < (min_filter) && fdata[1]>= (min_filter - t) ) || (fdata[1] > (max_filter) && fdata[1] <= (max_filter+tx  ))){
-		
+		if ( fdata[2] > 0. && (fdata[1] < (min_filter) && fdata[1]>= (min_filter - t) ) || (fdata[1] > (max_filter) && fdata[1] <= (max_filter+tx  ))){		
 			// orange color to create the selection border
 			col = vec4(1.,0.549019608,0.,1.);
 		}

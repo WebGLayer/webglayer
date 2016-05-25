@@ -28,7 +28,8 @@ WGL.internal.MapController = function() {
 	
 		this.matrix.name="mapMatrix";
 	}
-	this.zoommove = function(zoom, offset, func){		
+	this.zoommove = function(zoom, offset, func){	
+		
 		manager.zoom = zoom;
 		this.initMatrix();
 		// Scale to current zoom (worldCoords * 2^zoom)
