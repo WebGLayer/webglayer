@@ -192,6 +192,12 @@ function visualize(data){
 			// heatmap.reRender();
 			WGL.render();			
 		});
+		
+		
+	
+		$("#schools_visible").click(function(){
+			map.getLayersByName('Points')[0].setVisibility(this.checked);		
+		});
 
 		WGL.mcontroller.zoommove(map.getZoom(), getTopLeftTC());
 	}

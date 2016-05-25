@@ -45,39 +45,9 @@ initMap = function() {
             }
         }
     });
-    
-    var layerwms =   new OpenLayers.Layer.WMS(
-            "OpenLayers WMS",
-            "http://demo.cubewerx.com/demo/cubeserv/cubeserv.cgi?",
-            {layers: 'Foundation.GTOPO30', version: '1.3.0'},
-            {singleTile: true}
-        );
-    
-    var layerkml = new OpenLayers.Layer.Vector("KML", {
-        strategies: [new OpenLayers.Strategy.Fixed()],
-        protocol: new OpenLayers.Protocol.HTTP({
-            url: "data/schools.kml",
-            format: new OpenLayers.Format.KML({
-                extractStyles: true, 
-                extractAttributes: true,
-                maxDepth: 2
-            })
-        })
-    })
-    
-    
-    var featurecollection = {
-       	  "type": "FeatureCollection",
-       	  "features": [
-        	  { "type": "Feature", "properties": { }, "geometry": { "type": "Point", "coordinates": [ -204776.870719231286785, 6895993.165344892069697 ] } },
-        	  { "type": "Feature", "properties": { }, "geometry": { "type": "Point", "coordinates": [ -210917.473246261506574, 6881991.552669707685709 ] } },
-        	  { "type": "Feature", "properties": { }, "geometry": { "type": "Point", "coordinates": [ 251242.174180942529347, 6244475.625942491926253 ] } },
-        	  { "type": "Feature", "properties": { }, "geometry": { "type": "Point", "coordinates": [ -202141.057371347065782, 6886494.055498365312815 ] } },
-        	  { "type": "Feature", "properties": { }, "geometry": { "type": "Point", "coordinates": [ -207232.082917529012775, 6879547.010799741372466 ] } }
-        	  ]
-
-         
-     };
+      
+   
+        
     
     var vector_layer = new OpenLayers.Layer.Vector("Points",{
     					styleMap: new OpenLayers.Style({
@@ -86,6 +56,7 @@ initMap = function() {
                             'externalGraphic': "http://otn-production.intrasoft-intl.com/maps/symbols/!school.svg"                           
     					})
     		}); 
+    vector_layer.setVisibility(false);		
     map.addLayer(vector_layer);
    
     
@@ -105,7 +76,7 @@ initMap = function() {
     
    
      
-
+	
     map.addLayer(layer2);
   //  map.addLayer(layerkml);
     map.addControl( new OpenLayers.Control.LayerSwitcher() );
