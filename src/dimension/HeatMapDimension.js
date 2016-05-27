@@ -3,13 +3,15 @@ WGL.dimension.HeatMapDimension = function(id) {
 	var manager = WGL.getManager();
 	var GLU = WGL.internal.GLUtils;
 	this.id = id;
+	
+	/*indicate if the point has a value or just 1 should be used for every point*/
+	this.hasValues = false;
 	// this.manager = manager;
 	// Dimension.call(this, manager);
 	this.isSpatial = true;
 	this.lockScale = false;
 
-	this.glProgram = GLU.compileShaders('heatmap_vShader', 'heatmap_fShader',
-			this);
+	
 	this.maxcal = new WGL.internal.MaxCalculator(Math.floor(manager.w / 5),
 			Math.floor(manager.h / 5));
 	var framebuffer = gl.createFramebuffer();
@@ -90,12 +92,22 @@ WGL.dimension.HeatMapDimension = function(id) {
 		gl.bindTexture(gl.TEXTURE_2D, null);
 	}
 
-	this.createMapFramebuffer();
+	this.initProgram = function() {
+		this.createMapFramebuffer();
+		
+		/**
+		 * program uniforms
+		 */
+		gl.useProgram(this.glProgram);
+		manager.storeUniformLoc(this.glProgram, radius);
+		manager.storeUniformLoc(this.glProgram, grad);
+		manager.storeUniformLoc(this.glProgram, drawselect);
+		manager.storeUniformLoc(this.glProgram, numfilters);
+		manager.storeUniformLoc(this.glProgram, spatsum);
 
-	/**
-	 * program uniforms
-	 */
-
+		gl.useProgram(null);
+	
+	}
 	var drawselect = 'drawselect';
 	var numfilters = 'numfilters';
 	var spatsum = 'spatsum'
@@ -107,22 +119,17 @@ WGL.dimension.HeatMapDimension = function(id) {
 	var heatMapMinimum = 0;
 	
 	var grad = 'grad';
+	
+	this.glProgram = GLU.compileShaders('heatmap_vShader', 'heatmap_fShader',
+				this);
 
-
-	gl.useProgram(this.glProgram);
-
-	manager.storeUniformLoc(this.glProgram, radius);
-	manager.storeUniformLoc(this.glProgram, grad);
-	manager.storeUniformLoc(this.glProgram, drawselect);
-	manager.storeUniformLoc(this.glProgram, numfilters);
-	manager.storeUniformLoc(this.glProgram, spatsum);
-
-	gl.useProgram(null);
+	this.initProgram();
 	this.renderer = new WGL.dimension.HeatMapRenderer(manager);
 	// var maxcal = new
 	// MaxCalculator(Math.floor(manager.w/6),Math.floor(manager.h/6));
 	var the_filter;
 
+	
 	this.setFilter = function(f) {
 		the_filter = f;
 	}
@@ -131,7 +138,14 @@ WGL.dimension.HeatMapDimension = function(id) {
 		radiusWordVal = r;		
 	}	
 	
-	
+	this.setValues = function(val){
+		this.glProgram = GLU.compileShaders('heatmap_val_vShader', 'heatmap_val_fShader',
+				this);
+		this.glProgram.name='hetampwithvalues';
+		manager.addDataBuffer(WGL.utils.array2TA(val), 1, 'hmValues');
+		this.initProgram();
+		this.hasValues = true;
+	}
 	this.setup = function() {
 		// this.createFramebuffer();
 		// gl.useProgram(this.glProgram);
@@ -141,6 +155,10 @@ WGL.dimension.HeatMapDimension = function(id) {
 		manager.bindMapMatrix(this.glProgram);
 		manager.enableBufferForName(this.glProgram, "wPoint", "wPoint");
 		manager.enableBufferForName(this.glProgram, "index", "index");
+		
+		if (this.hasValues){
+			manager.enableBufferForName(this.glProgram, "hmValues", "values" );
+		}	
 		manager.bindRasterMatrix(this.glProgram);
 
 		gl.bindTexture(gl.TEXTURE_2D, this.heatTexture);

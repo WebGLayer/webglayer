@@ -79,8 +79,7 @@ initMap = function() {
 	
     map.addLayer(layer2);
   //  map.addLayer(layerkml);
-    map.addControl( new OpenLayers.Control.LayerSwitcher() );
-	
+   	
 	var renderer = OpenLayers.Util.getParameters(window.location.href).renderer;
 	renderer = (renderer) ? [ renderer ]
 			: OpenLayers.Layer.Vector.prototype.renderers;

@@ -11,6 +11,7 @@ var WGL = (function() {
 	var legends;
 	var index;
 	var u;
+	this.utils = u;
 	
 	var setVars = function(){
 			oneDDim = [];
