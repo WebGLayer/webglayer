@@ -1,3 +1,4 @@
+ /** @constructor */
 WGL.dimension.HeatMapDimension = function(id) {
 
 	var manager = WGL.getManager();
@@ -49,6 +50,7 @@ WGL.dimension.HeatMapDimension = function(id) {
 		return 2;
 	}
 
+	
 	this.addLegend = function(thelegend) {
 		legend = thelegend;
 		legend.setDimension(this);
@@ -92,6 +94,9 @@ WGL.dimension.HeatMapDimension = function(id) {
 		gl.bindTexture(gl.TEXTURE_2D, null);
 	}
 
+	/**
+	 * init Programs
+	 */
 	this.initProgram = function() {
 		this.createMapFramebuffer();
 		

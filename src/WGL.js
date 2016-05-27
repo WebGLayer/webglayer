@@ -1,3 +1,6 @@
+/**
+ * Facade object and API entry point.  
+ */
 var WGL = (function() {
 
 
@@ -37,16 +40,19 @@ var WGL = (function() {
 	/** public part* */
 	return {
 		
-		/* Internal helper classes */
+		/** Internal helper classes */
 		internal : {},
 			
-		/* Dimensions package */
+		/** Dimensions package */
 		dimension : {},
 		
-		/*Filters package*/
+		/** Filters package*/		
 		filter :{},
-		/*Filters package*/
+		
+		/** Filters package*/
 		experimental : {},
+		
+		/**User interface package*/
 		ui : {},
 		
 		/* */
