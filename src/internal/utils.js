@@ -104,22 +104,28 @@ WGL.utils = {
 			var numerator   = (a.x*b.x + a.y*b.y);
 			var denominator = Math.sqrt(a.x*a.x + a.y*a.y) * Math.sqrt(b.x*b.x + b.y*b.y);
 			
-			return numerator / denominator 	;	
+			return denominator / numerator   	;	
 		}
 		//pts_ar = new Float32Array(pts.length);
 		//var trLines = [];
 
-		var pts_ar = new Float32Array(lines.length* 4 * 4);
-		var normals_ar = new Float32Array(lines.length*4 *4 );
+		var p_num = 6;
+		var pts_ar = new Float32Array(lines.length*  p_num * 4);
+		var normals_ar = new Float32Array(lines.length* p_num *4 );
+		var linenormals_ar = new Float32Array(lines.length* p_num *4 );
+		var miter_ar =  new Float32Array(lines.length*  p_num*2);
 		var indicies=[];
 
 		var m = 0;
 		var p = 0;
+		var k = 0;
 		var edge_num = 0;	
 		for (var i = 0; i < lines.length; i++) {
 			var theline = lines[i];
 			/*calculate normals*/
 			var normals = [];
+			var miter=[];
+			var linenormals = [];
 
 			edge_num = edge_num + theline.length-1;
 			for (var j = 0; j < theline.length; j++){
@@ -131,6 +137,9 @@ WGL.utils = {
 					normals[j] = [];
 					normals[j].y = -(a.x-b.x) / l; 
 					normals[j].x = (a.y-b.y) / l;
+					miter[j] = 1.;
+					
+				
 
 
 				}
@@ -143,6 +152,7 @@ WGL.utils = {
 					normals[j] = [];
 					normals[j].y = -(a.x-b.x) / l; 
 					normals[j].x = (a.y-b.y) / l;
+					miter[j] = 1.;
 					
 				} else {
 					
@@ -163,11 +173,12 @@ WGL.utils = {
 					var res_y =  v_ab_y + v_bc_y;
 
 					var lres  = this.getLength({x:0,y:0}, {x:res_x, y:res_y});
-					var angle = this.getAngleCos({x: v_ab_x,y: v_ab_y}, {x:res_x, y:res_y});
+					var angle =  this.getAngleCos({x: v_ab_x,y: v_ab_y}, {x:res_x, y:res_y});
+					miter[j] = angle;
 					
 					normals[j] = [];
-					normals[j].y = - (res_x / lres) /angle; 
-					normals[j].x =   (res_y / lres) /angle;
+					normals[j].y = - (res_x / lres) // /angle; 
+					normals[j].x =   (res_y / lres) // /angle;
 				}
 			}
 			
@@ -176,7 +187,7 @@ WGL.utils = {
 			for (var j = 0; j < theline.length; j++){
 				var a = theline[j];							
 				var n_a = normals[j];				
-				
+				var m_a = miter[j];
 				
 				
 				pts_ar[m++] = a.x;
@@ -184,11 +195,19 @@ WGL.utils = {
 				normals_ar[p++] = n_a.x;
 				normals_ar[p++] = n_a.y;
 				
+				
+					miter_ar[k++]= m_a;
+				
+				
 										
 				pts_ar[m++] = a.x;
 				pts_ar[m++] = a.y;
 				normals_ar[p++] = -n_a.x;
-				normals_ar[p++] = -n_a.y;		
+				normals_ar[p++] = -n_a.y;	
+			
+					miter_ar[k++]= -m_a;
+				
+						
 				var ii = m /2-2;
 				if (j <theline.length-1){
 					indicies.push(ii, ii+1,ii+2 , ii+1, ii+2, ii+3);
@@ -197,7 +216,7 @@ WGL.utils = {
 			}			
 		}	
 		
-		return {pts:pts_ar , norm: normals_ar, indicies:new Uint16Array(indicies), num: indicies.length};
+		return {pts:pts_ar , norm: normals_ar, miters: miter_ar, indicies:new Uint16Array(indicies), num: indicies.length};
 	},
 	
 

@@ -11,11 +11,13 @@ WGL.dimension.LineDimension = function(id){
 	var zoom = 'zoom';
 	var drawselect = 'drawselect';
 	var numfilters = 'numfilters';
+	var uInverseTextureSize = 'uInverseTextureSize';
 	
 	gl.useProgram(this.glProgram);
-	manager.storeUniformLoc(this.glProgram, zoom);
-	manager.storeUniformLoc(this.glProgram, drawselect);
+	//manager.storeUniformLoc(this.glProgram, zoom);
+	//manager.storeUniformLoc(this.glProgram, drawselect);
 	manager.storeUniformLoc(this.glProgram, numfilters);
+	manager.storeUniformLoc(this.glProgram, uInverseTextureSize);
 	
 	gl.useProgram(null);
 	
@@ -30,10 +32,18 @@ WGL.dimension.LineDimension = function(id){
 		/** add specific buffer and uniforms */
 		gl.useProgram(this.glProgram);
 		
-		gl.uniform1f(this.glProgram.numfilters, manager.trasholds.allsum );		
+		gl.uniform1f(this.glProgram.numfilters, manager.trasholds.allsum );
+		
+		var size = new Float32Array(2);
+		size.set([ 1/manager.w, 1/manager.h]); 		                   		                  
+		gl.uniform2fv(this.glProgram.uInverseTextureSize,  size);
+		
+		
+		
 		manager.bindMapMatrix(this.glProgram);
 		manager.enableBufferForName(this.glProgram, "wPoint", "wPoint");
 		manager.enableBufferForName(this.glProgram, "normals", "normals");
+		manager.enableBufferForName(this.glProgram, "miter", "miter");
 		
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, manager.databuffers['indicies']);
 		//manager.enableBufferForName(this.glProgram, "index", "index");	
@@ -47,22 +57,15 @@ WGL.dimension.LineDimension = function(id){
 		gl.disable(gl.DEPTH_TEST);
 		
 		gl.enable(gl.BLEND);
-		//gl.blendFunc(gl.ONE, gl.ONE);
-		gl.blendFunc( gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA  );
+		gl.blendFunc(gl.ONE, gl.ONE);
+		//gl.blendFunc( gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA  );
 		//gl.enable(gl.BLEND);
 		//gl.blendFunc(gl.ONE, gl.ONE);
-		if (this.glProgram.loc == null ){
-			this.glProgram.loc = gl.getUniformLocation(this.glProgram, "zoom");
-			if (!this.glProgram.loc instanceof WebGLUniformLocation) {				
-				console.error("Uniform set failed, uniform: " + u_name
-						+ " value " + value);
-				return;
-			}
-		}
+
 		/*set point size*/		
 	//	console.log( map.getZoom());
 		
-		gl.uniform1f(this.glProgram.loc, manager.zoom);				
+	//	gl.uniform1f(this.glProgram.zoom, manager.zoom);				
 		
 				
 	}	
@@ -75,13 +78,7 @@ WGL.dimension.LineDimension = function(id){
 		this.setup();	
 		//manager.enableFilterTexture(this.glProgram);
 		//gl.useProgram(this.glProgram);	
-		if (this.glProgram.drawselect == null){
-			this.glProgram.drawselect = gl.getUniformLocation(this.glProgram, "drawselect");
-			if (!this.glProgram.drawselect instanceof WebGLUniformLocation) {
-				console.error("Uniform set failed, uniform");
-				return;
-			}
-		}
+
 		//gl.uniform1f(this.glProgram.drawselect, 0);
 		
 		//gl.drawArrays(gl.TRIANGLES, 0, this.num);

@@ -120,6 +120,7 @@ var WGL = (function() {
 				var triglines = u.array2TALines(data);
 				manager.addDataBuffer(triglines.pts, 2, 'wPoint');
 				manager.addDataBuffer(triglines.norm, 2, 'normals');
+				manager.addDataBuffer(triglines.miters, 1, 'miter');
 				manager.addElementBuffer(triglines.indicies, 1, 'indicies');
 
 			//} catch (err) {
