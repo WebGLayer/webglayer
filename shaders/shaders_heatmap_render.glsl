@@ -83,7 +83,7 @@
  			val =  	fdata[0] / reduceSelection; 
   			col =   getColor(val, colors);//col1*rangeval + col2*(1.-rangeval);//vec4(val, 1.-val , 0. , 0.0+val*2.);//vec4(1.,0.,0.,0.);
 
-  			col[3] = val*1.5+0.1;
+  			//col[3] = val*1.5+0.1;
   		//} else if (fdata[0] == min_filter && fdata[0] == max_filter){
   		//		col=vec4(1.,0.,0.,1.);
   		//}
@@ -92,7 +92,7 @@
   			//data are seleted but not with spatial filter 
   			val = (fdata[1]-min)/(max-min);	
   			col =  getColor(val, unselcolors);  			
-  			col[3] =  val*1.5;		
+  		//	col[3] =  val*1.5;		
   			//col = vec4(val, 1.-val , 0.2 , 0.6);//vec4(1.,0.,0.,0.);
   		}	else {
   			
