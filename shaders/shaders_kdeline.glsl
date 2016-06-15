@@ -125,7 +125,7 @@
      	
      	float pom;
   
-     	gl_FragColor = vec4(fv, 0. ,0.,fv);//col; 
+     	gl_FragColor = vec4(fv, fv ,1.,1.);//col; 
      //	float v = abs(edge);
  	//	v = smoothstep(0.65, 0.7, 0.6); 
   	//	gl_FragColor = mix(vec4(1.,0.,0., 1.0), vec4(0.0, 0.,1.,1.), v);

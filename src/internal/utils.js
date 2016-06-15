@@ -109,18 +109,23 @@ WGL.utils = {
 		//pts_ar = new Float32Array(pts.length);
 		//var trLines = [];
 
-		var p_num = 6;
-		var pts_ar = new Float32Array(lines.length*  p_num * 4);
-		var normals_ar = new Float32Array(lines.length* p_num *4 );
-		var linenormals_ar = new Float32Array(lines.length* p_num *4 );
-		var miter_ar =  new Float32Array(lines.length*  p_num*2);
+		/*count the points*/
+		var point_num = 0;
+		for (var i = 1; i < lines.length; i++) {
+			point_num = lines[i].length + point_num;
+		}
+
+		var pts_ar = new Float32Array(point_num * 4);
+		var normals_ar = new Float32Array(point_num *4 );
+		var linenormals_ar = new Float32Array(point_num *4 );
+		var miter_ar =  new Float32Array(  point_num*2);
 		var indicies=[];
 
 		var m = 0;
 		var p = 0;
 		var k = 0;
 		var edge_num = 0;	
-		for (var i = 0; i < lines.length; i++) {
+		for (var i = 1; i < lines.length; i++) {
 			var theline = lines[i];
 			/*calculate normals*/
 			var normals = [];
@@ -137,10 +142,7 @@ WGL.utils = {
 					normals[j] = [];
 					normals[j].y = -(a.x-b.x) / l; 
 					normals[j].x = (a.y-b.y) / l;
-					miter[j] = 1.;
-					
-				
-
+					miter[j] = 1.;								
 
 				}
 
@@ -174,7 +176,11 @@ WGL.utils = {
 
 					var lres  = this.getLength({x:0,y:0}, {x:res_x, y:res_y});
 					var angle =  this.getAngleCos({x: v_ab_x,y: v_ab_y}, {x:res_x, y:res_y});
+					if (angle< 1.2) {
 					miter[j] = angle;
+					} else {
+						miter[j] = 1.2;
+					}
 					
 					normals[j] = [];
 					normals[j].y = - (res_x / lres) // /angle; 

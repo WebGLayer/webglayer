@@ -17,6 +17,7 @@ WGL.dimension.LineKDEDimension = function(id){
 			Math.floor(manager.h / 5));
 	var framebuffer = gl.createFramebuffer();
 	
+	this.renderer = new WGL.dimension.HeatMapRenderer(manager);
 	
 	var visible = true;
 	this.setVisible = function(v){
@@ -106,11 +107,13 @@ WGL.dimension.LineKDEDimension = function(id){
 	
 		//manager.enableBufferForName(this.glProgram, "index", "index");	
 	//	manager.bindRasterMatrix(this.glProgram);	
+
+		gl.bindTexture(gl.TEXTURE_2D, this.heatTexture);
+		gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
 		
-		gl.bindFramebuffer(gl.FRAMEBUFFER, null);	
-		gl.viewport(manager.l, manager.b, manager.w, manager.h);
-		//gl.clearColor(0.0, 0.0, 0.0, 0.0);
-		//gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+		gl.viewport(0, 0, manager.w, manager.h);
+		gl.clearColor(0.0, 0.0, 0.0, 0.0);
+		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 	
 		gl.disable(gl.DEPTH_TEST);
 		
@@ -119,7 +122,8 @@ WGL.dimension.LineKDEDimension = function(id){
 		///gl.blendFunc( gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA  );
 		gl.enable(gl.BLEND);
 		gl.blendFunc(gl.ONE, gl.ONE);
-
+		gl.bindTexture(gl.TEXTURE_2D, null);
+		this.renderer.heatTexture = this.heatTexture;
 		/*set point size*/		
 	//	console.log( map.getZoom());
 		
@@ -142,7 +146,9 @@ WGL.dimension.LineKDEDimension = function(id){
 		//gl.drawArrays(gl.TRIANGLES, 0, this.num);
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, manager.databuffers['indicies']);
 		gl.drawElements(gl.TRIANGLES,this.num,gl.UNSIGNED_SHORT,0);
-		
+		this.maxall = this.maxcal.getMax(this.heatTexture, 1);
+		this.renderer.render(0,this.maxall, 0, this.maxall,this.maxall);
+	
 		//gl.uniform1f(this.glProgram.drawselect, 1);
 		
 		//gl.drawArrays(gl.TRIANGLES, 0, num);	
@@ -212,8 +218,11 @@ WGL.dimension.LineKDEDimension.array2TALines = function(lines) {
 	
 	
 	for (var i = 1; i < lines.length; i++) {
+		try {
 		var segments = lines[i].length -1;
-		
+		} catch(err) {
+			console.warn(err);
+		}
 		point_num = segments*4 + point_num ;
 	}
 

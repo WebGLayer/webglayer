@@ -34,30 +34,29 @@ function DataLoader() {
 		 * load data
 		 */
 		//d3.csv(file, function(error, data) {
-		var d = d3.dsv(";", "text/plain");
-		d(file, function(error, data){
+		d3.csv(file, function(error, data) {
 		var dateminmax ;
 
 		/*set timezone shift. The data are GMT +1 */
 		var dt = (new Date()).getTimezoneOffset()*60*1000 +60000;
 		
+			var lines = [];
+			var i = 0;
+			
 			data.forEach(function(val, k) {
 							
-					var line = val.geom.split(",");
+					if (lines[val.treck_id] == undefined){
+						lines[val.treck_id] = [];
+						//lines[val.treck_id].pos =[];
+						i = 0;
+						
+					}
+					var coef = i++;
+					lines[val.treck_id][coef] = [];
+					lines[val.treck_id][coef].x = parseFloat(val.x);
+					lines[val.treck_id][coef].y = parseFloat(val.y);
 					
-					
-					lines[k] = [];
-					var  i = 0;
-			
-					for (var m = 0; m < line.length; m++){
-						var p = line[m].split(" ");	
-						var point = [];
-						point.x = parseFloat(p[0]);
-						point.y = parseFloat(p[1]);
-
-						lines[k][m] = point;												    						    	
-					}		
-					
+	
 					//pts[j++] = parseFloat(val.x);
 					//pts[j++] = parseFloat(val.y);
 			});

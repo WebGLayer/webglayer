@@ -109,6 +109,11 @@ WGL.internal.GLUtils = {
 			$("head").append(data);
 		});
 		
+		$.get(domain+'shaders/shaders_kdeline.glsl', function(data) {
+			$("head").append(data);
+		});
+		
+		
 		
 		$.ajaxSetup({
 			async : true

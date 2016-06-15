@@ -12,7 +12,7 @@
       void main() {
 	
 		edge = sign(miter);
-  	 	vec2 pointPos = wPoint.xy + vec2(normals * 1./5.0 * abs(miter));
+  	 	vec2 pointPos = wPoint.xy + vec2(normals * 1./1000.0 * abs(miter));
   	    //vec4 mp = vec4(wPoint[0] +normals[0]/5., wPoint[1] + normals[1]/5.,0,1.); 
   		vec4 p =  mapMatrix *  vec4(pointPos,0.,1.);//mp; //wPoint;
   		//float n_speed = (speed+1.)/2.;
@@ -51,13 +51,13 @@
      	if ( dist < 0.2  ) {     		
      		//gl_FragColor = vec4(1., 1. / pow(0.01+dist*10.,grad),selected, 0.);//col;
      		
-     		gl_FragColor = vec4(dist, 0. , 0.,1.);  
-     		//gl_FragColor = vec4(1., 0. ,0.,1.);
+     		//gl_FragColor = vec4(dist, 0. , 0.,1.);  
+     		gl_FragColor = vec4(1., 0. ,0.,1.);
      	} else {
      		gl_FragColor = vec4(0., 0. ,0.,1.);//col; 
      	}
      	
-     	gl_FragColor = vec4(1.-dist, 0. ,0.,1.);//col; 
+     	gl_FragColor = vec4(0.1*(1.-pow(dist,3.)), 0. ,0.,1.-dist+0.1);//col; 
      //	float v = abs(edge);
  	//	v = smoothstep(0.65, 0.7, 0.6); 
   	//	gl_FragColor = mix(vec4(1.,0.,0., 1.0), vec4(0.0, 0.,1.,1.), v);

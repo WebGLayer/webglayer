@@ -6,8 +6,11 @@ function init() {
 		/*Load the data*/
 		var data = new DataLoader();
 		//data.loadPosData("data/birmin_3a.json");
-		data.loadPosData("data/test.json");
-		//data.loadPosData("data/xybirm5a.json");
+		//data.loadPosData("data/test.json");
+		//data.loadPosData("data/testf1k.json");
+		data.loadPosData("data/f50k.json");
+		
+		//ata.loadPosData("data/xybirm5a.json");
 		//data.loadPosData("data/xyall3a1000k.json");	
 			
 	}
@@ -19,7 +22,8 @@ function visualize(data){
 		 */
 		
 		WGL.init(data.num,'../../', 'map');	
-		WGL.addLineDimension(data.lines, 'themap');
+		kdedim = WGL.addLineKDEDimension(data.lines, 'themap');
+		//WGL.addMapDimension(data.lines[1], 'themap');
 		
 		/**
 		 * map is global variable from Open Layers, we set our onMove 
@@ -33,7 +37,12 @@ function visualize(data){
 		/** Drawing the map fist time */
 		WGL.mcontroller.zoommove(map.getZoom(), getTopLeftTC());
 		WGL.render();
-	
+		$("#slider_radius").on("input", function(){		
+			
+			kdedim.setRadius(this.value/100000);			
+			//heatmap.reRender();
+			WGL.render();			
+		});
 		
 	}
 
@@ -64,6 +73,8 @@ function getTopLeftTC() {
 function onMove() {			
 		WGL.mcontroller.zoommove(map.getZoom(), getTopLeftTC(), WGL.filterByExt);
 }
+
+
 	
 	
 	

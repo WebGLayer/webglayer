@@ -56,11 +56,11 @@ WGL.dimension.LineDimension = function(id){
 	
 		gl.disable(gl.DEPTH_TEST);
 		
-		gl.enable(gl.BLEND);
+		//gl.disable(gl.BLEND);
 		gl.blendFunc(gl.ONE, gl.ONE);
 		//gl.blendFunc( gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA  );
-		//gl.enable(gl.BLEND);
-		//gl.blendFunc(gl.ONE, gl.ONE);
+		gl.enable(gl.BLEND);
+		gl.blendFunc(gl.ONE, gl.ONE);
 
 		/*set point size*/		
 	//	console.log( map.getZoom());

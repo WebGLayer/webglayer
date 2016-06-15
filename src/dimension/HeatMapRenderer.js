@@ -18,14 +18,14 @@ WGL.dimension.HeatMapRenderer = function(){
 	
 	
 	this.colors =  new Float32Array(16);
-	this.colors.set([ 1, 0, 0, 0.95, 
-		              1, 1, 0, 0.55, 
-		              0, 1, 0, 0.15,
+	this.colors.set([ 1, 0, 0, 1.6, 
+		              1, 1, 0, 0.6, 
+		              0, 1, 0, 0.1,
 		              0, 0, 0, 1 ]);
 	
 	this.unselcolors =  new Float32Array(16);
-	this.unselcolors.set([  49/256, 130/256, 189/256, 0.1,
-	                       158/256, 202/256, 225/256, 0.1, 
+	this.unselcolors.set([  49/256, 130/256, 189/256, 0.8,
+	                       158/256, 202/256, 225/256, 0.4, 
 	                       222/256, 235/256, 247/256, 0.1, 
 	                       0, 0, 0, 1 ]);
 	//var legend = new HeatMapLegend('legend');
@@ -71,6 +71,7 @@ WGL.dimension.HeatMapRenderer = function(){
 	//	gl.disable(gl.BLEND);
 		gl.enable(gl.BLEND);		
 		gl.blendFunc( gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA  );
+	//	gl.blendFunc( gl.ONE, gl.ONE  );
 
 	}	
 	
