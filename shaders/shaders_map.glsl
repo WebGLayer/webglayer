@@ -28,14 +28,14 @@
   		// if data are selected  
   		if (fdata[0]>= ( numfilters / 256.)  && numfilters != 0. &&   drawselect>0.5 ){
   			
-  			col = vec4(255. /255., 140./255., 0., 0.4); 
+  			col = vec4(255. /255., 140./255., 0., 0.7); 
   			gl_Position = p;    	
-			gl_PointSize = p_size;
+			gl_PointSize = p_size*2.;
   			
   		} else if ((fdata[0] < ( numfilters / 256.)  || numfilters == 0.) && drawselect<0.5) {  	
   		   //If not selected then use blue color	   
   		   //p_size = p_size-3.;
-  		   col = vec4(0., 0. , 1., 0.4);
+  		   col = vec4(0., 0. , 1., 0.3);
   		   //col = vec4(0.482, 0.408, 0.533, 0.95); 	
   		   //p_size = 4.;
   		   //col = vec4(0.0,0.,0.,0.75);

@@ -134,6 +134,27 @@ var WGL = (function() {
 			this._dimensions[id] = dim;
 			return dim;
 		},
+
+		addLineKDEDimension : function(data, id) {
+		
+			var triglines = WGL.dimension.LineKDEDimension.array2TALines(data);
+			
+			manager.addDataBuffer(triglines.pts, 2, 'wPoint');
+			manager.addDataBuffer(triglines.angles, 1, 'angles');
+			manager.addDataBuffer(triglines.lengths, 1, 'lengths');
+			manager.addElementBuffer(triglines.indicies, 1, 'indicies');
+
+			//} catch (err) {
+			//	console.warn(err);
+			//}
+			;
+			var dim = new WGL.dimension.LineKDEDimension(id);
+
+			dim.num = triglines.num;
+			
+			this._dimensions[id] = dim;
+			return dim;
+		},
 		
 		addHeatMapDimension : function(data, id) {
 			try {

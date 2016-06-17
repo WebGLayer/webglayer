@@ -47,7 +47,7 @@ WGL.dimension.HeatMapDimension = function(id) {
 	}
 
 	this.gradFunction = function() {
-		return 2;
+		return 1/4;
 	}
 
 	
@@ -129,6 +129,7 @@ WGL.dimension.HeatMapDimension = function(id) {
 				this);
 
 	this.initProgram();
+	this.renderer2 = new WGL.dimension.IluminationRenderer(manager);
 	this.renderer = new WGL.dimension.HeatMapRenderer(manager);
 	// var maxcal = new
 	// MaxCalculator(Math.floor(manager.w/6),Math.floor(manager.h/6));
@@ -208,6 +209,7 @@ WGL.dimension.HeatMapDimension = function(id) {
 		gl.bindTexture(gl.TEXTURE_2D, null);
 
 		this.renderer.heatTexture = this.heatTexture;
+		this.renderer2.heatTexture = this.heatTexture;
 		manager.heatTexture = this.heatTexture;
 	}
 
@@ -274,6 +276,8 @@ WGL.dimension.HeatMapDimension = function(id) {
 				}
 
 			}
+			
+			this.renderer2.render(renderMin, renderMax, renderMin, renderMax,	renderMax);
 		
 
 	}

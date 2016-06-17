@@ -64,7 +64,7 @@
 
       	float dist =  length(gl_PointCoord.xy, vec2(0.5,0.5)); 
    
-     	if (dist < 0.5 && dist!=0. ) {    
+     	if (dist <= 0.5  ) {    
      			float val = 1. - pow(dist*2.,grad);
      		  	if (selected == 1.){
      		  		gl_FragColor = vec4(val, val , selected, 1.);//col;  

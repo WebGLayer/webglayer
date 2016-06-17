@@ -113,6 +113,9 @@ WGL.internal.GLUtils = {
 			$("head").append(data);
 		});
 		
+		$.get(domain+'shaders/shaders_ilumination_renderer.glsl', function(data) {
+			$("head").append(data);
+		});
 		
 		
 		$.ajaxSetup({

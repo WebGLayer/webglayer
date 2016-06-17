@@ -113,7 +113,7 @@
      		
      	float v = abs(interval[1] - interval[0])/2. ;
      	
-     	float dist = (1.-abs(k_y));
+     	float dist =  tan( pow((1.-abs(k_y)),1.));
      	
      	float fv = v*dist /5.;
      	if (v < 1.){

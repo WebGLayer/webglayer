@@ -17,7 +17,8 @@ WGL.dimension.LineKDEDimension = function(id){
 			Math.floor(manager.h / 5));
 	var framebuffer = gl.createFramebuffer();
 	
-	this.renderer = new WGL.dimension.HeatMapRenderer(manager);
+	this.renderer2 = new WGL.dimension.HeatMapRenderer(manager);
+	this.renderer = new WGL.dimension.IluminationRenderer(manager);
 	
 	var visible = true;
 	this.setVisible = function(v){
@@ -117,13 +118,14 @@ WGL.dimension.LineKDEDimension = function(id){
 	
 		gl.disable(gl.DEPTH_TEST);
 		
-		gl.disable(gl.BLEND);
+	//	gl.disable(gl.BLEND);
 	//	gl.blendFunc(gl.ONE, gl.ONE);
 		///gl.blendFunc( gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA  );
 		gl.enable(gl.BLEND);
 		gl.blendFunc(gl.ONE, gl.ONE);
 		gl.bindTexture(gl.TEXTURE_2D, null);
 		this.renderer.heatTexture = this.heatTexture;
+		this.renderer2.heatTexture = this.heatTexture;
 		/*set point size*/		
 	//	console.log( map.getZoom());
 		
@@ -147,6 +149,7 @@ WGL.dimension.LineKDEDimension = function(id){
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, manager.databuffers['indicies']);
 		gl.drawElements(gl.TRIANGLES,this.num,gl.UNSIGNED_SHORT,0);
 		this.maxall = this.maxcal.getMax(this.heatTexture, 1);
+		this.renderer2.render(0,this.maxall, 0, this.maxall,this.maxall);
 		this.renderer.render(0,this.maxall, 0, this.maxall,this.maxall);
 	
 		//gl.uniform1f(this.glProgram.drawselect, 1);

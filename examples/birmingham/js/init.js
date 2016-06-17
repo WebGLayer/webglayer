@@ -5,8 +5,8 @@ function init() {
 		var data = new DataLoader();
 	//	data.loadPosData("data/all13.json");
 	//	data.loadPosData("data/all13a14.json");
-		data.loadPosData("data/xybirm5a.json");
-	//	data.loadPosData("data/xyall5a500k.json");
+	//	data.loadPosData("data/xybirm5a.json");
+		data.loadPosData("data/all13.json");
 	//	data.loadPosData("data/xyall5a300k.json");
 	//	data.loadPosData("data/xyall5atest.json");
 	//	data.loadPosData("data/xyall5a400k.json");
@@ -26,7 +26,24 @@ function visualize(data){
 		}
 		
 		map.events.register("move", map, onMove);							
+		/*var heatmap2= WGL.addHeatMapDimension(data.pts, 'heatmap2');
+		heatmap2.radiusFunction = function(r, z){			
+			var res = r/40000 * Math.pow(2,z);
+			//console.log(res);
+			var gpsize = map.getGeodesicPixelSize();
+			var pixelsize = (gpsize.h+gpsize.w)/2;
+			return  res ;
+			};
 
+	heatmap2.renderer.colors.set([  1, 1, 1, 1.2, 
+	         		              1, 1,1, 0.5, 
+	         		              0, 0, 0, 0.0,
+	        		              0, 0, 0, 1 ]);
+	
+	 heatmap2.setRadius(60);
+	 heatmap2.gradFunction = function() {
+			return 1;
+		}*/
 		var controlHM = new WGL.ChartDiv("right","chm", "Heat map controls");
 		var heatmap = WGL.addHeatMapDimension(data.pts, 'heatmap');
 		heatmap.radiusFunction = function(r, z){			
@@ -36,14 +53,17 @@ function visualize(data){
 			var pixelsize = (gpsize.h+gpsize.w)/2;
 			return  res ;
 			};
-
+			
 		 heatmap.setRadius(30);
+		 
+		
 
 		var mapdim = WGL.addMapDimension(data.pts, 'themap');
 	
 		WGL.addPolyBrushFilter('themap','polybrush');
 		
 		addHeatMapControl(heatmap,'chm');
+		
 
 		WGL.addExtentFilter();
 	
@@ -239,7 +259,7 @@ function addHeatMapControl(hm,divid){
 	 thediv.append(
 	"<div style='margin:0.5em'>"+
 	"<text>Radius: </text><text id='radius_label'></text>"+	 
-	"<input style='width: 50%; right:1em; position:absolute' type ='range' max='100' min='1'"+
+	"<input style='width: 50%; right:1em; position:absolute' type ='range' max='300' min='1'"+
         				"step='1' name='points' id='slider_radius' value='30'></input> </div>");
         				
     
@@ -266,7 +286,8 @@ function addHeatMapControl(hm,divid){
 	
 	$("#slider_radius").on("input", function(){		
 		
-		hm.setRadius(this.value);	
+		hm.setRadius(this.value);
+		
 		$('#radius_label').html(this.value+"m ");
 		//heatmap.reRender();
 		WGL.render();			

@@ -1,26 +1,23 @@
 
-WGL.dimension.HeatMapRenderer = function(){
+WGL.dimension.IluminationRenderer = function(){
 	
 	var manager = WGL.getManager();
 	var GLU = WGL.internal.GLUtils;
 
-	this.glProgram = GLU.compileShaders("heatmap_render_vShader",  "heatmap_render_fShader");
+	this.glProgram = GLU.compileShaders("ilumination_renderer_vShader",  "ilumination_renderer_fShader");
 	gl.useProgram(this.glProgram);	
 	var texCoordLocation = gl.getAttribLocation(this.glProgram, "v_texCoord");
 	var rasterLoc = 	   gl.getUniformLocation(this.glProgram, "heatmap_raster" );
-	manager.storeUniformLoc(this.glProgram, "max");
-	manager.storeUniformLoc(this.glProgram, "min");
-	manager.storeUniformLoc(this.glProgram, "max_filter");
-	manager.storeUniformLoc(this.glProgram, "min_filter");
-	manager.storeUniformLoc(this.glProgram, "colors");
-	manager.storeUniformLoc(this.glProgram, "unselcolors");
+
+	manager.storeUniformLoc(this.glProgram, "colors");	
 	manager.storeUniformLoc(this.glProgram, "reduceSelection");
+	manager.storeUniformLoc(this.glProgram, "rsize");
 	
 	
 	this.colors =  new Float32Array(16);
-	this.colors.set([ 1, 0, 0, 1.4, 
-		              1, 1, 0, 0.9, 
-		              0, 1, 0, 0.01,
+	this.colors.set([ 1, 0, 0, 1.6, 
+		              1, 1, 0, 0.6, 
+		              0, 1, 0, 0.1,
 		              0, 0, 0, 1 ]);
 	
 	this.unselcolors =  new Float32Array(16);
@@ -50,7 +47,8 @@ WGL.dimension.HeatMapRenderer = function(){
 	this.setup = function() {
 		 gl.useProgram(this.glProgram);		
 		 gl.uniformMatrix4fv(this.glProgram.colors, false, this.colors);
-	  	 gl.uniformMatrix4fv(this.glProgram.unselcolors, false, this.unselcolors);
+		 gl.uniform2f(this.glProgram.rsize,  manager.w, manager.h);
+
 		 gl.bindBuffer(gl.ARRAY_BUFFER, texCoordBuffer);
 		 gl.enableVertexAttribArray(texCoordLocation);
 		 gl.vertexAttribPointer(texCoordLocation, 2, gl.FLOAT, false, 0, 0);
@@ -66,11 +64,11 @@ WGL.dimension.HeatMapRenderer = function(){
 		gl.viewport(manager.l, manager.b, manager.w, manager.h);
 	//	gl.clearColor(0.0, 0.0, 0.0, 0.0);
 	//	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-	
-		gl.disable(gl.DEPTH_TEST);
+		
+	//	gl.disable(gl.DEPTH_TEST);
 	//	gl.disable(gl.BLEND);
-		gl.enable(gl.BLEND);		
-		gl.blendFunc( gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA  );
+	//	gl.enable(gl.BLEND);		
+	//	gl.blendFunc( gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA  );
 	//	gl.blendFunc( gl.ONE, gl.ONE  );
 
 	}	
@@ -80,11 +78,7 @@ WGL.dimension.HeatMapRenderer = function(){
 		//legend.updateMax(max);
 		this.setup();
 	
-		//console.log(max);
-	    gl.uniform1f(this.glProgram.max, max);	
-	    gl.uniform1f(this.glProgram.min, min);
-	    gl.uniform1f(this.glProgram.max_filter, max_f);	
-	    gl.uniform1f(this.glProgram.min_filter, min_f);
+		//console.log(max);	   
 	    gl.uniform1f(this.glProgram.reduceSelection, reduceSelection);
 	   
 	   
