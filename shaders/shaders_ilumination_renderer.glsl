@@ -34,7 +34,10 @@
 	//const vec4 diffuseColor = vec4(0.9, 0.9, 0.9,1.);
 	//const vec4 specColor =    vec4(0.0, 0.0, 0.0, 1.);
 	
-	const vec3 ambientColor = vec3(1., 1., 1.);
+	//const vec3 ambientColor = vec3(1., 1., 1.);
+    //const vec3 diffuseColor = vec3(1., 1., 1.);
+    //const vec3 specColor    = vec3(1., 1., 1.);
+    const vec3 ambientColor = vec3(1., 1., 1.);
     const vec3 diffuseColor = vec3(1., 1., 1.);
     const vec3 specColor    = vec3(1., 1., 1.);
 	 
