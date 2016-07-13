@@ -47,15 +47,16 @@
   		 
   		kernel_val = kernel;
   		length_val = abs(lengths) / kernel_val;
-  		k_x = dir * (length_val/2.+ 1.);
+  		
+  		
+  		// k_x from line center in kernels
+  		k_x = dir * (length_val/2.+ 1.); // legnth from center + 2 * half kernels at the begining and end
+  		
+  		// k_y goes form -1 to 1 kernel
   		k_y = edge ;	
-  		
-  		
+  			
   		gl_Position = p;   
-  	
-  		
-  		
-		
+
       }
     </script>
     
@@ -69,13 +70,12 @@
   	 varying float k_y;
   
   
-  	
   	 
    	 float length(vec2 a, vec2 b){
         	return sqrt(pow((abs(a[0]-b[0])),2.)+pow((abs(a[1]-b[1])),2.));
       	}
       	
-     vec2 intesect(vec2 a, vec2 b){
+     vec2 intersect(vec2 a, vec2 b){
      	vec2 res = vec2(0.,0.);   
         if ( (a[0] >= b[0]) && (a[1] <= b[1]) ){
      		res = a;
@@ -108,8 +108,8 @@
       	//float dist =  abs(length(norm, vec2(0.0))-0.5) ;
       	//float dist = abs(k_y) /(length_val+kernel_val*2.);        
      	
-     	
-     	vec2 interval = intesect(vec2(k_x-1., k_x+1.), vec2(-length_val/2., length_val/2.));     	
+     	// evaluate if the kernel is bigger then the line and 
+     	vec2 interval = intersect(vec2(k_x-1., k_x+1.), vec2(-length_val/2., length_val/2.));     	
      		
      	float v = abs(interval[1] - interval[0])/2. ;
      	
