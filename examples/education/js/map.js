@@ -48,16 +48,8 @@ initMap = function() {
       
    
         
-    
-    var vector_layer = new OpenLayers.Layer.Vector("Points",{
-    					styleMap: new OpenLayers.Style({
-    						'pointRadius': 14,
-    						'fillColor': "#666666",    					
-                            'externalGraphic': "http://otn-production.intrasoft-intl.com/maps/symbols/!school.svg"                           
-    					})
-    		}); 
-    vector_layer.setVisibility(false);		
-    map.addLayer(vector_layer);
+  	
+   
    
     
     
@@ -77,7 +69,7 @@ initMap = function() {
    
      
 	
-    map.addLayer(layer2);
+    map.addLayer(layer);
   //  map.addLayer(layerkml);
    	
 	var renderer = OpenLayers.Util.getParameters(window.location.href).renderer;
