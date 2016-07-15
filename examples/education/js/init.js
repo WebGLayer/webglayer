@@ -108,7 +108,7 @@ function visualize(data){
 		//wgl.addLinearHistDimension(dayes);
 		chd3.setDim(WGL.addLinearHistDimension(percent));
 		WGL.addLinearFilter(percent,100, 'perF');		
-		charts['percent'] = new  WGL.ui.StackedBarChart(percent, "ch3", "percent", 'perF');
+		charts['percent'] = new  WGL.ui.StackedBarChart(percent, "ch3", "Grade in % (0=everthing wrong)", 'perF');
 	
 		/* type*/
 		//var days = {data: data.dayes,  min:0, max: 7, num_bins: 7,  name: 'dayes'};	
