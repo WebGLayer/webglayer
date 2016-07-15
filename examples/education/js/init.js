@@ -44,7 +44,7 @@ function visualize(data){
 	 heatmap2.gradFunction = function() {
 			return 1;
 		}*/
-		var controlHM = new WGL.ChartDiv("right","chm", "Heat map controls");
+		
 		var heatmap = WGL.addHeatMapDimension(data.pts, 'heatmap');
 		heatmap.radiusFunction = function(r, z){			
 			var res = r/20000 * Math.pow(2,z);
@@ -62,7 +62,6 @@ function visualize(data){
 	
 		WGL.addPolyBrushFilter('themap','polybrush');
 		
-		addHeatMapControl(heatmap,'chm');
 		
 
 		WGL.addExtentFilter();
@@ -76,12 +75,12 @@ function visualize(data){
 		
 		/* SEX*/
 		//var days = {data: data.dayes,  min:0, max: 7, num_bins: 7,  name: 'dayes'};	
-		var sex = {data: data.sex,  domain: ['0', '1'],  name: 'sex', type:'ordinal', label: "gendre"};
+		var sex = {data: data.sex,  domain: ['0', '1'],  name: 'sex', type:'ordinal', label: "gendre  (0=girl, 1=boy)"};
 		var chd1 = new WGL.ChartDiv("right","ch1", "Gendre");
 		//wgl.addLinearHistDimension(dayes);
 		chd1.setDim(WGL.addOrdinalHistDimension(sex));
 		WGL.addLinearFilter(sex,2, 'sexF');		
-		charts['sex'] = new  WGL.ui.StackedBarChart(sex, "ch1", "gendre", 'sexF');
+		charts['sex'] = new  WGL.ui.StackedBarChart(sex, "ch1", "gendre  (0=girl, 1=boy)", 'sexF');
 		
 		/* Subject*/
 		//var days = {data: data.dayes,  min:0, max: 7, num_bins: 7,  name: 'dayes'};	
@@ -142,6 +141,9 @@ function visualize(data){
 		 * Addin all charts
 		 */		
 		WGL.addCharts(charts);
+		var controlHM = new WGL.ChartDiv("right","chm", "Heat map controls");
+		addHeatMapControl(heatmap,'chm');
+		
 		//wgl.addLegend(legend);
 		
 		WGL.initFilters();
