@@ -68,7 +68,8 @@ WGL.internal.Manager = function(mapid, mapcontainer) {
 	this.updateMapSize();
 		
 	if (mapcontainer!= null){
-		document.getElementById(mapcontainer).appendChild(this.canvas);
+		 var element = document.getElementById(mapcontainer); // -- SSU enable to append into id or object
+	        (element ? element : mapcontainer).appendChild(this.canvas);
 	} else {
 		mapparentdiv.appendChild(this.canvas);
 	}
