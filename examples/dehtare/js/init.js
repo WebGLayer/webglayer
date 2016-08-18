@@ -89,7 +89,7 @@ function visualize(data){
 		var chd2 = new WGL.ChartDiv("right","ch3", "NDVI 20161");
 		chd2.setDim(WGL.addLinearHistDimension( ndvi2));		
 		WGL.addLinearFilter( ndvi2, 24*10, 'hoursF2');		
-		charts['ndvi2'] = new  WGL.ui.StackedBarChart( ndvi2, "ch2", "ndvi 20161", 'hoursF2');
+		charts['ndvi2'] = new  WGL.ui.StackedBarChart( ndvi2, "ch3", "ndvi 20161", 'hoursF2');
 		
 		
 		//charts['date'].setTicks(30);
