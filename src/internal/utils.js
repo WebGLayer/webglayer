@@ -87,7 +87,7 @@ WGL.utils = {
 		var i = 0;
 		for (var i = 0; i < pts.length; i++) {
 			pts_ar[i] = pts[i];
-			pts[i] = null;
+			//pts[i] = null;
 		}
 		return pts_ar;
 	},
