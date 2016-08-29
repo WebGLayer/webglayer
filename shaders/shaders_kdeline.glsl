@@ -2,6 +2,7 @@
       attribute vec4 wPoint;
       attribute float angles;   
       attribute float lengths;
+      attribute float speeds;
            
       uniform mat4 mapMatrix;
       uniform mat4 rasterMatrix;
@@ -11,6 +12,7 @@
   	 varying float kernel_val;
   	 varying float k_x;
   	 varying float k_y;
+  	 varying float speed_val;
       
     
       
@@ -54,6 +56,7 @@
   		
   		// k_y goes form -1 to 1 kernel
   		k_y = edge ;	
+  		speed_val = speeds;
   			
   		gl_Position = p;   
 
@@ -68,6 +71,7 @@
   	 varying float kernel_val;
   	 varying float k_x;
   	 varying float k_y;
+  	 varying float speed_val;
   
   
   	 
@@ -108,14 +112,15 @@
       	//float dist =  abs(length(norm, vec2(0.0))-0.5) ;
       	//float dist = abs(k_y) /(length_val+kernel_val*2.);        
      	
-     	// evaluate if the kernel is bigger then the line and 
+     	// evaluate if the kernel is bigger then the line segment 
      	vec2 interval = intersect(vec2(k_x-1., k_x+1.), vec2(-length_val/2., length_val/2.));     	
      		
-     	float v = abs(interval[1] - interval[0])/2. ;
+     	float v = abs(interval[1] - interval[0])/2.  ;
      	
      	float dist =  tan( pow((1.-abs(k_y)),1.));
      	
-     	float fv = v*dist /5.;
+     	float fv = v*dist /5. / speed_val;
+     	
      	if (v < 1.){
      	//	fv =0.;
      	}
