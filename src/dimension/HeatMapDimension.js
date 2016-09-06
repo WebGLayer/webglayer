@@ -152,6 +152,8 @@ WGL.dimension.HeatMapDimension = function(id) {
 		this.initProgram();
 		this.hasValues = true;
 	}
+	
+	
 	this.setup = function() {
 		// this.createFramebuffer();
 		// gl.useProgram(this.glProgram);
