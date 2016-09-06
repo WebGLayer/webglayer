@@ -18,8 +18,8 @@ WGL.dimension.HeatMapRenderer = function(){
 	
 	
 	this.colors =  new Float32Array(16);
-	this.colors.set([ 1, 0, 0, 1.4, 
-		              1, 1, 0, 0.9, 
+	this.colors.set([ 1, 0, 0, 2.4, 
+		              1, 1, 0, 1.9, 
 		              0, 1, 0, 0.01,
 		              0, 0, 0, 1 ]);
 	
