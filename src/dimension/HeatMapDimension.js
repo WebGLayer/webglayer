@@ -7,8 +7,6 @@ WGL.dimension.HeatMapDimension = function(id) {
 	
 	/*indicate if the point has a value or just 1 should be used for every point*/
 	this.hasValues = false;
-	// this.manager = manager;
-	// Dimension.call(this, manager);
 	this.isSpatial = true;
 	this.lockScale = false;
 
@@ -152,6 +150,8 @@ WGL.dimension.HeatMapDimension = function(id) {
 		this.initProgram();
 		this.hasValues = true;
 	}
+	
+	
 	this.setup = function() {
 		// this.createFramebuffer();
 		// gl.useProgram(this.glProgram);
