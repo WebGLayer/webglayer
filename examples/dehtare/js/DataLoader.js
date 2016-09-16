@@ -12,7 +12,10 @@ function DataLoader() {
 			var pts = [];
 			var ndvi_2016 = [];
 			var ndvi_20161 = [];
-			
+			var temp_20160 = [];
+			var vynos_t_ha = [];;
+			var conductivi = [];;
+			var vol_wat_co = [];;
 			
 			
 		
@@ -32,6 +35,10 @@ function DataLoader() {
 												
 					ndvi_2016[i]  = val.ndvi_2016_;	
 					ndvi_20161[i] = val.ndvi_20161;	
+					temp_20160[i] = val.temp_20160;
+					vynos_t_ha[i] = val.vynos_t_ha;
+					conductivi[i] = val.conductivi;
+					vol_wat_co[i] = val.vol_wat_co;
 				
 				});
 		
@@ -40,6 +47,10 @@ function DataLoader() {
 			visualize({pts: pts, 
 				ndvi_2016  : ndvi_2016, 
 				ndvi_20161 : ndvi_20161,
+				temp_20160 : temp_20160,
+				vynos_t_ha : vynos_t_ha,
+				conductivi : conductivi,
+				vol_wat_co : vol_wat_co,
 				num : data.length
 			});			
 		});

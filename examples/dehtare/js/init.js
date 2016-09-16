@@ -6,7 +6,7 @@ function init() {
 	//	data.loadPosData("data/all13.json");
 	//	data.loadPosData("data/all13a14.json");
 	//	data.loadPosData("data/xybirm5a.json");
-		data.loadPosData("data/t.json");
+		data.loadPosData("data/data2.json");
 	//	data.loadPosData("data/xyall5a300k.json");
 	//	data.loadPosData("data/xyall5atest.json");
 	//	data.loadPosData("data/xyall5a400k.json");
@@ -20,7 +20,7 @@ function init() {
 function visualize(data){	
 
 		//wgl = new WGL(data.num,'http://localhost:9999/js/webglayer/','map');	
-		WGL.init(data.num,'../','map', 'OpenLayers_Map_2_OpenLayers_Container');	
+		WGL.init(data.num,'../../','map', 'OpenLayers_Map_2_OpenLayers_Container');	
 		window.onresize = function(){
 			WGL.resize();
 		}
@@ -75,23 +75,51 @@ function visualize(data){
 	
 		//var road_surf = {data: data.road_surf, domain:['1','2','3','4','5'], name: 'road_surface'};
 		
+
 		
+		var name = "ndvi_20161";
+		var vis = {data: data[name],  min:0.1, max:0.7, num_bins: 100, name: name ,type:'linear', label : name} ;
+		var chd2 = new WGL.ChartDiv("right", vis.name , vis.label);
+		chd2.setDim(WGL.addLinearHistDimension(vis));		
+		WGL.addLinearFilter( vis, vis.num_bins, vis.name+'f');		
+		charts[vis.name] = new  WGL.ui.StackedBarChart( vis, vis.name, vis.label, vis.name+'f');
+	
+		var name = "ndvi_2016";
+		var vis = {data: data[name],  min:0.1, max:0.7, num_bins: 100, name: name ,type:'linear', label : name} ;
+		var chd2 = new WGL.ChartDiv("right", vis.name , vis.label);
+		chd2.setDim(WGL.addLinearHistDimension(vis));		
+		WGL.addLinearFilter( vis, vis.num_bins, vis.name+'f');		
+		charts[vis.name] = new  WGL.ui.StackedBarChart( vis, vis.name, vis.label, vis.name+'f');
+	
+		var name = "temp_20160";
+		var vis = {data: data[name],  min:14.0, max:17, num_bins: 100, name: name ,type:'linear', label : name} ;
+		var chd2 = new WGL.ChartDiv("right", vis.name , vis.label);
+		chd2.setDim(WGL.addLinearHistDimension(vis));		
+		WGL.addLinearFilter( vis, vis.num_bins, vis.name+'f');		
+		charts[vis.name] = new  WGL.ui.StackedBarChart( vis, vis.name, vis.label, vis.name+'f');
 		
-		/*HOURS*/
+		var name = "vynos_t_ha";
+		var vis = {data: data[name],  min:0.0, max:8, num_bins: 100, name: name ,type:'linear', label : name} ;
+		var chd2 = new WGL.ChartDiv("right", vis.name , vis.label);
+		chd2.setDim(WGL.addLinearHistDimension(vis));		
+		WGL.addLinearFilter( vis, vis.num_bins, vis.name+'f');		
+		charts[vis.name] = new  WGL.ui.StackedBarChart( vis, vis.name, vis.label, vis.name+'f');
 		
-		var ndvi = {data: data.ndvi_2016,  min:0.1, max:0.7, num_bins: 100, name: 'ndvi',type:'linear', label :"ndvi_2016"} ;
-		var chd2 = new WGL.ChartDiv("right","ch2", "NDVI 2016");
-		chd2.setDim(WGL.addLinearHistDimension( ndvi));		
-		WGL.addLinearFilter( ndvi, 24*10, 'hoursF');		
-		charts['ndvi'] = new  WGL.ui.StackedBarChart( ndvi, "ch2", "ndvi 2016", 'hoursF');
-		
-		var ndvi2 = {data: data.ndvi_20161,  min:0.1, max:0.7, num_bins: 100, name: 'ndvi2',type:'linear', label :"ndvi_2016"} ;
-		var chd2 = new WGL.ChartDiv("right","ch3", "NDVI 20161");
-		chd2.setDim(WGL.addLinearHistDimension( ndvi2));		
-		WGL.addLinearFilter( ndvi2, 24*10, 'hoursF2');		
-		charts['ndvi2'] = new  WGL.ui.StackedBarChart( ndvi2, "ch3", "ndvi 20161", 'hoursF2');
-		
-		
+		var name = "conductivi";
+		var vis = {data: data[name],  min:0.0, max:0.03, num_bins: 100, name: name ,type:'linear', label : name} ;
+		var chd2 = new WGL.ChartDiv("right", vis.name , vis.label);
+		chd2.setDim(WGL.addLinearHistDimension(vis));		
+		WGL.addLinearFilter( vis, vis.num_bins, vis.name+'f');		
+		charts[vis.name] = new  WGL.ui.StackedBarChart( vis, vis.name, vis.label, vis.name+'f');
+	
+		var name = "vol_wat_co";
+		var vis = {data: data[name],  min:0.0, max:0.17, num_bins: 100, name: name ,type:'linear', label : name} ;
+		var chd2 = new WGL.ChartDiv("right", vis.name , vis.label);
+		chd2.setDim(WGL.addLinearHistDimension(vis));		
+		WGL.addLinearFilter( vis, vis.num_bins, vis.name+'f');		
+		charts[vis.name] = new  WGL.ui.StackedBarChart( vis, vis.name, vis.label, vis.name+'f');
+	
+
 		//charts['date'].setTicks(30);
 		
 	
