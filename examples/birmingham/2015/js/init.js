@@ -7,7 +7,7 @@ function init() {
 	//	data.loadPosData("data/all13a14.json");
 	//	data.loadPosData("data/xybirm5a.json");
 	//	data.loadPosData("data/birm2015.json");
-		data.loadPosData("data/uk2015.json");
+		data.loadPosData("data/birm2015.json");
 	//	data.loadPosData("data/xyall5a300k.json");
 	//	data.loadPosData("data/xyall5atest.json");
 	//	data.loadPosData("data/xyall5a400k.json");
