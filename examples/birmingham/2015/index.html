@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Birmingham Accidents</title>
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"/>
+
+<style type="text/css">
+html,body {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	font-family: Verdana, Arial, sans-serif;
+}
+
+#view {
+	position: relative;
+}
+
+
+#map {
+	
+	display: block;
+    position:absolute;
+    height:auto;
+    bottom:0;
+    top:0;
+    left:0;
+    right:0;
+    margin-top:0px;
+    margin-bottom:18em;
+    margin-right:32em;
+    margin-left:0px;
+    z-index:100;	 
+   	opacity: .99;
+    border-bottom-width:1px;
+	border-bottom-style: solid;
+	border-bottom-color:white;
+}
+
+.pc_background{
+	background-color: rgb(14, 14, 14);			
+}
+
+.pc_chart_div {	
+	position:absolute;
+	height: 16.5em;
+	width:100%;
+	bottom:0;
+}
+
+.pc_chart_parent {
+	overflow-y:hidden;
+	overflow-x:hidden;		
+	background-color: none;	
+	position:absolute;
+	height: 18em;
+	left:0;
+	right:0;
+	border-top-width:1px;
+	border-top-style: solid;
+	border-top-color:white;
+	margin-right:32em;
+	bottom:0;
+	moz-box-shadow: 0px 0px 10px white;
+	webkit-box-shadow: 0px 0px 9px white;
+	box-shadow: -0px 0px 4px white;
+}
+#pc_header{
+	 margin-left: 0.5em;
+	 margin-top: 0.1em;
+	 margin-bottom: 0.1em;
+	 height: 1.5em;
+	 color: white;
+}
+
+
+#pc_chart {
+	z-index:2000;	
+}
+
+#wgl {
+	bottom: 0;	
+	padding: 1em;
+	height:3empt;
+	
+	margin-right: 48em;
+	z-index:1001;	
+	position:absolute;
+	right:2em;
+	
+	background-color: rgba(255, 255, 255, 0.0);
+	font: 12px sans-serif;
+	
+}
+.selectionlabel {
+	color:white;
+}
+
+#legend {
+	position: absolute;
+	top: 5em;
+	left: 0em;
+	height: 250px;
+	width: 150px;
+	padding: 0em;
+	z-index:3000;
+	background-color: rgba(255, 255, 255, 0.8);
+}
+#right {
+	position: fixed;
+	overflow-y:auto;
+	overflow-x:hidden;		
+	right: 0;
+	top: 0;
+	width: 32em;
+	height: 100%;
+	font-size: 1em;
+	moz-box-shadow: 0px 0px 10px black;
+	webkit-box-shadow: 0px 0px 9px  black;
+	box-shadow: -1px 0px 4px  black;
+	z-index: 10000;
+}
+
+#controls {
+	position: fixed;
+	top: 0em;
+	left: 3em;
+	width: 512px;
+	z-index:2000;
+	background-color: rgba(255, 255, 255, 0.3);
+}
+
+#about {
+	margin: 1em;
+}
+
+#controlToggle {
+	padding-left: 1em;
+}
+
+#controlToggle li {
+	list-style: none;
+}
+
+#test {
+	top: 0;
+	opacity: 1;
+	z-index: 1000;
+	pointer-events: none;
+	position: absolute;
+	top: 0px;
+}
+
+
+
+
+
+
+#chart_container {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+}
+.chart rect {
+  fill: steelblue;
+}
+
+.chart text {
+  fill: white;
+  font: 10px sans-serif;
+  text-anchor: end;
+}
+
+.brush{
+ fill: grey;
+ stroke: #ff8c00;
+ stroke-opacity: 1.;
+ stroke-width: 2;
+}
+
+.selected.bar {
+fill: #ff8c00;
+}
+
+.unselected.bar {
+fill: #7b6888;
+}
+
+.out.bar {
+fill: #98abc5;
+}
+
+.axis text {
+  font: 10px sans-serif;
+}
+.axis_pc text {
+  font: 10px sans-serif;
+  fill: white;
+  stroke: none;
+}
+
+.l text {
+  font: 10px sans-serif;
+}
+
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+
+.axis_pc {
+  fill: none;
+  stroke: white;
+  shape-rendering: crispEdges;
+  font: 10px sans-serif;
+}
+
+.x.axis path {
+  display: none;
+}
+
+.line {
+fill: none;
+stroke: steelblue;
+stroke-width: 2px;
+shape-rendering: optimizeSpeed ;
+ 
+}
+
+.point {
+	
+	stroke-width: 0.0005px;
+	z-index: 2000;
+ 	fill: #000;
+  	fill-opacity: .8;
+  	stroke: #fff; 
+}
+
+.l {
+ cursor: pointer;
+ stroke: #000; 
+}
+.grid-background {
+  fill: #ddd;
+}
+
+.grid line,
+.grid path {
+  fill: none;path{
+
+}
+
+}
+
+.control {
+	position: relative;
+	margin: 1em;
+	z-index: 2000;
+	
+}
+/* div:first-child { */
+/*   opacity: .99; */
+/* } */
+
+.slider {
+	position:absolute;
+	right:0em;
+	top:0em;	
+	width: 26em;
+}
+.slider_v {
+	position:absolute;
+	right:-3em;
+	top:6em;	
+	width: 10em;
+	height: 1em;	
+	 -webkit-transform: rotate(270deg);
+       -moz-transform: rotate(270deg);
+            transform: rotate(270deg);
+}
+
+.brush .extent {
+  
+  fill-opacity: .125;
+  shape-rendering: crispEdges;
+}
+</style>
+<script src="../../libs/OpenLayers.js"></script>
+<script src="../../libs/jquery-1.9.1.min.js"></script>
+<script src="../../libs/poly2tri.js"></script>
+
+<script src="../../libs/d3.v3.min.js"></script>
+
+
+<!-- Local configuration -->
+<script src="js/map.js"></script>
+<script src="js/DataLoader.js"></script>
+<script src="js/init.js"></script>
+
+<!-- WebGLayer -->
+
+
+<!--<script src="../../../build/WebGLayer.min.js"></script> -->
+
+ <script src="../../../src/WGL.js"></script>
+<script src="../../../src/internal/utils.js"></script>
+<script src="../../../src/internal/filtrutils.js"></script>
+<script src="../../../src/internal/GLUtils.js"></script>
+<script src="../../../src/internal/Manager.js"></script>
+<script src="../../../src/internal/MapController.js"></script>
+<script src="../../../src/internal/FloatRasterReader.js"></script>
+<script src="../../../src/internal/Filter.js"></script>
+<script src="../../../src/internal/MaxCalculator.js"></script>
+<script src="../../../src/internal/FloatReaderHistogram.js"></script>
+
+<script src="../../../src/dimension/MapDimension.js"></script>
+<script src="../../../src/dimension/HeatMapDimension.js"></script>
+<script src="../../../src/dimension/HeatMapRenderer.js"></script>
+<script src="../../../src/dimension/IluminationRenderer.js"></script>
+<script src="../../../src/dimension/HistDimension.js"></script>
+<script src="../../../src/dimension/ParallelCoordinates.js"></script>
+<script src="../../../src/dimension/ParallelCoordinatesRenderer.js"></script>
+
+<script src="../../../src/filter/LinearFilter.js"></script>
+<script src="../../../src/filter/MapPolyFilter.js"></script>
+<script src="../../../src/filter/ExtentFilter.js"></script>
+<script src="../../../src/filter/MapColorFilter.js"></script>
+
+<script src="../../../src/ui/StackedBarChart.js"></script>
+<script src="../../../src/ui/HeatMapLegend.js"></script>
+<script src="../../../src/ui/d3.svg.multibrush.js"></script>
+<script src="../../../src/ui/ChartDiv.js"></script> 
+
+</head>
+<body onload="init()">
+<!-- <div id="legend"></div> -->
+
+	<div id="map">	
+		
+	
+	<div id="wgl">Visualization made by <a href="http://webglayer.org/"> WebGLayer </a></div>
+	</div>
+	
+	<div>
+		<div id ="pc" class ="pc_chart_parent pc_background" >
+		
+ 		<div id = "pc_header" class='btn-minimize pc_background'  id=minPC >  
+ 		 <i id=butPC class='fa fa-chevron-down'></i> Parallel Coordinates</div> 
+ 		 
+		<div class ="pc_chart_div pc_background" ></div>
+		<div id ="pc_chart" class = "pc_chart_div" >					
+					<input class="slider_v" id="slider_pc" type="range"  name="points" min="1" max="5000"/>
+		</div>
+	</div>
+
+	<div id="right">
+				
+			<div id = "about" style = "text-align:justify"><div id = "close" class = "about" >  </div> 			
+			This visualization shows all reported Road Traffic Accidents in Birmingham 
+			in the 5 years to the end of December 2015. The visualisation provides an 
+			interactive heat map, which allows you to quickly identify accident hotspots 
+			in the city.  Make a selection in barcharts, map legend, in parallel coordinates 
+			or in the map to explore the data! Watch the video to see how to interact. 
+			The data is extracted from <a href="https://data.gov.uk/dataset/road-accidents-safety-data">
+			here </a>
+			</div>
+			<hr/>
+			<div id = "chart0">
+<!-- 				<div class="control"> -->
+<!-- 					<div class="sl_label">Radius:</div>		 -->
+<!-- 					   <input class="slider" type ="range" max="100" min="1" -->
+<!--         						oninput="document.getElementById('rangeValLabel').innerHTML = this.value;" -->
+<!--         						step="1" name="points" id="slider_radius?oo" value="10"> -->
+<!-- 					    </input> -->
+<!--     					<em id="rangeValLabel" style="font-style: normal;"></em> -->
+    
+<!-- 				</div>				 -->
+				<div class="control">	
+				<label>Layers:  </label>		<br/>
+					<label><input id="heatmap_visible" type="checkbox" name="heatmap" checked="true"/>heatmap</label> <br/>
+					<label><input id="points_visible" type="checkbox" name="themap" checked="true"/>accidents</label> <br/>
+					<label><input id="schools_visible" type="checkbox" name="heatmap" />schools</label> <br/>
+				
+					<label id ='reset'> Reset </label>
+				</div>
+				<hr/>
+			</div>
+		
+			
+<!-- 		<div class="control"> -->
+<!-- 			<div id="heatlegend"></div>					 -->
+<!-- 		</div>			 -->
+		</div>
+	
+			
+				 		
+	</div>
+	<div id="controls">
+		
+		<ul id="controlToggle">
+
+			<input type="radio" name="type" value="polygon" id="polygonToggle"
+				onclick="toggleControl(this);" />
+			<label class="selectionlabel" for="polygonToggle">sketch polygon</label>
+
+			<input type="radio" name="type" value="modify" id="createVertices"
+				onclick="toggleControl(this);" />
+			<label class="selectionlabel" for="createVertices">modify polygon</label>
+
+			<input type="radio" name="type" value="remove" id="removePolygon"
+				onclick="toggleControl(this);" />
+			<label class="selectionlabel" for="removePolygon">remove polygon</label>
+			
+		</ul>
+		
+		
+	</div>
+		
+		
+	</div>
+<!-- 	<div id='legend' style="padding:1em"> -->
+<!-- 		<object data="legend2.svg" /> -->
+<!-- 	</div> -->
+</body>
+</html>
