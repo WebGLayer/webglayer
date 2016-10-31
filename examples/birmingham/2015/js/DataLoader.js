@@ -46,7 +46,7 @@ function DataLoader() {
 			rtEnum[-1] = "Data missing or out of range";
 			
 						var vehtypeEnum = new Array();
-			vehtypeEnum[1]="Pedal cycle";
+			/*vehtypeEnum[1]="Pedal cycle";
 			vehtypeEnum[2]="Motorcycle 50cc and under";
 			vehtypeEnum[3]="Motorcycle 125cc and under";
 			vehtypeEnum[4]="Motorcycle over 125cc and up to 500cc";
@@ -66,7 +66,29 @@ function DataLoader() {
 			vehtypeEnum[90]="Other vehicle";
 			vehtypeEnum[97]="Motorcycle - unknown cc";
 			vehtypeEnum[98]="Goods vehicle - unknown weight";
-			vehtypeEnum[-1]="Data missing or out of range";
+			vehtypeEnum[-1]="Data missing or out of range";*/
+						
+			vehtypeEnum[1]="1";
+			vehtypeEnum[2]="2";
+			vehtypeEnum[3]="3";
+			vehtypeEnum[4]="4";
+			vehtypeEnum[5]="5";
+			vehtypeEnum[8]="8";
+			vehtypeEnum[9]="9";
+			vehtypeEnum[10]="10";
+			vehtypeEnum[11]= "11";
+			vehtypeEnum[16]= "16";
+			vehtypeEnum[17]="17";
+			vehtypeEnum[18]="18";
+			vehtypeEnum[19]="19";
+			vehtypeEnum[20]="20";
+			vehtypeEnum[21]="21"
+			vehtypeEnum[22]="22";
+			vehtypeEnum[23]="23";
+			vehtypeEnum[90]="90";
+			vehtypeEnum[97]="97";
+			vehtypeEnum[98]="98";
+			vehtypeEnum[-1]="-1";
 
 			var abEnum = new Array();
 			abEnum[1]="0-5";

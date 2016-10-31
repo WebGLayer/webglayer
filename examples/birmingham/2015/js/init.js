@@ -145,6 +145,7 @@ function visualize(data){
 		d[3] = sev;
 		
 		var pc = WGL.addParallelCoordinates('pc_chart', d);
+		
 		WGL.addMultiDim(d);
 			
 		/**
@@ -175,8 +176,7 @@ function visualize(data){
 			map.setCenter(lonlat);
 			map.zoomTo(11);
 		})
-		
-		$("#pc_header").click(function(){
+		function togglePC() {
 			$(".pc_chart_div").slideToggle();
 			var l = WGL.getDimension("pc_chart");
 			
@@ -209,8 +209,12 @@ function visualize(data){
 			//WGL.resize();
 			//WGL.getManager().updateMapSize();
 	 		//WGL.mcontroller.resize();	
+		}
+		$("#pc_header").click(function(){
+			togglePC();
 	 				
 		});
+		togglePC();
 		
 		$("#points_visible").click(function(){
 			var l = WGL.getDimension(this.name);
