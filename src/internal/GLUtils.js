@@ -26,11 +26,6 @@ WGL.internal.GLUtils = {
 					$("head").append(data);
 				});
 
-		$.get(domain+'shaders/shaders_filter_generic.glsl',
-						function(data) {
-							$("head").append(data);
-						});
-
 		$.get(domain+'shaders/shaders_filterhist.glsl',
 						function(data) {
 							$("head").append(data);
@@ -114,6 +109,17 @@ WGL.internal.GLUtils = {
 		});
 		
 		$.get(domain+'shaders/shaders_ilumination_renderer.glsl', function(data) {
+			$("head").append(data);
+		});
+		
+		$.get(domain+'shaders/shaders_filter1d.glsl', function(data) {
+			$("head").append(data);
+		});
+		
+		$.get(domain+'shaders/shaders_filter2d.glsl', function(data) {
+			$("head").append(data);
+		});
+		$.get(domain+'shaders/shaders_filter_generic.glsl', function(data) {
 			$("head").append(data);
 		});
 		

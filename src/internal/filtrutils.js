@@ -140,8 +140,8 @@ WGL.filterDim = function(id, filterId, filter, dorendering){
 	//f.readPixels();
 
 	//logFilterStatus();
-	mainFilter.applyFilterDim(dimensions[id],filterId);		
-	//console.log("filtering...:"+filter);
+	mainFilter.applyFilterDim(dimensions[id],filterId);	
+	console.log("filtering...:"+filter);
 
 	if (dorendering==undefined || dorendering==true){
 		this.render();
@@ -236,7 +236,7 @@ WGL.setFiltersTrasholds = function(){
 		} 
 	}
 	}
-	//console.log("trasholds "+trasholds.spatsum);
+	console.log("trasholds "+trasholds.allsum);
 	this.getManager().trasholds = trasholds;
 	//return trasholds;
 }

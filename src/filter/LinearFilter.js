@@ -93,7 +93,7 @@ WGL.filter.LinearFilter = function(meta, width, id){
 		}
 	
 		gl.drawArrays(gl.LINES, 0, pointsSize);		
-		//this.readPixels();
+		this.readPixels();
 		
 		gl.bindBuffer(gl.ARRAY_BUFFER, null);
 		gl.bindFramebuffer(gl.FRAMEBUFFER, null);
