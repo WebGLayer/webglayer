@@ -13,7 +13,31 @@ WGL.ChartDiv = function(parentdiv, divid, caption) {
 	var dimension;
 	this.setDim = function(d){
 		dimension = d;
-	}
+	};
+
+	this.change = function () {
+		$(this).toggleClass('btn-plus');
+		$("#"+divid).slideToggle();
+		var el = $("#but"+divid);
+		if (el.hasClass("fa-chevron-down")) {
+			/*deactivate*/
+			el.removeClass("fa-chevron-down");
+			el.addClass("fa-chevron-right");
+			if (dimension!=undefined){
+				dimension.setVisible(false);
+			}
+		}
+		else{
+			/*activate*/
+			el.removeClass("fa-chevron-right");
+			el.addClass("fa-chevron-down");
+			if (dimension!=undefined){
+				dimension.setVisible(true);
+				//dimension.render(WGL.getManager().num_rec);
+				WGL.render();
+			}
+		}
+	};
 	
 	
 	
@@ -40,9 +64,6 @@ WGL.ChartDiv = function(parentdiv, divid, caption) {
     			WGL.render();
     		}
 	    }
-	    
-	    
-	    
 	  });
 	
 	
