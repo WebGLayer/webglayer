@@ -75,6 +75,7 @@ var WGL = (function() {
 			this._mainFilter = new WGL.internal.Filter();
 
 			this._dimensions = [];
+			this._updatefuc = [];
 			
 			this.mcontroller = new WGL.internal.MapController();
 			this.mcontroller.resize();
@@ -347,6 +348,9 @@ var WGL = (function() {
 				}		
 				this.render();
 			
+		},
+		registerUpdateFunction: function (f) {
+			this._updatefuc.push(f)
 		}
 		
 	

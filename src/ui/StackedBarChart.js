@@ -1,4 +1,4 @@
- WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {	 	
+ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
 
 	 
 	var type;
@@ -36,7 +36,9 @@
 	var width = w - margin.left - margin.right;
 	var height = h - margin.top - margin.bottom;
 	var dataset = null;
-	var svgbw = "";	
+	var svgbw = "";
+
+	 this.y_label = "detections";
 	
 
 	this.setLinearXScale = function(){
@@ -59,7 +61,7 @@
 
 	this.xformat = function(d){
 			return d;
-			 }
+			 };
 	
 /*	this.setTicks = function(n){
 		xAxis.ticks(n) ;
@@ -96,10 +98,11 @@
 		//to update label printing
 		//new Date(d*1000).getYear()};
 		
-		xAxis = d3.svg.axis().scale(xScale).orient("bottom").tickFormat(this.xformat);;
+		xAxis = d3.svg.axis().scale(xScale).orient("bottom").tickFormat(this.xformat);
 
 		
-		yAxis = d3.svg.axis().scale(yScale).orient("left");
+		//yAxis = d3.svg.axis().scale(yScale).orient("left");
+		yAxis = d3.svg.axis().scale(yScale).orient("left").tickFormat(d3.format(".2n")); //changes
 
 		// xScale.domain(this.dataset.map(function(d) {
 		// return d.max-(d.max-d.min)/2; }));
@@ -118,7 +121,7 @@
 
 		svg.append("g").attr("class", "y axis").call(yAxis).append("text")
 				.attr("transform", "rotate(270)").attr("y", "-4.5em").attr("x",
-						"-2em").style("text-anchor", "end").text("number of items");
+						"-2em").style("text-anchor", "end").text(this.y_label); //changes
 
 		/*
 		 * bars = svg.selectAll(".bars").data(dataset).enter()
@@ -305,7 +308,7 @@
 		yScale = d3.scale.linear().domain(
 				[ 0, dataset.max[active_group] ]).range(
 				[ height, 0 ]);
-		yAxis = d3.svg.axis().scale(yScale).orient("left");
+		yAxis = d3.svg.axis().scale(yScale).orient("left").tickFormat(d3.format(".2n")); //changes format
 		svg.selectAll('.y.axis').transition().duration(30)
 				.call(yAxis);
 		

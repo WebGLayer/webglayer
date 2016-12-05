@@ -123,7 +123,11 @@ WGL.filterDim = function(id, filterId, filter, dorendering){
 	if  ( filter.length==0){
 		//console.log("filter deleted");
 		this.filterDeleted(id, filterId);	
-		mainFilter.thisfilter = undefined;					
+		mainFilter.thisfilter = undefined;
+		//call all update function
+		WGL._updatefuc.forEach(function (f) {
+			f();
+		});
 		return;
 		
 	} else if ( filter.length>0 && (filterId!=mainFilter.thisfilter || typeof(mainFilter.thisfilter)=='undefined' )){
@@ -146,6 +150,10 @@ WGL.filterDim = function(id, filterId, filter, dorendering){
 	if (dorendering==undefined || dorendering==true){
 		this.render();
 		this.updateCharts();
+		// call all update function
+		WGL._updatefuc.forEach(function (f) {
+			f();
+		})
 	}
 	
 	/** geting top k elemnts*/
