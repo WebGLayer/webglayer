@@ -131,7 +131,7 @@ WGL.filterDim = function(id, filterId, filter, dorendering){
 		return;
 		
 	} else if ( filter.length>0 && (filterId!=mainFilter.thisfilter || typeof(mainFilter.thisfilter)=='undefined' )){
-		console.log('filter changed');
+		//console.log('filter changed');
 		//thatfilter = thisfilter;			
 		mainFilter.thisfilter =  filterId;
 		this.filterChanged(id, mainFilter.thisfilter);						
@@ -145,7 +145,7 @@ WGL.filterDim = function(id, filterId, filter, dorendering){
 
 	//logFilterStatus();
 	mainFilter.applyFilterDim(dimensions[id],filterId);	
-	console.log("filtering...:"+filter);
+	//console.log("filtering...:"+filter);
 
 	if (dorendering==undefined || dorendering==true){
 		this.render();
@@ -244,7 +244,7 @@ WGL.setFiltersTrasholds = function(){
 		} 
 	}
 	}
-	console.log("trasholds "+trasholds.allsum);
+	//console.log("trasholds "+trasholds.allsum);
 	this.getManager().trasholds = trasholds;
 	//return trasholds;
 }

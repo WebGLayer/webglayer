@@ -40,6 +40,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-jsdoc');
   // Default task(s).
-  grunt.registerTask('default', ['concat','uglify','jsdoc']);
+  grunt.registerTask('default', ['concat','uglify']);
 
 };
