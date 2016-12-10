@@ -9,7 +9,7 @@ module.exports = function(grunt) {
     		 
     	  },
     	  dist : {
-    	    src  : ['src/**/*.js'],
+    	    src  : ['src/WGL.js','src/**/*.js'],
     	    dest : 'build/main.js'
     	  }
     	},

@@ -61,7 +61,12 @@
 
 	this.xformat = function(d){
 			return d;
-			 };
+	};
+	var yformat = d3.format(".2n");
+
+	 this.setYFormat = function (fuc) {
+		 yformat = fuc;
+	 };
 	
 /*	this.setTicks = function(n){
 		xAxis.ticks(n) ;
@@ -102,7 +107,7 @@
 
 		
 		//yAxis = d3.svg.axis().scale(yScale).orient("left");
-		yAxis = d3.svg.axis().scale(yScale).orient("left").tickFormat(d3.format(".2n")); //changes
+		yAxis = d3.svg.axis().scale(yScale).orient("left").tickFormat(yformat); //changes
 
 		// xScale.domain(this.dataset.map(function(d) {
 		// return d.max-(d.max-d.min)/2; }));
@@ -240,6 +245,25 @@
 			return (h - 63 + d[0] * 15 + 12)
 		}).attr("width", 12).attr("height", 12).attr("stroke", "none");
 
+		var help = d3.select("#"+div_id).append("div").classed('ii',true).append("i").classed('fa', true).classed('fa-info', true);
+        var tooltip_content = "<table>"+
+        "<tr>"+
+        '<td><div class="color-selected"><b>selected</b></div></td><td>selected data</td>'+
+        "</tr>"+
+        "<tr>"+
+        '<td><div class="color-unselected"><b>unselected</b></div></td><td>unselected data in the current map view</td>'+
+        "</tr>"+
+        "<tr>"+
+        '<td><div class="color-out"><b>out</b></div></td><td>data out of the current map view</td>'+
+        "</tr>"+
+        "</table>";
+        $(help).tooltipster({
+            content: tooltip_content,
+            contentAsHTML: true,
+            theme: 'tooltipster-light'
+
+        });
+
 		function resizeExtent(selection) {
 			selection.attr("height", height);
 		}
@@ -308,7 +332,8 @@
 		yScale = d3.scale.linear().domain(
 				[ 0, dataset.max[active_group] ]).range(
 				[ height, 0 ]);
-		yAxis = d3.svg.axis().scale(yScale).orient("left").tickFormat(d3.format(".2n")); //changes format
+		//console.log(this);
+		yAxis = d3.svg.axis().scale(yScale).orient("left").tickFormat(yformat); //changes format
 		svg.selectAll('.y.axis').transition().duration(30)
 				.call(yAxis);
 		
