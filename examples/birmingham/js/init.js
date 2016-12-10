@@ -10,7 +10,7 @@ function init() {
 	//	data.loadPosData("data/xyall5a300k.json");
 	//	data.loadPosData("data/xyall5atest.json");
 	//	data.loadPosData("data/xyall5a400k.json");
-	//  data.loadPosData("data/test.json");
+	//    data.loadPosData("data/test.json");
 	//	data.loadPosData("data/acc600k.json");
 				
 			

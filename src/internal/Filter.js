@@ -189,8 +189,8 @@ WGL.internal.Filter = function() {
 		//manager.filterTexture = filterTexture[activeID];
 		//console.log("returnunt texture "+activeID);
 
-		this.readPixels(activeID, 'active');
-    	this.readPixels(thatID, 'pasive');	
+		//this.readPixels(activeID, 'active');
+    	//this.readPixels(thatID, 'pasive');	
 				
 		gl.useProgram(null);
 		gl.bindRenderbuffer(gl.RENDERBUFFER, null);
