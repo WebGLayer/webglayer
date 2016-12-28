@@ -230,11 +230,15 @@
 		}).on(
 				"click",
 				function(d) {
-					var el = d3.select("#"+div_id + d[0])				
-						active_group = d[0];
-						for (var i = 0; i < classes.length; i++) {							
-							calcBar();													
-						}
+					var el = d3.select("#"+div_id + d[0]);
+					d3.select(this.parentNode).selectAll("rect").attr("stroke-width", "1").attr("stroke","black");
+					el.attr("stroke-width", "3");
+					el.attr("stroke", d[2]);
+
+					active_group = d[0];
+					for (var i = 0; i < classes.length; i++) {
+						calcBar();
+					}
 					
 
 				});
@@ -256,7 +260,7 @@
         "<tr>"+
         '<td><div class="color-out"><b>out</b></div></td><td>data out of the current map view</td>'+
         "</tr>"+
-        "</table>";
+        "</table><br/> When you click on the legend adjust the chart scale";
         $(help).tooltipster({
             content: tooltip_content,
             contentAsHTML: true,
