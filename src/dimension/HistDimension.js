@@ -140,20 +140,20 @@ WGL.dimension.HistDimension = function(meta){
 		gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 		gl.bindTexture(gl.TEXTURE_2D, null);
 
-	}
+	};
 
 
 	this.setToOrdinal = function( ){
 		valcalc = function(i){ 
 			return meta.domain[i];
-			}	
-	}
+			};
+	};
 
 	this.setToLinear = function() {
 			valcalc = function(i){ 
 			return (i + meta.min ) * (meta.max -meta.min) / (meta.num_bins)
 			}	
-	}
+	};
 	this.readPixels = function() {
 
 		/* console.time("reading filter"); */
@@ -206,6 +206,8 @@ WGL.dimension.HistDimension = function(meta){
 		
 		return res;
 
+	};
+	this.getDomain = function () {
+		return meta.domain;
 	}
-
-}
+};

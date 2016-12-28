@@ -20,6 +20,7 @@ WGL.filter.LinearFilter = function(meta, width, id){
 	
 	this.filterTexture = gl.createTexture();
 	this.filterTexture.name = "hist filter texture";
+	this.actual_filtres = [];
 
 
 	/*Initialise offscreen buffer*/
@@ -108,6 +109,7 @@ WGL.filter.LinearFilter = function(meta, width, id){
 		
 		
 		var allfilters = [];
+		this.actual_filtres = points;
 
 		//if (points.length==0){				
 		//	allfilters = new Float32Array([-1.5, 0, 1.5,0,0]);												

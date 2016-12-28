@@ -352,7 +352,6 @@ var WGL = (function() {
 		registerUpdateFunction: function (f) {
 			this._updatefuc.push(f)
 		}
-		
 	
 	};
 	
