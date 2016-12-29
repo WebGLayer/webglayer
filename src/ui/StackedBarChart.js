@@ -37,6 +37,7 @@
 	var height = h - margin.top - margin.bottom;
 	var dataset = null;
 	var svgbw = "";
+	 var bw = 0.0;
 
 	 this.y_label = "detections";
 	
@@ -44,7 +45,7 @@
 	this.setLinearXScale = function(){
 		xScale = new d3.scale.linear();
 		xScale = d3.scale.linear().domain([ m.min , m.max ]).range([ 0, width ]);
-		var bw = Math.floor(width / dataset.length );
+		bw = Math.floor(width / dataset.length );
 		svgbw= "h"+bw+"V";
 		type = 'linear';
 		return this;
@@ -52,7 +53,7 @@
 
 	this.setOrdinalXScale = function(){
 		xScale = d3.scale.ordinal().domain(m.domain).rangeBands([ 0, width ],0.03,0.015);
-		var bw =xScale.rangeBand();
+		bw =xScale.rangeBand();
 		svgbw= "h"+bw+"V";
 		type = 'ordinal';
 		return this;
@@ -361,10 +362,22 @@
 		var path = [], i = -1, n = groups.length, d;
 		while (++i < n) {
 			var d = groups[i];
-			path.push("M", xScale(d.val), ",", yScale(d.selected), "V",
+			if (yScale(d.selected) + yScale(d.unselected) - height < -0.1 && yScale(d.selected) > 8){
+				path.push("M", xScale(d.val), ",", yScale(d.selected),
+					"V",8,
+					"L",xScale(d.val) + bw/2, ",",0,
+					"L",xScale(d.val) + bw,",",8,
+					"V",yScale(d.selected)
+				);
+				//console.log(aa);
+			}
+			else{
+				path.push("M", xScale(d.val), ",", yScale(d.selected), "V",
 					yScale(d.selected) + yScale(d.unselected) - height, svgbw,
 					yScale(d.selected));
+			}
 		}
+		//console.log(path.join(""));
 		return path.join("");
 	}
 
@@ -373,10 +386,22 @@
 		while (++i < n) {
 			var d = groups[i];
 			var start = yScale(d.selected) + yScale(d.unselected) - height;
-			path.push("M", xScale(d.val), ",", start, "V", start
+			if (start + yScale(d.out) - height < -0.1 && start > 8){
+				path.push("M", xScale(d.val), ",", start,
+					"V",8,
+					"L",xScale(d.val) + bw/2, ",",0,
+					"L",xScale(d.val) + bw,",",8,
+					"V",start
+				);
+				//console.log(aa);
+			}
+			else{
+				path.push("M", xScale(d.val), ",", start, "V", start
 					+ yScale(d.out) - height, svgbw, start);
+			}
+
 		}
 		return path.join("");
 	}
 	
-}
+};
