@@ -37,14 +37,15 @@
 	var height = h - margin.top - margin.bottom;
 	var dataset = null;
 	var svgbw = "";
+	var bw = 0.0;
 
-	 this.y_label = "detections";
+	this.y_label = "detections";
 	
 
 	this.setLinearXScale = function(){
 		xScale = new d3.scale.linear();
 		xScale = d3.scale.linear().domain([ m.min , m.max ]).range([ 0, width ]);
-		var bw = Math.floor(width / dataset.length );
+		bw = Math.floor(width / dataset.length );
 		svgbw= "h"+bw+"V";
 		type = 'linear';
 		return this;
@@ -52,7 +53,7 @@
 
 	this.setOrdinalXScale = function(){
 		xScale = d3.scale.ordinal().domain(m.domain).rangeBands([ 0, width ],0.03,0.015);
-		var bw =xScale.rangeBand();
+		bw =xScale.rangeBand();
 		svgbw= "h"+bw+"V";
 		type = 'ordinal';
 		return this;
@@ -64,9 +65,13 @@
 	};
 	var yformat = d3.format(".2n");
 
-	 this.setYFormat = function (fuc) {
+	this.setYFormat = function (fuc) {
 		 yformat = fuc;
-	 };
+	};
+	var arrowHeight = 8;
+	this.setArrowHeight = function (value) {
+		arrowHeight = value;
+	};
 	
 /*	this.setTicks = function(n){
 		xAxis.ticks(n) ;
@@ -135,8 +140,8 @@
 		 */
 
 		/* new bars */
-		svg.append("clipPath").attr("id", "clip-" + div_id).append("rect")
-				.attr("width", width).attr("height", height);
+		//svg.append("clipPath").attr("id", "clip-" + div_id).append("rect")
+		//		.attr("width", width).attr("height", height);
 
 		bars = svg.selectAll(".bar").data([ "selected", "unselected", "out" ])
 				.enter().append("path").attr("class", function(d) {
@@ -227,17 +232,23 @@
 			return (h - 63 + d[0] * 15)
 		}).attr("width", 12).attr("height", 12).attr("fill", function(d) {
 			return d[2];
-		}).on(
-				"click",
-				function(d) {
-					var el = d3.select("#"+div_id + d[0])				
-						active_group = d[0];
-						for (var i = 0; i < classes.length; i++) {							
-							calcBar();													
-						}
-					
+		}).classed('legend-scale',true)
+		.on(
+			"click",
+			function(d) {
+				var el = d3.select("#"+div_id + d[0]);
+				d3.select(this.parentNode).selectAll("rect").classed('select-legend-scale', false);
+				//el.attr("stroke-width", "3");
+				//el.attr("stroke", d[2]);
+				el.classed('select-legend-scale', true);
 
-				});
+				active_group = d[0];
+				for (var i = 0; i < classes.length; i++) {
+					calcBar();
+				}
+
+
+			});
 
 		legendRect.enter().append("text").text(function(d) {
 			return d[1];
@@ -256,7 +267,7 @@
         "<tr>"+
         '<td><div class="color-out"><b>out</b></div></td><td>data out of the current map view</td>'+
         "</tr>"+
-        "</table>";
+        "</table><br/> When you click on the legend adjust the chart scale";
         $(help).tooltipster({
             content: tooltip_content,
             contentAsHTML: true,
@@ -357,10 +368,25 @@
 		var path = [], i = -1, n = groups.length, d;
 		while (++i < n) {
 			var d = groups[i];
-			path.push("M", xScale(d.val), ",", yScale(d.selected), "V",
+			if (yScale(d.selected) + yScale(d.unselected) - height < 0 && yScale(d.selected) > 0.1){ //&& yScale(d.selected) > 8
+				path.push("M", xScale(d.val), ",", yScale(d.selected),
+					"V",0,
+					"L",xScale(d.val) + bw/2, ",",-arrowHeight,
+					"L",xScale(d.val) + bw,",",0,
+					"V",yScale(d.selected)
+				);
+				//console.log(aa);
+			}
+			else if (yScale(d.selected) <= 0.1 ){
+				path.push("")
+			}
+			else{
+				path.push("M", xScale(d.val), ",", yScale(d.selected), "V",
 					yScale(d.selected) + yScale(d.unselected) - height, svgbw,
 					yScale(d.selected));
+			}
 		}
+		//console.log(path.join(""));
 		return path.join("");
 	}
 
@@ -369,10 +395,25 @@
 		while (++i < n) {
 			var d = groups[i];
 			var start = yScale(d.selected) + yScale(d.unselected) - height;
-			path.push("M", xScale(d.val), ",", start, "V", start
+			if (start + yScale(d.out) - height < 0 && start > 0.1){ //&& start > 8
+				path.push("M", xScale(d.val), ",", start,
+					"V",0,
+					"L",xScale(d.val) + bw/2, ",",-arrowHeight,
+					"L",xScale(d.val) + bw,",",0,
+					"V",start
+				);
+				//console.log(aa);
+			}
+			else if (start <= 0.1){
+				path.push("");
+			}
+			else{
+				path.push("M", xScale(d.val), ",", start, "V", start
 					+ yScale(d.out) - height, svgbw, start);
+			}
+
 		}
 		return path.join("");
 	}
 	
-}
+};

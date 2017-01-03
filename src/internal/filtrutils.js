@@ -247,4 +247,35 @@ WGL.setFiltersTrasholds = function(){
 	//console.log("trasholds "+trasholds.allsum);
 	this.getManager().trasholds = trasholds;
 	//return trasholds;
-}
+};
+/**
+ * Select value or add to selection
+ * @param dim_id dimension ID
+ * @param filter_id filter ID
+ * @param value value for filtering (one value from domain list)
+ * @param add if true value will be added to selection else will be selected only value
+ */
+WGL.exactFilterDim = function (dim_id, filter_id, value, add) {
+	add = add || false;
+	var filters = [];
+
+	var dim = this._dimensions[dim_id];//.filters[filter_id].actual_filtres
+	if (add){
+		filters = dim.filters[filter_id].actual_filtres
+	}
+	var index = -1;
+	var dom = dim.getDomain();
+	for (var i = 0; i < 7; i++){
+		var v = dom[i];
+		if (v == value){
+			index = i;
+		}
+	}
+	if (index < 0){
+		throw "Value '"+value+"' does not exist!";
+	}
+	else {
+		filters.push([index, index + 1]);
+		WGL.filterDim(dim_id, filter_id, filters);
+	}
+};

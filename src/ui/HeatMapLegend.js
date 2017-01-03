@@ -66,7 +66,7 @@ WGL.ui.HeatMapLegend = function(div_id, filterId) {
      .attr("y", -38)
      .attr("dy", ".71em")
      .style("text-anchor", "end")
-     .text("Magnitude-per-area within the radius ");
+     .text("Density of records within the radius "); //Magnitude-per-area within the radius
 
   	 svg.append("g")
      .attr("class", "y axis sel")
