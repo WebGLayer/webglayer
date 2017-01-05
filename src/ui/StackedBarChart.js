@@ -368,17 +368,13 @@
 		var path = [], i = -1, n = groups.length, d;
 		while (++i < n) {
 			var d = groups[i];
-			if (yScale(d.selected) + yScale(d.unselected) - height < 0 && yScale(d.selected) > 0.1){ //&& yScale(d.selected) > 8
+			if (yScale(d.selected) + yScale(d.unselected) - height < 0){ //&& yScale(d.selected) > 0.1
 				path.push("M", xScale(d.val), ",", yScale(d.selected),
 					"V",0,
 					"L",xScale(d.val) + bw/2, ",",-arrowHeight,
 					"L",xScale(d.val) + bw,",",0,
 					"V",yScale(d.selected)
 				);
-				//console.log(aa);
-			}
-			else if (yScale(d.selected) <= 0.1 ){
-				path.push("")
 			}
 			else{
 				path.push("M", xScale(d.val), ",", yScale(d.selected), "V",
@@ -395,7 +391,7 @@
 		while (++i < n) {
 			var d = groups[i];
 			var start = yScale(d.selected) + yScale(d.unselected) - height;
-			if (start + yScale(d.out) - height < 0 && start > 0.1){ //&& start > 8
+			if (start + yScale(d.out) - height < 0 && start > -0.1){
 				path.push("M", xScale(d.val), ",", start,
 					"V",0,
 					"L",xScale(d.val) + bw/2, ",",-arrowHeight,
@@ -404,7 +400,7 @@
 				);
 				//console.log(aa);
 			}
-			else if (start <= 0.1){
+			else if (start <= -0.1){
 				path.push("");
 			}
 			else{
