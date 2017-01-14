@@ -68,9 +68,18 @@
 	this.setYFormat = function (fuc) {
 		 yformat = fuc;
 	};
-	var arrowHeight = 8;
-	this.setArrowHeight = function (value) {
-		arrowHeight = value;
+	var arrowTan = 0.6;
+	var arrowHeight = 0.0;
+	 /**
+	  * Set arrow height. If target height in px is higher then margin.top height is set to margin.top.
+	  * @param tan height in tan (45° is tan 1)
+	  */
+	this.setArrowHeight = function (tan) {
+		arrowTan = tan;
+		arrowHeight = arrowTan * (bw/2);
+		if (arrowHeight > margin.top){
+			arrowHeight = margin.top;
+		}
 	};
 	
 /*	this.setTicks = function(n){
@@ -91,6 +100,8 @@
 		} else {
 			this.setOrdinalXScale();
 		}
+		//set arrow height for first
+		this.setArrowHeight(arrowTan);
 
 		var cols = [ "#ff8c00", "#7b6888", "#98abc5" ];
 		//var cols = [ "#ff8c00", "#3182bd", "#98abc5" ];
@@ -301,7 +312,7 @@
 			//console.log(xScale.domain()[j]+' '+brush1.extent()[0][1]);
 			
 		}
-	}
+	};
 	
 
 	// Create bars
@@ -337,7 +348,7 @@
 		 * yAxis = d3.svg.axis().scale(yScale).orient("left");
 		 * svg.selectAll('.y.axis').transition().duration(15).call(yAxis);
 		 */
-	}
+	};
 
 	function calcBar(){
 		yScale = d3.scale.linear().domain(
