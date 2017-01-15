@@ -68,9 +68,18 @@
 	this.setYFormat = function (fuc) {
 		 yformat = fuc;
 	};
-	var arrowHeight = 8;
-	this.setArrowHeight = function (value) {
-		arrowHeight = value;
+	var arrowTan = 0.6;
+	var arrowHeight = 0.0;
+	 /**
+	  * Set arrow height. If target height in px is higher then margin.top height is set to margin.top.
+	  * @param tan height in tan (45° is tan 1)
+	  */
+	this.setArrowHeight = function (tan) {
+		arrowTan = tan;
+		arrowHeight = arrowTan * (bw/2);
+		if (arrowHeight > margin.top){
+			arrowHeight = margin.top;
+		}
 	};
 	
 /*	this.setTicks = function(n){
@@ -91,6 +100,8 @@
 		} else {
 			this.setOrdinalXScale();
 		}
+		//set arrow height for first
+		this.setArrowHeight(arrowTan);
 
 		var cols = [ "#ff8c00", "#7b6888", "#98abc5" ];
 		//var cols = [ "#ff8c00", "#3182bd", "#98abc5" ];
@@ -301,7 +312,7 @@
 			//console.log(xScale.domain()[j]+' '+brush1.extent()[0][1]);
 			
 		}
-	}
+	};
 	
 
 	// Create bars
@@ -337,7 +348,7 @@
 		 * yAxis = d3.svg.axis().scale(yScale).orient("left");
 		 * svg.selectAll('.y.axis').transition().duration(15).call(yAxis);
 		 */
-	}
+	};
 
 	function calcBar(){
 		yScale = d3.scale.linear().domain(
@@ -368,17 +379,13 @@
 		var path = [], i = -1, n = groups.length, d;
 		while (++i < n) {
 			var d = groups[i];
-			if (yScale(d.selected) + yScale(d.unselected) - height < 0 && yScale(d.selected) > 0.1){ //&& yScale(d.selected) > 8
+			if (yScale(d.selected) + yScale(d.unselected) - height < 0){ //&& yScale(d.selected) > 0.1
 				path.push("M", xScale(d.val), ",", yScale(d.selected),
 					"V",0,
 					"L",xScale(d.val) + bw/2, ",",-arrowHeight,
 					"L",xScale(d.val) + bw,",",0,
 					"V",yScale(d.selected)
 				);
-				//console.log(aa);
-			}
-			else if (yScale(d.selected) <= 0.1 ){
-				path.push("")
 			}
 			else{
 				path.push("M", xScale(d.val), ",", yScale(d.selected), "V",
@@ -395,7 +402,7 @@
 		while (++i < n) {
 			var d = groups[i];
 			var start = yScale(d.selected) + yScale(d.unselected) - height;
-			if (start + yScale(d.out) - height < 0 && start > 0.1){ //&& start > 8
+			if (start + yScale(d.out) - height < 0 && start > -0.1){
 				path.push("M", xScale(d.val), ",", start,
 					"V",0,
 					"L",xScale(d.val) + bw/2, ",",-arrowHeight,
@@ -404,7 +411,7 @@
 				);
 				//console.log(aa);
 			}
-			else if (start <= 0.1){
+			else if (start <= -0.1){
 				path.push("");
 			}
 			else{
