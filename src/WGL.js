@@ -168,6 +168,18 @@ var WGL = (function() {
 			this._dimensions[id] = dim;
 			return dim;
 		},
+		
+		addMapLineDimension : function(data, id){
+			try {
+				manager.addDataBuffer(u.array2TA(data), 2, 'wPoint');
+			} catch (err) {
+				console.warn(err);
+			}
+			;
+			var dim = new WGL.experimental.MapLineDimension(id);
+			this._dimensions[id] = dim;
+			return dim;
+		},
 
 		addLinearHistDimension : function(m) {
 			var ta = u.array2TANormLinear(m, m.num_bins);
