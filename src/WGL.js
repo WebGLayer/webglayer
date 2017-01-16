@@ -174,8 +174,7 @@ var WGL = (function() {
 				manager.addDataBuffer(u.array2TA(data), 2, 'wPoint');
 			} catch (err) {
 				console.warn(err);
-			}
-			;
+			};
 			var dim = new WGL.experimental.MapLineDimension(id);
 			this._dimensions[id] = dim;
 			return dim;

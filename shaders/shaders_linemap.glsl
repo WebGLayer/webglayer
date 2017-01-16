@@ -41,8 +41,7 @@
   		  // col = vec4(0.0,0.,0.,0.75);
   		gl_Position = p;   	
 		
-  		
-	
+
  		
       }
     </script>
