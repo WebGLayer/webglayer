@@ -1,6 +1,6 @@
 <script id="mapline_vShader" type="x-shader/x-vertex">
      attribute vec4 wPoint;
-     attribute float attr;          
+   //  attribute float attr;          
      attribute vec2 index;
       
      uniform mat4 mapMatrix;  
@@ -21,18 +21,18 @@
   		vec4 p ;
   		// if data are selected  
   		if (fdata[0]>=1./256. && drawselect>0.5){
-  			col = vec4(attr ,1.-attr,0.,0.8);  		
+  			//col = vec4(1 ,1.-attr,0.,0.8);  		
   			p =  mapMatrix * wPoint;  	
   		} else if (fdata[0] < 1./256. && drawselect<0.5) {
-  			col = vec4(attr ,1.-attr,0.,0.5);  		
+  			//col = vec4(attr ,1.-attr,0.,0.5);  		
   			p =  mapMatrix * wPoint; 
   		
   		}   		
   		else  {
   			p =  vec4(-2.,-2.,0.,0.);  	
-  			col = vec4(attr ,1.-attr,0.,0.1);
+  			//col = vec4(attr ,1.-attr,0.,0.1);
   		}
-  		//col = vec4(attr *5.,1.-attr*5.,0.,0.8);
+  		col = vec4(1.,0.5,0.,0.8);
   		
   	    	   
   	
@@ -41,8 +41,7 @@
   		  // col = vec4(0.0,0.,0.,0.75);
   		gl_Position = p;   	
 		
-  		
-	
+
  		
       }
     </script>

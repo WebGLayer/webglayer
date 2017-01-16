@@ -1,27 +1,52 @@
-WGL.experimental.MapLineDimension = function(manager){
-	this.manager = manager;
-	Dimension.call(this, manager);
+WGL.experimental.MapLineDimension = function(id){
 	
+	var manager = WGL.getManager();
+	var GLU = WGL.internal.GLUtils;
+	
+	this.id = id;
+	this.isSpatial = true;
+	this.glProgram = GLU.compileShaders('mapline_vShader', 'mapline_fShader', this);
+	
+	this.name = "map";
+	
+	var zoom = 'zoom';
+	var drawselect = 'drawselect';
+	var numfilters = 'numfilters';
+	
+	gl.useProgram(this.glProgram);
+	manager.storeUniformLoc(this.glProgram, zoom);
+	manager.storeUniformLoc(this.glProgram, drawselect);
+	manager.storeUniformLoc(this.glProgram, numfilters);
+	
+	gl.useProgram(null);
+	
+	var visible = true;
+	this.setVisible = function(v){
+		visible = v;
+	}
 
 	this.setup = function() {
 		
 		//gl.useProgram(this.glProgram);
 		/** add specific buffer and uniforms */
 		gl.useProgram(this.glProgram);
-		manager.bindMapMatrix(this.glProgram);
-		manager.enableBufferForName(this.glProgram, "wPoint"+manager.year, "wPoint");
-		manager.enableBufferForName(this.glProgram,  "attr"+manager.year+manager.time, "attr");
-		manager.enableBufferForName(this.glProgram,  "index"+manager.year+"Line", "index");	
-	
-		manager.enableFilterTexture(this.glProgram);
-		manager.bindRasterMatrix(this.glProgram);
-		//this.manager.enableBufferForName(this.glProgram,  "attr0", "attr");
-		//this.manager.enableBuffer(this.glProgram, "speed");
-		gl.bindFramebuffer(gl.FRAMEBUFFER, null);	
-		gl.viewport(0, 0, manager.width, manager.height);
 		
+		gl.uniform1f(this.glProgram.numfilters, manager.trasholds.allsum );		
+		manager.bindMapMatrix(this.glProgram);
+		manager.enableBufferForName(this.glProgram, "wPoint", "wPoint");
+		manager.enableBufferForName(this.glProgram, "index", "index");	
+		manager.bindRasterMatrix(this.glProgram);	
+		
+		gl.bindFramebuffer(gl.FRAMEBUFFER, null);	
+		gl.viewport(manager.l, manager.b, manager.w, manager.h);
+		//gl.clearColor(0.0, 0.0, 0.0, 0.0);
+		//gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+	
 		gl.disable(gl.DEPTH_TEST);
-		gl.disable(gl.BLEND);
+		
+		gl.enable(gl.BLEND);
+		//gl.blendFunc(gl.ONE, gl.ONE);
+		gl.blendFunc( gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA  );
 		//gl.enable(gl.BLEND);
 		//gl.blendFunc(gl.ONE, gl.ONE);
 		if (this.glProgram.loc == null ){
@@ -32,50 +57,36 @@ WGL.experimental.MapLineDimension = function(manager){
 				return;
 			}
 		}
-		/*set point size*/
-		var z = map.getZoom();
+		/*set point size*/		
 	//	console.log( map.getZoom());
-		if (z > 8){
-			var zz = (z -7)/2;
-			gl.uniform1f(this.glProgram.loc, zz);		
-		} else {
-			gl.uniform1f(this.glProgram.loc, 1);		
-		}
 		
-		
-		
+		gl.uniform1f(this.glProgram.loc, manager.zoom);				
 		
 				
 	}	
-	
-	this.bindDrawSelect = function(val){
-		if (this.glProgram.drawselect == null ){
+	this.render = function(num) {
+		
+		if (visible == false){		
+			return;
+		}
+
+		this.setup();	
+		manager.enableFilterTexture(this.glProgram);
+		//gl.useProgram(this.glProgram);	
+		if (this.glProgram.drawselect == null){
 			this.glProgram.drawselect = gl.getUniformLocation(this.glProgram, "drawselect");
-			if (!this.glProgram.drawselect instanceof WebGLUniformLocation) {				
-				console.error("Uniform set failed, uniform: drawselect"
-						+ " value " + val);
+			if (!this.glProgram.drawselect instanceof WebGLUniformLocation) {
+				console.error("Uniform set failed, uniform");
 				return;
 			}
 		}
-	
-		gl.uniform1f(this.glProgram.drawselect, val);		
-	
-	}
-	
-	
-	this.render = function(num) {
-
-		this.setup();
-		gl.clearColor(0.0, 0.0, 0.0, 0.0);
-		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-	
-		this.bindDrawSelect(0);	
-		gl.lineWidth(1);					 
-		gl.drawArrays(gl.LINES, 0,  manager.num_rec*2);
+		gl.uniform1f(this.glProgram.drawselect, 0);
 		
-		this.bindDrawSelect(1);	
-		gl.lineWidth(4);					 
-		gl.drawArrays(gl.LINES, 0,  manager.num_rec*2);		
+		gl.drawArrays(gl.LINES, 0, num);	
+		
+		gl.uniform1f(this.glProgram.drawselect, 1);
+		
+		gl.drawArrays(gl.LINES, 0, num);	
 	    gl.useProgram(null);
 	   
 		
@@ -95,7 +106,7 @@ WGL.experimental.MapLineDimension = function(manager){
 
 	this.readPixels = function() {
 		
-		//gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+	//	gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 		var readout = new Uint8Array(4);
 	//	console.time("reading_pix");
 		gl.readPixels(0, 0, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, readout);
@@ -111,5 +122,3 @@ WGL.experimental.MapLineDimension = function(manager){
 	}
 	
 }
-
-	
