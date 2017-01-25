@@ -176,6 +176,7 @@ var WGL = (function() {
 				console.warn(err);
 			};
 			var dim = new WGL.experimental.MapLineDimension(id);
+			manager.addDataBuffer(dim.calcNormals(data), 2, 'normals');
 			this._dimensions[id] = dim;
 			return dim;
 		},

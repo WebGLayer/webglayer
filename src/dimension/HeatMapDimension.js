@@ -277,7 +277,7 @@ WGL.dimension.HeatMapDimension = function(id) {
 
 			}
 			
-			this.renderer2.render(renderMin, renderMax, renderMin, renderMax,	renderMax);
+			//this.renderer2.render(renderMin, renderMax, renderMin, renderMax,	renderMax);
 		
 
 	}

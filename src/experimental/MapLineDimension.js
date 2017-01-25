@@ -34,6 +34,7 @@ WGL.experimental.MapLineDimension = function(id){
 		gl.uniform1f(this.glProgram.numfilters, manager.trasholds.allsum );		
 		manager.bindMapMatrix(this.glProgram);
 		manager.enableBufferForName(this.glProgram, "wPoint", "wPoint");
+		manager.enableBufferForName(this.glProgram, "normals", "normals");
 		manager.enableBufferForName(this.glProgram, "index", "index");	
 		manager.bindRasterMatrix(this.glProgram);	
 		
@@ -81,8 +82,8 @@ WGL.experimental.MapLineDimension = function(id){
 			}
 		}
 		gl.uniform1f(this.glProgram.drawselect, 0);
-		
-		gl.drawArrays(gl.LINES, 0, num);	
+		gl.lineWidth(5);
+		//gl.drawArrays(gl.LINES, 0, num);	
 		
 		gl.uniform1f(this.glProgram.drawselect, 1);
 		
@@ -119,6 +120,27 @@ WGL.experimental.MapLineDimension = function(id){
 		console.log(sum);
 		console.log(readout);
 		
+	}
+
+	this.calcNormals = function(data){
+		var normals = new Float32Array(data.length);
+		var j= 0;
+		for (var i = 0; i< data.length; i=i+4){
+			var sx=data[i];
+			var sy=data[i+1];
+			var tx=data[i+2];
+			var ty=data[i+3];
+			var l = Math.sqrt(Math.pow(tx-sx, 2) + Math.pow(ty-sy,2));
+			var nx = (ty-sy) / l;
+			var ny= -(tx-sx) / l;
+			// repeat twice for both points
+			normals[j++]=nx;
+			normals[j++]=ny;
+			normals[j++]=nx;
+			normals[j++]=ny;
+			
+		}
+		return normals;		
 	}
 	
 }
