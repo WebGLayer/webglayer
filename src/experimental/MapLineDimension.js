@@ -13,11 +13,101 @@ WGL.experimental.MapLineDimension = function(id){
 	var drawselect = 'drawselect';
 	var numfilters = 'numfilters';
 	
+	var heatMapMaximim = 0;
+	var heatMapMinimum = 0;
+	
 	gl.useProgram(this.glProgram);
 	manager.storeUniformLoc(this.glProgram, zoom);
 	manager.storeUniformLoc(this.glProgram, drawselect);
 	manager.storeUniformLoc(this.glProgram, numfilters);
+	var framebuffer = gl.createFramebuffer();
 	
+	this.renderer2 = new WGL.dimension.IluminationRenderer(manager);
+	this.renderer = new WGL.dimension.HeatMapRenderer(manager);
+	
+	/*indicate if the point has a value or just 1 should be used for every point*/
+	this.hasValues = false;
+	// this.manager = manager;
+	// Dimension.call(this, manager);
+	this.isSpatial = true;
+	this.lockScale = false;
+
+	
+	this.maxcal = new WGL.internal.MaxCalculator(Math.floor(manager.w / 5),
+			Math.floor(manager.h / 5));
+	var framebuffer = gl.createFramebuffer();
+	var last_num;
+
+	var visible = true;
+	var doGetMax = true;
+	var legend;
+	this.setVisible = function(v) {
+		visible = v;
+	}
+
+	this.setDoGetMax = function(m) {
+		doGetMax = m;
+	}
+
+	/* default radiusFunc */
+	this.radiusFunction = function(r, z) {
+		return Math.pow(z, 2) / 10;
+	};
+
+	/* default getMax function */
+	this.maxFunction = function(max) {
+		if (max == undefined) {
+			return 99999999;
+		}
+		return max;
+	}
+	/* default getMin function */
+	this.minFunction = function(min) {
+		return 0;
+	}
+
+	this.addLegend = function(thelegend) {
+		legend = thelegend;
+		legend.setDimension(this);
+	}
+	this.createMapFramebuffer = function() {
+		framebuffer.width = manager.w;
+		framebuffer.height = manager.h;
+
+		var renderbuffer = gl.createRenderbuffer();
+
+		this.heatTexture = gl.createTexture();
+		this.heatTexture.name = "line heat map texture";
+
+		if (!gl.getExtension("OES_texture_float")) {
+			console.log("OES_texture_float not availble -- this is legal");
+		}
+		/** Framebuffer */
+		gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
+
+		/** Texture */
+		gl.bindTexture(gl.TEXTURE_2D, this.heatTexture);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); // Prevents
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, framebuffer.width,
+				framebuffer.height, 0, gl.RGBA, gl.FLOAT, null);
+
+		/** Render buffer */
+		gl.bindRenderbuffer(gl.RENDERBUFFER, renderbuffer);
+		gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT16,
+				framebuffer.width, framebuffer.height);
+
+		gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0,
+				gl.TEXTURE_2D, this.heatTexture, 0);
+		gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT,
+				gl.RENDERBUFFER, renderbuffer);
+
+		gl.bindTexture(gl.TEXTURE_2D, null);
+	}
+	this.createMapFramebuffer();
 	gl.useProgram(null);
 	
 	var visible = true;
@@ -25,6 +115,18 @@ WGL.experimental.MapLineDimension = function(id){
 		visible = v;
 	}
 
+	/* default getMax function */
+	this.maxFunction = function(max) {
+		if (max == undefined) {
+			return 99999999;
+		}
+		return max;
+	}
+	/* default getMin function */
+	this.minFunction = function(min) {
+		return 0;
+	}
+	
 	this.setup = function() {
 		
 		//gl.useProgram(this.glProgram);
@@ -37,27 +139,25 @@ WGL.experimental.MapLineDimension = function(id){
 		manager.enableBufferForName(this.glProgram, "normals", "normals");
 		manager.enableBufferForName(this.glProgram, "index", "index");	
 		manager.bindRasterMatrix(this.glProgram);	
-		
-		gl.bindFramebuffer(gl.FRAMEBUFFER, null);	
-		gl.viewport(manager.l, manager.b, manager.w, manager.h);
-		//gl.clearColor(0.0, 0.0, 0.0, 0.0);
-		//gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-	
+				if (this.hasValues){
+			manager.enableBufferForName(this.glProgram, "hmValues", "values" );
+		}	
+		manager.bindRasterMatrix(this.glProgram);
+
+		gl.bindTexture(gl.TEXTURE_2D, this.heatTexture);
+		gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
+
+		gl.viewport(0, 0, manager.w, manager.h);
+		gl.clearColor(0.0, 0.0, 0.0, 0.0);
+		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
 		gl.disable(gl.DEPTH_TEST);
-		
+		// gl.disable(gl.BLEND);
 		gl.enable(gl.BLEND);
-		//gl.blendFunc(gl.ONE, gl.ONE);
-		gl.blendFunc( gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA  );
-		//gl.enable(gl.BLEND);
-		//gl.blendFunc(gl.ONE, gl.ONE);
-		if (this.glProgram.loc == null ){
-			this.glProgram.loc = gl.getUniformLocation(this.glProgram, "zoom");
-			if (!this.glProgram.loc instanceof WebGLUniformLocation) {				
-				console.error("Uniform set failed, uniform: " + u_name
-						+ " value " + value);
-				return;
-			}
-		}
+		gl.blendFunc(gl.ONE, gl.ONE);
+
+		manager.enableFilterTexture(this.glProgram);
+	
 		/*set point size*/		
 	//	console.log( map.getZoom());
 		
@@ -65,7 +165,62 @@ WGL.experimental.MapLineDimension = function(id){
 		
 				
 	}	
+	
+	var renderMin;
+	var renderMax;
+	
 	this.render = function(num) {
+		if (visible == false) {
+			return;
+		}
+		this.renderData(num);
+		// var max = maxcale.getMax(this.heatTexture);
+		if (!this.lockScale) {
+			if (doGetMax) {
+				this.maxall = this.maxcal.getMax(this.heatTexture, 1);
+				if (manager.trasholds.spatsum > 0) {
+					this.maxsel = this.maxcal.getMax(this.heatTexture, 0);
+				}
+			}
+			renderMax = this.maxFunction(this.maxall);
+			renderMin = this.minFunction(this.maxall);
+			this.maxVal = this.maxall;
+			this.minVal= 0;
+		} 			
+		renderMax = this.maxFunction(this.maxVal);
+		renderMin = this.minFunction(this.minVal);
+			// if (typeof(the_filter) !='undefined') {
+			if (manager.trasholds.spatsum > 0) {
+				// var maxsel = this.maxcal.getMax(this.heatTexture, 0);
+				if (typeof (the_filter) != 'undefined') {
+					/* there is a color filter applied */
+					this.renderer.render(renderMin, renderMax, the_filter[0],
+							the_filter[1], this.maxsel);
+					legend.updateMaxAll(this.maxall);
+					legend.drawWithFilter(this.maxsel);
+				} else {
+					this.renderer.render(renderMin, renderMax, renderMin, renderMax,
+							this.maxsel);
+					legend.drawWithoutFilter();
+					legend.updateMaxAll(this.maxsel );
+				}
+				if (legend != undefined) {
+					// legend.drawWithFilter(maxsel);
+				}
+				// legend.updateMaxSel(this.maxall);
+			} else {
+				// this.renderer.render( renderMin, renderMax, 0, 0);
+				this.renderer.render(renderMin, renderMax, renderMin, renderMax,
+						renderMax);
+				if (legend != undefined) {
+					legend.drawWithoutFilter();
+					legend.updateMaxAll(this.maxall);
+				}
+			}
+			
+			//this.renderer2.render(renderMin, renderMax, renderMin, renderMax,	renderMax);
+	}
+	this.renderData = function(num) {
 		
 		if (visible == false){		
 			return;
@@ -86,10 +241,12 @@ WGL.experimental.MapLineDimension = function(id){
 		//gl.drawArrays(gl.LINES, 0, num);	
 		
 		gl.uniform1f(this.glProgram.drawselect, 1);
-		
+		gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
 		gl.drawArrays(gl.LINES, 0, num);	
+		gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 	    gl.useProgram(null);
-	   
+	    this.renderer.heatTexture = this.heatTexture;
+		//this.renderer2.heatTexture = this.heatTexture;
 		
 	}
 	
