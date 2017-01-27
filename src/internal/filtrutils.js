@@ -265,7 +265,7 @@ WGL.exactFilterDim = function (dim_id, filter_id, value, add) {
 	}
 	var index = -1;
 	var dom = dim.getDomain();
-	for (var i = 0; i < 7; i++){
+	for (var i = 0; i < dom.length; i++){
 		var v = dom[i];
 		if (v == value){
 			index = i;
