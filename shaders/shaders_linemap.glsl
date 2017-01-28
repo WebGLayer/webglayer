@@ -1,7 +1,7 @@
 <script id="mapline_vShader" type="x-shader/x-vertex">
 attribute vec4 wPoint;
-//  attribute float attr;
 attribute vec2 index;
+attribute float values;
 attribute vec4 normals;
 
 uniform mat4 mapMatrix;
@@ -16,9 +16,11 @@ uniform float spatsum;
 varying float selected;
 
 varying vec4 col;
+varying float hmval;
 
 void main() {
 
+	 hmval = values;
 	vec4 rp = rasterMatrix * vec4(index[0], index[1], 0., 1.);
 	vec4 fdata = texture2D(filter, vec2(rp[0], rp[1]));
 	vec4 p;
@@ -51,13 +53,15 @@ precision mediump float;
 varying vec4 col;
 
 varying float selected;
+varying float hmval;
 
 void main() {
 
+	float val =  hmval;
 	if (selected == 1.) {
-		gl_FragColor = vec4(1., 1., selected, 1.); //col;
+		gl_FragColor = vec4(val, val, selected, 1.); //col;
 	} else {
-		gl_FragColor = vec4(0., 1., selected, 1.); //col;
+		gl_FragColor = vec4(0., val, selected, 1.); //col;
 	}
 
 }

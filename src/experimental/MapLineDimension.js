@@ -26,7 +26,7 @@ WGL.experimental.MapLineDimension = function(id){
 	this.renderer = new WGL.dimension.HeatMapRenderer(manager);
 	
 	/*indicate if the point has a value or just 1 should be used for every point*/
-	this.hasValues = false;
+	this.hasValues = true;
 	// this.manager = manager;
 	// Dimension.call(this, manager);
 	this.isSpatial = true;
@@ -66,6 +66,11 @@ WGL.experimental.MapLineDimension = function(id){
 		return 0;
 	}
 
+	this.setValuesBuffer = function(buffername){
+						
+		this.valueBufferName = buffername;
+	}
+	
 	this.addLegend = function(thelegend) {
 		legend = thelegend;
 		legend.setDimension(this);
@@ -138,9 +143,10 @@ WGL.experimental.MapLineDimension = function(id){
 		manager.enableBufferForName(this.glProgram, "wPoint", "wPoint");
 		manager.enableBufferForName(this.glProgram, "normals", "normals");
 		manager.enableBufferForName(this.glProgram, "index", "index");	
-		manager.bindRasterMatrix(this.glProgram);	
-				if (this.hasValues){
-			manager.enableBufferForName(this.glProgram, "hmValues", "values" );
+		manager.bindRasterMatrix(this.glProgram);
+		
+		if (this.valueBufferName!=undefined){
+			manager.enableBufferForName(this.glProgram, this.valueBufferName, "values" );
 		}	
 		manager.bindRasterMatrix(this.glProgram);
 
