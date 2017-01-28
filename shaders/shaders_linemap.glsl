@@ -61,7 +61,7 @@ void main() {
 	if (selected == 1.) {
 		gl_FragColor = vec4(val, val, selected, 1.); //col;
 	} else {
-		gl_FragColor = vec4(0., val, selected, 1.); //col;
+		gl_FragColor = vec4(0., 0., selected, 0.); //col;
 	}
 
 }
