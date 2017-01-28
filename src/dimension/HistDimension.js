@@ -11,11 +11,11 @@ WGL.dimension.HistDimension = function(meta){
 		};
 
 	var valcalcMeta = function(i, metaData){
-		if (metaData ==undefined){
+		/*if (metaData ==undefined){*/
 			return i;
-			} else {
+			/*} else {
 				return metaData.min + i * (metaData.max -metaData.min) ;
-			}
+			}*/
 		};
 			
 	
