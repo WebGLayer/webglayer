@@ -23,7 +23,7 @@ WGL.dimension.MapDimension = function(id){
 	var visible = true;
 	this.setVisible = function(v){
 		visible = v;
-	}
+	};
 
 	this.setup = function() {
 		
@@ -58,12 +58,29 @@ WGL.dimension.MapDimension = function(id){
 			}
 		}
 		/*set point size*/		
-	//	console.log( map.getZoom());
+	    //console.log( map.getZoom());
 		
-		gl.uniform1f(this.glProgram.loc, manager.zoom);				
+		//gl.uniform1f(this.glProgram.loc, manager.zoom);
+
+		var pointsizeLoc = gl.getUniformLocation(this.glProgram, "pointsize");
+		gl.uniform1f(pointsizeLoc, this.pointSize(manager.zoom));
 		
 				
-	}	
+	};
+	this.pointSize = function (zoom) {
+		console.log(zoom);
+		var size  = 30.0; // in px v 19 zoom
+		//var sizePx  =  Math.pow(18 - zoom,2) / Math.pow(2,18 - zoom);
+		var sizePx  =  zoom * zoom / 20;
+		if (zoom > 15){
+			sizePx += 20;
+		}
+		//console.log(sizePx);
+		if (sizePx < 1){
+			return 1;
+		}
+		return sizePx;
+	};
 	this.render = function(num) {
 		
 		if (visible == false){		
@@ -90,19 +107,19 @@ WGL.dimension.MapDimension = function(id){
 	    gl.useProgram(null);
 	   
 		
-	}
+	};
 	
 	this.tearDown = function(){
 		gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 		gl.bindTexture(gl.TEXTURE_2D, null);
 		gl.useProgram(null);
-	}
+	};
 	
 
 	this.setMatrix = function(matrix){
 		manager.matrices.push(matrix);	
 		manager.mapMatrix=matrix;
-	}
+	};
 
 	this.readPixels = function() {
 		
@@ -120,5 +137,4 @@ WGL.dimension.MapDimension = function(id){
 		console.log(readout);
 		
 	}
-	
-}
+};

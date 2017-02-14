@@ -5,6 +5,7 @@
       uniform mat4 mapMatrix;
       uniform mat4 rasterMatrix;
       uniform float zoom;
+      uniform float pointsize;
  	  uniform float drawselect;   
       
       uniform sampler2D filter;
@@ -13,11 +14,11 @@
       varying vec4 col;
       void main() {
 	
-		float p_size = 1.;
+		float p_size = pointsize;
 		
-		if (zoom > 12.) {
-			p_size = zoom / 12.+2.;		
-		}  	  	  		
+		//if (zoom > 12.) {
+		//	p_size = zoom / 12.+2.;
+		//}
   	    	 
   		vec4 p =  mapMatrix * wPoint;
   		//float n_speed = (speed+1.)/2.;
