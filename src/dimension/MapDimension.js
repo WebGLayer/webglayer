@@ -8,15 +8,16 @@ WGL.dimension.MapDimension = function(id){
 	this.glProgram = GLU.compileShaders('map_vShader', 'map_fShader', this);
 	
 	this.name = "map";
-	
-	var zoom = 'zoom';
+
 	var drawselect = 'drawselect';
 	var numfilters = 'numfilters';
+	var point_size = 'pointsize';
 	
 	gl.useProgram(this.glProgram);
-	manager.storeUniformLoc(this.glProgram, zoom);
 	manager.storeUniformLoc(this.glProgram, drawselect);
 	manager.storeUniformLoc(this.glProgram, numfilters);
+	//pointsize
+	manager.storeUniformLoc(this.glProgram, point_size);
 	
 	gl.useProgram(null);
 	
@@ -57,25 +58,20 @@ WGL.dimension.MapDimension = function(id){
 				return;
 			}
 		}
-		/*set point size*/		
-	    //console.log( map.getZoom());
-		
-		//gl.uniform1f(this.glProgram.loc, manager.zoom);
-
-		var pointsizeLoc = gl.getUniformLocation(this.glProgram, "pointsize");
-		gl.uniform1f(pointsizeLoc, this.pointSize(manager.zoom));
-		
-				
+		/*set point size*/
+		gl.uniform1f(this.glProgram[point_size], this.pointSize(manager.zoom));
 	};
+	/**
+	 * Compute point size from zoom level
+	 * @param zoom zoom level (1 to 19)
+	 * @returns {number} point size in px
+	 */
 	this.pointSize = function (zoom) {
-		console.log(zoom);
-		var size  = 30.0; // in px v 19 zoom
-		//var sizePx  =  Math.pow(18 - zoom,2) / Math.pow(2,18 - zoom);
+		//console.log(zoom);
 		var sizePx  =  zoom * zoom / 20;
 		if (zoom > 15){
 			sizePx += 20;
 		}
-		//console.log(sizePx);
 		if (sizePx < 1){
 			return 1;
 		}
