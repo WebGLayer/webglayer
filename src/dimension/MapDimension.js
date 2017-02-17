@@ -12,12 +12,17 @@ WGL.dimension.MapDimension = function(id){
 	var drawselect = 'drawselect';
 	var numfilters = 'numfilters';
 	var point_size = 'pointsize';
+	var select_psk = 'select_psk';
+	// coeficient for selected point size
+	this.selectPointSizeCoef = 1.0;
 	
 	gl.useProgram(this.glProgram);
 	manager.storeUniformLoc(this.glProgram, drawselect);
 	manager.storeUniformLoc(this.glProgram, numfilters);
 	//pointsize
 	manager.storeUniformLoc(this.glProgram, point_size);
+	// point size coeficient for selected points (pointsize * select_psk)
+	manager.storeUniformLoc(this.glProgram, select_psk);
 	
 	gl.useProgram(null);
 	
@@ -58,8 +63,9 @@ WGL.dimension.MapDimension = function(id){
 				return;
 			}
 		}
-		/*set point size*/
+		/*set point size and selected point size*/
 		gl.uniform1f(this.glProgram[point_size], this.pointSize(manager.zoom));
+		gl.uniform1f(this.glProgram[select_psk], this.selectPointSizeCoef);
 	};
 	/**
 	 * Compute point size from zoom level
@@ -68,14 +74,13 @@ WGL.dimension.MapDimension = function(id){
 	 */
 	this.pointSize = function (zoom) {
 		//console.log(zoom);
-		var sizePx  =  zoom * zoom / 20;
-		if (zoom > 15){
-			sizePx += 20;
+		if (zoom >= 12){
+			return 4
 		}
-		if (sizePx < 1){
-			return 1;
+		if (zoom < 12 && zoom >= 9){
+			return 2
 		}
-		return sizePx;
+		return 1
 	};
 	this.render = function(num) {
 		

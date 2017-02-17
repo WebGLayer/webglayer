@@ -5,6 +5,7 @@
       uniform mat4 mapMatrix;
       uniform mat4 rasterMatrix;
       uniform float pointsize;
+      uniform float select_psk;
  	  uniform float drawselect;   
       
       uniform sampler2D filter;
@@ -26,7 +27,7 @@
   			
   			col = vec4(255. /255., 140./255., 0., 0.7); 
   			gl_Position = p;    	
-			gl_PointSize = p_size*2.;
+			gl_PointSize = p_size*select_psk;
   			
   		} else if ((fdata[0] < ( numfilters / 256.)  || numfilters == 0.) && drawselect<0.5) {  	
   		   //If not selected then use blue color	   
