@@ -9,7 +9,7 @@ WGL.experimental.MapLineDimension = function(id){
 	
 	this.name = "map";
 	
-	var zoom = 'zoom';
+	var difference = 'dif';
 	var drawselect = 'drawselect';
 	var numfilters = 'numfilters';
 	
@@ -17,7 +17,7 @@ WGL.experimental.MapLineDimension = function(id){
 	var heatMapMinimum = 0;
 	
 	gl.useProgram(this.glProgram);
-	manager.storeUniformLoc(this.glProgram, zoom);
+	manager.storeUniformLoc(this.glProgram, difference);
 	manager.storeUniformLoc(this.glProgram, drawselect);
 	manager.storeUniformLoc(this.glProgram, numfilters);
 	var framebuffer = gl.createFramebuffer();
@@ -167,10 +167,24 @@ WGL.experimental.MapLineDimension = function(id){
 		/*set point size*/		
 	//	console.log( map.getZoom());
 		
-		gl.uniform1f(this.glProgram.loc, manager.zoom);				
+		gl.uniform1f(this.glProgram[difference], this.differenceFunction(manager.zoom));
 		
 				
-	}	
+	};
+	/**
+	 * Difference function
+	 * @param zoom map zoom (from 0 to 18)
+	 * @returns {number} line difference
+	 */
+	this.differenceFunction = function (zoom) {
+		var dif = 0.00002;
+		var zoom_factor = Math.pow(2,18 - zoom);
+		//highlight for high zoom
+		if (zoom > 15){
+			return dif*zoom_factor + 0.00003;
+		}
+		return dif*zoom_factor;
+	};
 	
 	var renderMin;
 	var renderMax;
