@@ -6,7 +6,7 @@ attribute vec4 normals;
 
 uniform mat4 mapMatrix;
 uniform mat4 rasterMatrix;
-uniform float zoom;
+uniform float dif;
 uniform float drawselect;
 
 uniform sampler2D filter;
@@ -38,7 +38,7 @@ void main() {
 	}
 
 	col = vec4(1., 0.5, 0., 0.01);
-	float dif = 0.0005;
+	//float dif = zoom;
 	vec4 m = vec4(wPoint[0] + normals[0] * dif, wPoint[1] + normals[1] * dif,
 			0., 1.);
 	p = mapMatrix * m;
