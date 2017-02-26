@@ -1,6 +1,7 @@
 <script id="mapline_vShader" type="x-shader/x-vertex">
 attribute vec4 wPoint;
-attribute vec2 index;
+attribute vec2 index; // index of source point
+attribute vec2 indexDest; // index of destination point
 attribute float values;
 attribute vec4 normals;
 
@@ -23,10 +24,14 @@ void main() {
 	 hmval = values;
 	vec4 rp = rasterMatrix * vec4(index[0], index[1], 0., 1.);
 	vec4 fdata = texture2D(filter, vec2(rp[0], rp[1]));
+
+	rp = rasterMatrix * vec4(indexDest[0], indexDest[1], 0., 1.);
+	vec4 fdataDest = texture2D(filter, vec2(rp[0], rp[1])); // filter value for destination point
 	vec4 p;
 
 	// if data are selected
-	if (fdata[0] >= (numfilters / 256.) || numfilters == 0.) {
+	float filterNum = (numfilters / 256.);
+	if (numfilters == 0. || (fdata[0] >= filterNum ||  fdataDest[0] >= filterNum)) { // filtering id done here.
 		selected = 1.;
 		/*test if the data are selected without considering spatial index*/
 	} else if (fdata[0] >= (numfilters - spatsum) / 256.) {

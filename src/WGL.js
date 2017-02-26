@@ -79,8 +79,7 @@ var WGL = (function() {
 			
 			this.mcontroller = new WGL.internal.MapController();
 			this.mcontroller.resize();
-			
-						
+					
 			for (var i = 0; i < manager.num_rec; i++) {
 				index[i] = rasterer.calc(i);
 			}
@@ -88,6 +87,22 @@ var WGL = (function() {
 			var indexta = u.array2TA2D(index);
 			manager.addDataBuffer(indexta, 2, 'index');
 
+		},
+		
+		addLineIndex : function(){
+			var plus = true;
+			var indexLine = [];
+			for (var i = 0; i < manager.num_rec; i++) {
+				if (plus) {
+					indexLine[i] = rasterer.calc(i+1);
+					plus = false;
+				} else {
+					indexLine[i] = rasterer.calc(i-1);
+					plus =  true;
+				}
+			}
+			var indexta = u.array2TA2D(indexLine);
+			manager.addDataBuffer(indexta, 2, 'indexLine');
 		},
 
 		getManager : function() {
@@ -177,6 +192,7 @@ var WGL = (function() {
 			};
 			var dim = new WGL.experimental.MapLineDimension(id);
 			manager.addDataBuffer(dim.calcNormals(data), 2, 'normals');
+			this.addLineIndex();
 			this._dimensions[id] = dim;
 			return dim;
 		},

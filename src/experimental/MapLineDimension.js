@@ -41,6 +41,12 @@ WGL.experimental.MapLineDimension = function(id){
 	var visible = true;
 	var doGetMax = true;
 	var legend;
+	
+    var the_filter;
+
+	this.setFilter = function(f) {
+		the_filter = f;
+	}
 	this.setVisible = function(v) {
 		visible = v;
 	}
@@ -142,7 +148,8 @@ WGL.experimental.MapLineDimension = function(id){
 		manager.bindMapMatrix(this.glProgram);
 		manager.enableBufferForName(this.glProgram, "wPoint", "wPoint");
 		manager.enableBufferForName(this.glProgram, "normals", "normals");
-		manager.enableBufferForName(this.glProgram, "index", "index");	
+		manager.enableBufferForName(this.glProgram, "index", "index");
+		manager.enableBufferForName(this.glProgram, "indexLine", "indexDest");	
 		manager.bindRasterMatrix(this.glProgram);
 		
 		if (this.valueBufferName!=undefined){
@@ -188,8 +195,9 @@ WGL.experimental.MapLineDimension = function(id){
 	
 	var renderMin;
 	var renderMax;
-	
+	var last_num;
 	this.render = function(num) {
+		last_num = num;
 		if (visible == false) {
 			return;
 		}
@@ -239,6 +247,9 @@ WGL.experimental.MapLineDimension = function(id){
 			}
 			
 			//this.renderer2.render(renderMin, renderMax, renderMin, renderMax,	renderMax);
+	}
+	this.update = function() {
+		this.renderData(last_num);
 	}
 	this.renderData = function(num) {
 		

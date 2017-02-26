@@ -257,13 +257,13 @@ WGL.dimension.HeatMapDimension = function(id) {
 				} else {
 					this.renderer.render(renderMin, renderMax, renderMin, renderMax,
 							this.maxsel);
-					legend.drawWithoutFilter();
-					legend.updateMaxAll(this.maxsel );
+					
 
 				}
 
 				if (legend != undefined) {
-					// legend.drawWithFilter(maxsel);
+					legend.drawWithoutFilter();
+					legend.updateMaxAll(this.maxsel );
 				}
 				// legend.updateMaxSel(this.maxall);
 			} else {
