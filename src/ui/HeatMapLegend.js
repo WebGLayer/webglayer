@@ -1,4 +1,7 @@
-WGL.ui.HeatMapLegend = function(div_id, filterId) {
+WGL.ui.HeatMapLegend = function(div_id, filterId, useBrush) {
+	if (useBrush === undefined){
+		useBrush = true;
+	}
 	
 	var manager = WGL.getManager();
 	var GLU = WGL.internal.GLUtils;
@@ -211,12 +214,13 @@ WGL.ui.HeatMapLegend = function(div_id, filterId) {
 	var brush = d3.svg.brush()		
 	    .y(yScale)
 	    .on("brush", brushed);
-	
-		 
-	  svg.append("g").attr("class", "brush").call(brush)
-		.selectAll("rect").attr("width", 60);
 
-	 
+	console.log(useBrush);
+	if (useBrush){
+		svg.append("g").attr("class", "brush").call(brush)
+			.selectAll("rect").attr("width", 60);
+	}
+
 	 this.updateMaxAll = function(max){
 		 var filter =  filterVal ;
 	 	 	 	 	
@@ -231,7 +235,22 @@ WGL.ui.HeatMapLegend = function(div_id, filterId) {
 			}
 		
 		 
-	 }
+	 };
+	this.updateMaxMinAll = function(min,max){
+		var filter =  filterVal ;
+
+		yScale.domain([min, max]);
+
+		svg.selectAll('.y.axis.all')
+			.call(yAxis);
+		if (filter[0]!=filter[1]){
+			this.update(filter);
+		} else {
+			this.update([0,0]);
+		}
+
+
+	}
 	 
 	 this.showSelection = function(){
 	 	svg.selectAll(".grad")

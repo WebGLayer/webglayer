@@ -61,16 +61,16 @@ WGL.experimental.MapLineDimension = function(id){
 	};
 
 	/* default getMax function */
-	this.maxFunction = function(max) {
+	/*this.maxFunction = function(max) {
 		if (max == undefined) {
 			return 99999999;
 		}
 		return max;
-	}
+	}*/
 	/* default getMin function */
-	this.minFunction = function(min) {
-		return 0;
-	}
+	/*this.minFunction = function(min) {
+		return min;
+	}*/
 
 	this.setValuesBuffer = function(buffername){
 						
@@ -132,11 +132,11 @@ WGL.experimental.MapLineDimension = function(id){
 			return 99999999;
 		}
 		return max;
-	}
+	};
 	/* default getMin function */
 	this.minFunction = function(min) {
-		return 0;
-	}
+		return min;
+	};
 	
 	this.setup = function() {
 		
@@ -217,6 +217,7 @@ WGL.experimental.MapLineDimension = function(id){
 		} 			
 		renderMax = this.maxFunction(this.maxVal);
 		renderMin = this.minFunction(this.minVal);
+		//console.log(renderMax + " "+ renderMin);
 			// if (typeof(the_filter) !='undefined') {
 			if (manager.trasholds.spatsum > 0) {
 				// var maxsel = this.maxcal.getMax(this.heatTexture, 0);
