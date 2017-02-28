@@ -190,7 +190,7 @@ WGL.experimental.MapLineDimension = function(id){
 		if (zoom > 15){
 			return dif*zoom_factor + 0.00003;
 		}
-		return dif*zoom_factor;
+		return -dif*zoom_factor;
 	};
 	
 	var renderMin;
