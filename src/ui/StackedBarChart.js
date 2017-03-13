@@ -268,7 +268,7 @@
 		}).attr("width", 12).attr("height", 12).attr("stroke", "none");
 
 		var help = d3.select("#"+div_id).append("div").classed('ii',true).append("i").classed('fa', true).classed('fa-info', true);
-        var tooltip_content = "<table>"+
+        var tooltip_content = "<div class='wgl-close-tooltip'><i class='fa fa-times' aria-hidden='true'></i></div><table>"+
         "<tr>"+
         '<td><div class="color-selected"><b>selected</b></div></td><td>selected data</td>'+
         "</tr>"+
@@ -278,11 +278,19 @@
         "<tr>"+
         '<td><div class="color-out"><b>out</b></div></td><td>data out of the current map view</td>'+
         "</tr>"+
-        "</table><br/> When you click on the legend adjust the chart scale";
+        "</table><br/> Click on the coloured squares in the legend to adjust <br> the chart scale to the 'selected'/ 'unselected'/ 'out' data.";
         $(help).tooltipster({
             content: tooltip_content,
             contentAsHTML: true,
-            theme: 'tooltipster-light'
+            theme: 'tooltipster-light',
+			trigger: 'click',
+			interactive: 'true',
+			autoClose: 'false',
+			functionReady: function(){
+				$('.wgl-close-tooltip').click(function(){
+					$(help).tooltipster('hide');
+				});
+			}
 
         });
 

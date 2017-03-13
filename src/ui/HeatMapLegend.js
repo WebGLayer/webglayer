@@ -21,14 +21,14 @@ WGL.ui.HeatMapLegend = function(div_id, filterId) {
 	
 	var yAxis = d3.svg.axis()
     .scale(yScale)
-    .orient("left");
+    .orient("left").tickFormat(d3.format("s"));
 
     var yScaleSel = d3.scale.linear().domain([ 0, 200]).range(
 			[ height, 0 ]);
 	
 	var yAxisSel = d3.svg.axis()
     .scale(yScaleSel)
-    .orient("right");
+    .orient("right").tickFormat(d3.format("s"));
     
 	
 	var limitByMax = true;
