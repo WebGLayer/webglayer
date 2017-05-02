@@ -45,6 +45,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-qunit');
   grunt.loadNpmTasks('grunt-jsdoc');
   // Default task(s).
-  grunt.registerTask('default', ['concat','uglify']);
+  grunt.registerTask('default', ['concat', 'uglify']);
 
 };
