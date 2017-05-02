@@ -321,6 +321,10 @@
 			
 		}
 	};
+
+	this.clean = function () {
+		d3.select("#" + div_id).selectAll('*').remove();
+	};
 	
 
 	// Create bars

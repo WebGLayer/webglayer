@@ -290,5 +290,14 @@ WGL.internal.Manager = function(mapid, mapcontainer) {
 			return loc;
 		}			
 	}
+	/**
+	 * Delete buffer
+	 * @param bufname buffer name
+	 */
+	this.cleanBuffer = function (bufname) {
+		var buf = this.databuffers[bufname];
+		gl.deleteBuffer(buf);
+		delete this.databuffers[bufname];
+	}
 	
 }

@@ -280,7 +280,15 @@ WGL.dimension.ParallelCoordinates = function(div, data){
 			 brush.clear();
 			 //brush.call("brush")
 			 brushed.call();
-		 }
+		 };
+	}
+
+	this.clean = function () {
+		var manager = WGL.getManager();
+		manager.cleanBuffer("indexpc");
+		manager.cleanBuffer("td");
+		manager.cleanBuffer("ti");
+		gl.deleteProgram(this.glProgram);
 	}
 
 	
