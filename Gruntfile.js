@@ -17,7 +17,8 @@ module.exports = function(grunt) {
     	
     uglify: {
       options: {
-        banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
+        banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n',
+        mangle:true
       },
       build: {
         src: 'build/main.js',
@@ -32,12 +33,16 @@ module.exports = function(grunt) {
     	                destination: 'doc'
     	            }
     	        }
-    	    }	
+    	    },
+    qunit: {
+        all: ['test/**/*.html']
+      }
   });
 
   // Load the plugin that provides the "uglify" task.''
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-qunit');
   grunt.loadNpmTasks('grunt-jsdoc');
   // Default task(s).
   grunt.registerTask('default', ['concat','uglify']);
