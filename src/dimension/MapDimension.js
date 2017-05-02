@@ -137,5 +137,9 @@ WGL.dimension.MapDimension = function(id){
 		console.log(sum);
 		console.log(readout);
 		
+	};
+
+	this.clean = function () {
+		gl.deleteProgram(this.glProgram);
 	}
 };

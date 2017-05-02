@@ -330,6 +330,13 @@ WGL.experimental.MapLineDimension = function(id){
 			
 		}
 		return normals;		
-	}
+	};
+
+	this.clean = function () {
+		var manager = WGL.getManager();
+		manager.cleanBuffer('normals');
+		manager.cleanBuffer('indexLine');
+		gl.deleteProgram(this.glProgram);
+	};
 	
 }

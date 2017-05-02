@@ -209,5 +209,10 @@ WGL.dimension.HistDimension = function(meta){
 	};
 	this.getDomain = function () {
 		return meta.domain;
+	};
+	this.clean = function () {
+		var manager = WGL.getManager();
+		manager.cleanBuffer(meta.name);
+		gl.deleteProgram(this.program);
 	}
 };

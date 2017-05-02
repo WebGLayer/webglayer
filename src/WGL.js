@@ -379,6 +379,54 @@ var WGL = (function() {
 		},
 		registerUpdateFunction: function (f) {
 			this._updatefuc.push(f)
+		},
+		/**
+		 * Delete dimension. The function may not delete all buffers. Function does not delete chart.
+		 * @param dimname dimension name
+		 */
+		cleanDimension: function (dimname) {
+			var dim = this._dimensions[dimname];
+			dim.clean();
+			delete this._dimensions[dimname];
+			WGL.render();
+		},
+		/**
+		 * Delete all dimensions, filters and charts
+		 */
+		cleanAll: function () {
+			// clean and delete dimensions
+			for (var key in this._dimensions){
+				console.log(key);
+				try {
+					this._dimensions[key].clean();
+				} catch (err) {
+					console.warn(err);
+					console.warn("maybe method clean is not implemented. glProgram was not deleted!");
+				}
+				delete WGL._dimensions[key];
+				//console.log('Dimension '+key+' was deleted');
+			}
+			this._dimensions = [];
+
+			// clean buffers
+			for (var key in manager.databuffers){
+				manager.cleanBuffer(key);
+				//console.log('Buffer '+key+' was deleted');
+			}
+			//clean charts
+			for (var ch in charts){
+				charts[ch].clean();
+				//console.log('Charts '+ch+' was deleted');
+			}
+			charts = [];
+
+			// delete extend filter
+			try {
+				delete extf;
+			} catch (err) {}
+
+			WGL.render();
+
 		}
 	
 	};

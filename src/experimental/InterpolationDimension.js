@@ -155,8 +155,12 @@ WGL.experimental.InterpolationDimension = function(manager){
 		
 		return readout;
 
-	}
-}
+	};
+
+	this.clean = function () {
+		gl.deleteProgram(this.glProgram);
+	};
+};
 
 
 	

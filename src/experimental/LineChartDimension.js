@@ -133,7 +133,13 @@ WGL.experimental.LineChartDimension = function(manager, width) {
 		
 		return res;
 
-	}
+	};
 
-}
+	this.clean = function () {
+		var manager = WGL.getManager();
+		manager.cleanBuffer('findex');
+		gl.deleteProgram(this.program);
+	};
+
+};
 

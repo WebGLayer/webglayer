@@ -119,6 +119,13 @@ WGL.dimension.LineDimension = function(id){
 		console.log(sum);
 		console.log(readout);
 		
+	};
+
+	this.clean = function () {
+		var manager = WGL.getManager();
+		manager.cleanBuffer("normals");
+		manager.cleanBuffer("miter");
+		gl.deleteProgram(this.glProgram);
 	}
 	
 }
