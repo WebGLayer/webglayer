@@ -213,7 +213,6 @@ WGL.dimension.HistDimension = function(meta){
 	this.clean = function () {
 		var manager = WGL.getManager();
 		manager.cleanBuffer(meta.name);
-		manager.cleanBuffer(meta.name);
 		gl.deleteTexture(this.histTexture);
 		gl.deleteProgram(this.program);
 	}
