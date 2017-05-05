@@ -402,7 +402,7 @@ var WGL = (function() {
 					this._dimensions[key].clean();
 				} catch (err) {
 					console.warn(err);
-					console.warn("maybe method clean is not implemented. glProgram was not deleted!");
+					console.error("maybe method clean is not implemented. glProgram was not deleted! "+key);
 				}
 				delete WGL._dimensions[key];
 				//console.log('Dimension '+key+' was deleted');
@@ -425,6 +425,7 @@ var WGL = (function() {
 			try {
 				delete extf;
 			} catch (err) {}
+
 			manager.resetWebGL();
 			WGL.render();
 

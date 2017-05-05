@@ -289,6 +289,8 @@ WGL.dimension.ParallelCoordinates = function(div, data){
 		manager.cleanBuffer("td");
 		manager.cleanBuffer("ti");
 		gl.deleteProgram(this.glProgram);
+		gl.deleteTexture(this.pcTexture);
+		renderer.clean();
 	}
 
 	

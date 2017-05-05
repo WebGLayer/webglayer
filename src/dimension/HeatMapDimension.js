@@ -317,7 +317,9 @@ WGL.dimension.HeatMapDimension = function(id) {
 
 	}
 	this.clean = function () {
+		gl.deleteTexture(this.heatTexture);
 		gl.deleteProgram(this.glProgram);
+		this.renderer.clean();
 	}
 
 };
