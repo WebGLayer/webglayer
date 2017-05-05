@@ -111,6 +111,15 @@ WGL.internal.Manager = function(mapid, mapcontainer) {
 
 	}
 	
+	this.resetWebGL = function(){
+		gl = null;
+		gl = this.canvas.getContext('webgl', {preserveDrawingBuffer: true, antialias: true}) || this.canvas.getContext('experimental-webgl', {preserveDrawingBuffer: true});
+
+		  if (!gl) {
+			  alert("Could not initialise WebGL, sorry :-(. Are you using Chrome?");
+	      }
+	}
+	
 	
 	this.setMapMatrix = function(matrix){
 		this.mapMatrix = matrix;		

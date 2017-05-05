@@ -394,6 +394,7 @@ var WGL = (function() {
 		 * Delete all dimensions, filters and charts
 		 */
 		cleanAll: function () {
+			
 			// clean and delete dimensions
 			for (var key in this._dimensions){
 				console.log(key);
@@ -424,7 +425,7 @@ var WGL = (function() {
 			try {
 				delete extf;
 			} catch (err) {}
-
+			manager.resetWebGL();
 			WGL.render();
 
 		}
