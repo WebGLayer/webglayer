@@ -337,6 +337,7 @@ WGL.experimental.MapLineDimension = function(id){
 		manager.cleanBuffer('normals');
 		manager.cleanBuffer('indexLine');
 		gl.deleteProgram(this.glProgram);
+		gl.deleteTexture(this.heatTexture);
 	};
 	
 }

@@ -99,6 +99,9 @@ WGL.dimension.ParallelCoordinatesRenderer = function(){
 		manager.matrices.push(matrix);	
 		manager.mapMatrix=matrix;
 	}
+	this.clean = function () {
+		gl.deleteBuffer(texCoordBuffer);
+	}
 
 
 	
