@@ -1,11 +1,11 @@
 WGL.ChartDiv = function(parentdiv, divid, caption) {
 
-	var newhtml= "<div class='btn-minimize'  id=min"+divid+" style='margin: 0.5em'> <i id='but"+divid+"' class='fa fa-chevron-down'></i><text> "+caption+"</text></div>" +
+	var newhtml= "<div id='chd-container-"+divid+"'><div class='btn-minimize'  id=min"+divid+" style='margin: 0.5em'> <i id='but"+divid+"' class='fa fa-chevron-down'></i><text> "+caption+"</text></div>" +
 				
 
 				" <div id = "+divid+" class = 'vis-div' style='position: relative'></div>" +
 				
-				" <hr/>";
+				" <hr/></div>";
 	
 	$("#"+parentdiv).append(newhtml);
 
@@ -37,6 +37,10 @@ WGL.ChartDiv = function(parentdiv, divid, caption) {
 				WGL.render();
 			}
 		}
+	};
+
+	this.destroy = function () {
+		$("#chd-container-"+divid).remove();
 	};
 	
 	

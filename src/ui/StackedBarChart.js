@@ -322,8 +322,14 @@
 		}
 	};
 
-	this.clean = function () {
-		d3.select("#" + div_id).selectAll('*').remove();
+	this.clean = function (cleanChartDiv) {
+		cleanChartDiv = cleanChartDiv || false;
+		if (cleanChartDiv){
+			d3.select("#chd-container-" + div_id).remove();
+		}
+		else {
+			d3.select("#" + div_id).selectAll('*').remove();
+		}
 	};
 	
 
