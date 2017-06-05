@@ -393,7 +393,8 @@ var WGL = (function() {
 		/**
 		 * Delete all dimensions, filters and charts
 		 */
-		cleanAll: function () {
+		cleanAll: function (cleanChartDiv) {
+			cleanChartDiv = cleanChartDiv || false;
 			
 			// clean and delete dimensions
 			for (var key in this._dimensions){
@@ -416,7 +417,7 @@ var WGL = (function() {
 			}
 			//clean charts
 			for (var ch in charts){
-				charts[ch].clean();
+				charts[ch].clean(cleanChartDiv);
 				//console.log('Charts '+ch+' was deleted');
 			}
 			charts = [];
@@ -425,6 +426,7 @@ var WGL = (function() {
 			try {
 				delete extf;
 			} catch (err) {}
+
 
 			manager.resetWebGL();
 			WGL.render();
