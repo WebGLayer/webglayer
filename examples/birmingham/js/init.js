@@ -54,16 +54,13 @@ function visualize(data){
 			return  res ;
 			};
 			
-		 heatmap.setRadius(30);
-		 
-		
+		heatmap.setRadius(30);
 
 		var mapdim = WGL.addMapDimension(data.pts, 'themap');
 	
 		WGL.addPolyBrushFilter('themap','polybrush');
 		
 		addHeatMapControl(heatmap,'chm');
-		
 
 		WGL.addExtentFilter();
 	
@@ -71,7 +68,6 @@ function visualize(data){
 	
 		var charts = [];				
 
-	
 		//var road_surf = {data: data.road_surf, domain:['1','2','3','4','5'], name: 'road_surface'};
 		
 		/* DAYS*/
@@ -84,7 +80,6 @@ function visualize(data){
 		charts['days'] = new  WGL.ui.StackedBarChart(days, "ch1", "day of the week", 'daysF');
 		
 		/*HOURS*/
-		
 		var hours = {data: data.hours,  min:0, max:24, num_bins: 24*5, name: 'hours',type:'linear', label :"hour of the day"} ;
 		var chd2 = new WGL.ChartDiv("right","ch2", "Hour of the day");
 		chd2.setDim(WGL.addLinearHistDimension(hours));		
@@ -97,14 +92,12 @@ function visualize(data){
 		chd3.setDim(WGL.addOrdinalHistDimension(sev));
 		WGL.addLinearFilter(sev,3, 'sevF');
 		charts['sev']   = new  WGL.ui.StackedBarChart(sev, "ch3", "accident severity",'sevF');
-	
-	
+
 		var roadtype = {data: data.road_type, domain: data.rtDom,  
 				name:'roadt', type:'ordinal', label : "road type"};
 		WGL.addOrdinalHistDimension(roadtype).setVisible(false);
 		WGL.addLinearFilter( roadtype, 8 , 'roadtF');		
 		//charts['roadt'] = new StackedBarChart(roadtype, "chart4", "road type", 'roadtF');
-	
 
 		var sl = {data: data.speed_limit, domain: ['20','30','40','50','60','70'], 
 				name:'speedlimit', type:'ordinal', label : "Speed limit"};
@@ -112,8 +105,7 @@ function visualize(data){
 		chd4.setDim(WGL.addOrdinalHistDimension(sl));
 		WGL.addLinearFilter(sl, 13, 'slF');
 		charts['speedlimit'] = new  WGL.ui.StackedBarChart(sl, "ch4", "Speed limit", 'slF');
-		
-	
+
 		/*Date*/
 		var date =  {data: data.date,   min:data.dmm.min, max:data.dmm.max, num_bins: 100, name: 'date', type:'linear'} ;
 		var chd5 = new WGL.ChartDiv("right","ch5", "Date");
