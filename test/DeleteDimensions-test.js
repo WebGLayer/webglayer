@@ -1,8 +1,6 @@
 /**
  * Created by kolovsky on 2.5.17.
  */
-
-// clean all dimension
 QUnit.test("Delete dimensions", function( assert ) {
     var data = {
         pts: [10,10,30,30,50,30],

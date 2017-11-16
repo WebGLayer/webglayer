@@ -1,50 +1,56 @@
 <!doctype html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <title>Test examples</title>
-  <link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-2.3.2.css">
-  <script src="https://code.jquery.com/qunit/qunit-2.3.2.js"></script>
-  <script src="lib/d3.v3.min.js"></script>
-  <script src="lib/jquery-1.9.1.min.js"></script>
+    <meta charset="utf-8">
+    <title>WebGLayer Tests</title>
 
-  <script src="../src/WGL.js"></script>
-  <script src="../src/internal/utils.js"></script>
-  <script src="../src/internal/filtrutils.js"></script>
-  <script src="../src/internal/GLUtils.js"></script>
-  <script src="../src/internal/Manager.js"></script>
-  <script src="../src/internal/MapController.js"></script>
-  <script src="../src/internal/FloatRasterReader.js"></script>
-  <script src="../src/internal/Filter.js"></script>
-  <script src="../src/internal/MaxCalculator.js"></script>
-  <script src="../src/internal/FloatReaderHistogram.js"></script>
+    <link rel="stylesheet" href="lib/qunit-2.3.2.css">
+    <script src="lib/qunit-2.3.2.js"></script>
+    <script src="lib/d3.v3.min.js"></script>
+    <script src="lib/jquery-1.9.1.min.js"></script>
 
-  <script src="../src/dimension/MapDimension.js"></script>
-  <script src="../src/dimension/HeatMapDimension.js"></script>
-  <script src="../src/dimension/HeatMapRenderer.js"></script>
-  <script src="../src/dimension/IluminationRenderer.js"></script>
-  <script src="../src/dimension/HistDimension.js"></script>
-  <script src="../src/dimension/ParallelCoordinates.js"></script>
-  <script src="../src/dimension/ParallelCoordinatesRenderer.js"></script>
-  <script src="../src/experimental/MapLineDimension.js"></script>
+    <!-- WGL script import-->
+    <script src="../src/WGL.js"></script>
+    <script src="../src/internal/utils.js"></script>
+    <script src="../src/internal/filtrutils.js"></script>
+    <script src="../src/internal/GLUtils.js"></script>
+    <script src="../src/internal/Manager.js"></script>
+    <script src="../src/internal/MapController.js"></script>
+    <script src="../src/internal/FloatRasterReader.js"></script>
+    <script src="../src/internal/Filter.js"></script>
+    <script src="../src/internal/MaxCalculator.js"></script>
+    <script src="../src/internal/FloatReaderHistogram.js"></script>
 
-  <script src="../src/filter/LinearFilter.js"></script>
-  <script src="../src/filter/MapPolyFilter.js"></script>
-  <script src="../src/filter/ExtentFilter.js"></script>
-  <script src="../src/filter/MapColorFilter.js"></script>
+    <script src="../src/dimension/MapDimension.js"></script>
+    <script src="../src/dimension/HeatMapDimension.js"></script>
+    <script src="../src/dimension/HeatMapRenderer.js"></script>
+    <script src="../src/dimension/IluminationRenderer.js"></script>
+    <script src="../src/dimension/HistDimension.js"></script>
+    <script src="../src/dimension/ParallelCoordinates.js"></script>
+    <script src="../src/dimension/ParallelCoordinatesRenderer.js"></script>
+    <script src="../src/experimental/MapLineDimension.js"></script>
 
-  <script src="../src/ui/StackedBarChart.js"></script>
-  <script src="../src/ui/HeatMapLegend.js"></script>
-  <script src="../src/ui/d3.svg.multibrush.js"></script>
-  <script src="../src/ui/ChartDiv.js"></script>
+    <script src="../src/filter/LinearFilter.js"></script>
+    <script src="../src/filter/MapPolyFilter.js"></script>
+    <script src="../src/filter/ExtentFilter.js"></script>
+    <script src="../src/filter/MapColorFilter.js"></script>
 
-  <script src="tests.js"></script>
+    <script src="../src/ui/StackedBarChart.js"></script>
+    <script src="../src/ui/HeatMapLegend.js"></script>
+    <script src="../src/ui/d3.svg.multibrush.js"></script>
+    <script src="../src/ui/ChartDiv.js"></script>
+
+    <!-- tests import -->
+    <script src="DeleteDimensions-test.js"></script>
+    <script src="HistDimension-test.js"></script>
+    <script src="MapDimension-test.js"></script>
 
 </head>
 <body>
+<!-- minimal require for Qunit-->
+<div id="map"></div>
 <div id="qunit"></div>
 <div id="qunit-fixture"></div>
-<div id="map"></div>
 <div id="chart-tests"></div>
  
 </body>
