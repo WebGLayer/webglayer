@@ -6,7 +6,7 @@ QUnit.test("HistDimension", function( assert ) {
         pts: [10,10, 30,30, 50,30, 46,87, 45,23],
         value: [0.0, 10.0, 20.0, 10.0, 0.0],
         min: 0.0,
-        max: 20.0,
+        max: 21.0,
         domain: [0.0, 10.0, 20.0]
     };
     data.num = data.value.length;
