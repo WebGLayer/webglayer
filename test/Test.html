@@ -40,13 +40,22 @@
     <script src="../src/ui/d3.svg.multibrush.js"></script>
     <script src="../src/ui/ChartDiv.js"></script>
 
-    <!-- tests import -->
+    <!-- tests import main-->
+    <script src="main-test.js"></script>
+    <!-- tests import-->
     <script src="DeleteDimensions-test.js"></script>
     <script src="HistDimension-test.js"></script>
-    <script src="MapDimension-test.js"></script>
+    <!--<script src="MapDimension-test.js"></script>-->
+    <script src="HeatMapDimension-test.js"></script>
 
 </head>
 <body>
+<style type="text/css">
+    #map{
+        width: 500px;
+        height: 200px;
+    }
+</style>
 <!-- minimal require for Qunit-->
 <div id="map"></div>
 <div id="qunit"></div>
