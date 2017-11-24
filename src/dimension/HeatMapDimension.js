@@ -305,15 +305,15 @@ WGL.dimension.HeatMapDimension = function(id) {
 		var readout;
 
 		if (mode === 'float'){
-            gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
-            readout = new Float32Array(4);
-            gl.readPixels(x,y, 1, 1, gl.RGBA, gl.FLOAT, readout);
-            gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+			gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
+			readout = new Float32Array(4);
+			gl.readPixels(x,y, 1, 1, gl.RGBA, gl.FLOAT, readout);
+			gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 		}
 		else {
-            gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-            readout = new Uint8Array(4);
-            gl.readPixels(x, y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, readout);
+			gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+			readout = new Uint8Array(4);
+			gl.readPixels(x, y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, readout);
             console.log(readout, x, y);
 		}
 
