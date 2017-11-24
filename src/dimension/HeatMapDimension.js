@@ -300,20 +300,24 @@ WGL.dimension.HeatMapDimension = function(id) {
 		manager.mapMatrix = matrix;
 	}
 
-	this.readPixels = function() {
+	this.readPixels = function(x,y, mode) {
+		mode = mode || "";
+		var readout;
 
-		// gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-		var readout = new Uint8Array(4);
-		// console.time("reading_pix");
-		gl.readPixels(0, 0, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, readout);
-		// console.timeEnd("reading_pix");
-		// gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-		var sum = 0;
-		for (i = 0; i < readout.length; i++) {
-			sum = sum + readout[i];
+		if (mode === 'float'){
+			gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
+			readout = new Float32Array(4);
+			gl.readPixels(x,y, 1, 1, gl.RGBA, gl.FLOAT, readout);
+			gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 		}
-		console.log(sum);
-		console.log(readout);
+		else {
+			gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+			readout = new Uint8Array(4);
+			gl.readPixels(x, y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, readout);
+            console.log(readout, x, y);
+		}
+
+		return readout;
 
 	}
 	this.clean = function () {
