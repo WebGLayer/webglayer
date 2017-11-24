@@ -229,7 +229,7 @@ initMap = function() {
 		map.addControl(controls[key]);
 	}
 
-	var lonlat = new OpenLayers.LonLat(-1.9,52.5).transform(new OpenLayers.Projection("EPSG:4326"),new OpenLayers.Projection("EPSG:900913"));
+	var lonlat = new OpenLayers.LonLat(-10,102.5).transform(new OpenLayers.Projection("EPSG:4326"),new OpenLayers.Projection("EPSG:900913"));
 	map.setCenter(lonlat);
 	map.zoomTo(11);
 }

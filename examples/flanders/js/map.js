@@ -197,7 +197,7 @@ initMap = function() {
 		map.addControl(controls[key]);
 	}
 
-	var lonlat = new OpenLayers.LonLat(4.47,51.22).transform(new OpenLayers.Projection("EPSG:4326"),new OpenLayers.Projection("EPSG:900913"));
+	var lonlat = new OpenLayers.LonLat(41.87, 87.62).transform(new OpenLayers.Projection("EPSG:4326"),new OpenLayers.Projection("EPSG:900913"));
 	map.setCenter(lonlat);
 	map.zoomTo(11);
 }

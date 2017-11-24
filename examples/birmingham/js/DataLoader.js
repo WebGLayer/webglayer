@@ -84,10 +84,10 @@ function DataLoader() {
 				
 				});
 		
-			
+			console.log(pts);
 			
 			visualize({pts: pts, 
-				days: days, 
+				days: days,
 				hours :hours, 
 				sev : sev, 
 				road_type: road_type, 
