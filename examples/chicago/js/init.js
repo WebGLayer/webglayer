@@ -66,26 +66,28 @@ function visualize(data){
 	
 		/*for ordinal dimension from 1-3 use range 0.5-3.5*/
 	
-		/*var charts = [];
+		var charts = [];
 
 		//var road_surf = {data: data.road_surf, domain:['1','2','3','4','5'], name: 'road_surface'};
-		
-		/!* DAYS*!/
-		//var days = {data: data.dayes,  min:0, max: 7, num_bins: 7,  name: 'dayes'};	
+
+		/* DAYS*/
 		var days = {data: data.days,  domain: data.daysarray,  name: 'days', type:'ordinal', label: "day of the week"};
 		var chd1 = new WGL.ChartDiv("right","ch1", "Day of the week");
-		//wgl.addLinearHistDimension(dayes);
 		chd1.setDim(WGL.addOrdinalHistDimension(days));
 		WGL.addLinearFilter(days,7, 'daysF');		
 		charts['days'] = new  WGL.ui.StackedBarChart(days, "ch1", "day of the week", 'daysF');
-		
-		/!*HOURS*!/
+
+
+
+		/*HOURS*/
 		var hours = {data: data.hours,  min:0, max:24, num_bins: 24*5, name: 'hours',type:'linear', label :"hour of the day"} ;
 		var chd2 = new WGL.ChartDiv("right","ch2", "Hour of the day");
 		chd2.setDim(WGL.addLinearHistDimension(hours));		
 		WGL.addLinearFilter(hours, 24*10, 'hoursF');		
 		charts['hours'] = new  WGL.ui.StackedBarChart(hours, "ch2", "hour of the day", 'hoursF');
-		
+
+		/*
+
 		/!*SERVELITY*!/
 		var sev   = {data: data.sev,  domain: data.sevEnum ,  name: 'sev', type:'ordinal', label : "accident servelity"};	
 		var chd3 = new WGL.ChartDiv("right","ch3", "Accident severity");
@@ -133,11 +135,12 @@ function visualize(data){
 		 *!/
 		WGL.addCharts(charts);
 		//wgl.addLegend(legend);*/
-		
+
+    	WGL.addCharts(charts);
+
 		WGL.initFilters();
-		WGL.render();
 	
-		//wgl.render();	
+		//wgl.render();
 		
 		//var radius = 12.;		
 

@@ -5,29 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e20b1c9e-24de-40f1-bd96-4a5f3981a3c0" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/chicago/2015/data/DataLoader.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/chicago/2015/data/birm2015.json" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/chicago/2015/data/birmtest.json" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/chicago/2015/data/schools.json" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/chicago/2015/data/schools.kml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/chicago/2015/data/uk2015.json" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/chicago/2015/index.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/chicago/2015/js/DataLoader.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/chicago/2015/js/init.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/chicago/2015/js/map.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/chicago/data/.gitignore" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/chicago/data/all13.json" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/chicago/data/schools.json" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/chicago/index.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/chicago/index13.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/chicago/js/DataLoader.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/chicago/js/init.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/chicago/js/init13.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/chicago/js/map.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/examples/birmingham/2015/js/map.js" afterPath="$PROJECT_DIR$/examples/birmingham/2015/js/map.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/examples/birmingham/js/DataLoader.js" afterPath="$PROJECT_DIR$/examples/birmingham/js/DataLoader.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/examples/birmingham/js/map.js" afterPath="$PROJECT_DIR$/examples/birmingham/js/map.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/examples/flanders/js/map.js" afterPath="$PROJECT_DIR$/examples/flanders/js/map.js" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/examples/chicago/data/data.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/examples/chicago/data/schools.json" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/examples/chicago/index.html" afterPath="$PROJECT_DIR$/examples/chicago/index.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/examples/chicago/js/DataLoader.js" afterPath="$PROJECT_DIR$/examples/chicago/js/DataLoader.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/examples/chicago/js/init.js" afterPath="$PROJECT_DIR$/examples/chicago/js/init.js" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -46,77 +29,47 @@
       <file leaf-file-name="DataLoader.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/examples/chicago/js/DataLoader.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="492">
-              <caret line="105" column="5" lean-forward="true" selection-start-line="105" selection-start-column="5" selection-end-line="105" selection-end-column="5" />
+            <state relative-caret-position="380">
+              <caret line="89" column="29" lean-forward="false" selection-start-line="89" selection-start-column="29" selection-end-line="89" selection-end-column="29" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="init.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/examples/flanders/js/init.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2106">
-              <caret line="6" column="36" lean-forward="false" selection-start-line="6" selection-start-column="36" selection-end-line="6" selection-end-column="36" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="init.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="init.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/examples/chicago/js/init.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="18">
-              <caret line="37" column="50" lean-forward="true" selection-start-line="37" selection-start-column="50" selection-end-line="37" selection-end-column="50" />
+            <state relative-caret-position="200">
+              <caret line="142" column="23" lean-forward="true" selection-start-line="142" selection-start-column="23" selection-end-line="142" selection-end-column="23" />
               <folding>
-                <marker date="1511525948405" expanded="true" signature="7490:7518" ph="..." />
-                <marker date="1511525948405" expanded="true" signature="7561:7622" ph="..." />
-                <marker date="1511525948405" expanded="true" signature="7706:7718" ph="..." />
-                <marker date="1511525948405" expanded="true" signature="7798:7838" ph="..." />
-                <marker date="1511525948405" expanded="true" signature="8011:8023" ph="..." />
-                <marker date="1511525948405" expanded="true" signature="8092:8132" ph="..." />
-                <marker date="1511525948405" expanded="true" signature="8270:8282" ph="..." />
-                <marker date="1511525948405" expanded="true" signature="8335:8375" ph="..." />
+                <marker date="1511531219026" expanded="true" signature="7376:7404" ph="..." />
+                <marker date="1511531219026" expanded="true" signature="7447:7508" ph="..." />
+                <marker date="1511531219026" expanded="true" signature="7592:7604" ph="..." />
+                <marker date="1511531219026" expanded="true" signature="7684:7724" ph="..." />
+                <marker date="1511531219026" expanded="true" signature="7897:7909" ph="..." />
+                <marker date="1511531219026" expanded="true" signature="7978:8018" ph="..." />
+                <marker date="1511531219026" expanded="true" signature="8156:8168" ph="..." />
+                <marker date="1511531219026" expanded="true" signature="8221:8261" ph="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="data.json" pinned="false" current-in-tab="true">
+      <file leaf-file-name="data.json" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/examples/chicago/data/data.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="1" selection-end-column="51" />
+            <state relative-caret-position="1656">
+              <caret line="92" column="48" lean-forward="true" selection-start-line="92" selection-start-column="48" selection-end-line="92" selection-end-column="48" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
       <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/examples/birmingham/index.html">
+        <entry file="file://$PROJECT_DIR$/examples/chicago/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="193">
-              <caret line="384" column="123" lean-forward="true" selection-start-line="384" selection-start-column="123" selection-end-line="384" selection-end-column="123" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="map.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/examples/birmingham/js/map.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="256">
-              <caret line="235" column="33" lean-forward="true" selection-start-line="235" selection-start-column="33" selection-end-line="235" selection-end-column="33" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DataLoader.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/examples/birmingham/js/DataLoader.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="445">
-              <caret line="86" column="29" lean-forward="true" selection-start-line="86" selection-start-column="29" selection-end-line="86" selection-end-column="29" />
+            <state relative-caret-position="576">
+              <caret line="317" column="0" lean-forward="true" selection-start-line="317" selection-start-column="0" selection-end-line="317" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -148,6 +101,8 @@
       <find>heatmap_visible</find>
       <find>error</find>
       <find>render</find>
+      <find>daysof</find>
+      <find>speed</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -165,11 +120,12 @@
         <option value="$PROJECT_DIR$/examples/flanders/js/map.js" />
         <option value="$PROJECT_DIR$/examples/chicago/js/map.js" />
         <option value="$PROJECT_DIR$/examples/birmingham/index.html" />
-        <option value="$PROJECT_DIR$/examples/chicago/index.html" />
-        <option value="$PROJECT_DIR$/examples/chicago/js/DataLoader.js" />
         <option value="$PROJECT_DIR$/examples/birmingham/js/DataLoader.js" />
         <option value="$PROJECT_DIR$/examples/birmingham/js/init.js" />
         <option value="$PROJECT_DIR$/examples/birmingham/js/map.js" />
+        <option value="$PROJECT_DIR$/examples/chicago/index.html" />
+        <option value="$PROJECT_DIR$/examples/chicago/data/data.json" />
+        <option value="$PROJECT_DIR$/examples/chicago/js/DataLoader.js" />
         <option value="$PROJECT_DIR$/examples/chicago/js/init.js" />
       </list>
     </option>
@@ -208,6 +164,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -379,7 +336,6 @@
         </subPane>
       </pane>
       <pane id="Scope" />
-      <pane id="Scratches" />
       <pane id="PackagesPane" />
       <pane id="AndroidView" />
     </panes>
@@ -442,6 +398,12 @@
       <method />
     </configuration>
     <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
+      <node-interpreter>project</node-interpreter>
+      <node-options />
+      <gulpfile />
+      <tasks />
+      <arguments />
+      <envs />
       <method />
     </configuration>
     <configuration default="true" type="js.build_tools.npm" factoryName="npm">
@@ -480,11 +442,12 @@
       <workItem from="1511353522926" duration="1839000" />
       <workItem from="1511457745528" duration="65000" />
       <workItem from="1511519097760" duration="8296000" />
+      <workItem from="1511529788982" duration="1489000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="18000000" />
+    <option name="totallyTimeSpent" value="19489000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="24" width="1301" height="744" extended-state="6" />
@@ -494,7 +457,6 @@
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Grunt " active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32884902" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32882884" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -517,6 +479,7 @@
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32884902" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -551,7 +514,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -567,7 +529,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="108">
           <caret line="6" column="36" lean-forward="false" selection-start-line="6" selection-start-column="36" selection-end-line="6" selection-end-column="36" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -575,7 +536,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -632,7 +592,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3528">
           <caret line="196" column="38" lean-forward="false" selection-start-line="196" selection-start-column="38" selection-end-line="196" selection-end-column="38" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -697,7 +656,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="108">
           <caret line="6" column="36" lean-forward="false" selection-start-line="6" selection-start-column="36" selection-end-line="6" selection-end-column="36" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -705,7 +663,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -818,7 +775,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="108">
           <caret line="6" column="36" lean-forward="false" selection-start-line="6" selection-start-column="36" selection-end-line="6" selection-end-column="36" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -826,23 +782,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="603">
           <caret line="196" column="38" lean-forward="false" selection-start-line="196" selection-start-column="38" selection-end-line="196" selection-end-column="38" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/examples/chicago/data/schools.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/examples/chicago/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="247">
-          <caret line="23" column="4" lean-forward="false" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="4" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -850,7 +789,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="3" lean-forward="false" selection-start-line="0" selection-start-column="3" selection-end-line="0" selection-end-column="3" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -873,8 +811,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/examples/birmingham/js/map.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="256">
-          <caret line="235" column="33" lean-forward="true" selection-start-line="235" selection-start-column="33" selection-end-line="235" selection-end-column="33" />
+        <state relative-caret-position="4230">
+          <caret line="235" column="33" lean-forward="false" selection-start-line="235" selection-start-column="33" selection-end-line="235" selection-end-column="33" />
           <folding />
         </state>
       </provider>
@@ -887,52 +825,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/examples/birmingham/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="193">
-          <caret line="384" column="123" lean-forward="true" selection-start-line="384" selection-start-column="123" selection-end-line="384" selection-end-column="123" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/examples/chicago/js/DataLoader.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="492">
-          <caret line="105" column="5" lean-forward="true" selection-start-line="105" selection-start-column="5" selection-end-line="105" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/examples/birmingham/js/DataLoader.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="445">
-          <caret line="86" column="29" lean-forward="true" selection-start-line="86" selection-start-column="29" selection-end-line="86" selection-end-column="29" />
+        <state relative-caret-position="1548">
+          <caret line="86" column="29" lean-forward="false" selection-start-line="86" selection-start-column="29" selection-end-line="86" selection-end-column="29" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/examples/flanders/js/init.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2106">
-          <caret line="6" column="36" lean-forward="false" selection-start-line="6" selection-start-column="36" selection-end-line="6" selection-end-column="36" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/examples/chicago/js/init.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="18">
-          <caret line="37" column="50" lean-forward="true" selection-start-line="37" selection-start-column="50" selection-end-line="37" selection-end-column="50" />
-          <folding>
-            <marker date="1511525948405" expanded="true" signature="7490:7518" ph="..." />
-            <marker date="1511525948405" expanded="true" signature="7561:7622" ph="..." />
-            <marker date="1511525948405" expanded="true" signature="7706:7718" ph="..." />
-            <marker date="1511525948405" expanded="true" signature="7798:7838" ph="..." />
-            <marker date="1511525948405" expanded="true" signature="8011:8023" ph="..." />
-            <marker date="1511525948405" expanded="true" signature="8092:8132" ph="..." />
-            <marker date="1511525948405" expanded="true" signature="8270:8282" ph="..." />
-            <marker date="1511525948405" expanded="true" signature="8335:8375" ph="..." />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -952,11 +849,68 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/examples/chicago/data/data.json">
+    <entry file="file://$PROJECT_DIR$/examples/flanders/js/init.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="18">
+          <caret line="6" column="36" lean-forward="false" selection-start-line="6" selection-start-column="36" selection-end-line="6" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/examples/birmingham/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="18">
+          <caret line="384" column="123" lean-forward="false" selection-start-line="384" selection-start-column="123" selection-end-line="384" selection-end-column="123" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/examples/chicago/data/schools.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="1" selection-end-column="51" />
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/examples/chicago/data/data.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1656">
+          <caret line="92" column="48" lean-forward="true" selection-start-line="92" selection-start-column="48" selection-end-line="92" selection-end-column="48" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/examples/chicago/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="576">
+          <caret line="317" column="0" lean-forward="true" selection-start-line="317" selection-start-column="0" selection-end-line="317" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/examples/chicago/js/DataLoader.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="380">
+          <caret line="89" column="29" lean-forward="false" selection-start-line="89" selection-start-column="29" selection-end-line="89" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/examples/chicago/js/init.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="200">
+          <caret line="142" column="23" lean-forward="true" selection-start-line="142" selection-start-column="23" selection-end-line="142" selection-end-column="23" />
+          <folding>
+            <marker date="1511531219026" expanded="true" signature="7376:7404" ph="..." />
+            <marker date="1511531219026" expanded="true" signature="7447:7508" ph="..." />
+            <marker date="1511531219026" expanded="true" signature="7592:7604" ph="..." />
+            <marker date="1511531219026" expanded="true" signature="7684:7724" ph="..." />
+            <marker date="1511531219026" expanded="true" signature="7897:7909" ph="..." />
+            <marker date="1511531219026" expanded="true" signature="7978:8018" ph="..." />
+            <marker date="1511531219026" expanded="true" signature="8156:8168" ph="..." />
+            <marker date="1511531219026" expanded="true" signature="8221:8261" ph="..." />
+          </folding>
         </state>
       </provider>
     </entry>
