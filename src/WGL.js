@@ -5,434 +5,434 @@ var WGL = (function() {
 
 
 
-	/** private part* */
+  /** private part* */
 
-	var manager, rasterer;
-	
-	var oneDDim;
-	var charts;
-	var legends;
-	var index;
-	var u;
-	this.utils = u;
-	
-	var setVars = function(){
-			oneDDim = [];
-			charts = [];
-			legends = [];
-			index = [];
-	}
+  var manager, rasterer;
 
-	var addFilter = function(dimid, filterid, filter) {
-		var d = WGL._dimensions[dimid];
-		if (typeof (d) == 'undefined') {
-			throw ('Cant set fitler to not defined dimension ' + name);
-		}
+  var oneDDim;
+  var charts;
+  var legends;
+  var index;
+  var u;
+  this.utils = u;
 
-		if (d.filters == null) {
-			d.filters = [];
-			d.filtersids = [];
-		}
-		d.filters[filterid] = filter;
-		d.filtersids.push(filterid);
-	};
+  var setVars = function(){
+      oneDDim = [];
+      charts = [];
+      legends = [];
+      index = [];
+  }
 
-	/** public part* */
-	return {
-		
-		/** Internal helper classes */
-		internal : {},
-			
-		/** Dimensions package */
-		dimension : {},
-		
-		/** Filters package*/		
-		filter :{},
-		
-		/** Filters package*/
-		experimental : {},
-		
-		/**User interface package*/
-		ui : {},
-		
-		/* */
-		filterutils: {},
-		
-		numrec : {},
-			
+  var addFilter = function(dimid, filterid, filter) {
+    var d = WGL._dimensions[dimid];
+    if (typeof (d) == 'undefined') {
+      throw ('Cant set fitler to not defined dimension ' + name);
+    }
 
-		/* MAIN INTITAIZATION */
-		init : function(num, url, divid, mapcontainerid) {
-			setVars();			
-			u = this.utils;
-			manager = new WGL.internal.Manager(divid,  mapcontainerid);			
-			WGL.internal.GLUtils.loadShaders(url);
-			
-			rasterer = new u.Rasterer(num);		
-			manager.num_rec = num;
-			manager.r_size = rasterer.size;
-				
-			this._mainFilter = new WGL.internal.Filter();
+    if (d.filters == null) {
+      d.filters = [];
+      d.filtersids = [];
+    }
+    d.filters[filterid] = filter;
+    d.filtersids.push(filterid);
+  };
 
-			this._dimensions = [];
-			this._updatefuc = [];
-			
-			this.mcontroller = new WGL.internal.MapController();
-			this.mcontroller.resize();
-					
-			for (var i = 0; i < manager.num_rec; i++) {
-				index[i] = rasterer.calc(i);
-			}
+  /** public part* */
+  return {
 
-			var indexta = u.array2TA2D(index);
-			manager.addDataBuffer(indexta, 2, 'index');
+    /** Internal helper classes */
+    internal : {},
 
-		},
-		
-		addLineIndex : function(){
-			var plus = true;
-			var indexLine = [];
-			for (var i = 0; i < manager.num_rec; i++) {
-				if (plus) {
-					indexLine[i] = rasterer.calc(i+1);
-					plus = false;
-				} else {
-					indexLine[i] = rasterer.calc(i-1);
-					plus =  true;
-				}
-			}
-			var indexta = u.array2TA2D(indexLine);
-			manager.addDataBuffer(indexta, 2, 'indexLine');
-		},
+    /** Dimensions package */
+    dimension : {},
 
-		getManager : function() {
-			return manager;
-		},
-		
-		
-		getRasterSize: function(){
-			return rasterer.size;
-		},
-		
-		
-		/**
-		 * Adding dimensions
-		 */
-		addMapDimension : function(data, id) {
-			try {
-				manager.addDataBuffer(u.array2TA(data), 2, 'wPoint');
-			} catch (err) {
-				console.warn(err);
-			}
-			;
-			var dim = new WGL.dimension.MapDimension(id);
-			this._dimensions[id] = dim;
-			return dim;
-		},
+    /** Filters package*/
+    filter :{},
 
-		addLineDimension : function(data, id) {
-		//	try {				
+    /** Filters package*/
+    experimental : {},
 
-				var triglines = u.array2TALines(data);
-				manager.addDataBuffer(triglines.pts, 2, 'wPoint');
-				manager.addDataBuffer(triglines.norm, 2, 'normals');
-				manager.addDataBuffer(triglines.miters, 1, 'miter');
-				manager.addElementBuffer(triglines.indicies, 1, 'indicies');
+    /**User interface package*/
+    ui : {},
 
-			//} catch (err) {
-			//	console.warn(err);
-			//}
-			;
-			var dim = new WGL.dimension.LineDimension(id);
+    /* */
+    filterutils: {},
 
-			dim.num = triglines.num;
-			
-			this._dimensions[id] = dim;
-			return dim;
-		},
-
-		addLineKDEDimension : function(data, id) {
-		
-			var triglines = WGL.dimension.LineKDEDimension.array2TALines(data);
-			
-			manager.addDataBuffer(triglines.pts, 2, 'wPoint');
-			manager.addDataBuffer(triglines.angles, 1, 'angles');
-			manager.addDataBuffer(triglines.lengths, 1, 'lengths');
-			manager.addElementBuffer(triglines.indicies, 1, 'indicies');
-
-			//} catch (err) {
-			//	console.warn(err);
-			//}
-			;
-			var dim = new WGL.dimension.LineKDEDimension(id);
-
-			dim.num = triglines.num;
-			
-			this._dimensions[id] = dim;
-			return dim;
-		},
-		
-		addHeatMapDimension : function(data, id) {
-			try {
-				manager.addDataBuffer(u.array2TA(data), 2, 'wPoint');
-			} catch (err) {
-				console.warn(err);
-			}
-			;
-			var dim = new WGL.dimension.HeatMapDimension(id);
-			this._dimensions[id] = dim;
-			return dim;
-		},
-		
-		addMapLineDimension : function(data, id){
-			try {
-				manager.addDataBuffer(u.array2TA(data), 2, 'wPoint');
-			} catch (err) {
-				console.warn(err);
-			};
-			var dim = new WGL.experimental.MapLineDimension(id);
-			manager.addDataBuffer(dim.calcNormals(data), 2, 'normals');
-			this.addLineIndex();
-			this._dimensions[id] = dim;
-			return dim;
-		},
-
-		addLinearHistDimension : function(m) {
-			var ta = u.array2TANormLinear(m, m.num_bins);
-			manager.addDataBuffer(ta, 1, m.name, m.min, m.max);
-			var dim = new WGL.dimension.HistDimension(m);
-			this._dimensions[m.name] = dim;
-			oneDDim[m.name] = dim;
-			manager.dimnum = Object.keys(oneDDim).length;
-			return dim;
-		},
-
-		addOrdinalHistDimension : function(m) {
-			var ta = u.array2TANormOrdinal(m);
-			manager.addDataBuffer(ta, 1, m.name);
-			var dim = new WGL.dimension.HistDimension(m);
-			dim.setToOrdinal();
-			this._dimensions[m.name] = dim;
-			oneDDim[m.name] = dim;
-			manager.dimnum = Object.keys(oneDDim).length;
-			return dim;
-		},
-		
-		addMultiDim : function(d){
-			 var ta = [];		
-			 /* add multiple dimension*/
-			for (var i in d){
-				
-				var dim = d[i];
-				//create typedarray of every dimension /
-				if (dim.type=='ordinal'){
-					ta[i] = u.array2TANormOrdinal(dim);
-				} else if (dim.type =='linear'){
-					ta[i] = u.array2TANormLinear(dim , dim.num_bins);
-				} else {
-					console.error('Dimension type missing or unknown for dim '+d);
-				}
-			}
-			/*data array*/
-			var td = [];			
-			/*artificially generated coordinates of each column*/
-			var ti = [];			
-			/*index of each row*/
-			var index_pc = [];
-			/*connects all typed array to one big array*/
-			for (var j in ta[0]){
-				for(var i in ta){
-					i =  parseInt(i);				
-					index_pc.push(index[parseInt(j)]);
-					td.push(ta[i][j]);
-					ti.push(i / (d.length-1)) ;
-				
-					/*if not end point add twice to connect each line*/
-					 if( !(i==0 || i==(ta.length-1)) ){
-						 index_pc.push(index[parseInt(j)]);
-						 td.push(ta[i][j]);
-						 ti.push(i / (d.length-1));
-					 }
-					
-				}
-			}			
-			var ai=u.array2TA2D(index_pc);
-			manager.num_of_attrib = d.length;
-			manager.addDataBuffer(ai, 2, 'indexpc');
-			//manager.addElementBuffer(new Uint16Array(indicies),1, 'indicies');
-			manager.addDataBuffer(new Float32Array(td), 1, 'td');
-			manager.addDataBuffer(new Float32Array(ti), 1, 'ti');
-		},
-		
-		addParallelCoordinates : function(div, data){		
-			var dim = new WGL.dimension.ParallelCoordinates(div, data);
-			this._dimensions[div] = dim;	
-			return dim;
-		},
-		
-
-		/** Adding filters */
-		addLinearFilter : function(m, res, id) {
-			var d = this._dimensions[m.name];
-			if (d == null) {
-				console.error('Cant set fitler to not defined dimension '
-						+ m.name);
-			}
-			var f = new WGL.filter.LinearFilter(m, res, id);// res);
-			addFilter(m.name, id, f);
-		},
-
-		addPolyBrushFilter : function(name, id) {
-			var d = this._dimensions[name];
-			if (typeof (d) == 'undefined') {
-				throw ('Cant set fitler to not defined dimension ' + name);
-			}
-			var polyFilter = new WGL.filter.MapPolyFilter();// res);
-			addFilter(name, id, polyFilter);
-		},
-
-		addColorFilter : function(name, id) {
-			var colorFilter = new WGL.filter.MapColorFilter(this._dimensions[name]);// res);
-			addFilter(name, id, colorFilter);
-			return colorFilter;
-		},
-
-		addExtentFilter : function() {
-			var isspatial = false;
-			for (i in this._dimensions) {
-				// check if there is spatial dimension
-				if (this._dimensions[i].isSpatial) {
-					isspatial = true
-				}
-			}
-			if (!isspatial) {
-				throw "Can not set spatial filter without spatial dimension"
-			}
-			extf = new WGL.filter.ExtentFilter();
-		},
-
-		resetFilters : function() {
-			
-			
-			for (var i in charts) {
-				var ch = charts[i];
-				ch.brush.clear();
-			}
-			
-			for (var i in legends) {
-				var l = legends[i];
-				l.reset();
-				//l.brush.clear();
-				//l.brush.call(l.brushed);
-				//try { 
-					//d3.selectAll(".brush").call(l.brush)
-					//}
-				//catch (err){console.log(err)};
-			}
-			for (var i in this._dimensions) {
-				if (this._dimensions[i].reset!= undefined){
-						this._dimensions[i].reset();
-					}	
-				for (var f in this._dimensions[i].filters) {
-					this._dimensions[i].filters[f].isActive = false;
-															
-				}
-			}
-			this.setFiltersTrasholds();
-			this._mainFilter.applyFilterAll(this._dimensions);
-			this.render();
-		},
-		/* Adding UI */
-
-		addCharts : function(ch) {
-			charts = ch;
-		},
-
-		addLegend : function(l) {
-			legends.push(l);
-		},
-
-		initFilters : function() {
-			this._mainFilter.applyFilterAll(this._dimensions);
-		},
-		
-		updateCharts : function(){						
-			for ( var i in charts) {
-					if (this._dimensions[i].visible){										
-						var readout = this._dimensions[i].readPixels();
-						if (typeof readout != 'undefined') {
-							charts[i].update(readout);		
-					}		
-				}
-			}		
-		},
-		
-		resize : function(){			
-				for (var i in this._dimensions){
-					var d = this._dimensions[i];
-					if (d.resize != undefined){				
-							d.resize()				
-					}
-				}		
-				this.render();
-			
-		},
-		registerUpdateFunction: function (f) {
-			this._updatefuc.push(f)
-		},
-		/**
-		 * Delete dimension. The function may not delete all buffers. Function does not delete chart.
-		 * @param dimname dimension name
-		 */
-		cleanDimension: function (dimname) {
-			var dim = this._dimensions[dimname];
-			dim.clean();
-			delete this._dimensions[dimname];
-			WGL.render();
-		},
-		/**
-		 * Delete all dimensions, filters and charts
-		 */
-		cleanAll: function (cleanChartDiv) {
-			cleanChartDiv = cleanChartDiv || false;
-			
-			// clean and delete dimensions
-			for (var key in this._dimensions){
-				console.log(key);
-				try {
-					this._dimensions[key].clean();
-				} catch (err) {
-					console.warn(err);
-					console.error("maybe method clean is not implemented. glProgram was not deleted! "+key);
-				}
-				delete WGL._dimensions[key];
-				//console.log('Dimension '+key+' was deleted');
-			}
-			this._dimensions = [];
-
-			// clean buffers
-			for (var key in manager.databuffers){
-				manager.cleanBuffer(key);
-				//console.log('Buffer '+key+' was deleted');
-			}
-			//clean charts
-			for (var ch in charts){
-				charts[ch].clean(cleanChartDiv);
-				//console.log('Charts '+ch+' was deleted');
-			}
-			charts = [];
-
-			// delete extend filter
-			try {
-				delete extf;
-			} catch (err) {}
+    numrec : {},
 
 
-			manager.resetWebGL();
-			WGL.render();
+    /* MAIN INTITAIZATION */
+    init : function(num, url, divid, mapcontainerid) {
+      setVars();
+      u = this.utils;
+      manager = new WGL.internal.Manager(divid,  mapcontainerid);
+      WGL.internal.GLUtils.loadShaders(url);
 
-		}
-	
-	};
-	
+      rasterer = new u.Rasterer(num);
+      manager.num_rec = num;
+      manager.r_size = rasterer.size;
+
+      this._mainFilter = new WGL.internal.Filter();
+
+      this._dimensions = [];
+      this._updatefuc = [];
+
+      this.mcontroller = new WGL.internal.MapController();
+      this.mcontroller.resize();
+
+      for (var i = 0; i < manager.num_rec; i++) {
+        index[i] = rasterer.calc(i);
+      }
+
+      var indexta = u.array2TA2D(index);
+      manager.addDataBuffer(indexta, 2, 'index');
+
+    },
+
+    addLineIndex : function(){
+      var plus = true;
+      var indexLine = [];
+      for (var i = 0; i < manager.num_rec; i++) {
+        if (plus) {
+          indexLine[i] = rasterer.calc(i+1);
+          plus = false;
+        } else {
+          indexLine[i] = rasterer.calc(i-1);
+          plus =  true;
+        }
+      }
+      var indexta = u.array2TA2D(indexLine);
+      manager.addDataBuffer(indexta, 2, 'indexLine');
+    },
+
+    getManager : function() {
+      return manager;
+    },
+
+
+    getRasterSize: function(){
+      return rasterer.size;
+    },
+
+
+    /**
+     * Adding dimensions
+     */
+    addMapDimension : function(data, id) {
+      try {
+        manager.addDataBuffer(u.array2TA(data), 2, 'wPoint');
+      } catch (err) {
+        console.warn(err);
+      }
+      ;
+      var dim = new WGL.dimension.MapDimension(id);
+      this._dimensions[id] = dim;
+      return dim;
+    },
+
+    addLineDimension : function(data, id) {
+    //	try {
+
+        var triglines = u.array2TALines(data);
+        manager.addDataBuffer(triglines.pts, 2, 'wPoint');
+        manager.addDataBuffer(triglines.norm, 2, 'normals');
+        manager.addDataBuffer(triglines.miters, 1, 'miter');
+        manager.addElementBuffer(triglines.indicies, 1, 'indicies');
+
+      //} catch (err) {
+      //	console.warn(err);
+      //}
+      ;
+      var dim = new WGL.dimension.LineDimension(id);
+
+      dim.num = triglines.num;
+
+      this._dimensions[id] = dim;
+      return dim;
+    },
+
+    addLineKDEDimension : function(data, id) {
+
+      var triglines = WGL.dimension.LineKDEDimension.array2TALines(data);
+
+      manager.addDataBuffer(triglines.pts, 2, 'wPoint');
+      manager.addDataBuffer(triglines.angles, 1, 'angles');
+      manager.addDataBuffer(triglines.lengths, 1, 'lengths');
+      manager.addElementBuffer(triglines.indicies, 1, 'indicies');
+
+      //} catch (err) {
+      //	console.warn(err);
+      //}
+      ;
+      var dim = new WGL.dimension.LineKDEDimension(id);
+
+      dim.num = triglines.num;
+
+      this._dimensions[id] = dim;
+      return dim;
+    },
+
+    addHeatMapDimension : function(data, id) {
+      try {
+        manager.addDataBuffer(u.array2TA(data), 2, 'wPoint');
+      } catch (err) {
+        console.warn(err);
+      }
+      ;
+      var dim = new WGL.dimension.HeatMapDimension(id);
+      this._dimensions[id] = dim;
+      return dim;
+    },
+
+    addMapLineDimension : function(data, id){
+      try {
+        manager.addDataBuffer(u.array2TA(data), 2, 'wPoint');
+      } catch (err) {
+        console.warn(err);
+      };
+      var dim = new WGL.experimental.MapLineDimension(id);
+      manager.addDataBuffer(dim.calcNormals(data), 2, 'normals');
+      this.addLineIndex();
+      this._dimensions[id] = dim;
+      return dim;
+    },
+
+    addLinearHistDimension : function(m) {
+      var ta = u.array2TANormLinear(m, m.num_bins);
+      manager.addDataBuffer(ta, 1, m.name, m.min, m.max);
+      var dim = new WGL.dimension.HistDimension(m);
+      this._dimensions[m.name] = dim;
+      oneDDim[m.name] = dim;
+      manager.dimnum = Object.keys(oneDDim).length;
+      return dim;
+    },
+
+    addOrdinalHistDimension : function(m) {
+      var ta = u.array2TANormOrdinal(m);
+      manager.addDataBuffer(ta, 1, m.name);
+      var dim = new WGL.dimension.HistDimension(m);
+      dim.setToOrdinal();
+      this._dimensions[m.name] = dim;
+      oneDDim[m.name] = dim;
+      manager.dimnum = Object.keys(oneDDim).length;
+      return dim;
+    },
+
+    addMultiDim : function(d){
+       var ta = [];
+       /* add multiple dimension*/
+      for (var i in d){
+
+        var dim = d[i];
+        //create typedarray of every dimension /
+        if (dim.type=='ordinal'){
+          ta[i] = u.array2TANormOrdinal(dim);
+        } else if (dim.type =='linear'){
+          ta[i] = u.array2TANormLinear(dim , dim.num_bins);
+        } else {
+          console.error('Dimension type missing or unknown for dim '+d);
+        }
+      }
+      /*data array*/
+      var td = [];
+      /*artificially generated coordinates of each column*/
+      var ti = [];
+      /*index of each row*/
+      var index_pc = [];
+      /*connects all typed array to one big array*/
+      for (var j in ta[0]){
+        for(var i in ta){
+          i =  parseInt(i);
+          index_pc.push(index[parseInt(j)]);
+          td.push(ta[i][j]);
+          ti.push(i / (d.length-1)) ;
+
+          /*if not end point add twice to connect each line*/
+           if( !(i==0 || i==(ta.length-1)) ){
+             index_pc.push(index[parseInt(j)]);
+             td.push(ta[i][j]);
+             ti.push(i / (d.length-1));
+           }
+
+        }
+      }
+      var ai=u.array2TA2D(index_pc);
+      manager.num_of_attrib = d.length;
+      manager.addDataBuffer(ai, 2, 'indexpc');
+      //manager.addElementBuffer(new Uint16Array(indicies),1, 'indicies');
+      manager.addDataBuffer(new Float32Array(td), 1, 'td');
+      manager.addDataBuffer(new Float32Array(ti), 1, 'ti');
+    },
+
+    addParallelCoordinates : function(div, data){
+      var dim = new WGL.dimension.ParallelCoordinates(div, data);
+      this._dimensions[div] = dim;
+      return dim;
+    },
+
+
+    /** Adding filters */
+    addLinearFilter : function(m, res, id) {
+      var d = this._dimensions[m.name];
+      if (d == null) {
+        console.error('Cant set fitler to not defined dimension '
+            + m.name);
+      }
+      var f = new WGL.filter.LinearFilter(m, res, id);// res);
+      addFilter(m.name, id, f);
+    },
+
+    addPolyBrushFilter : function(name, id) {
+      var d = this._dimensions[name];
+      if (typeof (d) == 'undefined') {
+        throw ('Cant set fitler to not defined dimension ' + name);
+      }
+      var polyFilter = new WGL.filter.MapPolyFilter();// res);
+      addFilter(name, id, polyFilter);
+    },
+
+    addColorFilter : function(name, id) {
+      var colorFilter = new WGL.filter.MapColorFilter(this._dimensions[name]);// res);
+      addFilter(name, id, colorFilter);
+      return colorFilter;
+    },
+
+    addExtentFilter : function() {
+      var isspatial = false;
+      for (i in this._dimensions) {
+        // check if there is spatial dimension
+        if (this._dimensions[i].isSpatial) {
+          isspatial = true
+        }
+      }
+      if (!isspatial) {
+        throw "Can not set spatial filter without spatial dimension"
+      }
+      extf = new WGL.filter.ExtentFilter();
+    },
+
+    resetFilters : function() {
+
+
+      for (var i in charts) {
+        var ch = charts[i];
+        ch.brush.clear();
+      }
+
+      for (var i in legends) {
+        var l = legends[i];
+        l.reset();
+        //l.brush.clear();
+        //l.brush.call(l.brushed);
+        //try {
+          //d3.selectAll(".brush").call(l.brush)
+          //}
+        //catch (err){console.log(err)};
+      }
+      for (var i in this._dimensions) {
+        if (this._dimensions[i].reset!= undefined){
+            this._dimensions[i].reset();
+          }
+        for (var f in this._dimensions[i].filters) {
+          this._dimensions[i].filters[f].isActive = false;
+
+        }
+      }
+      this.setFiltersTrasholds();
+      this._mainFilter.applyFilterAll(this._dimensions);
+      this.render();
+    },
+    /* Adding UI */
+
+    addCharts : function(ch) {
+      charts = ch;
+    },
+
+    addLegend : function(l) {
+      legends.push(l);
+    },
+
+    initFilters : function() {
+      this._mainFilter.applyFilterAll(this._dimensions);
+    },
+
+    updateCharts : function(){
+      for ( var i in charts) {
+          if (this._dimensions[i].visible){
+            var readout = this._dimensions[i].readPixels();
+            if (typeof readout != 'undefined') {
+              charts[i].update(readout);
+          }
+        }
+      }
+    },
+
+    resize : function(){
+        for (var i in this._dimensions){
+          var d = this._dimensions[i];
+          if (d.resize != undefined){
+              d.resize()
+          }
+        }
+        this.render();
+
+    },
+    registerUpdateFunction: function (f) {
+      this._updatefuc.push(f)
+    },
+    /**
+     * Delete dimension. The function may not delete all buffers. Function does not delete chart.
+     * @param dimname dimension name
+     */
+    cleanDimension: function (dimname) {
+      var dim = this._dimensions[dimname];
+      dim.clean();
+      delete this._dimensions[dimname];
+      WGL.render();
+    },
+    /**
+     * Delete all dimensions, filters and charts
+     */
+    cleanAll: function (cleanChartDiv) {
+      cleanChartDiv = cleanChartDiv || false;
+
+      // clean and delete dimensions
+      for (var key in this._dimensions){
+        console.log(key);
+        try {
+          this._dimensions[key].clean();
+        } catch (err) {
+          console.warn(err);
+          console.error("maybe method clean is not implemented. glProgram was not deleted! "+key);
+        }
+        delete WGL._dimensions[key];
+        //console.log('Dimension '+key+' was deleted');
+      }
+      this._dimensions = [];
+
+      // clean buffers
+      for (var key in manager.databuffers){
+        manager.cleanBuffer(key);
+        //console.log('Buffer '+key+' was deleted');
+      }
+      //clean charts
+      for (var ch in charts){
+        charts[ch].clean(cleanChartDiv);
+        //console.log('Charts '+ch+' was deleted');
+      }
+      charts = [];
+
+      // delete extend filter
+      try {
+        delete extf;
+      } catch (err) {}
+
+
+      manager.resetWebGL();
+      WGL.render();
+
+    }
+
+  };
+
 }());

@@ -1,329 +1,329 @@
  /** @constructor */
 WGL.dimension.HeatMapDimension = function(id) {
 
-	var manager = WGL.getManager();
-	var GLU = WGL.internal.GLUtils;
-	this.id = id;
-	
-	/*indicate if the point has a value or just 1 should be used for every point*/
-	this.hasValues = false;
-	// this.manager = manager;
-	// Dimension.call(this, manager);
-	this.isSpatial = true;
-	this.lockScale = false;
+  var manager = WGL.getManager();
+  var GLU = WGL.internal.GLUtils;
+  this.id = id;
 
-	
-	this.maxcal = new WGL.internal.MaxCalculator(Math.floor(manager.w / 5),
-			Math.floor(manager.h / 5));
-	var framebuffer = gl.createFramebuffer();
-	var last_num;
+  /*indicate if the point has a value or just 1 should be used for every point*/
+  this.hasValues = false;
+  // this.manager = manager;
+  // Dimension.call(this, manager);
+  this.isSpatial = true;
+  this.lockScale = false;
 
-	var visible = true;
-	var doGetMax = true;
-	var legend;
-	this.setVisible = function(v) {
-		visible = v;
-	}
 
-	this.setDoGetMax = function(m) {
-		doGetMax = m;
-	}
+  this.maxcal = new WGL.internal.MaxCalculator(Math.floor(manager.w / 5),
+      Math.floor(manager.h / 5));
+  var framebuffer = gl.createFramebuffer();
+  var last_num;
 
-	/* default radiusFunc */
-	this.radiusFunction = function(r, z) {
-		return Math.pow(z, 2) / 10;
-	};
+  var visible = true;
+  var doGetMax = true;
+  var legend;
+  this.setVisible = function(v) {
+    visible = v;
+  }
 
-	/* default getMax function */
-	this.maxFunction = function(max) {
-		if (max == undefined) {
-			return 99999999;
-		}
-		return max;
-	}
-	/* default getMin function */
-	this.minFunction = function(min) {
-		return 0;
-	}
+  this.setDoGetMax = function(m) {
+    doGetMax = m;
+  }
 
-	this.gradFunction = function() {
-		return 1/4;
-	}
+  /* default radiusFunc */
+  this.radiusFunction = function(r, z) {
+    return Math.pow(z, 2) / 10;
+  };
 
-	
-	this.addLegend = function(thelegend) {
-		legend = thelegend;
-		legend.setDimension(this);
-	}
+  /* default getMax function */
+  this.maxFunction = function(max) {
+    if (max == undefined) {
+      return 99999999;
+    }
+    return max;
+  }
+  /* default getMin function */
+  this.minFunction = function(min) {
+    return 0;
+  }
 
-	this.createMapFramebuffer = function() {
-		framebuffer.width = manager.w;
-		framebuffer.height = manager.h;
+  this.gradFunction = function() {
+    return 1/4;
+  }
 
-		var renderbuffer = gl.createRenderbuffer();
 
-		this.heatTexture = gl.createTexture();
-		this.heatTexture.name = "heat map texture";
+  this.addLegend = function(thelegend) {
+    legend = thelegend;
+    legend.setDimension(this);
+  }
 
-		if (!gl.getExtension("OES_texture_float")) {
-			console.log("OES_texture_float not availble -- this is legal");
-		}
-		/** Framebuffer */
-		gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
+  this.createMapFramebuffer = function() {
+    framebuffer.width = manager.w;
+    framebuffer.height = manager.h;
 
-		/** Texture */
-		gl.bindTexture(gl.TEXTURE_2D, this.heatTexture);
-		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); // Prevents
-		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    var renderbuffer = gl.createRenderbuffer();
 
-		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, framebuffer.width,
-				framebuffer.height, 0, gl.RGBA, gl.FLOAT, null);
+    this.heatTexture = gl.createTexture();
+    this.heatTexture.name = "heat map texture";
 
-		/** Render buffer */
-		gl.bindRenderbuffer(gl.RENDERBUFFER, renderbuffer);
-		gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT16,
-				framebuffer.width, framebuffer.height);
+    if (!gl.getExtension("OES_texture_float")) {
+      console.log("OES_texture_float not availble -- this is legal");
+    }
+    /** Framebuffer */
+    gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
 
-		gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0,
-				gl.TEXTURE_2D, this.heatTexture, 0);
-		gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT,
-				gl.RENDERBUFFER, renderbuffer);
+    /** Texture */
+    gl.bindTexture(gl.TEXTURE_2D, this.heatTexture);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); // Prevents
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 
-		gl.bindTexture(gl.TEXTURE_2D, null);
-	}
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, framebuffer.width,
+        framebuffer.height, 0, gl.RGBA, gl.FLOAT, null);
 
-	/**
-	 * init Programs
-	 */
-	this.initProgram = function() {
-		this.createMapFramebuffer();
-		
-		/**
-		 * program uniforms
-		 */
-		gl.useProgram(this.glProgram);
-		manager.storeUniformLoc(this.glProgram, radius);
-		manager.storeUniformLoc(this.glProgram, grad);
-		manager.storeUniformLoc(this.glProgram, drawselect);
-		manager.storeUniformLoc(this.glProgram, numfilters);
-		manager.storeUniformLoc(this.glProgram, spatsum);
+    /** Render buffer */
+    gl.bindRenderbuffer(gl.RENDERBUFFER, renderbuffer);
+    gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT16,
+        framebuffer.width, framebuffer.height);
 
-		gl.useProgram(null);
-	
-	}
-	var drawselect = 'drawselect';
-	var numfilters = 'numfilters';
-	var spatsum = 'spatsum'
+    gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0,
+        gl.TEXTURE_2D, this.heatTexture, 0);
+    gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT,
+        gl.RENDERBUFFER, renderbuffer);
 
-	var radius = 'radius';	
-	
-	var radiusWordVal = 5;
-	var heatMapMaximim = 0;
-	var heatMapMinimum = 0;
-	
-	var grad = 'grad';
-	
-	this.glProgram = GLU.compileShaders('heatmap_vShader', 'heatmap_fShader',
-				this);
+    gl.bindTexture(gl.TEXTURE_2D, null);
+  }
 
-	this.initProgram();
-	//this.renderer2 = new WGL.dimension.IluminationRenderer(manager);
-	this.renderer = new WGL.dimension.HeatMapRenderer(manager);
-	// var maxcal = new
-	// MaxCalculator(Math.floor(manager.w/6),Math.floor(manager.h/6));
-	var the_filter;
+  /**
+   * init Programs
+   */
+  this.initProgram = function() {
+    this.createMapFramebuffer();
 
-	
-	this.setFilter = function(f) {
-		the_filter = f;
-	}
+    /**
+     * program uniforms
+     */
+    gl.useProgram(this.glProgram);
+    manager.storeUniformLoc(this.glProgram, radius);
+    manager.storeUniformLoc(this.glProgram, grad);
+    manager.storeUniformLoc(this.glProgram, drawselect);
+    manager.storeUniformLoc(this.glProgram, numfilters);
+    manager.storeUniformLoc(this.glProgram, spatsum);
 
-	this.setRadius = function(r){
-		radiusWordVal = r;		
-	}	
-	
-	this.setValues = function(val){
-		this.glProgram = GLU.compileShaders('heatmap_val_vShader', 'heatmap_val_fShader',
-				this);
-		this.glProgram.name='hetampwithvalues';
-		manager.addDataBuffer(WGL.utils.array2TA(val), 1, 'hmValues');
-		this.initProgram();
-		this.hasValues = true;
-	}
-	this.setup = function() {
-		// this.createFramebuffer();
-		// gl.useProgram(this.glProgram);
-		/** add specific buffer and uniforms */
-		gl.useProgram(this.glProgram);
+    gl.useProgram(null);
 
-		manager.bindMapMatrix(this.glProgram);
-		manager.enableBufferForName(this.glProgram, "wPoint", "wPoint");
-		manager.enableBufferForName(this.glProgram, "index", "index");
-		
-		if (this.hasValues){
-			manager.enableBufferForName(this.glProgram, "hmValues", "values" );
-		}	
-		manager.bindRasterMatrix(this.glProgram);
+  }
+  var drawselect = 'drawselect';
+  var numfilters = 'numfilters';
+  var spatsum = 'spatsum'
 
-		gl.bindTexture(gl.TEXTURE_2D, this.heatTexture);
-		gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
+  var radius = 'radius';
 
-		gl.viewport(0, 0, manager.w, manager.h);
-		gl.clearColor(0.0, 0.0, 0.0, 0.0);
-		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+  var radiusWordVal = 5;
+  var heatMapMaximim = 0;
+  var heatMapMinimum = 0;
 
-		gl.disable(gl.DEPTH_TEST);
-		// gl.disable(gl.BLEND);
-		gl.enable(gl.BLEND);
-		gl.blendFunc(gl.ONE, gl.ONE);
+  var grad = 'grad';
 
-		manager.enableFilterTexture(this.glProgram);
-	}
+  this.glProgram = GLU.compileShaders('heatmap_vShader', 'heatmap_fShader',
+        this);
 
-	this.renderData = function(num) {
-		last_num = num;
-		this.setup();
+  this.initProgram();
+  //this.renderer2 = new WGL.dimension.IluminationRenderer(manager);
+  this.renderer = new WGL.dimension.HeatMapRenderer(manager);
+  // var maxcal = new
+  // MaxCalculator(Math.floor(manager.w/6),Math.floor(manager.h/6));
+  var the_filter;
 
-		gl.useProgram(this.glProgram);
-		gl.uniform1f(this.glProgram[numfilters], manager.trasholds.allsum);
-		// console.log(manager.filternum);
 
-		this.radiusValue =  this.radiusFunction(radiusWordVal, manager.zoom);		
-		//legend.circle.attr("r", this.radiusValue);
-		
-		gl.uniform1f(this.glProgram[radius], this.radiusValue*2 );
-		gl.uniform1f(this.glProgram[grad], this.gradFunction());
-		gl.uniform1f(this.glProgram[spatsum], manager.trasholds.spatsum);
-		//console.log("spatsum "+manager.trasholds.spatsum) ;
-		//console.log("allsum "+manager.trasholds.allsum) ;
-		// gl.uniform1f(this.glProgram[drawselect], 0);
-		// gl.drawArrays(gl.POINTS, 0, num);
+  this.setFilter = function(f) {
+    the_filter = f;
+  }
 
-		// gl.uniform1f(this.glProgram[drawselect], 1);
-		gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
-		gl.drawArrays(gl.POINTS, 0, num);
-		gl.useProgram(null);
+  this.setRadius = function(r){
+    radiusWordVal = r;
+  }
 
-		gl.bindTexture(gl.TEXTURE_2D, null);
+  this.setValues = function(val){
+    this.glProgram = GLU.compileShaders('heatmap_val_vShader', 'heatmap_val_fShader',
+        this);
+    this.glProgram.name='hetampwithvalues';
+    manager.addDataBuffer(WGL.utils.array2TA(val), 1, 'hmValues');
+    this.initProgram();
+    this.hasValues = true;
+  }
+  this.setup = function() {
+    // this.createFramebuffer();
+    // gl.useProgram(this.glProgram);
+    /** add specific buffer and uniforms */
+    gl.useProgram(this.glProgram);
 
-		this.renderer.heatTexture = this.heatTexture;
-		//this.renderer2.heatTexture = this.heatTexture;
-		manager.heatTexture = this.heatTexture;
-	}
+    manager.bindMapMatrix(this.glProgram);
+    manager.enableBufferForName(this.glProgram, "wPoint", "wPoint");
+    manager.enableBufferForName(this.glProgram, "index", "index");
 
-	var renderMin;
-	var renderMax;
-	this.render = function(num) {
+    if (this.hasValues){
+      manager.enableBufferForName(this.glProgram, "hmValues", "values" );
+    }
+    manager.bindRasterMatrix(this.glProgram);
 
-		if (visible == false) {
-			return;
-		}
+    gl.bindTexture(gl.TEXTURE_2D, this.heatTexture);
+    gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
 
-		this.renderData(num);
+    gl.viewport(0, 0, manager.w, manager.h);
+    gl.clearColor(0.0, 0.0, 0.0, 0.0);
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-		// var max = maxcale.getMax(this.heatTexture);
+    gl.disable(gl.DEPTH_TEST);
+    // gl.disable(gl.BLEND);
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl.ONE, gl.ONE);
 
-		if (!this.lockScale) {
+    manager.enableFilterTexture(this.glProgram);
+  }
 
-			if (doGetMax) {
-				this.maxall = this.maxcal.getMax(this.heatTexture, 1);
-				if (manager.trasholds.spatsum > 0) {
-					this.maxsel = this.maxcal.getMax(this.heatTexture, 0);
-				}
-			}
-			renderMax = this.maxFunction(this.maxall);
-			renderMin = this.minFunction(this.maxall);
-			this.maxVal = this.maxall;
-			this.minVal= 0;
-		} 
-			
-		renderMax = this.maxFunction(this.maxVal);
-		renderMin = this.minFunction(this.minVal);
-		
+  this.renderData = function(num) {
+    last_num = num;
+    this.setup();
 
-			
+    gl.useProgram(this.glProgram);
+    gl.uniform1f(this.glProgram[numfilters], manager.trasholds.allsum);
+    // console.log(manager.filternum);
 
-			// if (typeof(the_filter) !='undefined') {
-			if (manager.trasholds.spatsum > 0) {
-				// var maxsel = this.maxcal.getMax(this.heatTexture, 0);
-				if (typeof (the_filter) != 'undefined') {
-					/* there is a color filter applied */
-					this.renderer.render(renderMin, renderMax, the_filter[0],
-							the_filter[1], this.maxsel);
-					legend.updateMaxAll(this.maxall);
-					legend.drawWithFilter(this.maxsel);
-				} else {
-					this.renderer.render(renderMin, renderMax, renderMin, renderMax,
-							this.maxsel);
-					
+    this.radiusValue =  this.radiusFunction(radiusWordVal, manager.zoom);
+    //legend.circle.attr("r", this.radiusValue);
 
-				}
+    gl.uniform1f(this.glProgram[radius], this.radiusValue*2 );
+    gl.uniform1f(this.glProgram[grad], this.gradFunction());
+    gl.uniform1f(this.glProgram[spatsum], manager.trasholds.spatsum);
+    //console.log("spatsum "+manager.trasholds.spatsum) ;
+    //console.log("allsum "+manager.trasholds.allsum) ;
+    // gl.uniform1f(this.glProgram[drawselect], 0);
+    // gl.drawArrays(gl.POINTS, 0, num);
 
-				if (legend != undefined) {
-					legend.drawWithoutFilter();
-					legend.updateMaxAll(this.maxsel );
-				}
-				// legend.updateMaxSel(this.maxall);
-			} else {
-				// this.renderer.render( renderMin, renderMax, 0, 0);
-				this.renderer.render(renderMin, renderMax, renderMin, renderMax,
-						renderMax);
-				if (legend != undefined) {
-					legend.drawWithoutFilter();
-					legend.updateMaxAll(this.maxall);
-				}
+    // gl.uniform1f(this.glProgram[drawselect], 1);
+    gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
+    gl.drawArrays(gl.POINTS, 0, num);
+    gl.useProgram(null);
 
-			}
-			
-			//this.renderer2.render(renderMin, renderMax, renderMin, renderMax,	renderMax);
-		
+    gl.bindTexture(gl.TEXTURE_2D, null);
 
-	}
+    this.renderer.heatTexture = this.heatTexture;
+    //this.renderer2.heatTexture = this.heatTexture;
+    manager.heatTexture = this.heatTexture;
+  }
 
-	this.update = function() {
-		this.renderData(last_num);
-	}
+  var renderMin;
+  var renderMax;
+  this.render = function(num) {
 
-	this.reRender = function() {
-		this.render(last_num);
-	}
-	this.tearDown = function() {
-		gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-		gl.bindTexture(gl.TEXTURE_2D, null);
-		gl.useProgram(null);
-	}
+    if (visible == false) {
+      return;
+    }
 
-	this.setMatrix = function(matrix) {
-		manager.matrices.push(matrix);
-		manager.mapMatrix = matrix;
-	}
+    this.renderData(num);
 
-	this.readPixels = function(x,y, mode) {
-		mode = mode || "";
-		var readout;
+    // var max = maxcale.getMax(this.heatTexture);
 
-		if (mode === 'float'){
-			gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
-			readout = new Float32Array(4);
-			gl.readPixels(x,y, 1, 1, gl.RGBA, gl.FLOAT, readout);
-			gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-		}
-		else {
-			gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-			readout = new Uint8Array(4);
-			gl.readPixels(x, y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, readout);
+    if (!this.lockScale) {
+
+      if (doGetMax) {
+        this.maxall = this.maxcal.getMax(this.heatTexture, 1);
+        if (manager.trasholds.spatsum > 0) {
+          this.maxsel = this.maxcal.getMax(this.heatTexture, 0);
+        }
+      }
+      renderMax = this.maxFunction(this.maxall);
+      renderMin = this.minFunction(this.maxall);
+      this.maxVal = this.maxall;
+      this.minVal= 0;
+    }
+
+    renderMax = this.maxFunction(this.maxVal);
+    renderMin = this.minFunction(this.minVal);
+
+
+
+
+      // if (typeof(the_filter) !='undefined') {
+      if (manager.trasholds.spatsum > 0) {
+        // var maxsel = this.maxcal.getMax(this.heatTexture, 0);
+        if (typeof (the_filter) != 'undefined') {
+          /* there is a color filter applied */
+          this.renderer.render(renderMin, renderMax, the_filter[0],
+              the_filter[1], this.maxsel);
+          legend.updateMaxAll(this.maxall);
+          legend.drawWithFilter(this.maxsel);
+        } else {
+          this.renderer.render(renderMin, renderMax, renderMin, renderMax,
+              this.maxsel);
+
+
+        }
+
+        if (legend != undefined) {
+          legend.drawWithoutFilter();
+          legend.updateMaxAll(this.maxsel );
+        }
+        // legend.updateMaxSel(this.maxall);
+      } else {
+        // this.renderer.render( renderMin, renderMax, 0, 0);
+        this.renderer.render(renderMin, renderMax, renderMin, renderMax,
+            renderMax);
+        if (legend != undefined) {
+          legend.drawWithoutFilter();
+          legend.updateMaxAll(this.maxall);
+        }
+
+      }
+
+      //this.renderer2.render(renderMin, renderMax, renderMin, renderMax,	renderMax);
+
+
+  }
+
+  this.update = function() {
+    this.renderData(last_num);
+  }
+
+  this.reRender = function() {
+    this.render(last_num);
+  }
+  this.tearDown = function() {
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    gl.bindTexture(gl.TEXTURE_2D, null);
+    gl.useProgram(null);
+  }
+
+  this.setMatrix = function(matrix) {
+    manager.matrices.push(matrix);
+    manager.mapMatrix = matrix;
+  }
+
+  this.readPixels = function(x,y, mode) {
+    mode = mode || "";
+    var readout;
+
+    if (mode === 'float'){
+      gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
+      readout = new Float32Array(4);
+      gl.readPixels(x,y, 1, 1, gl.RGBA, gl.FLOAT, readout);
+      gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    }
+    else {
+      gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+      readout = new Uint8Array(4);
+      gl.readPixels(x, y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, readout);
             console.log(readout, x, y);
-		}
+    }
 
-		return readout;
+    return readout;
 
-	}
-	this.clean = function () {
-		gl.deleteTexture(this.heatTexture);
-		gl.deleteProgram(this.glProgram);
-		this.renderer.clean();
-	}
+  }
+  this.clean = function () {
+    gl.deleteTexture(this.heatTexture);
+    gl.deleteProgram(this.glProgram);
+    this.renderer.clean();
+  }
 
 };
