@@ -7,6 +7,7 @@
 	var w;
 	var h;
 	var margin;
+	var rotate_x;
 	if (typeof(params)=='undefined'){
 		w = 500;
 		h = 215;
@@ -16,10 +17,12 @@
 			bottom : 65,
 			left : 60
 			};
+		rotate_x = false;
 	} else {
 		w=params.w;
 		h=params.h;
 		margin=params.margin;
+		rotate_x=params.rotate_x;
 	}
 	
 	var dataset;
@@ -135,10 +138,24 @@
 				"translate(" + margin.left + "," + margin.top + ")");
 
 		chart = svg.select('.chart');
-		svg.append("g").attr("class", "x axis").attr("transform",
-				"translate(0," + height + ")").call(xAxis).append("text")
-			    .attr("y", "3.5em").attr("x",
-				width /2 ).style("text-anchor", "end").text(x_label);
+
+		if(rotate_x) {
+            svg.append("g")
+                .attr("class", "x axis")
+                .attr("transform", "translate(0," + height + ")")
+                .call(xAxis)
+                .selectAll("text")
+                .attr("y", 0)
+                .attr("x", 9)
+                .attr("dy", ".35em")
+                .attr("transform", "rotate(90)")
+                .style("text-anchor", "start");
+		} else {
+            svg.append("g").attr("class", "x axis").attr("transform",
+                "translate(0," + height + ")").call(xAxis).append("text")
+                .attr("y", "3.5em").attr("x",
+                width /2 ).style("text-anchor", "end").text(x_label);
+		}
 
 		svg.append("g").attr("class", "y axis").call(yAxis).append("text")
 				.attr("transform", "rotate(270)").attr("y", "-4.5em").attr("x",
@@ -237,9 +254,11 @@
 		var legendRect = svg.append("g").attr("class", "l").selectAll('rect')
 				.data(classes);
 
+		var legend_x = (rotate_x ? -50 : w - 150);
+
 		legendRect.enter().append("rect").attr("id", function(d) {
 			return div_id+ d[0];
-		}).attr("x", w - 150).attr("y", function(d) {
+		}).attr("x", legend_x).attr("y", function(d) {
 			return (h - 63 + d[0] * 15)
 		}).attr("width", 12).attr("height", 12).attr("fill", function(d) {
 			return d[2];
@@ -263,7 +282,7 @@
 
 		legendRect.enter().append("text").text(function(d) {
 			return d[1];
-		}).attr("x", w - 130).attr("y", function(d) {
+		}).attr("x", legend_x + 20).attr("y", function(d) {
 			return (h - 63 + d[0] * 15 + 12)
 		}).attr("width", 12).attr("height", 12).attr("stroke", "none");
 
@@ -279,7 +298,7 @@
         '<td><div class="color-out"><b>out</b></div></td><td>data out of the current map view</td>'+
         "</tr>"+
         "</table><br/> Click on the coloured squares in the legend to adjust <br> the chart scale to the 'selected'/ 'unselected'/ 'out' data.";
-        $(help).tooltipster({
+        /*$(help).tooltipster({
             content: tooltip_content,
             contentAsHTML: true,
             theme: 'tooltipster-light',
@@ -292,7 +311,7 @@
 				});
 			}
 
-        });
+        });*/
 
 		function resizeExtent(selection) {
 			selection.attr("height", height);
