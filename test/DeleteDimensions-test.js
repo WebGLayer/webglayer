@@ -63,4 +63,6 @@ QUnit.test("Delete dimensions", function( assert ) {
     }
     assert.equal(len, 0, "length of the WGL._dimension array after clean LINE");
 
+    cleanTest();
+
 });

@@ -5,7 +5,7 @@ QUnit.test("HistDimension", function( assert ) {
     var data = {
         pts: [10,10, 30,30, 50,30, 46,87, 45,23],
         value: [0.0, 10.0, 20.0, 10.0, 0.0],
-        min: 0.0,
+        min: -1.0,
         max: 21.0,
         domain: [0.0, 10.0, 20.0]
     };
@@ -42,4 +42,5 @@ QUnit.test("HistDimension", function( assert ) {
     });
     assert.equal(sumPixelsO, data.num, "the number of points (values) in readPixels() function (ordinal)");
     assert.equal(pixelsO.length, set0rdinal.domain.length, "num of bins (ordinal)")
+    cleanTest();
 });
