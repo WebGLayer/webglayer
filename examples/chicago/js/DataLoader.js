@@ -15,10 +15,6 @@ function DataLoader() {
         var date = [];
         var primary_type = [];
         var district = [];
-        var sev = [];
-        var road_type = [];
-        var speed_limit = [];
-
 
         var weekday = new Array(7);
         weekday[0]=  "Sun";
@@ -107,6 +103,44 @@ function DataLoader() {
         districtEnum[24] = "6464 N Clark St";
         districtEnum[25] = "5555 W Grand Ave"
 
+        var primaryTypeEnum = [
+            'PROSTITUTION',
+            'OTHER OFFENSE',
+            'THEFT',
+            'LIQUOR LAW VIOLATION',
+            'NON-CRIMINAL',
+            'BURGLARY',
+            'PUBLIC PEACE VIOLATION',
+            'RITUALISM',
+            'HOMICIDE',
+            'BATTERY',
+            'ARSON',
+            'NARCOTICS',
+            'GAMBLING',
+            'OFFENSE INVOLVING CHILDREN',
+            'HUMAN TRAFFICKING',
+            'MOTOR VEHICLE THEFT',
+            'ASSAULT',
+            'INTIMIDATION',
+            'PUBLIC INDECENCY',
+            'CONCEALED CARRY LICENSE VIOLATION',
+            'WEAPONS VIOLATION',
+            'ROBBERY',
+            'KIDNAPPING',
+            'INTERFERENCE WITH PUBLIC OFFICER',
+            'NON-CRIMINAL (SUBJECT SPECIFIED)',
+            'CRIM SEXUAL ASSAULT',
+            'CRIMINAL TRESPASS',
+            'NON - CRIMINAL',
+            'DOMESTIC VIOLENCE',
+            'CRIMINAL DAMAGE',
+            'SEX OFFENSE',
+            'STALKING',
+            'OTHER NARCOTIC VIOLATION',
+            'DECEPTIVE PRACTICE',
+            'OBSCENITY'
+        ];
+
         rtDom = new Array();
         var i = 0;
         for(var key in rtEnum) {
@@ -135,46 +169,44 @@ function DataLoader() {
                 var d =  (new Date(val.data));
                 days[i] =  weekday[d.getDay()]; //d.getDay();
 
-				hours[i] = d.getHours() + d.getMinutes()/60;
+                hours[i] = d.getHours() + d.getMinutes()/60;
                 date[i] = Math.round(d.getTime()/(1000*60*60));
                 dateminmax = getMinMax(date[i], dateminmax);
 
-				if (typeof(days[i]) == 'undefined'
+                if (typeof(days[i]) == 'undefined'
                     || typeof(hours[i]) == 'undefined'
                     || typeof(primary_type[i]) == 'undefined'
                     || typeof(district[i]) == 'undefined')  {
-				 console.error('error id data');
-				 }
+                    console.error('error id data');
+                }
 
             });
-
-            console.log(district);
-            console.log(primary_type);
 
             visualize({
                 pts: pts,
                 days: days,
-				hours: hours,
+                hours: hours,
                 primary_type: primary_type,
+                primaryTypeEnum: primaryTypeEnum,
                 district: district,
                 districtEnum: districtEnum,
                 daysarray: weekday,
                 num: data.length
             });
 
-			/*visualize({pts: pts,
-			 days: days,
-			 hours :hours,
-			 sev : sev,
-			 road_type: road_type,
-			 speed_limit: speed_limit,
-			 date:date,
-			 dmm :dateminmax ,
-			 num : data.length,
-			 daysarray: weekday,
-			 sevEnum:  sevEnum,
-			 rtDom: rtDom});
-			 });*/
+            /*visualize({pts: pts,
+             days: days,
+             hours :hours,
+             sev : sev,
+             road_type: road_type,
+             speed_limit: speed_limit,
+             date:date,
+             dmm :dateminmax ,
+             num : data.length,
+             daysarray: weekday,
+             sevEnum:  sevEnum,
+             rtDom: rtDom});
+             });*/
 
         });
     }
