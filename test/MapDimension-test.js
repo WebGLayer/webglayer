@@ -22,7 +22,7 @@ QUnit.test("MapDimension", function( assert ) {
     WGL.render();
 
     // read pixels from canvas
-    var pixValue = reliableReadPixel(100, 100);
+    var pixValue = reliableReadPixel(100, 100, 1, 1);
 
     // reference values
     var alpha = 23;

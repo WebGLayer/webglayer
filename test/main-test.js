@@ -10,10 +10,12 @@ function cleanTest() {
  * Read pixels from 'webglayer' canvas using '2d' context
  * @param x
  * @param y
+ * @param dx
+ * @param dy
  * @param destination_canvas off screen canvas for '2d' context
  * @returns {CanvasPixelArray}
  */
-function reliableReadPixel(x, y, destination_canvas) {
+function reliableReadPixel(x, y, dx, dy, destination_canvas) {
     var dC = destination_canvas || document.createElement('canvas');
     var sC = document.getElementById('webglayer');
     dC.width = sC.width;
@@ -21,5 +23,5 @@ function reliableReadPixel(x, y, destination_canvas) {
 
     var cc = dC.getContext('2d');
     cc.drawImage(sC, 0, 0);
-    return cc.getImageData(x, y, 1, 1).data;
+    return cc.getImageData(x, y, dx, dy).data;
 }
