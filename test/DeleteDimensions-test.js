@@ -1,8 +1,6 @@
 /**
  * Created by kolovsky on 2.5.17.
  */
-
-// clean all dimension
 QUnit.test("Delete dimensions", function( assert ) {
     var data = {
         pts: [10,10,30,30,50,30],
@@ -64,5 +62,7 @@ QUnit.test("Delete dimensions", function( assert ) {
         len += 1;
     }
     assert.equal(len, 0, "length of the WGL._dimension array after clean LINE");
+
+    cleanTest();
 
 });
