@@ -19,7 +19,7 @@ WGL.dimension.HeatMapDimension = function(id) {
   var last_num;
 
   var visible = true;
-  var illumination = true;
+  var illumination = false;
   var doGetMax = true;
   var legend;
   this.setVisible = function(v) {
@@ -134,9 +134,7 @@ WGL.dimension.HeatMapDimension = function(id) {
     this);
 
   this.initProgram();
-  if(illumination) {
-    this.renderer2 = new WGL.dimension.IluminationRenderer(manager);
-  }
+  this.renderer2 = new WGL.dimension.IluminationRenderer(manager);
   this.renderer = new WGL.dimension.HeatMapRenderer(manager);
   // var maxcal = new
   // MaxCalculator(Math.floor(manager.w/6),Math.floor(manager.h/6));
@@ -216,9 +214,8 @@ WGL.dimension.HeatMapDimension = function(id) {
     gl.bindTexture(gl.TEXTURE_2D, null);
 
     this.renderer.heatTexture = this.heatTexture;
-    if(illumination) {
-      this.renderer2.heatTexture = this.heatTexture;
-    }
+    this.renderer2.heatTexture = this.heatTexture;
+
     manager.heatTexture = this.heatTexture;
   };
 
