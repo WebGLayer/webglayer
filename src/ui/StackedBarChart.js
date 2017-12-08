@@ -66,7 +66,8 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
     this.xformat = function(d){
         return d;
     };
-    var yformat = d3.format(".2n");
+    
+    var yformat = d3.format("s");
 
     this.setYFormat = function (fuc) {
         yformat = fuc;
