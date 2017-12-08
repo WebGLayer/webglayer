@@ -204,7 +204,14 @@ function visualize(data){
 			// heatmap.reRender();
 			WGL.render();			
 		});
-		
+    	$("#illumination_visible").click(function(){
+        	var l = WGL.getDimension(this.name);
+        	l.renderIllumination(this.checked);
+        	// heatmap.reRender();
+        	WGL.render();
+    	});
+
+
 		
 	
 		$("#schools_visible").click(function(){
