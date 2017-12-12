@@ -132,7 +132,7 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
         // xScale.domain(this.dataset.map(function(d) {
         // return d.max-(d.max-d.min)/2; }));
 
-        svg = d3.select("#" + div_id).append("svg").attr("width",
+        svg = d3.select("#" + div_id).attr("style", "overflow: auto").append("svg").attr("width",
             width + margin.left + margin.right).attr("height",
             height + margin.top + margin.bottom).append("g").attr(
             "transform",

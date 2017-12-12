@@ -12,9 +12,13 @@ function DataLoader() {
         var pts = [];
         var days = [];
         var hours = [];
+        var months =[];
         var date = [];
         var primary_type = [];
         var district = [];
+        var description = [];
+        var community_area = [];
+        var location_description = [];
 
         var weekday = new Array(7);
         weekday[0]=  "Sun";
@@ -26,6 +30,20 @@ function DataLoader() {
         weekday[6] = "Sat";
         //var weekarray = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri","Sat"];
 
+
+        var monthsArray = new Array(12);
+        monthsArray[0] = 'January';
+        monthsArray[1] = 'February';
+        monthsArray[2] = 'March';
+        monthsArray[3] = 'April';
+        monthsArray[4] = 'May';
+        monthsArray[5] = 'June';
+        monthsArray[6] = 'July';
+        monthsArray[7] = 'August';
+        monthsArray[8] = 'September';
+        monthsArray[9] = 'October';
+        monthsArray[10] = 'November';
+        monthsArray[11] = 'December';
 
         var sevEnum = new Array(3);
         sevEnum[0] = "Fatal";
@@ -103,6 +121,87 @@ function DataLoader() {
         districtEnum[24] = "6464 N Clark St";
         districtEnum[25] = "5555 W Grand Ave"
 
+        var communityAreaEnum = [];
+
+        communityAreaEnum[0] = "Not Reported";
+        communityAreaEnum[1] = "Rogers Park";
+        communityAreaEnum[2] = "West Ridge";
+        communityAreaEnum[3] = "Uptown";
+        communityAreaEnum[4] = "Lincoln Square";
+        communityAreaEnum[5] = "North Center";
+        communityAreaEnum[6] = "Lake View";
+        communityAreaEnum[7] = "Lincoln Park";
+        communityAreaEnum[8] = "Near North Side";
+        communityAreaEnum[9] = "Edison Park";
+        communityAreaEnum[10] = "Norwood Park";
+        communityAreaEnum[11] = "Jefferson Park";
+        communityAreaEnum[12] = "Forest Glen";
+        communityAreaEnum[13] = "North Park";
+        communityAreaEnum[14] = "Albany Park";
+        communityAreaEnum[15] = "Portage Park";
+        communityAreaEnum[16] = "Irving Park";
+        communityAreaEnum[17] = "Dunning";
+        communityAreaEnum[18] = "Montclare";
+        communityAreaEnum[19] = "Belmont Cragin";
+        communityAreaEnum[20] = "Hermosa";
+        communityAreaEnum[21] = "Avondale";
+        communityAreaEnum[22] = "Logan Square";
+        communityAreaEnum[23] = "Humboldt Park";
+        communityAreaEnum[24] = "West Town";
+        communityAreaEnum[25] = "Austin";
+        communityAreaEnum[26] = "West Garfield Park";
+        communityAreaEnum[27] = "East Garfield Park";
+        communityAreaEnum[28] = "Near West Side";
+        communityAreaEnum[29] = "North Lawndale";
+        communityAreaEnum[30] = "South Lawndale";
+        communityAreaEnum[31] = "Lower West Side";
+        communityAreaEnum[32] = "Loop";
+        communityAreaEnum[33] = "Near South Side";
+        communityAreaEnum[34] = "Armour Square";
+        communityAreaEnum[35] = "Douglas";
+        communityAreaEnum[36] = "Oakland";
+        communityAreaEnum[37] = "Fuller Park";
+        communityAreaEnum[38] = "Grand Boulevard";
+        communityAreaEnum[39] = "Kenwood";
+        communityAreaEnum[40] = "Washington Park";
+        communityAreaEnum[41] = "Hyde Park";
+        communityAreaEnum[42] = "Woodlawn";
+        communityAreaEnum[43] = "South Shore";
+        communityAreaEnum[44] = "Chatham";
+        communityAreaEnum[45] = "Avalon Park";
+        communityAreaEnum[46] = "South Chicago";
+        communityAreaEnum[47] = "Burnside";
+        communityAreaEnum[48] = "Calumet Heights";
+        communityAreaEnum[49] = "Roseland";
+        communityAreaEnum[50] = "Pullman";
+        communityAreaEnum[51] = "South Deering";
+        communityAreaEnum[52] = "East Side";
+        communityAreaEnum[53] = "West Pullman";
+        communityAreaEnum[54] = "Riverdale";
+        communityAreaEnum[55] = "Hegewisch";
+        communityAreaEnum[56] = "Garfield Ridge";
+        communityAreaEnum[57] = "Archer Heights";
+        communityAreaEnum[58] = "Brighton Park";
+        communityAreaEnum[59] = "McKinley Park";
+        communityAreaEnum[60] = "Bridgeport";
+        communityAreaEnum[61] = "New City";
+        communityAreaEnum[62] = "West Elsdon";
+        communityAreaEnum[63] = "Gage Park";
+        communityAreaEnum[64] = "Clearing";
+        communityAreaEnum[65] = "West Lawn";
+        communityAreaEnum[66] = "Chicago Lawn";
+        communityAreaEnum[67] = "West Englewood";
+        communityAreaEnum[68] = "Englewood";
+        communityAreaEnum[69] = "Greater Grand Crossing";
+        communityAreaEnum[70] = "Ashburn";
+        communityAreaEnum[71] = "Auburn Gresham";
+        communityAreaEnum[72] = "Beverly";
+        communityAreaEnum[73] = "Washington Heights";
+        communityAreaEnum[74] = "Mount Greenwood";
+        communityAreaEnum[75] = "Morgan Park";
+        communityAreaEnum[76] = "O'Hare";
+        communityAreaEnum[77] = "Edgewater";
+
         var primaryTypeEnum = [
             'PROSTITUTION',
             'OTHER OFFENSE',
@@ -162,19 +261,25 @@ function DataLoader() {
                 pts[j++] = parseFloat(val.x);
                 pts[j++] = parseFloat(val.y);
 
-                primary_type[i] = val["primary type"];
+                primary_type[i] = val["primary_type"];
+
+                description[i] = val["description"];
+                location_description[i] = val["location_description"];
 
                 district[i] = districtValues[val["district"]];
+                community_area[i] = communityAreaEnum[val["community_area"]];
 
-                var d =  (new Date(val.data));
+                var d =  (new Date(val["date"]));
                 days[i] =  weekday[d.getDay()]; //d.getDay();
+
+                months[i] = monthsArray[d.getMonth()];
 
                 hours[i] = d.getHours() + d.getMinutes()/60;
                 date[i] = Math.round(d.getTime()/(1000*60*60));
                 dateminmax = getMinMax(date[i], dateminmax);
 
                 if (typeof(days[i]) == 'undefined'
-                    || typeof(hours[i]) == 'undefined'
+                   || typeof(hours[i]) == 'undefined'
                     || typeof(primary_type[i]) == 'undefined'
                     || typeof(district[i]) == 'undefined')  {
                     console.error('error id data');
@@ -186,11 +291,17 @@ function DataLoader() {
                 pts: pts,
                 days: days,
                 hours: hours,
+                months: months,
                 primary_type: primary_type,
                 primaryTypeEnum: primaryTypeEnum,
+                community_area: community_area,
+                communityAreaEnum: communityAreaEnum,
                 district: district,
+                description: description,
+                location_description: location_description,
                 districtEnum: districtEnum,
                 daysarray: weekday,
+                monthsArray: monthsArray,
                 num: data.length
             });
 
