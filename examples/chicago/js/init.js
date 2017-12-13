@@ -118,7 +118,6 @@ function visualize(data){
   };
   charts['district']   = new  WGL.ui.StackedBarChart(district, "ch3", "crime district",'districtF', paramsDistrict);
 
-
   var primary_type   = {data: data.primary_type,  domain: data.primaryTypeEnum ,  name: 'primary type', type:'ordinal', label : "crime primary type"};
   var chd4 = new WGL.ChartDiv("right","ch4", "Primary Type");
   chd4.setDim(WGL.addOrdinalHistDimension(primary_type));
@@ -155,6 +154,60 @@ function visualize(data){
   };
   charts['community area'] = new WGL.ui.StackedBarChart(community_area, "ch7", "community area",'communityAreaF', paramsCA);
 
+  var arrest = {data: data.arrest,  domain: data.arrestEnum,  name: 'arrest', type:'ordinal', label : "arrest"};
+  var chd8 = new WGL.ChartDiv("right","ch8", "Arrest");
+  chd8.setDim(WGL.addOrdinalHistDimension(arrest));
+  WGL.addLinearFilter(arrest,3,'arrestF');
+  charts['arrest'] = new WGL.ui.StackedBarChart(arrest, "ch8", "arrest",'arrestF');
+
+
+  var domestic = {data: data.domestic,  domain: data.domesticEnum, name: 'domestic', type:'ordinal', label : "domestic"};
+  var chd9 = new WGL.ChartDiv("right","ch9", "Domestic");
+  chd9.setDim(WGL.addOrdinalHistDimension(domestic));
+  WGL.addLinearFilter(domestic,3,'domesticF');
+  charts['domestic'] = new WGL.ui.StackedBarChart(domestic, "ch9", "domestic",'domesticF');
+
+  var years = {data: data.years,  domain: data.yearsEnum,  name: 'years', type:'ordinal', label : "years"};
+  var chd10 = new WGL.ChartDiv("right","ch10", "Crimes per Year");
+  chd10.setDim(WGL.addOrdinalHistDimension(years));
+  WGL.addLinearFilter(years,3,'yearsF');
+  charts['years'] = new WGL.ui.StackedBarChart(years, "ch10", "years",'yearsF');
+
+  var fbiCode   = {data: data.fbi_code,  domain: data.fbiCodeEnum,  name: 'fbi code', type:'ordinal', label : "fbi code"};
+  var chd11 = new WGL.ChartDiv("right","ch11", "FBI Code");
+  chd11.setDim(WGL.addOrdinalHistDimension(fbiCode));
+  WGL.addLinearFilter(fbiCode,3,'fbiCodeF');
+  var paramsFbi = {
+    w: 500,
+    h: 340,
+    margin: {
+      top: 20,
+      right: 20,
+      bottom: 155,
+      left: 60
+    },
+    rotate_x: true
+  };
+  charts['fbi code'] = new  WGL.ui.StackedBarChart(fbiCode, "ch11", "fbi code",'fbiCodeF');
+
+  /*LOCATION DESCRIPTION*/
+  var location_description = {data: data.location_description,  domain: data.locationDescriptionEnum,  name: 'location description', type:'ordinal', label : "location description"};
+  var chd6 = new WGL.ChartDiv("right","ch6", "Location Description");
+  chd6.setDim(WGL.addOrdinalHistDimension(location_description));
+  WGL.addLinearFilter(location_description,3,'locationDescriptionF');
+  var paramsLD = {
+    w: 500,
+    h: 340,
+    margin: {
+      top: 20,
+      right: 20,
+      bottom: 155,
+      left: 60
+    },
+    rotate_x: true
+  };
+  charts['location description'] = new WGL.ui.StackedBarChart(location_description, "ch6", "location description",'locationDescriptionF', paramsLD);
+
   var d =[];
   d[0]= hours;
   d[1] = days;
@@ -166,12 +219,6 @@ function visualize(data){
   WGL.addCharts(charts);
 
   WGL.initFilters();
-
-  //wgl.render();
-
-  //var radius = 12.;
-
-
 
 
   $("#slider_pc").on("input", function(){

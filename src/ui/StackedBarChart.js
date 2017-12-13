@@ -356,8 +356,7 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
     // Create bars
 
     this.update = function(data) {
-        if (dataset == null) {
-            dataset = Array.prototype.slice.call(data);
+        if (dataset == null) {dataset = Array.prototype.slice.call(data);
             dataset.max = data.max;
             this.init();
         }

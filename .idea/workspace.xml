@@ -1,55 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/examples/chicago/js/init.js" line="72" mnemonic="0" />
+    <bookmark url="file://$PROJECT_DIR$/examples/chicago/js/init.js" line="70" mnemonic="0" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e20b1c9e-24de-40f1-bd96-4a5f3981a3c0" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/test/HeatMapDimension-test.js" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/test/HistDimension-test.js" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/test/MapDimension-test.js" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/test/lib/qunit-2.3.2.css" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/test/lib/qunit-2.3.2.js" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/test/main-test.js" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/test/readme.md" />
       <change beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
-      <change beforePath="$PROJECT_DIR$/src/WGL.js" afterPath="$PROJECT_DIR$/src/WGL.js" />
-      <change beforePath="$PROJECT_DIR$/src/dimension/HeatMapDimension.js" afterPath="$PROJECT_DIR$/src/dimension/HeatMapDimension.js" />
-      <change beforePath="$PROJECT_DIR$/src/dimension/HeatMapRenderer.js" afterPath="$PROJECT_DIR$/src/dimension/HeatMapRenderer.js" />
-      <change beforePath="$PROJECT_DIR$/src/dimension/HistDimension.js" afterPath="$PROJECT_DIR$/src/dimension/HistDimension.js" />
-      <change beforePath="$PROJECT_DIR$/src/dimension/IluminationRenderer.js" afterPath="$PROJECT_DIR$/src/dimension/IluminationRenderer.js" />
-      <change beforePath="$PROJECT_DIR$/src/dimension/MapDimension.js" afterPath="$PROJECT_DIR$/src/dimension/MapDimension.js" />
-      <change beforePath="$PROJECT_DIR$/src/dimension/ParallelCoordinates.js" afterPath="$PROJECT_DIR$/src/dimension/ParallelCoordinates.js" />
-      <change beforePath="$PROJECT_DIR$/src/dimension/ParallelCoordinatesRenderer.js" afterPath="$PROJECT_DIR$/src/dimension/ParallelCoordinatesRenderer.js" />
-      <change beforePath="$PROJECT_DIR$/src/experimental/HeatMapHistogram.js" afterPath="$PROJECT_DIR$/src/experimental/HeatMapHistogram.js" />
-      <change beforePath="$PROJECT_DIR$/src/experimental/InterpolationDimension.js" afterPath="$PROJECT_DIR$/src/experimental/InterpolationDimension.js" />
-      <change beforePath="$PROJECT_DIR$/src/experimental/InterpolationRenderer.js" afterPath="$PROJECT_DIR$/src/experimental/InterpolationRenderer.js" />
-      <change beforePath="$PROJECT_DIR$/src/experimental/LineChart.js" afterPath="$PROJECT_DIR$/src/experimental/LineChart.js" />
-      <change beforePath="$PROJECT_DIR$/src/experimental/LineChartDimension.js" afterPath="$PROJECT_DIR$/src/experimental/LineChartDimension.js" />
-      <change beforePath="$PROJECT_DIR$/src/experimental/LineDimension.js" afterPath="$PROJECT_DIR$/src/experimental/LineDimension.js" />
-      <change beforePath="$PROJECT_DIR$/src/experimental/LineKDEDimension.js" afterPath="$PROJECT_DIR$/src/experimental/LineKDEDimension.js" />
-      <change beforePath="$PROJECT_DIR$/src/experimental/MapLineDimension.js" afterPath="$PROJECT_DIR$/src/experimental/MapLineDimension.js" />
-      <change beforePath="$PROJECT_DIR$/src/experimental/SDLineChartDimension.js" afterPath="$PROJECT_DIR$/src/experimental/SDLineChartDimension.js" />
-      <change beforePath="$PROJECT_DIR$/src/experimental/SVGCanvas.js" afterPath="$PROJECT_DIR$/src/experimental/SVGCanvas.js" />
-      <change beforePath="$PROJECT_DIR$/src/experimental/WGLold.js" afterPath="$PROJECT_DIR$/src/experimental/WGLold.js" />
-      <change beforePath="$PROJECT_DIR$/src/filter/ExtentFilter.js" afterPath="$PROJECT_DIR$/src/filter/ExtentFilter.js" />
-      <change beforePath="$PROJECT_DIR$/src/filter/LinearFilter.js" afterPath="$PROJECT_DIR$/src/filter/LinearFilter.js" />
-      <change beforePath="$PROJECT_DIR$/src/filter/MapColorFilter.js" afterPath="$PROJECT_DIR$/src/filter/MapColorFilter.js" />
-      <change beforePath="$PROJECT_DIR$/src/filter/MapPolyFilter.js" afterPath="$PROJECT_DIR$/src/filter/MapPolyFilter.js" />
-      <change beforePath="$PROJECT_DIR$/src/internal/Filter.js" afterPath="$PROJECT_DIR$/src/internal/Filter.js" />
-      <change beforePath="$PROJECT_DIR$/src/internal/FloatRasterReader.js" afterPath="$PROJECT_DIR$/src/internal/FloatRasterReader.js" />
-      <change beforePath="$PROJECT_DIR$/src/internal/FloatReaderHistogram.js" afterPath="$PROJECT_DIR$/src/internal/FloatReaderHistogram.js" />
-      <change beforePath="$PROJECT_DIR$/src/internal/GLUtils.js" afterPath="$PROJECT_DIR$/src/internal/GLUtils.js" />
-      <change beforePath="$PROJECT_DIR$/src/internal/Manager.js" afterPath="$PROJECT_DIR$/src/internal/Manager.js" />
-      <change beforePath="$PROJECT_DIR$/src/internal/MapController.js" afterPath="$PROJECT_DIR$/src/internal/MapController.js" />
-      <change beforePath="$PROJECT_DIR$/src/internal/MaxCalculator.js" afterPath="$PROJECT_DIR$/src/internal/MaxCalculator.js" />
-      <change beforePath="$PROJECT_DIR$/src/internal/filtrutils.js" afterPath="$PROJECT_DIR$/src/internal/filtrutils.js" />
-      <change beforePath="$PROJECT_DIR$/src/internal/utils.js" afterPath="$PROJECT_DIR$/src/internal/utils.js" />
-      <change beforePath="$PROJECT_DIR$/src/ui/ChartDiv.js" afterPath="$PROJECT_DIR$/src/ui/ChartDiv.js" />
-      <change beforePath="$PROJECT_DIR$/src/ui/HeatMapLegend.js" afterPath="$PROJECT_DIR$/src/ui/HeatMapLegend.js" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change beforePath="$PROJECT_DIR$/examples/chicago/data/data.json" afterPath="$PROJECT_DIR$/examples/chicago/data/data.json" />
+      <change beforePath="$PROJECT_DIR$/examples/chicago/js/DataLoader.js" afterPath="$PROJECT_DIR$/examples/chicago/js/DataLoader.js" />
+      <change beforePath="$PROJECT_DIR$/examples/chicago/js/init.js" afterPath="$PROJECT_DIR$/examples/chicago/js/init.js" />
       <change beforePath="$PROJECT_DIR$/src/ui/StackedBarChart.js" afterPath="$PROJECT_DIR$/src/ui/StackedBarChart.js" />
-      <change beforePath="$PROJECT_DIR$/test/Test.html" afterPath="$PROJECT_DIR$/test/Test.html" />
-      <change beforePath="$PROJECT_DIR$/test/tests.js" afterPath="$PROJECT_DIR$/test/DeleteDimensions-test.js" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -64,41 +25,40 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="data.json" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/examples/chicago/data/data.json">
+          <provider selected="true" editor-type-id="LargeFileEditor">
+            <state relative-caret-position="4894">
+              <caret line="8968" column="76" lean-forward="true" selection-start-line="8968" selection-start-column="76" selection-end-line="8968" selection-end-column="76" />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="DataLoader.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/examples/chicago/js/DataLoader.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="468">
-              <caret line="63" column="0" lean-forward="false" selection-start-line="63" selection-start-column="0" selection-end-line="63" selection-end-column="0" />
+            <state relative-caret-position="451">
+              <caret line="390" column="46" lean-forward="false" selection-start-line="390" selection-start-column="46" selection-end-line="390" selection-end-column="46" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="init.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/examples/chicago/js/init.js">
+      <file leaf-file-name="index13.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/examples/chicago/index13.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1818">
-              <caret line="101" column="24" lean-forward="false" selection-start-line="101" selection-start-column="24" selection-end-line="101" selection-end-column="24" />
+            <state relative-caret-position="287">
+              <caret line="292" column="3" lean-forward="false" selection-start-line="292" selection-start-column="3" selection-end-line="292" selection-end-column="3" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="init.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/examples/birmingham/js/init.js">
+      <file leaf-file-name="WGL.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/WGL.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2304">
-              <caret line="128" column="27" lean-forward="false" selection-start-line="120" selection-start-column="8" selection-end-line="128" selection-end-column="27" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="map.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/examples/chicago/js/map.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4194">
-              <caret line="233" column="16" lean-forward="false" selection-start-line="233" selection-start-column="16" selection-end-line="233" selection-end-column="16" />
+            <state relative-caret-position="320">
+              <caret line="359" column="16" lean-forward="false" selection-start-line="359" selection-start-column="16" selection-end-line="359" selection-end-column="16" />
               <folding />
             </state>
           </provider>
@@ -107,29 +67,28 @@
       <file leaf-file-name="StackedBarChart.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/ui/StackedBarChart.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="310">
-              <caret line="28" column="15" lean-forward="true" selection-start-line="28" selection-start-column="15" selection-end-line="28" selection-end-column="15" />
+            <state relative-caret-position="72">
+              <caret line="358" column="8" lean-forward="false" selection-start-line="358" selection-start-column="8" selection-end-line="358" selection-end-column="8" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/examples/chicago/index.html">
+      <file leaf-file-name="init.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/examples/chicago/js/init.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="367" column="41" lean-forward="false" selection-start-line="367" selection-start-column="41" selection-end-line="367" selection-end-column="41" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="package.json" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/package.json">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="594">
-              <caret line="33" column="1" lean-forward="false" selection-start-line="33" selection-start-column="1" selection-end-line="33" selection-end-column="1" />
-              <folding />
+            <state relative-caret-position="-545">
+              <caret line="154" column="29" lean-forward="false" selection-start-line="154" selection-start-column="29" selection-end-line="154" selection-end-column="29" />
+              <folding>
+                <marker date="1513164867482" expanded="true" signature="10039:10067" ph="..." />
+                <marker date="1513164867482" expanded="true" signature="10113:10174" ph="..." />
+                <marker date="1513164867482" expanded="true" signature="10259:10271" ph="..." />
+                <marker date="1513164867482" expanded="true" signature="10355:10395" ph="..." />
+                <marker date="1513164867482" expanded="true" signature="10544:10556" ph="..." />
+                <marker date="1513164867482" expanded="true" signature="10623:10663" ph="..." />
+                <marker date="1513164867482" expanded="true" signature="10791:10803" ph="..." />
+                <marker date="1513164867482" expanded="true" signature="10856:10896" ph="..." />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -138,20 +97,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>loadPosData</find>
-      <find>topixels</find>
-      <find>getTopLeftTC</find>
-      <find>hours</find>
-      <find>dmm</find>
-      <find>error id</find>
-      <find>rtDom</find>
-      <find>#map</find>
-      <find>paral</find>
-      <find>mapdim</find>
-      <find>pts</find>
-      <find>heatmap</find>
-      <find>map</find>
-      <find>themap</find>
       <find>heatmapdi</find>
       <find>visible</find>
       <find>setzoo</find>
@@ -168,7 +113,25 @@
       <find>acci</find>
       <find>rotate_x</find>
       <find>zoom</find>
+      <find>chd7</find>
+      <find>VISIBLE</find>
+      <find>updatech</find>
+      <find>updatecha</find>
+      <find>width</find>
+      <find>dataset</find>
+      <find>ch8</find>
+      <find>years</find>
+      <find>year</find>
+      <find>2017</find>
+      <find>fbiCodeValues</find>
+      <find>update</find>
+      <find>,2017,</find>
+      <find>schools</find>
     </findStrings>
+    <replaceStrings>
+      <replace>fbiCodeEnum</replace>
+      <replace>years</replace>
+    </replaceStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -188,10 +151,10 @@
         <option value="$PROJECT_DIR$/examples/birmingham/js/init.js" />
         <option value="$PROJECT_DIR$/examples/birmingham/js/map.js" />
         <option value="$PROJECT_DIR$/examples/chicago/data/data.json" />
-        <option value="$PROJECT_DIR$/examples/chicago/js/DataLoader.js" />
-        <option value="$PROJECT_DIR$/examples/chicago/js/init.js" />
         <option value="$PROJECT_DIR$/examples/chicago/index.html" />
         <option value="$PROJECT_DIR$/examples/chicago/js/map.js" />
+        <option value="$PROJECT_DIR$/examples/chicago/js/init.js" />
+        <option value="$PROJECT_DIR$/examples/chicago/js/DataLoader.js" />
         <option value="$PROJECT_DIR$/src/ui/StackedBarChart.js" />
       </list>
     </option>
@@ -209,7 +172,7 @@
   <component name="NodeModulesDirectoryManager">
     <handled-path value="$PROJECT_DIR$/node_modules" />
   </component>
-  <component name="ProjectFrameBounds">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="65" />
     <option name="y" value="24" />
     <option name="width" value="1301" />
@@ -230,6 +193,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -242,24 +206,64 @@
               <item name="webglayer" type="462c0819:PsiDirectoryNode" />
               <item name="examples" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="webglayer" type="b2602c69:ProjectViewProjectNode" />
+              <item name="webglayer" type="462c0819:PsiDirectoryNode" />
+              <item name="examples" type="462c0819:PsiDirectoryNode" />
+              <item name="birmingham" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="webglayer" type="b2602c69:ProjectViewProjectNode" />
+              <item name="webglayer" type="462c0819:PsiDirectoryNode" />
+              <item name="examples" type="462c0819:PsiDirectoryNode" />
+              <item name="birmingham" type="462c0819:PsiDirectoryNode" />
+              <item name="data" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="webglayer" type="b2602c69:ProjectViewProjectNode" />
+              <item name="webglayer" type="462c0819:PsiDirectoryNode" />
+              <item name="examples" type="462c0819:PsiDirectoryNode" />
+              <item name="birmingham" type="462c0819:PsiDirectoryNode" />
+              <item name="js" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="webglayer" type="b2602c69:ProjectViewProjectNode" />
+              <item name="webglayer" type="462c0819:PsiDirectoryNode" />
+              <item name="examples" type="462c0819:PsiDirectoryNode" />
+              <item name="chicago" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="webglayer" type="b2602c69:ProjectViewProjectNode" />
+              <item name="webglayer" type="462c0819:PsiDirectoryNode" />
+              <item name="examples" type="462c0819:PsiDirectoryNode" />
+              <item name="chicago" type="462c0819:PsiDirectoryNode" />
+              <item name="data" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="webglayer" type="b2602c69:ProjectViewProjectNode" />
+              <item name="webglayer" type="462c0819:PsiDirectoryNode" />
+              <item name="examples" type="462c0819:PsiDirectoryNode" />
+              <item name="chicago" type="462c0819:PsiDirectoryNode" />
+              <item name="js" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
       <pane id="Scope" />
-      <pane id="Scratches" />
       <pane id="PackagesPane" />
       <pane id="AndroidView" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="nodejs_interpreter_path" value="/usr/local/bin/node" />
+    <property name="nodejs_interpreter_path" value="node" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="HbShouldOpenHtmlAsHb" value="" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../1dt-backend" />
     <property name="js.eslint.eslintPackage" value="" />
     <property name="js-jscs-nodeInterpreter" value="/usr/local/bin/node" />
+    <property name="SearchEverywhereHistoryKey" value="stacked&#9;FILE&#9;file:///home/alvaro/git/webglayer/src/ui/StackedBarChart.js" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -278,7 +282,9 @@
       </list>
     </option>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="JavaScript Debug.index.html (1)">
+    <configuration name="index.html (1)" type="JavascriptDebugType" factoryName="JavaScript Debug" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/webglayer/examples/chicago/index.html" />
+    <configuration name="index.html" type="JavascriptDebugType" factoryName="JavaScript Debug" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/webglayer/examples/birmingham/index.html" />
     <configuration default="true" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application">
       <method />
     </configuration>
@@ -337,6 +343,16 @@
       <arguments />
       <envs />
     </configuration>
+    <list size="2">
+      <item index="0" class="java.lang.String" itemvalue="JavaScript Debug.index.html" />
+      <item index="1" class="java.lang.String" itemvalue="JavaScript Debug.index.html (1)" />
+    </list>
+    <recent_temporary>
+      <list size="2">
+        <item index="0" class="java.lang.String" itemvalue="JavaScript Debug.index.html (1)" />
+        <item index="1" class="java.lang.String" itemvalue="JavaScript Debug.index.html" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="ShelveChangesManager" show_recycled="false">
     <option name="remove_strategy" value="false" />
@@ -360,81 +376,61 @@
       <workItem from="1511777825637" duration="29000" />
       <workItem from="1511953323806" duration="5561000" />
       <workItem from="1511961255556" duration="3053000" />
+      <workItem from="1512739762445" duration="7000" />
+      <workItem from="1513072494779" duration="14053000" />
+      <workItem from="1513157774871" duration="10254000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="29548000" />
+    <option name="totallyTimeSpent" value="53882000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="67" y="25" width="1853" height="1055" extended-state="6" />
+    <frame x="65" y="24" width="1853" height="1055" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17539126" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.123043716" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Grunt " active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Grunt " active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32946146" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32882884" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.39915523" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32882884" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24980783" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Grunt " active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32884902" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager />
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/ui/StackedBarChart.js</url>
+          <line>358</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+      <option name="time" value="2" />
+    </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/examples/chicago/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="7" column="25" lean-forward="false" selection-start-line="7" selection-start-column="25" selection-end-line="7" selection-end-column="25" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/examples/chicago/data/all13.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/examples/birmingham/js/DataLoader.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="306">
@@ -467,7 +463,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -489,7 +484,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="126">
           <caret line="7" column="25" lean-forward="false" selection-start-line="7" selection-start-column="25" selection-end-line="7" selection-end-column="25" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -511,7 +505,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -533,7 +526,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -565,24 +557,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/package.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="594">
-          <caret line="33" column="1" lean-forward="false" selection-start-line="33" selection-start-column="1" selection-end-line="33" selection-end-column="1" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/examples/education/data/t.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/WGL.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-429">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
         </state>
       </provider>
@@ -643,13 +620,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/examples/birmingham/data/all13.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-9018">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/examples/heatmap/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="126">
@@ -683,7 +653,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2304">
           <caret line="128" column="27" lean-forward="false" selection-start-line="120" selection-start-column="8" selection-end-line="128" selection-end-column="27" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -730,54 +699,102 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/examples/chicago/data/schools.json" />
-    <entry file="file://$PROJECT_DIR$/examples/chicago/data/data.json">
-      <provider selected="true" editor-type-id="LargeFileEditor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="36">
-          <caret line="35" column="73" lean-forward="true" selection-start-line="35" selection-start-column="73" selection-end-line="35" selection-end-column="73" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/examples/chicago/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="367" column="41" lean-forward="false" selection-start-line="367" selection-start-column="41" selection-end-line="367" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/examples/chicago/js/map.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="184">
+          <caret line="233" column="17" lean-forward="false" selection-start-line="233" selection-start-column="17" selection-end-line="233" selection-end-column="17" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ui/StackedBarChart.js">
+    <entry file="file://$PROJECT_DIR$/package.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="310">
-          <caret line="28" column="15" lean-forward="true" selection-start-line="28" selection-start-column="15" selection-end-line="28" selection-end-column="15" />
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/examples/chicago/js/DataLoader.js">
+    <entry file="file://$PROJECT_DIR$/examples/birmingham/data/all13.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="468">
-          <caret line="63" column="0" lean-forward="false" selection-start-line="63" selection-start-column="0" selection-end-line="63" selection-end-column="0" />
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/examples/libs/WebGLayer.min.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="202">
+          <caret line="1" column="3812" lean-forward="false" selection-start-line="1" selection-start-column="3812" selection-end-line="1" selection-end-column="3812" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/WGL.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="320">
+          <caret line="359" column="16" lean-forward="false" selection-start-line="359" selection-start-column="16" selection-end-line="359" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/examples/chicago/data/data.json">
+      <provider selected="true" editor-type-id="LargeFileEditor">
+        <state relative-caret-position="4894">
+          <caret line="8968" column="76" lean-forward="true" selection-start-line="8968" selection-start-column="76" selection-end-line="8968" selection-end-column="76" />
+        </state>
+      </provider>
+      <provider editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="49" lean-forward="false" selection-start-line="0" selection-start-column="49" selection-end-line="0" selection-end-column="49" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/examples/chicago/index13.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="287">
+          <caret line="292" column="3" lean-forward="false" selection-start-line="292" selection-start-column="3" selection-end-line="292" selection-end-column="3" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/examples/chicago/js/init.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1818">
-          <caret line="101" column="24" lean-forward="false" selection-start-line="101" selection-start-column="24" selection-end-line="101" selection-end-column="24" />
+        <state relative-caret-position="-545">
+          <caret line="154" column="29" lean-forward="false" selection-start-line="154" selection-start-column="29" selection-end-line="154" selection-end-column="29" />
+          <folding>
+            <marker date="1513164867482" expanded="true" signature="10039:10067" ph="..." />
+            <marker date="1513164867482" expanded="true" signature="10113:10174" ph="..." />
+            <marker date="1513164867482" expanded="true" signature="10259:10271" ph="..." />
+            <marker date="1513164867482" expanded="true" signature="10355:10395" ph="..." />
+            <marker date="1513164867482" expanded="true" signature="10544:10556" ph="..." />
+            <marker date="1513164867482" expanded="true" signature="10623:10663" ph="..." />
+            <marker date="1513164867482" expanded="true" signature="10791:10803" ph="..." />
+            <marker date="1513164867482" expanded="true" signature="10856:10896" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/examples/chicago/js/DataLoader.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="451">
+          <caret line="390" column="46" lean-forward="false" selection-start-line="390" selection-start-column="46" selection-end-line="390" selection-end-column="46" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/examples/chicago/js/map.js">
+    <entry file="file://$PROJECT_DIR$/src/ui/StackedBarChart.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4194">
-          <caret line="233" column="16" lean-forward="false" selection-start-line="233" selection-start-column="16" selection-end-line="233" selection-end-column="16" />
+        <state relative-caret-position="72">
+          <caret line="358" column="8" lean-forward="false" selection-start-line="358" selection-start-column="8" selection-end-line="358" selection-end-column="8" />
           <folding />
         </state>
       </provider>

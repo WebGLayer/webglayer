@@ -19,6 +19,10 @@ function DataLoader() {
         var description = [];
         var community_area = [];
         var location_description = [];
+        var arrest = [];
+        var domestic = [];
+        var years = [];
+        var fbi_code = [];
 
         var weekday = new Array(7);
         weekday[0]=  "Sun";
@@ -240,6 +244,91 @@ function DataLoader() {
             'OBSCENITY'
         ];
 
+        var locationDescriptionArray = [
+          'STREET',
+          'RESIDENCE',
+          'APARTMENT',
+          'SIDEWALK',
+          'OTHER',
+          'PARKING LOT/GARAGE(NON.RESID.)',
+          'ALLEY',
+          'SCHOOL, PUBLIC, BUILDING',
+          'RESIDENCE-GARAGE',
+          'RESIDENCE PORCH/HALLWAY',
+          'SMALL RETAIL STORE',
+          'VEHICLE NON-COMMERCIAL',
+          'RESTAURANT',
+          'GROCERY FOOD STORE',
+          'DEPARTMENT STORE',
+          'GAS STATION',
+          'RESIDENTIAL YARD (FRONT/BACK)',
+          'CHA PARKING LOT/GROUNDS',
+          'PARK PROPERTY',
+          'COMMERCIAL / BUSINESS OFFICE'
+        ];
+
+        var fbiCodeValues = {};
+
+      fbiCodeValues["18"] = "DRUG ABUSE";
+      fbiCodeValues["22"] = "LIQUOR LICENSE";
+      fbiCodeValues["20"] = "OFFENSES AGAINST FAMILY";
+      fbiCodeValues["15"] = "WEAPONS VIOLATION";
+      fbiCodeValues["04B"] = "AGGRAVATED BATTERY";
+      fbiCodeValues["14"] = "VANDALISM";
+      fbiCodeValues["01A"] = "HOMICIDE 1ST AND 2ND DEGREE";
+      fbiCodeValues["26"] = "MISC NON-INDEX OFFENSE";
+      fbiCodeValues["13"] = "STOLEN PROPERTY";
+      fbiCodeValues["09"] = "ARSON";
+      fbiCodeValues["05"] = "BURGLARY";
+      fbiCodeValues["12"] = "EMBEZZLEMENT";
+      fbiCodeValues["10"] = "FORGERY AND COUNTERFEITING";
+      fbiCodeValues["11"] = "FRAUD";
+      fbiCodeValues["04A"] = "AGGRAVATED ASSAULT";
+      fbiCodeValues["19"] = "GAMBLING";
+      fbiCodeValues["07"] = "MOTOR VEHICLE THEFT";
+      fbiCodeValues["06"] = "LARCENY";
+      fbiCodeValues["24"] = "DISORDERLY CONDUCT";
+      fbiCodeValues["01B"] = "INVOLUNTARILY MANSLAUGHTER";
+      fbiCodeValues["03"] = "ROBBERY";
+      fbiCodeValues["16"] = "PROSTITUTION";
+      fbiCodeValues["17"] = "CRIMINAL SEXUAL ABUSE";
+      fbiCodeValues["08B"] = "SIMPLE BATTERY";
+      fbiCodeValues["02"] = "CRIMINAL SEXUAL ASSAULT";
+      fbiCodeValues["08A"] = "SIMPLE ASSAULT";
+
+      var fbiCodeEnum = [];
+
+      fbiCodeEnum[0] = "DRUG ABUSE";
+      fbiCodeEnum[1] = "LIQUOR LICENSE";
+      fbiCodeEnum[2] = "OFFENSES AGAINST FAMILY";
+      fbiCodeEnum[3] = "WEAPONS VIOLATION";
+      fbiCodeEnum[4] = "AGGRAVATED BATTERY";
+      fbiCodeEnum[5] = "VANDALISM";
+      fbiCodeEnum[6] = "HOMICIDE 1ST AND 2ND DEGREE";
+      fbiCodeEnum[7] = "MISC NON-INDEX OFFENSE";
+      fbiCodeEnum[8] = "STOLEN PROPERTY";
+      fbiCodeEnum[10] = "ARSON";
+      fbiCodeEnum[11] = "BURGLARY";
+      fbiCodeEnum[12] = "EMBEZZLEMENT";
+      fbiCodeEnum[13] = "FORGERY AND COUNTERFEITING";
+      fbiCodeEnum[14] = "FRAUD";
+      fbiCodeEnum[15] = "AGGRAVATED ASSAULT";
+      fbiCodeEnum[16] = "GAMBLING";
+      fbiCodeEnum[17] = "MOTOR VEHICLE THEFT";
+      fbiCodeEnum[18] = "LARCENY";
+      fbiCodeEnum[19] = "DISORDERLY CONDUCT";
+      fbiCodeEnum[20] = "INVOLUNTARILY MANSLAUGHTER";
+      fbiCodeEnum[21] = "ROBBERY";
+      fbiCodeEnum[22] = "PROSTITUTION";
+      fbiCodeEnum[23] = "CRIMINAL SEXUAL ABUSE";
+      fbiCodeEnum[24] = "SIMPLE BATTERY";
+      fbiCodeEnum[25] = "CRIMINAL SEXUAL ASSAULT";
+      fbiCodeEnum[26] = "SIMPLE ASSAULT";
+
+      var arrestEnum = ["ARRESTED", "NOT ARRESTED"];
+        var domesticEnum = ["DOMESTIC", "NOT DOMESTIC"];
+        var yearsEnum = [2016, 2017];
+
         rtDom = new Array();
         var i = 0;
         for(var key in rtEnum) {
@@ -264,7 +353,16 @@ function DataLoader() {
                 primary_type[i] = val["primary_type"];
 
                 description[i] = val["description"];
-                location_description[i] = val["location_description"];
+
+                fbi_code[i] = fbiCodeValues[val["fbi_code"]];
+
+                arrest[i] = ( val["arrest"] == "true" ? "ARRESTED" : "NOT ARRESTED" );
+                domestic[i] = ( val["domestic"] == "true" ? "DOMESTIC" : "NOT DOMESTIC" );
+
+
+                if(locationDescriptionArray.indexOf(val["location_description"]) != -1) {
+                    location_description.push(val["location_description"]);
+                }
 
                 district[i] = districtValues[val["district"]];
                 community_area[i] = communityAreaEnum[val["community_area"]];
@@ -273,6 +371,8 @@ function DataLoader() {
                 days[i] =  weekday[d.getDay()]; //d.getDay();
 
                 months[i] = monthsArray[d.getMonth()];
+
+                years[i] = d.getFullYear();
 
                 hours[i] = d.getHours() + d.getMinutes()/60;
                 date[i] = Math.round(d.getTime()/(1000*60*60));
@@ -287,6 +387,9 @@ function DataLoader() {
 
             });
 
+            console.log(location_description)
+          console.log(locationDescriptionArray)
+
             visualize({
                 pts: pts,
                 days: days,
@@ -294,31 +397,25 @@ function DataLoader() {
                 months: months,
                 primary_type: primary_type,
                 primaryTypeEnum: primaryTypeEnum,
+                arrest: arrest,
+                arrestEnum: arrestEnum,
+                years: years,
+                yearsEnum: yearsEnum,
+                fbi_code: fbi_code,
+                fbiCodeEnum: fbiCodeEnum,
+                domestic: domestic,
+                domesticEnum: domesticEnum,
                 community_area: community_area,
                 communityAreaEnum: communityAreaEnum,
                 district: district,
                 description: description,
                 location_description: location_description,
+                locationDescriptionEnum: locationDescriptionArray,
                 districtEnum: districtEnum,
                 daysarray: weekday,
                 monthsArray: monthsArray,
                 num: data.length
             });
-
-            /*visualize({pts: pts,
-             days: days,
-             hours :hours,
-             sev : sev,
-             road_type: road_type,
-             speed_limit: speed_limit,
-             date:date,
-             dmm :dateminmax ,
-             num : data.length,
-             daysarray: weekday,
-             sevEnum:  sevEnum,
-             rtDom: rtDom});
-             });*/
-
         });
     }
 
