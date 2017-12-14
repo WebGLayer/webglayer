@@ -104,7 +104,7 @@ function visualize(data){
     var district   = {data: data.district,  domain: data.districtEnum ,  name: 'district', type:'ordinal', label : "crime district"};
   var chd3 = new WGL.ChartDiv("right","ch3", "Districts");
   chd3.setDim(WGL.addOrdinalHistDimension(district));
-  WGL.addLinearFilter(district,3, 'districtF');
+  WGL.addLinearFilter(district,23, 'districtF');
   var paramsDistrict = {
     w: 500,
     h: 340,
@@ -121,7 +121,7 @@ function visualize(data){
   var primary_type   = {data: data.primary_type,  domain: data.primaryTypeEnum ,  name: 'primary type', type:'ordinal', label : "crime primary type"};
   var chd4 = new WGL.ChartDiv("right","ch4", "Primary Type");
   chd4.setDim(WGL.addOrdinalHistDimension(primary_type));
-  WGL.addLinearFilter(primary_type,3, 'primaryTypeF');
+  WGL.addLinearFilter(primary_type,35, 'primaryTypeF');
   var paramsPType = {
     w: 500,
     h: 400,
@@ -136,11 +136,11 @@ function visualize(data){
   charts['primary type'] = new  WGL.ui.StackedBarChart(primary_type, "ch4", "primary type",'primaryTypeF', paramsPType);
 
 
-  /*COMMUNITY AREA*/
+  /*COMMUNITY AREA
   var community_area   = {data: data.community_area,  domain: data.communityAreaEnum,  name: 'community area', type:'ordinal', label : "community area"};
   var chd7 = new WGL.ChartDiv("right","ch7", "Community Areas");
   chd7.setDim(WGL.addOrdinalHistDimension(community_area));
-  WGL.addLinearFilter(community_area,10 , 'communityAreaF');
+  WGL.addLinearFilter(community_area,78, 'communityAreaF');
   var paramsCA = {
     w: 1000,
     h: 340,
@@ -152,65 +152,25 @@ function visualize(data){
     },
     rotate_x: true
   };
-  charts['community area'] = new WGL.ui.StackedBarChart(community_area, "ch7", "community area",'communityAreaF', paramsCA);
+  charts['community area'] = new WGL.ui.StackedBarChart(community_area, "ch7", "community area",'communityAreaF', paramsCA); */
 
   var arrest = {data: data.arrest,  domain: data.arrestEnum,  name: 'arrest', type:'ordinal', label : "arrest"};
   var chd8 = new WGL.ChartDiv("right","ch8", "Arrest");
   chd8.setDim(WGL.addOrdinalHistDimension(arrest));
-  WGL.addLinearFilter(arrest,3,'arrestF');
+  WGL.addLinearFilter(arrest,2,'arrestF');
   charts['arrest'] = new WGL.ui.StackedBarChart(arrest, "ch8", "arrest",'arrestF');
 
 
   var domestic = {data: data.domestic,  domain: data.domesticEnum, name: 'domestic', type:'ordinal', label : "domestic"};
   var chd9 = new WGL.ChartDiv("right","ch9", "Domestic");
   chd9.setDim(WGL.addOrdinalHistDimension(domestic));
-  WGL.addLinearFilter(domestic,3,'domesticF');
+  WGL.addLinearFilter(domestic,2,'domesticF');
   charts['domestic'] = new WGL.ui.StackedBarChart(domestic, "ch9", "domestic",'domesticF');
-
-  var years = {data: data.years,  domain: data.yearsEnum,  name: 'years', type:'ordinal', label : "years"};
-  var chd10 = new WGL.ChartDiv("right","ch10", "Crimes per Year");
-  chd10.setDim(WGL.addOrdinalHistDimension(years));
-  WGL.addLinearFilter(years,3,'yearsF');
-  charts['years'] = new WGL.ui.StackedBarChart(years, "ch10", "years",'yearsF');
-
-  var fbiCode   = {data: data.fbi_code,  domain: data.fbiCodeEnum,  name: 'fbi code', type:'ordinal', label : "fbi code"};
-  var chd11 = new WGL.ChartDiv("right","ch11", "FBI Code");
-  chd11.setDim(WGL.addOrdinalHistDimension(fbiCode));
-  WGL.addLinearFilter(fbiCode,3,'fbiCodeF');
-  var paramsFbi = {
-    w: 500,
-    h: 340,
-    margin: {
-      top: 20,
-      right: 20,
-      bottom: 155,
-      left: 60
-    },
-    rotate_x: true
-  };
-  charts['fbi code'] = new  WGL.ui.StackedBarChart(fbiCode, "ch11", "fbi code",'fbiCodeF');
-
-  /*LOCATION DESCRIPTION*/
-  var location_description = {data: data.location_description,  domain: data.locationDescriptionEnum,  name: 'location description', type:'ordinal', label : "location description"};
-  var chd6 = new WGL.ChartDiv("right","ch6", "Location Description");
-  chd6.setDim(WGL.addOrdinalHistDimension(location_description));
-  WGL.addLinearFilter(location_description,3,'locationDescriptionF');
-  var paramsLD = {
-    w: 500,
-    h: 340,
-    margin: {
-      top: 20,
-      right: 20,
-      bottom: 155,
-      left: 60
-    },
-    rotate_x: true
-  };
-  charts['location description'] = new WGL.ui.StackedBarChart(location_description, "ch6", "location description",'locationDescriptionF', paramsLD);
 
   var d =[];
   d[0]= hours;
   d[1] = days;
+  d[2] = months;
 
   var pc = WGL.addParallelCoordinates('pc_chart', d);
   WGL.addMultiDim(d);
@@ -280,12 +240,6 @@ function visualize(data){
     l.setVisible(this.checked);
     // heatmap.reRender();
     WGL.render();
-  });
-
-
-
-  $("#schools_visible").click(function(){
-    map.getLayersByName('Points')[0].setVisibility(this.checked);
   });
 
   WGL.mcontroller.zoommove(map.getZoom(), getTopLeftTC());

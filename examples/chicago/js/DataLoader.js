@@ -125,7 +125,7 @@ function DataLoader() {
         districtEnum[24] = "6464 N Clark St";
         districtEnum[25] = "5555 W Grand Ave"
 
-        var communityAreaEnum = [];
+        /*var communityAreaEnum = [];
 
         communityAreaEnum[0] = "Not Reported";
         communityAreaEnum[1] = "Rogers Park";
@@ -204,7 +204,7 @@ function DataLoader() {
         communityAreaEnum[74] = "Mount Greenwood";
         communityAreaEnum[75] = "Morgan Park";
         communityAreaEnum[76] = "O'Hare";
-        communityAreaEnum[77] = "Edgewater";
+        communityAreaEnum[77] = "Edgewater";*/
 
         var primaryTypeEnum = [
             'PROSTITUTION',
@@ -267,7 +267,7 @@ function DataLoader() {
           'COMMERCIAL / BUSINESS OFFICE'
         ];
 
-        var fbiCodeValues = {};
+        /*var fbiCodeValues = {};
 
       fbiCodeValues["18"] = "DRUG ABUSE";
       fbiCodeValues["22"] = "LIQUOR LICENSE";
@@ -323,7 +323,7 @@ function DataLoader() {
       fbiCodeEnum[23] = "CRIMINAL SEXUAL ABUSE";
       fbiCodeEnum[24] = "SIMPLE BATTERY";
       fbiCodeEnum[25] = "CRIMINAL SEXUAL ASSAULT";
-      fbiCodeEnum[26] = "SIMPLE ASSAULT";
+      fbiCodeEnum[26] = "SIMPLE ASSAULT";*/
 
       var arrestEnum = ["ARRESTED", "NOT ARRESTED"];
         var domesticEnum = ["DOMESTIC", "NOT DOMESTIC"];
@@ -352,17 +352,17 @@ function DataLoader() {
 
                 primary_type[i] = val["primary_type"];
 
-                description[i] = val["description"];
+                //description[i] = val["description"];
 
-                fbi_code[i] = fbiCodeValues[val["fbi_code"]];
+                //fbi_code[i] = fbiCodeValues[val["fbi_code"]];
 
                 arrest[i] = ( val["arrest"] == "true" ? "ARRESTED" : "NOT ARRESTED" );
                 domestic[i] = ( val["domestic"] == "true" ? "DOMESTIC" : "NOT DOMESTIC" );
 
 
-                if(locationDescriptionArray.indexOf(val["location_description"]) != -1) {
+                /*if(locationDescriptionArray.indexOf(val["location_description"]) != -1) {
                     location_description.push(val["location_description"]);
-                }
+                }*/
 
                 district[i] = districtValues[val["district"]];
                 community_area[i] = communityAreaEnum[val["community_area"]];
@@ -372,7 +372,7 @@ function DataLoader() {
 
                 months[i] = monthsArray[d.getMonth()];
 
-                years[i] = d.getFullYear();
+                //years[i] = d.getFullYear();
 
                 hours[i] = d.getHours() + d.getMinutes()/60;
                 date[i] = Math.round(d.getTime()/(1000*60*60));
@@ -387,9 +387,6 @@ function DataLoader() {
 
             });
 
-            console.log(location_description)
-          console.log(locationDescriptionArray)
-
             visualize({
                 pts: pts,
                 days: days,
@@ -399,18 +396,10 @@ function DataLoader() {
                 primaryTypeEnum: primaryTypeEnum,
                 arrest: arrest,
                 arrestEnum: arrestEnum,
-                years: years,
-                yearsEnum: yearsEnum,
-                fbi_code: fbi_code,
-                fbiCodeEnum: fbiCodeEnum,
                 domestic: domestic,
                 domesticEnum: domesticEnum,
-                community_area: community_area,
-                communityAreaEnum: communityAreaEnum,
                 district: district,
                 description: description,
-                location_description: location_description,
-                locationDescriptionEnum: locationDescriptionArray,
                 districtEnum: districtEnum,
                 daysarray: weekday,
                 monthsArray: monthsArray,

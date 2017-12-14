@@ -58,25 +58,7 @@ initMap = function() {
     		}); 
     vector_layer.setVisibility(false);		
     map.addLayer(vector_layer);
-   
-    
-    
-    $.ajax({
-    	  dataType: "json",
-    	  url: './data/schools.json',    	 
-    	  success: function(data){
-    		  
-    		  var geojson_format = new OpenLayers.Format.GeoJSON();
-    		  
-    		 
-    		  vector_layer.addFeatures(geojson_format.read(data));
-    	  }
-    	});
-    
-    
-   
-     
-	
+
     map.addLayer(layer2);
   //  map.addLayer(layerkml);
    	
