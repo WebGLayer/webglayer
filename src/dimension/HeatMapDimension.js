@@ -1,4 +1,4 @@
- /** @constructor */
+/** @constructor */
 WGL.dimension.HeatMapDimension = function(id) {
 
   var manager = WGL.getManager();
@@ -14,20 +14,25 @@ WGL.dimension.HeatMapDimension = function(id) {
 
 
   this.maxcal = new WGL.internal.MaxCalculator(Math.floor(manager.w / 5),
-      Math.floor(manager.h / 5));
+    Math.floor(manager.h / 5));
   var framebuffer = gl.createFramebuffer();
   var last_num;
 
   var visible = true;
+  var illumination = false;
   var doGetMax = true;
   var legend;
   this.setVisible = function(v) {
     visible = v;
-  }
+  };
+
+  this.renderIllumination = function(v) {
+    illumination = v;
+  };
 
   this.setDoGetMax = function(m) {
     doGetMax = m;
-  }
+  };
 
   /* default radiusFunc */
   this.radiusFunction = function(r, z) {
@@ -40,21 +45,21 @@ WGL.dimension.HeatMapDimension = function(id) {
       return 99999999;
     }
     return max;
-  }
+  };
   /* default getMin function */
   this.minFunction = function(min) {
     return 0;
-  }
+  };
 
   this.gradFunction = function() {
     return 1/4;
-  }
+  };
 
 
   this.addLegend = function(thelegend) {
     legend = thelegend;
     legend.setDimension(this);
-  }
+  };
 
   this.createMapFramebuffer = function() {
     framebuffer.width = manager.w;
@@ -79,20 +84,20 @@ WGL.dimension.HeatMapDimension = function(id) {
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, framebuffer.width,
-        framebuffer.height, 0, gl.RGBA, gl.FLOAT, null);
+      framebuffer.height, 0, gl.RGBA, gl.FLOAT, null);
 
     /** Render buffer */
     gl.bindRenderbuffer(gl.RENDERBUFFER, renderbuffer);
     gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT16,
-        framebuffer.width, framebuffer.height);
+      framebuffer.width, framebuffer.height);
 
     gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0,
-        gl.TEXTURE_2D, this.heatTexture, 0);
+      gl.TEXTURE_2D, this.heatTexture, 0);
     gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT,
-        gl.RENDERBUFFER, renderbuffer);
+      gl.RENDERBUFFER, renderbuffer);
 
     gl.bindTexture(gl.TEXTURE_2D, null);
-  }
+  };
 
   /**
    * init Programs
@@ -112,7 +117,7 @@ WGL.dimension.HeatMapDimension = function(id) {
 
     gl.useProgram(null);
 
-  }
+  };
   var drawselect = 'drawselect';
   var numfilters = 'numfilters';
   var spatsum = 'spatsum'
@@ -126,10 +131,10 @@ WGL.dimension.HeatMapDimension = function(id) {
   var grad = 'grad';
 
   this.glProgram = GLU.compileShaders('heatmap_vShader', 'heatmap_fShader',
-        this);
+    this);
 
   this.initProgram();
-  //this.renderer2 = new WGL.dimension.IluminationRenderer(manager);
+  this.renderer2 = new WGL.dimension.IluminationRenderer(manager);
   this.renderer = new WGL.dimension.HeatMapRenderer(manager);
   // var maxcal = new
   // MaxCalculator(Math.floor(manager.w/6),Math.floor(manager.h/6));
@@ -138,20 +143,20 @@ WGL.dimension.HeatMapDimension = function(id) {
 
   this.setFilter = function(f) {
     the_filter = f;
-  }
+  };
 
   this.setRadius = function(r){
     radiusWordVal = r;
-  }
+  };
 
   this.setValues = function(val){
     this.glProgram = GLU.compileShaders('heatmap_val_vShader', 'heatmap_val_fShader',
-        this);
+      this);
     this.glProgram.name='hetampwithvalues';
     manager.addDataBuffer(WGL.utils.array2TA(val), 1, 'hmValues');
     this.initProgram();
     this.hasValues = true;
-  }
+  };
   this.setup = function() {
     // this.createFramebuffer();
     // gl.useProgram(this.glProgram);
@@ -180,7 +185,7 @@ WGL.dimension.HeatMapDimension = function(id) {
     gl.blendFunc(gl.ONE, gl.ONE);
 
     manager.enableFilterTexture(this.glProgram);
-  }
+  };
 
   this.renderData = function(num) {
     last_num = num;
@@ -209,9 +214,10 @@ WGL.dimension.HeatMapDimension = function(id) {
     gl.bindTexture(gl.TEXTURE_2D, null);
 
     this.renderer.heatTexture = this.heatTexture;
-    //this.renderer2.heatTexture = this.heatTexture;
+    this.renderer2.heatTexture = this.heatTexture;
+
     manager.heatTexture = this.heatTexture;
-  }
+  };
 
   var renderMin;
   var renderMax;
@@ -245,60 +251,75 @@ WGL.dimension.HeatMapDimension = function(id) {
 
 
 
-      // if (typeof(the_filter) !='undefined') {
-      if (manager.trasholds.spatsum > 0) {
-        // var maxsel = this.maxcal.getMax(this.heatTexture, 0);
-        if (typeof (the_filter) != 'undefined') {
-          /* there is a color filter applied */
-          this.renderer.render(renderMin, renderMax, the_filter[0],
-              the_filter[1], this.maxsel);
-          legend.updateMaxAll(this.maxall);
-          legend.drawWithFilter(this.maxsel);
-        } else {
-          this.renderer.render(renderMin, renderMax, renderMin, renderMax,
-              this.maxsel);
+    // if (typeof(the_filter) !='undefined') {
+    if (manager.trasholds.spatsum > 0) {
+      // var maxsel = this.maxcal.getMax(this.heatTexture, 0);
+      if (typeof (the_filter) != 'undefined') {
+        /* there is a color filter applied */
+        this.renderer.render(renderMin, renderMax, the_filter[0],
+          the_filter[1], this.maxsel);
 
 
+        if(illumination) {
+          this.renderer2.render(renderMin, renderMax, the_filter[0], the_filter[1], this.maxsel);
         }
 
-        if (legend != undefined) {
-          legend.drawWithoutFilter();
-          legend.updateMaxAll(this.maxsel );
-        }
-        // legend.updateMaxSel(this.maxall);
+        legend.updateMaxAll(this.maxall);
+        legend.drawWithFilter(this.maxsel);
       } else {
-        // this.renderer.render( renderMin, renderMax, 0, 0);
         this.renderer.render(renderMin, renderMax, renderMin, renderMax,
-            renderMax);
-        if (legend != undefined) {
-          legend.drawWithoutFilter();
-          legend.updateMaxAll(this.maxall);
+          this.maxsel);
+
+        if(illumination) {
+          this.renderer2.render(renderMin, renderMax, renderMin, renderMax, this.maxsel);
         }
+
 
       }
 
-      //this.renderer2.render(renderMin, renderMax, renderMin, renderMax,	renderMax);
+      if (legend != undefined) {
+        legend.drawWithoutFilter();
+        legend.updateMaxAll(this.maxsel );
+      }
+      // legend.updateMaxSel(this.maxall);
+    } else {
+      // this.renderer.render( renderMin, renderMax, 0, 0);
+      this.renderer.render(renderMin, renderMax, renderMin, renderMax,
+        renderMax);
+
+      if(illumination) {
+        this.renderer2.render(renderMin, renderMax, renderMin, renderMax,	renderMax);
+      }
+
+      if (legend != undefined) {
+        legend.drawWithoutFilter();
+        legend.updateMaxAll(this.maxall);
+      }
+
+    }
+
+    //this.renderer2.render(renderMin, renderMax, renderMin, renderMax,	renderMax);
 
 
-  }
+  };
 
   this.update = function() {
     this.renderData(last_num);
-  }
+  };
 
   this.reRender = function() {
     this.render(last_num);
-  }
+  };
   this.tearDown = function() {
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
     gl.bindTexture(gl.TEXTURE_2D, null);
     gl.useProgram(null);
-  }
+  };
 
   this.setMatrix = function(matrix) {
     manager.matrices.push(matrix);
     manager.mapMatrix = matrix;
-  }
+  };
 
   this.readPixels = function(x,y, mode) {
     mode = mode || "";
@@ -314,16 +335,19 @@ WGL.dimension.HeatMapDimension = function(id) {
       gl.bindFramebuffer(gl.FRAMEBUFFER, null);
       readout = new Uint8Array(4);
       gl.readPixels(x, y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, readout);
-            console.log(readout, x, y);
+      console.log(readout, x, y);
     }
 
     return readout;
 
-  }
+  };
   this.clean = function () {
     gl.deleteTexture(this.heatTexture);
     gl.deleteProgram(this.glProgram);
     this.renderer.clean();
-  }
+    if(illumination) {
+      this.renderer2.clean();
+    }
+  };
 
 };
