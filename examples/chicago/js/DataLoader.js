@@ -365,7 +365,7 @@ function DataLoader() {
                 }*/
 
                 district[i] = districtValues[val["district"]];
-                community_area[i] = communityAreaEnum[val["community_area"]];
+                //community_area[i] = communityAreaEnum[val["community_area"]];
 
                 var d =  (new Date(val["date"]));
                 days[i] =  weekday[d.getDay()]; //d.getDay();

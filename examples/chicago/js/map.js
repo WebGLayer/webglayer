@@ -256,6 +256,19 @@ function toggleControl(element) {
 	}
 }
 
+function toggleColorScheme(element) {
+	var schemes = element.parentNode.childNodes;
+	for (var scheme in schemes) {
+        if (schemes[scheme].nodeName == "BUTTON") {
+            if (schemes[scheme] == element) {
+                schemes[scheme].classList.add("colorSchemeSelected");
+            } else {
+                schemes[scheme].classList.remove("colorSchemeSelected");
+            }
+        }
+    }
+}
+
 function transform(x, y) {
 	var tl = getTopLeftTC();
 	var p = new OpenLayers.LonLat(y, x);

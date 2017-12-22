@@ -22,7 +22,7 @@ html,body {
 
 
 #map {
-	
+
 	display: block;
     position:absolute;
     height:auto;
@@ -34,7 +34,7 @@ html,body {
     margin-bottom:18em;
     margin-right:32em;
     margin-left:0px;
-    z-index:100;	 
+    z-index:100;
    	opacity: .99;
     border-bottom-width:1px;
 	border-bottom-style: solid;
@@ -42,10 +42,10 @@ html,body {
 }
 
 .pc_background{
-	background-color: rgb(14, 14, 14);			
+	background-color: rgb(14, 14, 14);
 }
 
-.pc_chart_div {	
+.pc_chart_div {
 	position:absolute;
 	height: 16.5em;
 	width:100%;
@@ -54,8 +54,8 @@ html,body {
 
 .pc_chart_parent {
 	overflow-y:hidden;
-	overflow-x:hidden;		
-	background-color: none;	
+	overflow-x:hidden;
+	background-color: none;
 	position:absolute;
 	height: 18em;
 	left:0;
@@ -79,22 +79,22 @@ html,body {
 
 
 #pc_chart {
-	z-index:2000;	
+	z-index:2000;
 }
 
 #wgl {
-	bottom: 0;	
+	bottom: 0;
 	padding: 1em;
 	height:3em;
-	
+
 	margin-right: 48em;
-	z-index:1001;	
+	z-index:1001;
 	position:absolute;
 	right:2em;
-	
+
 	background-color: rgba(255, 255, 255, 0.0);
 	font: 12px sans-serif;
-	
+
 }
 .selectionlabel {
 	color:white;
@@ -113,7 +113,7 @@ html,body {
 #right {
 	position: fixed;
 	overflow-y:auto;
-	overflow-x:hidden;		
+	overflow-x:hidden;
 	right: 0;
 	top: 0;
 	width: 32em;
@@ -144,6 +144,25 @@ html,body {
 
 #controlToggle li {
 	list-style: none;
+}
+
+#colorSchemeSelector {
+	position: fixed;
+	z-index: 2000;
+	width: auto;
+	top: 0;
+	right: 35em;
+	padding: 0.3em;
+	background-color: whitesmoke;
+}
+
+#colorSchemeLabel {
+	font-size: 0.8em;
+	padding-bottom: 0.4em;
+}
+
+button.colorSchemeSelected {
+	background-color: #8699A4 !important;
 }
 
 #test {
@@ -232,21 +251,21 @@ fill: none;
 stroke: steelblue;
 stroke-width: 2px;
 shape-rendering: optimizeSpeed ;
- 
+
 }
 
 .point {
-	
+
 	stroke-width: 0.0005px;
 	z-index: 2000;
  	fill: #000;
   	fill-opacity: .8;
-  	stroke: #fff; 
+  	stroke: #fff;
 }
 
 .l {
  cursor: pointer;
- stroke: #000; 
+ stroke: #000;
 }
 .grid-background {
   fill: #ddd;
@@ -264,7 +283,7 @@ shape-rendering: optimizeSpeed ;
 	position: relative;
 	margin: 1em;
 	z-index: 2000;
-	
+
 }
 /* div:first-child { */
 /*   opacity: .99; */
@@ -273,25 +292,52 @@ shape-rendering: optimizeSpeed ;
 .slider {
 	position:absolute;
 	right:0em;
-	top:0em;	
+	top:0em;
 	width: 26em;
 }
 .slider_v {
 	position:absolute;
 	right:-3em;
-	top:6em;	
+	top:6em;
 	width: 10em;
-	height: 1em;	
+	height: 1em;
 	 -webkit-transform: rotate(270deg);
        -moz-transform: rotate(270deg);
             transform: rotate(270deg);
 }
 
 .brush .extent {
-  
-  fill-opacity: .125;
-  shape-rendering: crispEdges;
+
+	fill-opacity: .125;
+	shape-rendering: crispEdges;
 }
+
+.btn-group button {
+	background-color: whitesmoke; /* Green background */
+	border: 1px solid lightgray; /* Green border */
+	color: black; /* White text */
+	cursor: pointer; /* Pointer/hand icon */
+	float: left; /* Float the buttons side by side */
+	padding: 0.3em 0.3em;
+}
+
+.btn-group button:not(:last-child) {
+	border-right: none; /* Prevent double borders */
+}
+
+/* Clear floats (clearfix hack) */
+.btn-group:after {
+	content: "";
+	clear: both;
+	display: table;
+}
+
+/* Add a background color on hover */
+.btn-group button:hover {
+	background-color: darkgray;
+}
+
+
 </style>
 <script src="../libs/OpenLayers.js"></script>
 <script src="../libs/jquery-1.9.1.min.js"></script>
@@ -337,37 +383,37 @@ shape-rendering: optimizeSpeed ;
 <script src="../../src/ui/StackedBarChart.js"></script>
 <script src="../../src/ui/HeatMapLegend.js"></script>
 <script src="../../src/ui/d3.svg.multibrush.js"></script>
-<script src="../../src/ui/ChartDiv.js"></script> 
+<script src="../../src/ui/ChartDiv.js"></script>
 
 </head>
 <body onload="init()">
 <!-- <div id="legend"></div> -->
 
-	<div id="map">	
-		
-	
+	<div id="map">
+
+
 	<div id="wgl">Visualization made by <a href="http://webglayer.org/"> WebGLayer </a></div>
 	</div>
-	
+
 	<div>
 		<div id ="pc" class ="pc_chart_parent pc_background" >
-		
- 		<div id = "pc_header" class='btn-minimize pc_background'  id=minPC >  
- 		 <i id=butPC class='fa fa-chevron-down'></i> Parallel Coordinates</div> 
- 		 
+
+ 		<div id = "pc_header" class='btn-minimize pc_background'  id=minPC >
+ 		 <i id=butPC class='fa fa-chevron-down'></i> Parallel Coordinates</div>
+
 		<div class ="pc_chart_div pc_background" ></div>
-		<div id ="pc_chart" class = "pc_chart_div">					
+		<div id ="pc_chart" class = "pc_chart_div">
 					<input class="slider_v" id="slider_pc" type="range"  name="points" min="1" max="5000"/>
 		</div>
 	</div>
 
 	<div id="right">
-				
-			<div id = "about" style = "text-align:justify"><div id = "close" class = "about" >  </div> 
+
+			<div id = "about" style = "text-align:justify"><div id = "close" class = "about" >  </div>
 				This visualization is showing more than 200 000 crimes registered by police in the city of
 				Chicago during 2017. The data was extracted from <a href="https://data.cityofchicago.org/Public-Safety/Crimes-2001-to-present"> here</a>.
-				Make a selection in barcharts, map legend, in parallel coordinates or in the map to explore the data! 
-				Watch the <a href = "https://www.youtube.com/watch?v=YcyNYfpGwz0">video</a> to see how to interact. 
+				Make a selection in barcharts, map legend, in parallel coordinates or in the map to explore the data!
+				Watch the <a href = "https://www.youtube.com/watch?v=YcyNYfpGwz0">video</a> to see how to interact.
 			</div>
 			<hr/>
 			<div id = "chart0">
@@ -378,29 +424,29 @@ shape-rendering: optimizeSpeed ;
 <!--         						step="1" name="points" id="slider_radius?oo" value="10"> -->
 <!-- 					    </input> -->
 <!--     					<em id="rangeValLabel" style="font-style: normal;"></em> -->
-    
+
 <!-- 				</div>				 -->
-				<div class="control">	
+				<div class="control">
 				<label>Layers:  </label>		<br/>
 					<label><input id="heatmap_visible" type="checkbox" name="heatmap" checked="true"/>heatmap</label> <br/>
 					<label><input id="points_visible" type="checkbox" name="themap" checked="true"/>crimes</label> <br/>
-				
+
 					<label id ='reset'> Reset </label>
 				</div>
 				<hr/>
 			</div>
-		
-			
+
+
 <!-- 		<div class="control"> -->
 <!-- 			<div id="heatlegend"></div>					 -->
 <!-- 		</div>			 -->
 		</div>
-	
-			
-				 		
+
+
+
 	</div>
 	<div id="controls">
-		
+
 		<ul id="controlToggle">
 
 			<input type="radio" name="type" value="polygon" id="polygonToggle"
@@ -414,13 +460,24 @@ shape-rendering: optimizeSpeed ;
 			<input type="radio" name="type" value="remove" id="removePolygon"
 				onclick="toggleControl(this);" />
 			<label class="selectionlabel" for="removePolygon">remove polygon</label>
-			
+
 		</ul>
-		
-		
+
 	</div>
-		
-		
+
+	<div id="colorSchemeSelector">
+
+		<div id="colorSchemeLabel">Heatmap Color</div>
+		<div id="colorSchemeButtons" class="btn-group">
+			<button onclick="toggleColorScheme(this);" id="blue_scheme">Blue</button>
+			<button onclick="toggleColorScheme(this);" id="red_scheme">Red</button>
+			<button onclick="toggleColorScheme(this);" id="fire_scheme">Fire</button>
+			<button onclick="toggleColorScheme(this);" id="icy_scheme">Icy</button>
+		</div>
+
+	</div>
+
+
 	</div>
 <!-- 	<div id='legend' style="padding:1em"> -->
 <!-- 		<object data="legend2.svg" /> -->
