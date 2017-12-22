@@ -21,6 +21,7 @@ WGL.dimension.HeatMapDimension = function(id) {
   var visible = true;
   var illumination = false;
   var doGetMax = true;
+  var colorScheme = "blue";
   var legend;
   this.setVisible = function(v) {
     visible = v;
@@ -32,6 +33,11 @@ WGL.dimension.HeatMapDimension = function(id) {
 
   this.setDoGetMax = function(m) {
     doGetMax = m;
+  };
+
+  this.setColorScheme = function(c) {
+    colorScheme = c;
+    console.log(colorScheme);
   };
 
   /* default radiusFunc */

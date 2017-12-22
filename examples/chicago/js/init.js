@@ -241,6 +241,12 @@ function visualize(data){
     // heatmap.reRender();
     WGL.render();
   });
+  $(".color-scheme-btn").click(function() {
+    toggleColorScheme(this);
+    var l = WGL.getDimension("heatmap");
+    l.setColorScheme(this.value);
+    WGL.render();
+  });
 
   WGL.mcontroller.zoommove(map.getZoom(), getTopLeftTC());
 }
