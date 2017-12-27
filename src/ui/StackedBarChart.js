@@ -35,6 +35,7 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
     var svg;
     var chart;
     var active_group = 2;
+    var colors = [];
 
     var width = w - margin.left - margin.right;
     var height = h - margin.top - margin.bottom;
@@ -62,6 +63,10 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
         return this;
     }
 
+    this.setStackedBarChartColors = function(c) {
+        this.colors = c;
+        return this;
+    }
 
     this.xformat = function(d){
         return d;
@@ -108,7 +113,7 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
         this.setArrowHeight(arrowTan);
 
         var cols = [ "#ff8c00", "#7b6888", "#98abc5" ];
-        //var cols = [ "#ff8c00", "#3182bd", "#98abc5" ];
+
         var classes = [ [ "0", "selected", cols[0] ],
             [ "1", "unselected", cols[1] ], [ "2", "out", cols[2] ] ];
 

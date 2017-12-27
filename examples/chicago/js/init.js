@@ -245,6 +245,7 @@ function visualize(data){
     toggleColorScheme(this);
     var l = WGL.getDimension("heatmap");
     l.setColorScheme(this.value);
+    changeMapColor(this.value);
     WGL.render();
   });
 

@@ -23,6 +23,33 @@ WGL.dimension.HeatMapDimension = function(id) {
   var doGetMax = true;
   var colorScheme = "blue";
   var legend;
+
+  var colorSchemes = {};
+  colorSchemes['blue'] = [
+      0.03, 0.11, 0.35 , 1.4,
+      0.18, 0.71, 0.76, 1.4,
+      1, 1, 0.85, 1.4,
+      0, 0, 0, 1
+  ];
+  colorSchemes['red'] = [
+      0.87, 0.19, 0.12, 1.4,
+      0.66, 0.53, 0.89, 0.9,
+      0.09, 0.38, 0.6, 0.01,
+      0, 0, 0, 1
+  ];
+  colorSchemes['fire'] = [
+      1, 1, 0.89, 1.4,
+      0.99, 0.6, 0.16, 0.9,
+      0.4, 0.15, 0.02, 0.01,
+      0, 0, 0, 1
+  ];
+  colorSchemes['icy'] = [
+      1, 1, 1, 1.4,
+      0.47, 0.73, 0.92, 0.9,
+      0.14, 0.11, 0.37, 0.01,
+      0, 0, 0, 1
+  ];
+
   this.setVisible = function(v) {
     visible = v;
   };
@@ -37,7 +64,6 @@ WGL.dimension.HeatMapDimension = function(id) {
 
   this.setColorScheme = function(c) {
     colorScheme = c;
-    console.log(colorScheme);
   };
 
   /* default radiusFunc */
@@ -141,7 +167,7 @@ WGL.dimension.HeatMapDimension = function(id) {
 
   this.initProgram();
   this.renderer2 = new WGL.dimension.IluminationRenderer(manager);
-  this.renderer = new WGL.dimension.HeatMapRenderer(manager);
+  this.renderer = new WGL.dimension.HeatMapRenderer(manager, colorScheme);
   // var maxcal = new
   // MaxCalculator(Math.floor(manager.w/6),Math.floor(manager.h/6));
   var the_filter;
@@ -221,6 +247,9 @@ WGL.dimension.HeatMapDimension = function(id) {
 
     this.renderer.heatTexture = this.heatTexture;
     this.renderer2.heatTexture = this.heatTexture;
+
+      this.renderer.colors =  new Float32Array(16);
+      this.renderer.colors.set(colorSchemes[colorScheme]);
 
     manager.heatTexture = this.heatTexture;
   };

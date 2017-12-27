@@ -16,12 +16,7 @@ WGL.dimension.HeatMapRenderer = function(){
   manager.storeUniformLoc(this.glProgram, "unselcolors");
   manager.storeUniformLoc(this.glProgram, "reduceSelection");
 
-
   this.colors =  new Float32Array(16);
-  this.colors.set([ 1, 0, 0, 1.4,
-                  1, 1, 0, 0.9,
-                  0, 1, 0, 0.01,
-                  0, 0, 0, 1 ]);
 
   this.unselcolors =  new Float32Array(16);
   this.unselcolors.set([  49/256, 130/256, 189/256, 0.8,

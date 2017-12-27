@@ -2,6 +2,12 @@
 
 var	wgs = new OpenLayers.Projection("EPSG:4326"); // Transform from WGS 1984
 var merc = new OpenLayers.Projection("EPSG:900913");
+
+var colors = {};
+colors['blue'] = 'light';
+colors['red'] = 'light';
+colors['fire'] = 'dark';
+colors['icy'] = 'dark';
 	
 initMap = function() {
 
@@ -26,7 +32,7 @@ initMap = function() {
 			  }) ;
 	 
 	  
-	var layer2 = new  OpenLayers.Layer.OSM('osm', 'http://${s}.basemaps.cartocdn.com/dark_all/${z}/${x}/${y}.png', {});
+	var layer2 = new  OpenLayers.Layer.OSM('osm', 'http://${s}.basemaps.cartocdn.com/light_all/${z}/${x}/${y}.png', {});
 	       
 	        
     var layer = new OpenLayers.Layer.OSM('', null, {
@@ -104,7 +110,6 @@ initMap = function() {
 	var polygons = [];
 
 	var m_id;
-	
 
 	function report(event) {
 		if (event.type!="sketchcomplete"){
@@ -267,6 +272,11 @@ function toggleColorScheme(element) {
             }
         }
     }
+}
+
+function changeMapColor(c) {
+    map.removeLayer(map.getLayersByName("osm")[0]);
+    map.addLayer(new OpenLayers.Layer.OSM('osm', 'http://${s}.basemaps.cartocdn.com/'+colors[c]+'_all/${z}/${x}/${y}.png', {}));
 }
 
 function transform(x, y) {
