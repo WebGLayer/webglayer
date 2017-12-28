@@ -1,4 +1,4 @@
-WGL.ui.HeatMapLegend = function(div_id, filterId, useBrush) {
+WGL.ui.HeatMapLegend = function(div_id, filterId, useBrush, colorScheme) {
   if (useBrush === undefined){
     useBrush = true;
   }
@@ -32,10 +32,32 @@ WGL.ui.HeatMapLegend = function(div_id, filterId, useBrush) {
   var yAxisSel = d3.svg.axis()
     .scale(yScaleSel)
     .orient("right").tickFormat(d3.format("s"));
-    
+
 
   var limitByMax = true;
   var heatDimension;
+
+  var colors = {};
+  colors["blue"] = [
+      {offset: "0%", color: "rgba(255, 255, 217,1)"},
+      {offset: "50%", color: "rgba(65, 182, 196,0.8)"},
+      {offset: "100%", color: "rgba(8, 29, 88,0.6)"}
+      ];
+  colors["red"] = [
+      {offset: "0%", color: "rgba(23, 97, 153,1)"},
+      {offset: "50%", color: "rgba(169, 136, 227,0.8)"},
+      {offset: "100%", color: "rgba(226, 48, 30,0.6)"}
+      ];
+  colors["fire"] = [
+      {offset: "0%", color: "rgba(102, 37, 6,1)"},
+      {offset: "50%", color: "rgba(254, 153, 41,0.8)"},
+      {offset: "100%", color: "rgba(255, 255, 229,0.6)"}
+      ];
+  colors["icy"] = [
+      {offset: "0%", color: "rgba(42, 27, 94,1)"},
+      {offset: "50%", color: "rgba(121, 187, 235,0.8)"},
+      {offset: "100%", color: "rgba(255, 255, 255,0.6)"}
+      ];
 
   this.setDimension = function(dim){
     //console.log("setDimension not imeplemented!");
@@ -76,7 +98,7 @@ WGL.ui.HeatMapLegend = function(div_id, filterId, useBrush) {
      .call(yAxisSel)
       .attr("transform",
        "translate(60,0)")
-       
+
 
   //this.circleLabel = d3.select("#" + div_id).append("label").style({bottom: "170px", position: "absolute", left: "120px" })
   //.text("Kernel:")
@@ -113,11 +135,7 @@ WGL.ui.HeatMapLegend = function(div_id, filterId, useBrush) {
         .attr("x2","0%")
         .attr("y2","100%")
         .selectAll("stop")
-        .data([
-               {offset: "0%", color: "rgba(255, 0, 0,1)"},
-               {offset: "50%", color: "rgba(255, 255, 0,0.8)"},
-               {offset: "100%", color: "rgba(0, 255, 0,0.6)"}
-               ])
+        .data(colors[colorScheme])
          .enter().append("stop")
           .attr("offset", function(d) { return d.offset; })
           .attr("stop-color", function(d) { return d.color; });
@@ -188,9 +206,9 @@ WGL.ui.HeatMapLegend = function(div_id, filterId, useBrush) {
 
     svg.selectAll(".grad")
      .attr("y",  yScale(f[1]))
-        .attr("height", yScale(f[0]) - yScale(f[1]) );		
-        
-     
+        .attr("height", yScale(f[0]) - yScale(f[1]) );
+
+
         if (f.length == 2 && f[0]==f[1]){
           /*pass the filter parameter to the dimension to render to colors properly*/
           f=[];
@@ -255,7 +273,7 @@ WGL.ui.HeatMapLegend = function(div_id, filterId, useBrush) {
    this.showSelection = function(){
     svg.selectAll(".grad")
      .attr("y",  0)
-        .attr("height", yScale(f[0]) - yScale(f[1]) );	
+        .attr("height", yScale(f[0]) - yScale(f[1]) );
    }
 
    this.update = function(filter){

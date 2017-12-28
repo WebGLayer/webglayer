@@ -1,6 +1,5 @@
 WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
 
-
     var type;
     var div_id;
 
@@ -8,6 +7,8 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
     var h;
     var margin;
     var rotate_x;
+    var colorScheme;
+
     if (typeof(params)=='undefined'){
         w = 500;
         h = 215;
@@ -18,11 +19,18 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
             left : 60
         };
         rotate_x = false;
+        colorScheme = "blue";
     } else {
-        w=params.w;
-        h=params.h;
-        margin=params.margin;
+        w=(params.w ? params.w : 500);
+        h=(params.h ? params.h : 215);
+        margin=(params.margin ? params.margin : margin = {
+            top : 20,
+            right : 20,
+            bottom : 65,
+            left : 60
+        });
         rotate_x=params.rotate_x;
+        colorScheme=(params.colorScheme ? params.colorScheme : "blue")
     }
 
     var dataset;
@@ -35,7 +43,12 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
     var svg;
     var chart;
     var active_group = 2;
-    var colors = [];
+
+    var colors = {};
+    colors["blue"] = [ "#a9ef28", "#50a7f9", "#dce2e0" ];
+    colors["red"] = [ "#fd9a2f", "#50a7f9", "#dce2e0" ];
+    colors["fire"] = [ "#fd9a2f", "#50a7f9", "#dce2e0" ];
+    colors["icy"] = [ "#a9ef28", "#50a7f9", "#dce2e0" ];
 
     var width = w - margin.left - margin.right;
     var height = h - margin.top - margin.bottom;
@@ -112,7 +125,7 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
         //set arrow height for first
         this.setArrowHeight(arrowTan);
 
-        var cols = [ "#ff8c00", "#7b6888", "#98abc5" ];
+        var cols = colors[colorScheme];
 
         var classes = [ [ "0", "selected", cols[0] ],
             [ "1", "unselected", cols[1] ], [ "2", "out", cols[2] ] ];
@@ -347,7 +360,7 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
         }
     };
 
-    this.clean = function (cleanChartDiv) {
+        this.clean = function (cleanChartDiv) {
         cleanChartDiv = cleanChartDiv || false;
         if (cleanChartDiv){
             d3.select("#chd-container-" + div_id).remove();
