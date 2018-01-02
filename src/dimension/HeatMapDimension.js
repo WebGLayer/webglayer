@@ -27,8 +27,8 @@ WGL.dimension.HeatMapDimension = function(id) {
   var colorSchemes = {};
   colorSchemes['blue'] = [
       0.03, 0.11, 0.35 , 1.4,
-      0.18, 0.71, 0.76, 1.4,
-      1, 1, 0.85, 1.4,
+      0.18, 0.71, 0.76, 0.9,
+      1, 1, 0.85, 0.01,
       0, 0, 0, 1
   ];
   colorSchemes['red'] = [

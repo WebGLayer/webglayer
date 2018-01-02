@@ -79,7 +79,7 @@ function visualize(data){
 
   $("#reset").on("click", function(){
     WGL.resetFilters();
-    var lonlat = new OpenLayers.LonLat(-1.9,52.5).transform(new OpenLayers.Projection("EPSG:4326"),new OpenLayers.Projection("EPSG:900913"));
+    var lonlat = new OpenLayers.LonLat(-87.6,41.8).transform(new OpenLayers.Projection("EPSG:4326"),new OpenLayers.Projection("EPSG:900913"));
     map.setCenter(lonlat);
     map.zoomTo(11);
   })
