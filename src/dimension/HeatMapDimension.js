@@ -20,8 +20,18 @@ WGL.dimension.HeatMapDimension = function(id) {
 
   var visible = true;
   var illumination = false;
+  var colorScheme = "blue";
   var doGetMax = true;
   var legend;
+
+  this.useColorScheme = function(c) {
+    colorScheme = c;
+  };
+
+  this.getColorScheme = function() {
+    return colorScheme;
+  };
+
   this.setVisible = function(v) {
     visible = v;
   };
@@ -226,6 +236,8 @@ WGL.dimension.HeatMapDimension = function(id) {
     if (visible == false) {
       return;
     }
+
+    this.renderer.colorScheme = colorScheme;
 
     this.renderData(num);
 
