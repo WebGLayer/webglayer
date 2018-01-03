@@ -28,6 +28,10 @@ WGL.dimension.HeatMapDimension = function(id) {
     colorScheme = c;
   };
 
+  this.getColorScheme = function() {
+    return colorScheme;
+  };
+
   this.setVisible = function(v) {
     visible = v;
   };
