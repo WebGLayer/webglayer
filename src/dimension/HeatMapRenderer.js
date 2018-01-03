@@ -16,12 +16,35 @@ WGL.dimension.HeatMapRenderer = function(){
   manager.storeUniformLoc(this.glProgram, "unselcolors");
   manager.storeUniformLoc(this.glProgram, "reduceSelection");
 
+  var colorSchemes = {};
+  colorSchemes['blue'] = [
+    0.03, 0.11, 0.35 , 1.4,
+    0.18, 0.71, 0.76, 0.9,
+    1, 1, 0.85, 0.01,
+    0, 0, 0, 1
+  ];
+  colorSchemes['red'] = [
+    0.87, 0.19, 0.12, 1.4,
+    0.66, 0.53, 0.89, 0.9,
+    0.09, 0.38, 0.6, 0.01,
+    0, 0, 0, 1
+  ];
+  colorSchemes['fire'] = [
+    1, 1, 0.89, 1.4,
+    0.99, 0.6, 0.16, 0.9,
+    0.4, 0.15, 0.02, 0.01,
+    0, 0, 0, 1
+  ];
+  colorSchemes['icy'] = [
+    1, 1, 1, 1.4,
+    0.47, 0.73, 0.92, 0.9,
+    0.14, 0.11, 0.37, 0.01,
+    0, 0, 0, 1
+  ];
+
+  this.colorScheme = "blue";
 
   this.colors =  new Float32Array(16);
-  this.colors.set([ 1, 0, 0, 1.4,
-                  1, 1, 0, 0.9,
-                  0, 1, 0, 0.01,
-                  0, 0, 0, 1 ]);
 
   this.unselcolors =  new Float32Array(16);
   this.unselcolors.set([  49/256, 130/256, 189/256, 0.8,
@@ -47,7 +70,7 @@ WGL.dimension.HeatMapRenderer = function(){
     gl.useProgram(null);
 
 
-  this.setup = function() {
+    this.setup = function() {
      gl.useProgram(this.glProgram);
      gl.uniformMatrix4fv(this.glProgram.colors, false, this.colors);
        gl.uniformMatrix4fv(this.glProgram.unselcolors, false, this.unselcolors);
@@ -75,9 +98,11 @@ WGL.dimension.HeatMapRenderer = function(){
 
   }
 
-
   this.render = function(min, max, min_f, max_f, reduceSelection) {
     //legend.updateMax(max);
+
+    this.colors.set(colorSchemes[this.colorScheme]);
+
     this.setup();
 
     //console.log(max);
