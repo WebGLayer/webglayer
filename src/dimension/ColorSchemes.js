@@ -27,17 +27,24 @@ function ColorSchemes() {
   ];
 
   var schemeSelected = "blue";
+  var matrixSelected = schemes[schemeSelected];
 
   this.setSchemeSelected = function(s) {
     schemeSelected = s;
+    matrixSelected = schemes[schemeSelected];
   };
 
   this.getSchemeSelected = function() {
     return schemeSelected;
   };
 
+  this.setCustomMatrixSelected = function(m) {
+    schemeSelected = 'custom';
+    matrixSelected = m;
+  };
+
   this.getSchemeMatrixSelected = function() {
-    return schemes[schemeSelected];
+    return matrixSelected;
   };
 
 };
