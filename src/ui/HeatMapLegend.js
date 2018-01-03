@@ -37,7 +37,7 @@ WGL.ui.HeatMapLegend = function(div_id, filterId, useBrush, colorScheme) {
   var limitByMax = true;
   var heatDimension;
 
-  var colors = {};
+  /*var colors = {};
   colors["blue"] = [
     {offset: "0%", color: "rgba(8, 29, 88,0.6)"},
     {offset: "50%", color: "rgba(65, 182, 196,0.8)"},
@@ -57,7 +57,7 @@ WGL.ui.HeatMapLegend = function(div_id, filterId, useBrush, colorScheme) {
     {offset: "0%", color: "rgba(255, 255, 255,0.6)"},
     {offset: "50%", color: "rgba(121, 187, 235,0.8)"},
     {offset: "100%", color: "rgba(42, 27, 94,1)"}
-  ];
+  ];*/
 
   this.setDimension = function(dim){
     //console.log("setDimension not imeplemented!");
@@ -124,7 +124,13 @@ WGL.ui.HeatMapLegend = function(div_id, filterId, useBrush, colorScheme) {
 //		 heatDimension.lockScale = this.checked;
 //		});
 
+  var rgbaMatrix = colorSchemes.getSchemeMatrixSelected();
 
+  var colors = [
+    {offset: "0%", color:"rgba(" + rgbaMatrix[0] + ", " + rgbaMatrix[1] + ", " + rgbaMatrix[2] + ", 1)"},
+    {offset: "50%", color:"rgba(" + rgbaMatrix[3] + ", " + rgbaMatrix[4] + ", " + rgbaMatrix[5] + ", 0.6)"},
+    {offset: "100%", color:"rgba(" + rgbaMatrix[6] + ", " + rgbaMatrix[7] + ", " + rgbaMatrix[8] + ", 0.3)"}
+  ];
 
   /*Adding gradients*/
 
@@ -135,7 +141,7 @@ WGL.ui.HeatMapLegend = function(div_id, filterId, useBrush, colorScheme) {
     .attr("x2","0%")
     .attr("y2","100%")
     .selectAll("stop")
-    .data(colors[colorScheme])
+    .data(colors)
     .enter().append("stop")
     .attr("offset", function(d) { return d.offset; })
     .attr("stop-color", function(d) { return d.color; });
