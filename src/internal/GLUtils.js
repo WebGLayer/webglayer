@@ -122,6 +122,9 @@ WGL.internal.GLUtils = {
     $.get(domain+'shaders/shaders_filter_generic.glsl', function(data) {
       $("head").append(data);
     });
+    $.get(domain+'shaders/shaders_identify.glsl', function(data) {
+        $("head").append(data);
+    });
 
 
     $.ajaxSetup({
@@ -140,7 +143,7 @@ WGL.internal.GLUtils = {
     gl.compileShader(vertexShader);
 
     if (!gl.getShaderParameter(vertexShader, gl.COMPILE_STATUS)) {
-      alert("An error occurred compiling the shaders: "
+      alert("An error occurred compiling the shaders V: "
           + gl.getShaderInfoLog(vertexShader));
       return null;
     }
@@ -151,8 +154,8 @@ WGL.internal.GLUtils = {
     gl.compileShader(fragmentShader);
 
     if (!gl.getShaderParameter(fragmentShader, gl.COMPILE_STATUS)) {
-      alert("An error occurred compiling the shaders: "
-          + gl.getShaderInfoLog(vertexShader));
+      alert("An error occurred compiling the shaders F: "
+          + gl.getShaderInfoLog(fragmentShader));
       return null;
     }
     // link shaders to create our program

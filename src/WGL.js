@@ -130,6 +130,31 @@ var WGL = (function() {
       return dim;
     },
 
+    /**
+     * Add Identify dimension to the WGL.
+     * @param data {Array} array of xy data e.g [x1, y1, x2, y2, ...] in 0 level
+     * @param pts_id {Array} array of ID [id1, id2, id3, ...]
+     * @param id {String} ID of dimension
+     * @param properties_path path to directory with files for identify
+     * @returns {WGL.dimension.IdentifyDimension}
+     */
+    addIdentifyDimension: function (data, pts_id, id, properties_path) {
+      try { // try create pts buffer
+          manager.addDataBuffer(u.array2TA(data), 2, 'wPoint');
+      } catch (err) {
+          console.warn(err);
+      }
+
+      try { // try create pts_id buffer
+          manager.addDataBuffer(WGL.utils.array2TA(pts_id), 1, 'pts_id');
+      } catch (err) {
+          console.warn(err);
+      }
+      var dim = new WGL.dimension.IdentifyDimension(id, properties_path);
+      this._dimensions[id] = dim;
+      return dim;
+    },
+
     addLineDimension : function(data, id) {
     //	try {
 
