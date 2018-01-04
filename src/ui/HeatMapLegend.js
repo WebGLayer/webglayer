@@ -1,4 +1,4 @@
-WGL.ui.HeatMapLegend = function(div_id, filterId, useBrush) {
+WGL.ui.HeatMapLegend = function(div_id, filterId, useBrush, colorScheme) {
   if (useBrush === undefined){
     useBrush = true;
   }
@@ -9,10 +9,10 @@ WGL.ui.HeatMapLegend = function(div_id, filterId, useBrush) {
   var w = 190;
   var h = 200;
   var margin = {
-      top : 10,
-      right : 0,
-      bottom : 10,
-      left : 45
+    top : 10,
+    right : 0,
+    bottom : 10,
+    left : 45
   };
   //var lockscale = false;
   var filterVal = [];
@@ -20,19 +20,19 @@ WGL.ui.HeatMapLegend = function(div_id, filterId, useBrush) {
   var height = h - margin.top - margin.bottom;
 
   var yScale = d3.scale.linear().domain([ 0, 200]).range(
-      [ height, 0 ]);
+    [ height, 0 ]);
 
   var yAxis = d3.svg.axis()
     .scale(yScale)
     .orient("left").tickFormat(d3.format("s"));
 
-    var yScaleSel = d3.scale.linear().domain([ 0, 200]).range(
-      [ height, 0 ]);
+  var yScaleSel = d3.scale.linear().domain([ 0, 200]).range(
+    [ height, 0 ]);
 
   var yAxisSel = d3.svg.axis()
     .scale(yScaleSel)
     .orient("right").tickFormat(d3.format("s"));
-    
+
 
   var limitByMax = true;
   var heatDimension;
@@ -61,66 +61,68 @@ WGL.ui.HeatMapLegend = function(div_id, filterId, useBrush) {
 
   /** Adding axis**/
 
-   svg.append("g")
-     .attr("class", "y axis all")
-     .call(yAxis)
-     .append("text")
-     .attr("transform", "rotate(-90)")
-     .attr("y", -38)
-     .attr("dy", ".71em")
-     .style("text-anchor", "end")
-     .text("Density of records within the radius "); //Magnitude-per-area within the radius
+  svg.append("g")
+    .attr("class", "y axis all")
+    .call(yAxis)
+    .append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", -38)
+    .attr("dy", ".71em")
+    .style("text-anchor", "end")
+    .text("Density of records within the radius "); //Magnitude-per-area within the radius
 
-     svg.append("g")
-     .attr("class", "y axis sel")
-     .call(yAxisSel)
-      .attr("transform",
-       "translate(60,0)")
-       
+  svg.append("g")
+    .attr("class", "y axis sel")
+    .call(yAxisSel)
+    .attr("transform",
+      "translate(60,0)")
+
 
   //this.circleLabel = d3.select("#" + div_id).append("label").style({bottom: "170px", position: "absolute", left: "120px" })
   //.text("Kernel:")
 
   //this.circle = svg.append("circle");
 
-    //this.circle.attr("cx", 100)
-   // .attr("cy", 10)
-   // .attr("stroke", "black")
+  //this.circle.attr("cx", 100)
+  // .attr("cy", 10)
+  // .attr("stroke", "black")
   //  .attr("stroke-width","1")
-   // .attr("fill","white")
+  // .attr("fill","white")
   //  .attr("r", 20);
 
 
 
 //	d3.select("#" + div_id).append("label").style({bottom: "5px", position: "absolute", left: "5px" })
 //	.text("lock scale")
-//	.append("input")	
+//	.append("input")
 //	.attr("type","checkbox")
-//	.attr("id","scale")	
+//	.attr("id","scale")
 //	.on("click", function(d,i){
 //		// lockscale = this.checked;
 //		 heatDimension.lockScale = this.checked;
-//		}); 
+//		});
 
+  var rgbaMatrix = WGL.colorSchemes.getSchemeMatrixSelected();
 
+  var colors = [
+    {offset: "0%", color:"rgba(" + rgbaMatrix[0] + ", " + rgbaMatrix[1] + ", " + rgbaMatrix[2] + ", 1)"},
+    {offset: "50%", color:"rgba(" + rgbaMatrix[3] + ", " + rgbaMatrix[4] + ", " + rgbaMatrix[5] + ", 0.6)"},
+    {offset: "100%", color:"rgba(" + rgbaMatrix[6] + ", " + rgbaMatrix[7] + ", " + rgbaMatrix[8] + ", 0.3)"}
+  ];
 
-   /*Adding gradients*/
+  /*Adding gradients*/
 
   svg.append("defs").append("linearGradient")
-        .attr("id", "legend_gradient")
-        .attr("x1","0%")
-        .attr("y1","0%")
-        .attr("x2","0%")
-        .attr("y2","100%")
-        .selectAll("stop")
-        .data([
-               {offset: "0%", color: "rgba(255, 0, 0,1)"},
-               {offset: "50%", color: "rgba(255, 255, 0,0.8)"},
-               {offset: "100%", color: "rgba(0, 255, 0,0.6)"}
-               ])
-         .enter().append("stop")
-          .attr("offset", function(d) { return d.offset; })
-          .attr("stop-color", function(d) { return d.color; });
+    .attr("id", "legend_gradient")
+    .attr("x1","0%")
+    .attr("y1","0%")
+    .attr("x2","0%")
+    .attr("y2","100%")
+    .selectAll("stop")
+    .data(colors)
+    .enter().append("stop")
+    .attr("offset", function(d) { return d.offset; })
+    .attr("stop-color", function(d) { return d.color; });
 
   svg.append("defs").append("linearGradient")
     .attr("id", "legend_blue_gradient")
@@ -130,11 +132,11 @@ WGL.ui.HeatMapLegend = function(div_id, filterId, useBrush) {
     .attr("y2","100%")
     .selectAll("stop")
     .data([
-         {offset: "0%", color:"rgba(59, 130, 189,1)"},
-         {offset: "50%", color: "rgba(158, 202,225,0.6)"},
-         {offset: "100%", color: "rgba(222, 235,247,0.3)"}
-         ])
-   .enter().append("stop")
+      {offset: "0%", color:"rgba(59, 130, 189,1)"},
+      {offset: "50%", color: "rgba(158, 202,225,0.6)"},
+      {offset: "100%", color: "rgba(222, 235,247,0.3)"}
+    ])
+    .enter().append("stop")
     .attr("offset", function(d) { return d.offset; })
     .attr("stop-color", function(d) { return d.color; });
 
@@ -147,11 +149,11 @@ WGL.ui.HeatMapLegend = function(div_id, filterId, useBrush) {
     .attr("height", height);
 
   svg.append("rect").attr("fill", "url(#legend_blue_gradient)")
-      .attr("id","grad_b")
-      .attr("x", 0)
-      .attr("y", 0)
-      .attr("width", 30)
-      .attr("height", height);
+    .attr("id","grad_b")
+    .attr("x", 0)
+    .attr("y", 0)
+    .attr("width", 30)
+    .attr("height", height);
 
   svg.append("rect").attr("fill", "black")
     .attr("class","grad")
@@ -161,15 +163,15 @@ WGL.ui.HeatMapLegend = function(div_id, filterId, useBrush) {
     .attr("height", 0);
 
   svg.append("rect").attr("fill", "url(#legend_gradient)")
-            .attr("class","grad")
-            .attr("x", 30)
-                    .attr("y", 0)
-                    .attr("width", 30)
-                    .attr("height", 0);
+    .attr("class","grad")
+    .attr("x", 30)
+    .attr("y", 0)
+    .attr("width", 30)
+    .attr("height", 0);
 
 
   var brushed = function(){
-     filterVal = brush.extent();
+    filterVal = brush.extent();
     if (parseFloat(yScale.domain()[1]) <=  parseFloat(brush.extent()[1])){
       //f[1] =9999999;
       limitByMax= false;
@@ -184,21 +186,21 @@ WGL.ui.HeatMapLegend = function(div_id, filterId, useBrush) {
 
 
     //console.log(parseFloat(yScale.domain()[1]-100))+ " vs "+  parseFloat(yScale(brush.extent()[1]));
-      // var f = brush.extent();
+    // var f = brush.extent();
 
     svg.selectAll(".grad")
-     .attr("y",  yScale(f[1]))
-        .attr("height", yScale(f[0]) - yScale(f[1]) );		
-        
-     
-        if (f.length == 2 && f[0]==f[1]){
-          /*pass the filter parameter to the dimension to render to colors properly*/
-          f=[];
-          heatDimension.setFilter(undefined);
-        } else {
-           filterVal = f;
-          heatDimension.setFilter(f);
-        }
+      .attr("y",  yScale(f[1]))
+      .attr("height", yScale(f[0]) - yScale(f[1]) );
+
+
+    if (f.length == 2 && f[0]==f[1]){
+      /*pass the filter parameter to the dimension to render to colors properly*/
+      f=[];
+      heatDimension.setFilter(undefined);
+    } else {
+      filterVal = f;
+      heatDimension.setFilter(f);
+    }
 
     WGL.filterDim(heatDimension.id,filterId,f);
 
@@ -212,8 +214,8 @@ WGL.ui.HeatMapLegend = function(div_id, filterId, useBrush) {
   }
 
   var brush = d3.svg.brush()
-      .y(yScale)
-      .on("brush", brushed);
+    .y(yScale)
+    .on("brush", brushed);
 
   console.log(useBrush);
   if (useBrush){
@@ -221,21 +223,21 @@ WGL.ui.HeatMapLegend = function(div_id, filterId, useBrush) {
       .selectAll("rect").attr("width", 60);
   }
 
-   this.updateMaxAll = function(max){
-     var filter =  filterVal ;
+  this.updateMaxAll = function(max){
+    var filter =  filterVal ;
 
-     yScale.domain([0, max]);
+    yScale.domain([0, max]);
 
-     svg.selectAll('.y.axis.all')
+    svg.selectAll('.y.axis.all')
       .call(yAxis);
-      if (filter[0]!=filter[1]){
-        this.update(filter);
-      } else {
-        this.update([0,0]);
-      }
+    if (filter[0]!=filter[1]){
+      this.update(filter);
+    } else {
+      this.update([0,0]);
+    }
 
 
-   };
+  };
   this.updateMaxMinAll = function(min,max){
     var filter =  filterVal ;
 
@@ -252,41 +254,41 @@ WGL.ui.HeatMapLegend = function(div_id, filterId, useBrush) {
 
   }
 
-   this.showSelection = function(){
+  this.showSelection = function(){
     svg.selectAll(".grad")
-     .attr("y",  0)
-        .attr("height", yScale(f[0]) - yScale(f[1]) );	
-   }
+      .attr("y",  0)
+      .attr("height", yScale(f[0]) - yScale(f[1]) );
+  }
 
-   this.update = function(filter){
-      filterVal = filter;
-     //if (!lockscale){
-      var min =  filterVal [0];
-      var max =  filterVal [1];
-      //this.updateMax(m+ m*0.2);
+  this.update = function(filter){
+    filterVal = filter;
+    //if (!lockscale){
+    var min =  filterVal [0];
+    var max =  filterVal [1];
+    //this.updateMax(m+ m*0.2);
 
-      var y =  yScale(max);
-      var h =  yScale(min) - yScale(max);
-      svg.selectAll(".grad")
-       .attr("y",  y)
-          .attr("height", h );
-      svg.selectAll(".extent")
-       .attr("y",  y)
-          .attr("height", h );
+    var y =  yScale(max);
+    var h =  yScale(min) - yScale(max);
+    svg.selectAll(".grad")
+      .attr("y",  y)
+      .attr("height", h );
+    svg.selectAll(".extent")
+      .attr("y",  y)
+      .attr("height", h );
 
-      svg.selectAll('.y.axis.sel').attr("transform",
-       "translate(60,"+y+")");
+    svg.selectAll('.y.axis.sel').attr("transform",
+      "translate(60,"+y+")");
 
-      yScaleSel.domain([0,selectionMax]).range([h, 0 ]);
-      yAxisSel.ticks(h/15);
-      svg.selectAll('.y.axis.sel')
+    yScaleSel.domain([0,selectionMax]).range([h, 0 ]);
+    yAxisSel.ticks(h/15);
+    svg.selectAll('.y.axis.sel')
       .call(yAxisSel);
 
-           if (!limitByMax){
-        //doBrush([min,m]);
-       }
-     //}
+    if (!limitByMax){
+      //doBrush([min,m]);
+    }
+    //}
 
-   }
+  }
 
 }

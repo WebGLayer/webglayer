@@ -16,12 +16,7 @@ WGL.dimension.HeatMapRenderer = function(){
   manager.storeUniformLoc(this.glProgram, "unselcolors");
   manager.storeUniformLoc(this.glProgram, "reduceSelection");
 
-
   this.colors =  new Float32Array(16);
-  this.colors.set([ 1, 0, 0, 1.4,
-                  1, 1, 0, 0.9,
-                  0, 1, 0, 0.01,
-                  0, 0, 0, 1 ]);
 
   this.unselcolors =  new Float32Array(16);
   this.unselcolors.set([  49/256, 130/256, 189/256, 0.8,
@@ -47,7 +42,7 @@ WGL.dimension.HeatMapRenderer = function(){
     gl.useProgram(null);
 
 
-  this.setup = function() {
+    this.setup = function() {
      gl.useProgram(this.glProgram);
      gl.uniformMatrix4fv(this.glProgram.colors, false, this.colors);
        gl.uniformMatrix4fv(this.glProgram.unselcolors, false, this.unselcolors);
@@ -75,9 +70,11 @@ WGL.dimension.HeatMapRenderer = function(){
 
   }
 
-
   this.render = function(min, max, min_f, max_f, reduceSelection) {
     //legend.updateMax(max);
+
+    this.colors.set(convertRgbaToMatrix(WGL.colorSchemes.getSchemeMatrixSelected()));
+
     this.setup();
 
     //console.log(max);
@@ -113,6 +110,30 @@ WGL.dimension.HeatMapRenderer = function(){
     gl.deleteBuffer(texCoordBuffer);
   }
 
+  function convertRgbaToMatrix(m) {
+    var matrix = new Float32Array(16);
 
+    matrix[0] = m[0]/256;
+    matrix[1] = m[1]/256;
+    matrix[2] = m[2]/256;
+    matrix[3] = 1.4;
+
+    matrix[4] = m[3]/256;
+    matrix[5] = m[4]/256;
+    matrix[6] = m[5]/256;
+    matrix[7] = 0.9;
+
+    matrix[8] = m[6]/256;
+    matrix[9] = m[7]/256;
+    matrix[10] = m[8]/256;
+    matrix[11] = 0.01;
+
+    matrix[12] = 0;
+    matrix[13] = 0;
+    matrix[14] = 0;
+    matrix[15] = 1;
+
+    return matrix;
+  }
 
 }

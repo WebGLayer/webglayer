@@ -1,4 +1,4 @@
- WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
+WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
 
 
   var type;
@@ -15,7 +15,7 @@
       right : 20,
       bottom : 65,
       left : 60
-      };
+    };
   } else {
     w=params.w;
     h=params.h;
@@ -61,19 +61,19 @@
 
 
   this.xformat = function(d){
-      return d;
+    return d;
   };
   var yformat = d3.format(".2n");
 
   this.setYFormat = function (fuc) {
-     yformat = fuc;
+    yformat = fuc;
   };
   var arrowTan = 0.6;
   var arrowHeight = 0.0;
-   /**
-    * Set arrow height. If target height in px is higher then margin.top height is set to margin.top.
-    * @param tan height in tan (45° is tan 1)
-    */
+  /**
+   * Set arrow height. If target height in px is higher then margin.top height is set to margin.top.
+   * @param tan height in tan (45° is tan 1)
+   */
   this.setArrowHeight = function (tan) {
     arrowTan = tan;
     arrowHeight = arrowTan * (bw/2);
@@ -82,13 +82,13 @@
     }
   };
 
-/*	this.setTicks = function(n){
-    xAxis.ticks(n) ;
-  }
+  /*	this.setTicks = function(n){
+      xAxis.ticks(n) ;
+    }
 
-  this.setTicksValues = function(v){
-    xAxis.ticksValues(v);
-  }*/
+    this.setTicksValues = function(v){
+      xAxis.ticksValues(v);
+    }*/
   this.init = function() {
     // xScale = d3.scale.ordinal().rangeRoundBands([0, width], .1);
     // xScale = d3.scale.ordinal().rangeRoundBands([0, width], .1);
@@ -106,12 +106,12 @@
     var cols = [ "#ff8c00", "#7b6888", "#98abc5" ];
     //var cols = [ "#ff8c00", "#3182bd", "#98abc5" ];
     var classes = [ [ "0", "selected", cols[0] ],
-        [ "1", "unselected", cols[1] ], [ "2", "out", cols[2] ] ];
+      [ "1", "unselected", cols[1] ], [ "2", "out", cols[2] ] ];
 
     colorScale = d3.scale.ordinal().range(cols);
 
     yScale = d3.scale.linear().domain([ 0, dataset.max[2] ]).range(
-        [ height, 0 ]);
+      [ height, 0 ]);
 
     colorScale.domain([ "selected", "unselected", "out" ]);
 
@@ -129,20 +129,20 @@
     // return d.max-(d.max-d.min)/2; }));
 
     svg = d3.select("#" + div_id).append("svg").attr("width",
-        width + margin.left + margin.right).attr("height",
-        height + margin.top + margin.bottom).append("g").attr(
-        "transform",
-        "translate(" + margin.left + "," + margin.top + ")");
+      width + margin.left + margin.right).attr("height",
+      height + margin.top + margin.bottom).append("g").attr(
+      "transform",
+      "translate(" + margin.left + "," + margin.top + ")");
 
     chart = svg.select('.chart');
     svg.append("g").attr("class", "x axis").attr("transform",
-        "translate(0," + height + ")").call(xAxis).append("text")
-          .attr("y", "3.5em").attr("x",
-        width /2 ).style("text-anchor", "end").text(x_label);
+      "translate(0," + height + ")").call(xAxis).append("text")
+      .attr("y", "3.5em").attr("x",
+      width /2 ).style("text-anchor", "end").text(x_label);
 
     svg.append("g").attr("class", "y axis").call(yAxis).append("text")
-        .attr("transform", "rotate(270)").attr("y", "-4.5em").attr("x",
-            "-2em").style("text-anchor", "end").text(this.y_label); //changes
+      .attr("transform", "rotate(270)").attr("y", "-4.5em").attr("x",
+      "-2em").style("text-anchor", "end").text(this.y_label); //changes
 
     /*
      * bars = svg.selectAll(".bars").data(dataset).enter()
@@ -155,9 +155,9 @@
     //		.attr("width", width).attr("height", height);
 
     bars = svg.selectAll(".bar").data([ "selected", "unselected", "out" ])
-        .enter().append("path").attr("class", function(d) {
-          return d + " foreground bar ";
-        }).datum(dataset);
+      .enter().append("path").attr("class", function(d) {
+        return d + " foreground bar ";
+      }).datum(dataset);
 
     //bars.on("click", function(d)
     //		{ d.selected = !d.selected;
@@ -165,7 +165,7 @@
     //		})
 
     svg.selectAll(".foreground.bar").attr("clip-path",
-        "url(#clip-" + div_id + ")");
+      "url(#clip-" + div_id + ")");
 
     // update(dataset);
     // svg.selectAll("selected bar").attr("d", barPathSelected);
@@ -220,22 +220,22 @@
     }
 
     var brush1 = d3.svg.multibrush().x(xScale).extentAdaption(resizeExtent)
-        .on("brush", brush).on("brushend", function(d) {
-          if (brush1.extent().length == 0) {
-            brush();
-          }
+      .on("brush", brush).on("brushend", function(d) {
+        if (brush1.extent().length == 0) {
+          brush();
+        }
 
-        });
+      });
     this.brush = brush1;
 
     var brushNode = svg.append("g").attr("class", "brush").call(brush1)
-        .selectAll("rect").attr("height", height);
+      .selectAll("rect").attr("height", height);
 
     /**
      * legend and scaling
      */
     var legendRect = svg.append("g").attr("class", "l").selectAll('rect')
-        .data(classes);
+      .data(classes);
 
     legendRect.enter().append("rect").attr("id", function(d) {
       return div_id+ d[0];
@@ -244,22 +244,22 @@
     }).attr("width", 12).attr("height", 12).attr("fill", function(d) {
       return d[2];
     }).classed('legend-scale',true)
-    .on(
-      "click",
-      function(d) {
-        var el = d3.select("#"+div_id + d[0]);
-        d3.select(this.parentNode).selectAll("rect").classed('select-legend-scale', false);
-        //el.attr("stroke-width", "3");
-        //el.attr("stroke", d[2]);
-        el.classed('select-legend-scale', true);
+      .on(
+        "click",
+        function(d) {
+          var el = d3.select("#"+div_id + d[0]);
+          d3.select(this.parentNode).selectAll("rect").classed('select-legend-scale', false);
+          //el.attr("stroke-width", "3");
+          //el.attr("stroke", d[2]);
+          el.classed('select-legend-scale', true);
 
-        active_group = d[0];
-        for (var i = 0; i < classes.length; i++) {
-          calcBar();
-        }
+          active_group = d[0];
+          for (var i = 0; i < classes.length; i++) {
+            calcBar();
+          }
 
 
-      });
+        });
 
     legendRect.enter().append("text").text(function(d) {
       return d[1];
@@ -268,21 +268,21 @@
     }).attr("width", 12).attr("height", 12).attr("stroke", "none");
 
     var help = d3.select("#"+div_id).append("div").classed('ii',true).append("i").classed('fa', true).classed('fa-info', true);
-        var tooltip_content = "<div class='wgl-close-tooltip'><i class='fa fa-times' aria-hidden='true'></i></div><table>"+
-        "<tr>"+
-        '<td><div class="color-selected"><b>selected</b></div></td><td>selected data</td>'+
-        "</tr>"+
-        "<tr>"+
-        '<td><div class="color-unselected"><b>unselected</b></div></td><td>unselected data in the current map view</td>'+
-        "</tr>"+
-        "<tr>"+
-        '<td><div class="color-out"><b>out</b></div></td><td>data out of the current map view</td>'+
-        "</tr>"+
-        "</table><br/> Click on the coloured squares in the legend to adjust <br> the chart scale to the 'selected'/ 'unselected'/ 'out' data.";
-        $(help).tooltipster({
-            content: tooltip_content,
-            contentAsHTML: true,
-            theme: 'tooltipster-light',
+    var tooltip_content = "<div class='wgl-close-tooltip'><i class='fa fa-times' aria-hidden='true'></i></div><table>"+
+      "<tr>"+
+      '<td><div class="color-selected"><b>selected</b></div></td><td>selected data</td>'+
+      "</tr>"+
+      "<tr>"+
+      '<td><div class="color-unselected"><b>unselected</b></div></td><td>unselected data in the current map view</td>'+
+      "</tr>"+
+      "<tr>"+
+      '<td><div class="color-out"><b>out</b></div></td><td>data out of the current map view</td>'+
+      "</tr>"+
+      "</table><br/> Click on the coloured squares in the legend to adjust <br> the chart scale to the 'selected'/ 'unselected'/ 'out' data.";
+    $(help).tooltipster({
+      content: tooltip_content,
+      contentAsHTML: true,
+      theme: 'tooltipster-light',
       trigger: 'click',
       interactive: 'true',
       autoClose: 'false',
@@ -292,7 +292,7 @@
         });
       }
 
-        });
+    });
 
     function resizeExtent(selection) {
       selection.attr("height", height);
@@ -304,18 +304,18 @@
 
       var f = brush1.extent();
       var leftEdges = xScale.range();
-          var width = xScale.rangeBand();
-          var l;
-          var r;
-          var left = brush1.extent()[0][0];
-          var right = brush1.extent()[0][1]
-          for(l=0; left > (leftEdges[l] + width); l++) {}
-          for(r=0; right > (leftEdges[r] + width); r++) {}
-            //do nothing, just increment j until case fails
-          console.log("Clicked on " + xScale.domain()[l]+ " "+xScale.domain()[r]);
+      var width = xScale.rangeBand();
+      var l;
+      var r;
+      var left = brush1.extent()[0][0];
+      var right = brush1.extent()[0][1]
+      for(l=0; left > (leftEdges[l] + width); l++) {}
+      for(r=0; right > (leftEdges[r] + width); r++) {}
+      //do nothing, just increment j until case fails
+      console.log("Clicked on " + xScale.domain()[l]+ " "+xScale.domain()[r]);
 
-          var f = [];
-          f[0] = [ xScale.domain()[l],  xScale.domain()[r]];
+      var f = [];
+      f[0] = [ xScale.domain()[l],  xScale.domain()[r]];
       WGL.filterDim(id, filterId, f);
       //console.log(xScale.domain()[j]+' '+brush1.extent()[0][1]);
 
@@ -370,12 +370,12 @@
 
   function calcBar(){
     yScale = d3.scale.linear().domain(
-        [ 0, dataset.max[active_group] ]).range(
-        [ height, 0 ]);
+      [ 0, dataset.max[active_group] ]).range(
+      [ height, 0 ]);
     //console.log(this);
     yAxis = d3.svg.axis().scale(yScale).orient("left").tickFormat(yformat); //changes format
     svg.selectAll('.y.axis').transition().duration(30)
-        .call(yAxis);
+      .call(yAxis);
 
     svg.selectAll(".selected.bar").attr("d", barPathSelected);
     svg.selectAll(".unselected.bar").attr("d", barPathUnselected);
@@ -388,7 +388,7 @@
     while (++i < n) {
       var d = groups[i];
       path.push("M", xScale(d.val), ",", height, "V", yScale(d.selected),
-          svgbw, height);
+        svgbw, height);
     }
     return path.join("");
   }

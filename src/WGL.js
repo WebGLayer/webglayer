@@ -60,6 +60,7 @@ var WGL = (function() {
 
     numrec : {},
 
+    colorSchemes : {},
 
     /* MAIN INTITAIZATION */
     init : function(num, url, divid, mapcontainerid) {
@@ -71,6 +72,8 @@ var WGL = (function() {
       rasterer = new u.Rasterer(num);
       manager.num_rec = num;
       manager.r_size = rasterer.size;
+
+      this.colorSchemes = new WGL.dimension.ColorSchemes();
 
       this._mainFilter = new WGL.internal.Filter();
 
