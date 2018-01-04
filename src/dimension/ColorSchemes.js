@@ -1,4 +1,4 @@
-function ColorSchemes() {
+WGL.dimension.ColorSchemes = function(){
 
   var schemes = {};
 
@@ -47,6 +47,4 @@ function ColorSchemes() {
     return matrixSelected;
   };
 
-}
-
-WGL.dimension.colorSchemes = new ColorSchemes();
+};

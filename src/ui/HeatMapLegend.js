@@ -102,7 +102,7 @@ WGL.ui.HeatMapLegend = function(div_id, filterId, useBrush, colorScheme) {
 //		 heatDimension.lockScale = this.checked;
 //		});
 
-  var rgbaMatrix = WGL.dimension.colorSchemes.getSchemeMatrixSelected();
+  var rgbaMatrix = WGL.colorSchemes.getSchemeMatrixSelected();
 
   var colors = [
     {offset: "0%", color:"rgba(" + rgbaMatrix[0] + ", " + rgbaMatrix[1] + ", " + rgbaMatrix[2] + ", 1)"},
