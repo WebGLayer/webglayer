@@ -28,8 +28,8 @@ WGL.dimension.IdentifyDimension = function (id, properties_path) {
     }
     // create framebuffer
     framebuffer = gl.createFramebuffer();
-    framebuffer.width = manager.w;
-    framebuffer.height = manager.h;
+    framebuffer.width = manager.canvas.width;
+    framebuffer.height = manager.canvas.height;
 
     // texture
     texture = gl.createTexture();
