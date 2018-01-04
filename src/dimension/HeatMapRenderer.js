@@ -73,7 +73,7 @@ WGL.dimension.HeatMapRenderer = function(){
   this.render = function(min, max, min_f, max_f, reduceSelection) {
     //legend.updateMax(max);
 
-    this.colors.set(convertRgbaToMatrix(colorSchemes.getSchemeMatrixSelected()));
+    this.colors.set(convertRgbaToMatrix(WGL.dimension.colorSchemes.getSchemeMatrixSelected()));
 
     this.setup();
 

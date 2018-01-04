@@ -9,7 +9,7 @@ QUnit.test("ColorScheme", function( assert ) {
       0, 0 , 256
     ];
 
-    var blueMatrix = colorSchemes.getSchemeMatrixSelected();
+    var blueMatrix = WGL.dimension.colorSchemes.getSchemeMatrixSelected();
 
     assert.deepEqual([
       8, 28, 90,
@@ -17,13 +17,13 @@ QUnit.test("ColorScheme", function( assert ) {
       256, 256, 218
     ], blueMatrix);
 
-    colorSchemes.setCustomMatrixSelected(customMatrix);
+    WGL.dimension.colorSchemes.setCustomMatrixSelected(customMatrix);
 
     assert.deepEqual([
       256, 0, 0,
       0, 256, 0,
       0, 0 , 256
-    ], colorSchemes.getSchemeMatrixSelected());
+    ], WGL.dimension.colorSchemes.getSchemeMatrixSelected());
 
     cleanTest();
 });

@@ -37,28 +37,6 @@ WGL.ui.HeatMapLegend = function(div_id, filterId, useBrush, colorScheme) {
   var limitByMax = true;
   var heatDimension;
 
-  /*var colors = {};
-  colors["blue"] = [
-    {offset: "0%", color: "rgba(8, 29, 88,0.6)"},
-    {offset: "50%", color: "rgba(65, 182, 196,0.8)"},
-    {offset: "100%", color: "rgba(255, 255, 217,1)"}
-  ];
-  colors["red"] = [
-    {offset: "0%", color: "rgba(226, 48, 30,0.6)"},
-    {offset: "50%", color: "rgba(169, 136, 227,0.8)"},
-    {offset: "100%", color: "rgba(23, 97, 153,1)"}
-  ];
-  colors["fire"] = [
-    {offset: "0%", color: "rgba(255, 255, 229,0.6)"},
-    {offset: "50%", color: "rgba(254, 153, 41,0.8)"},
-    {offset: "100%", color: "rgba(102, 37, 6,1)"}
-  ];
-  colors["icy"] = [
-    {offset: "0%", color: "rgba(255, 255, 255,0.6)"},
-    {offset: "50%", color: "rgba(121, 187, 235,0.8)"},
-    {offset: "100%", color: "rgba(42, 27, 94,1)"}
-  ];*/
-
   this.setDimension = function(dim){
     //console.log("setDimension not imeplemented!");
     heatDimension = dim;
@@ -124,7 +102,7 @@ WGL.ui.HeatMapLegend = function(div_id, filterId, useBrush, colorScheme) {
 //		 heatDimension.lockScale = this.checked;
 //		});
 
-  var rgbaMatrix = colorSchemes.getSchemeMatrixSelected();
+  var rgbaMatrix = WGL.dimension.colorSchemes.getSchemeMatrixSelected();
 
   var colors = [
     {offset: "0%", color:"rgba(" + rgbaMatrix[0] + ", " + rgbaMatrix[1] + ", " + rgbaMatrix[2] + ", 1)"},

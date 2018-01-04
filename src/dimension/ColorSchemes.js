@@ -47,6 +47,6 @@ function ColorSchemes() {
     return matrixSelected;
   };
 
-};
+}
 
-var colorSchemes = new ColorSchemes();
+WGL.dimension.colorSchemes = new ColorSchemes();
