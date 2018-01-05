@@ -1,12 +1,13 @@
 WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
 
-
   var type;
   var div_id;
 
   var w;
   var h;
   var margin;
+  var rotate_x;
+
   if (typeof(params)=='undefined'){
     w = 500;
     h = 215;
@@ -16,10 +17,17 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
       bottom : 65,
       left : 60
     };
+    rotate_x = false;
   } else {
-    w=params.w;
-    h=params.h;
-    margin=params.margin;
+    w=(params.w ? params.w : 500);
+    h=(params.h ? params.h : 215);
+    margin=(params.margin ? params.margin : margin = {
+      top : 20,
+      right : 20,
+      bottom : 65,
+      left : 60
+    });
+    rotate_x=params.rotate_x;
   }
 
   var dataset;
@@ -59,11 +67,11 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
     return this;
   }
 
-
   this.xformat = function(d){
     return d;
   };
-  var yformat = d3.format(".2n");
+
+  var yformat = d3.format("s");
 
   this.setYFormat = function (fuc) {
     yformat = fuc;
@@ -83,12 +91,12 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
   };
 
   /*	this.setTicks = function(n){
-      xAxis.ticks(n) ;
-    }
+          xAxis.ticks(n) ;
+      }
 
-    this.setTicksValues = function(v){
-      xAxis.ticksValues(v);
-    }*/
+      this.setTicksValues = function(v){
+          xAxis.ticksValues(v);
+      }*/
   this.init = function() {
     // xScale = d3.scale.ordinal().rangeRoundBands([0, width], .1);
     // xScale = d3.scale.ordinal().rangeRoundBands([0, width], .1);
@@ -103,8 +111,8 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
     //set arrow height for first
     this.setArrowHeight(arrowTan);
 
-    var cols = [ "#ff8c00", "#7b6888", "#98abc5" ];
-    //var cols = [ "#ff8c00", "#3182bd", "#98abc5" ];
+    var cols = [ "#fd9a2f", "#50a7f9", "#dce2e0" ];
+
     var classes = [ [ "0", "selected", cols[0] ],
       [ "1", "unselected", cols[1] ], [ "2", "out", cols[2] ] ];
 
@@ -135,10 +143,24 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
       "translate(" + margin.left + "," + margin.top + ")");
 
     chart = svg.select('.chart');
-    svg.append("g").attr("class", "x axis").attr("transform",
-      "translate(0," + height + ")").call(xAxis).append("text")
-      .attr("y", "3.5em").attr("x",
-      width /2 ).style("text-anchor", "end").text(x_label);
+
+    if(rotate_x) {
+      svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis)
+        .selectAll("text")
+        .attr("y", 0)
+        .attr("x", 9)
+        .attr("dy", ".35em")
+        .attr("transform", "rotate(90)")
+        .style("text-anchor", "start");
+    } else {
+      svg.append("g").attr("class", "x axis").attr("transform",
+        "translate(0," + height + ")").call(xAxis).append("text")
+        .attr("y", "3.5em").attr("x",
+        width /2 ).style("text-anchor", "end").text(x_label);
+    }
 
     svg.append("g").attr("class", "y axis").call(yAxis).append("text")
       .attr("transform", "rotate(270)").attr("y", "-4.5em").attr("x",
@@ -237,9 +259,11 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
     var legendRect = svg.append("g").attr("class", "l").selectAll('rect')
       .data(classes);
 
+    var legend_x = (rotate_x ? -50 : w - 150);
+
     legendRect.enter().append("rect").attr("id", function(d) {
       return div_id+ d[0];
-    }).attr("x", w - 150).attr("y", function(d) {
+    }).attr("x", legend_x).attr("y", function(d) {
       return (h - 63 + d[0] * 15)
     }).attr("width", 12).attr("height", 12).attr("fill", function(d) {
       return d[2];
@@ -263,7 +287,7 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
 
     legendRect.enter().append("text").text(function(d) {
       return d[1];
-    }).attr("x", w - 130).attr("y", function(d) {
+    }).attr("x", legend_x + 20).attr("y", function(d) {
       return (h - 63 + d[0] * 15 + 12)
     }).attr("width", 12).attr("height", 12).attr("stroke", "none");
 
@@ -279,20 +303,20 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
       '<td><div class="color-out"><b>out</b></div></td><td>data out of the current map view</td>'+
       "</tr>"+
       "</table><br/> Click on the coloured squares in the legend to adjust <br> the chart scale to the 'selected'/ 'unselected'/ 'out' data.";
-    $(help).tooltipster({
-      content: tooltip_content,
-      contentAsHTML: true,
-      theme: 'tooltipster-light',
-      trigger: 'click',
-      interactive: 'true',
-      autoClose: 'false',
-      functionReady: function(){
-        $('.wgl-close-tooltip').click(function(){
-          $(help).tooltipster('hide');
-        });
-      }
-
+    /*$(help).tooltipster({
+        content: tooltip_content,
+        contentAsHTML: true,
+        theme: 'tooltipster-light',
+  trigger: 'click',
+  interactive: 'true',
+  autoClose: 'false',
+  functionReady: function(){
+    $('.wgl-close-tooltip').click(function(){
+      $(help).tooltipster('hide');
     });
+  }
+
+    });*/
 
     function resizeExtent(selection) {
       selection.attr("height", height);
@@ -336,8 +360,7 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
   // Create bars
 
   this.update = function(data) {
-    if (dataset == null) {
-      dataset = Array.prototype.slice.call(data);
+    if (dataset == null) {dataset = Array.prototype.slice.call(data);
       dataset.max = data.max;
       this.init();
     }
