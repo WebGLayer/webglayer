@@ -151,10 +151,10 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
         .call(xAxis)
         .selectAll("text")
         .attr("y", 0)
-        .attr("x", 9)
+        .attr("x", -10)
         .attr("dy", ".35em")
-        .attr("transform", "rotate(90)")
-        .style("text-anchor", "start");
+        .attr("transform", "rotate(270)")
+        .style("text-anchor", "end");
     } else {
       svg.append("g").attr("class", "x axis").attr("transform",
         "translate(0," + height + ")").call(xAxis).append("text")
