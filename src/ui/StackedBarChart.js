@@ -259,7 +259,9 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
     var legendRect = svg.append("g").attr("class", "l").selectAll('rect')
       .data(classes);
 
-    var legend_x = (rotate_x ? -50 : w - 150);
+    //var legend_x = (rotate_x ? -50 : w - 150);
+
+    var legend_x = w - 150;
 
     legendRect.enter().append("rect").attr("id", function(d) {
       return div_id+ d[0];
