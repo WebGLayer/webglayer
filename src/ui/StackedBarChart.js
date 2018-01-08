@@ -303,20 +303,20 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
       '<td><div class="color-out"><b>out</b></div></td><td>data out of the current map view</td>'+
       "</tr>"+
       "</table><br/> Click on the coloured squares in the legend to adjust <br> the chart scale to the 'selected'/ 'unselected'/ 'out' data.";
-    /*$(help).tooltipster({
-        content: tooltip_content,
-        contentAsHTML: true,
-        theme: 'tooltipster-light',
-  trigger: 'click',
-  interactive: 'true',
-  autoClose: 'false',
-  functionReady: function(){
-    $('.wgl-close-tooltip').click(function(){
-      $(help).tooltipster('hide');
-    });
-  }
+    $(help).tooltipster({
+      content: tooltip_content,
+      contentAsHTML: true,
+      theme: 'tooltipster-light',
+      trigger: 'click',
+      interactive: 'true',
+      autoClose: 'false',
+      functionReady: function(){
+        $('.wgl-close-tooltip').click(function(){
+          $(help).tooltipster('hide');
+        });
+      }
 
-    });*/
+    });
 
     function resizeExtent(selection) {
       selection.attr("height", height);
