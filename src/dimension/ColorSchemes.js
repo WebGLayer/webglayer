@@ -2,36 +2,46 @@ WGL.dimension.ColorSchemes = function(){
 
   var schemes = {};
 
-  schemes['blue'] = [
-    8, 28, 90,
-    46, 182, 194,
-    256, 256, 218
-  ];
+  schemes['blue'] = {
+    'rgba': [8, 28, 90,
+      46, 182, 194,
+      237, 248, 177
+    ],
+    'bg': 'light'
+  };
 
-  schemes['red'] = [
-    223, 49, 31,
-    169, 136, 228,
-    23, 97, 154
-  ];
+  schemes['red'] = {
+    'rgba': [223, 49, 31,
+      169, 136, 228,
+      23, 97, 154
+    ],
+    'bg': 'light'
+  };
 
-  schemes['fire'] = [
-    256, 256, 228,
-    253, 154, 41,
-    102, 38, 5
-  ];
+  schemes['fire'] = {
+    'rgba': [256, 256, 228,
+      253, 154, 41,
+      102, 38, 5
+    ],
+    'bg': 'dark'
+  };
 
-  schemes['icy'] = [
-    256, 256, 256,
-    120, 187, 236,
-    36, 28, 95
-  ];
+  schemes['icy'] = {
+    'rgba': [256, 256, 256,
+      120, 187, 236,
+      36, 28, 95
+    ],
+    'bg': 'dark'
+  };
 
   var schemeSelected = "blue";
-  var matrixSelected = schemes[schemeSelected];
+  var bgSelected = "light";
+  var matrixSelected = schemes[schemeSelected]['rgba'];
 
   this.setSchemeSelected = function(s) {
     schemeSelected = s;
-    matrixSelected = schemes[schemeSelected];
+    matrixSelected = schemes[schemeSelected]['rgba'];
+    bgSelected = schemes[schemeSelected]['bg'];
   };
 
   this.getSchemeSelected = function() {
@@ -41,10 +51,15 @@ WGL.dimension.ColorSchemes = function(){
   this.setCustomMatrixSelected = function(m) {
     schemeSelected = 'custom';
     matrixSelected = m;
+    bgSelected = 'dark';
   };
 
   this.getSchemeMatrixSelected = function() {
     return matrixSelected;
   };
+
+  this.getSchemeBgSelected = function () {
+    return bgSelected;
+  }
 
 };
