@@ -111,7 +111,7 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
     //set arrow height for first
     this.setArrowHeight(arrowTan);
 
-    var cols = [ "#fd9a2f", "#50a7f9", "#dce2e0" ];
+    var cols = [ "#ff8c00", "#7b6888", "#98abc5" ];
 
     var classes = [ [ "0", "selected", cols[0] ],
       [ "1", "unselected", cols[1] ], [ "2", "out", cols[2] ] ];
