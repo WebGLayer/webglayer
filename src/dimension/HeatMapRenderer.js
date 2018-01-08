@@ -126,7 +126,7 @@ WGL.dimension.HeatMapRenderer = function(){
     matrix[8] = m[6]/256;
     matrix[9] = m[7]/256;
     matrix[10] = m[8]/256;
-    matrix[11] = 0.01;
+    matrix[11] = 0.05;
 
     matrix[12] = 0;
     matrix[13] = 0;
