@@ -110,6 +110,8 @@ WGL.ui.HeatMapLegend = function(div_id, filterId, useBrush, colorScheme) {
     {offset: "100%", color:"rgba(" + rgbaMatrix[6] + ", " + rgbaMatrix[7] + ", " + rgbaMatrix[8] + ", 0.3)"}
   ];
 
+  var bg_rectangle = (WGL.colorSchemes.getSchemeBgSelected() == 'dark' ? 'black' : 'white');
+
   /*Adding gradients*/
 
   svg.append("defs").append("linearGradient")
@@ -141,8 +143,8 @@ WGL.ui.HeatMapLegend = function(div_id, filterId, useBrush, colorScheme) {
     .attr("stop-color", function(d) { return d.color; });
 
   /*addig color rectangeles*/
-  svg.append("rect").attr("fill", "black")
-    .attr("id","grad_bacground")
+  svg.append("rect").attr("fill", bg_rectangle)
+    .attr("id", "grad_bacground")
     .attr("x", 0)
     .attr("y", 0)
     .attr("width", 30)
@@ -155,12 +157,12 @@ WGL.ui.HeatMapLegend = function(div_id, filterId, useBrush, colorScheme) {
     .attr("width", 30)
     .attr("height", height);
 
-  svg.append("rect").attr("fill", "black")
-    .attr("class","grad")
-    .attr("x", 30)
-    .attr("y", 0)
-    .attr("width", 30)
-    .attr("height", 0);
+  svg.append("rect").attr("fill", bg_rectangle)
+     .attr("class", "grad")
+     .attr("x", 30)
+     .attr("y", 0)
+     .attr("width", 30)
+     .attr("height", 0);
 
   svg.append("rect").attr("fill", "url(#legend_gradient)")
     .attr("class","grad")
