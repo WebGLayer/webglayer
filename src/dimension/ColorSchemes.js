@@ -34,6 +34,15 @@ WGL.dimension.ColorSchemes = function(){
     'bg': 'dark'
   };
 
+  schemes['gamma'] = {
+    'rgba': [
+      256, 0, 0,
+      256, 256, 0,
+      0, 256, 0
+    ],
+    'bg': 'dark'
+  };
+
   var schemeSelected = "blue";
   var bgSelected = "light";
   var matrixSelected = schemes[schemeSelected]['rgba'];
