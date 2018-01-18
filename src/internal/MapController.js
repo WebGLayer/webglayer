@@ -6,6 +6,7 @@ WGL.internal.MapController = function() {
   this.matrix;
   this.width;
   this.height;
+  this.offset;
 
 
   this.resize = function(){
@@ -31,18 +32,25 @@ WGL.internal.MapController = function() {
   this.zoommove = function(zoom, offset, func){
 
     manager.zoom = zoom;
+    this.offset = offset;
+
     this.initMatrix();
     // Scale to current zoom (worldCoords * 2^zoom)
     var scale = Math.pow(2, zoom);
     scaleMatrix(this.matrix, scale, scale);
 
+
     // translate to current view (vector from topLeft to 0,0)
     translateMatrix(this.matrix, -offset.x, -offset.y);
 
-    manager.setMapMatrix(this.matrix)
-    //WGL.filterutils.updateSizeOfMapDimensions();
 
+    //console.log(offset.x * scale);
+    manager.setMapMatrix(this.matrix);
+    //WGL.filterutils.updateSizeOfMapDimensions();
+    //func();
     WGL.filterByExt();
+
+
     //func();
     //manager.wgl.render();
     //manager.wgl.updateCharts();

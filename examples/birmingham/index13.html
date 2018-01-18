@@ -290,11 +290,14 @@ shape-rendering: optimizeSpeed ;
   shape-rendering: crispEdges;
 }
 </style>
+<link rel="stylesheet" href="../../src/styles/wgl-selection.css"/>
+
 <script src="../libs/OpenLayers.js"></script>
 <script src="../libs/jquery-1.9.1.min.js"></script>
 <script src="../libs/poly2tri.js"></script>
 
 <script src="../libs/d3.v3.min.js"></script>
+<script src="../libs/jquery.csv.js"></script>
 
 
 <!-- Local configuration -->
@@ -305,9 +308,9 @@ shape-rendering: optimizeSpeed ;
 <!-- WebGLayer -->
 
 
-<script src="../../build/WebGLayer.min.js"></script>
+<!--<script src="../../build/WebGLayer.min.js"></script>-->
 
-<!-- <script src="../../src/WGL.js"></script>
+<script src="../../src/WGL.js"></script>
 <script src="../../src/internal/utils.js"></script>
 <script src="../../src/internal/filtrutils.js"></script>
 <script src="../../src/internal/GLUtils.js"></script>
@@ -324,6 +327,9 @@ shape-rendering: optimizeSpeed ;
 <script src="../../src/dimension/HistDimension.js"></script>
 <script src="../../src/dimension/ParallelCoordinates.js"></script>
 <script src="../../src/dimension/ParallelCoordinatesRenderer.js"></script>
+<script src="../../src/dimension/IdentifyDimension.js"></script>
+<script src="../../src/dimension/ColorSchemes.js"></script>
+<script src="../../src/dimension/IluminationRenderer.js"></script>
 
 <script src="../../src/filter/LinearFilter.js"></script>
 <script src="../../src/filter/MapPolyFilter.js"></script>
@@ -333,7 +339,10 @@ shape-rendering: optimizeSpeed ;
 <script src="../../src/ui/StackedBarChart.js"></script>
 <script src="../../src/ui/HeatMapLegend.js"></script>
 <script src="../../src/ui/d3.svg.multibrush.js"></script>
-<script src="../../src/ui/ChartDiv.js"></script> -->
+<script src="../../src/ui/ChartDiv.js"></script>
+<script src="../../src/ui/PopupWin.js"></script>
+
+
 
 </head>
 <body onload="init()">
@@ -419,5 +428,17 @@ shape-rendering: optimizeSpeed ;
 <!-- 	<div id='legend' style="padding:1em"> -->
 <!-- 		<object data="legend2.svg" /> -->
 <!-- 	</div> -->
+<!--<div id="wgl-point-win" class="wgl-point-selection-win">
+    <div id="wgl-point-win-head">
+        Accident Details
+        <div id="wgl-win-close">
+            <i class="fa fa-times-circle" aria-hidden="true"></i>
+        </div>
+    </div>
+
+    <div id="wgl-point-win-context">
+
+    </div>
+</div>-->
 </body>
 </html>

@@ -16,6 +16,7 @@ function DataLoader() {
 			var sev = [];
 			var road_type = [];
 			var speed_limit = [];
+			var pts_id = [];
 			
 			
 			var weekday = new Array(7);
@@ -77,6 +78,7 @@ function DataLoader() {
 					sev[i] = sevEnum[val.accident_severity-1];
 					road_type[i] = rtEnum[val.road_type];
 					speed_limit[i] = val.speed_limit;
+					pts_id[i] = i;
 					
 					if (typeof(days[i]) == 'undefined' || typeof(hours[i]) == 'undefined' || typeof(sev[i]) == 'undefined')  {
 						console.error('error id data');
@@ -84,7 +86,7 @@ function DataLoader() {
 				
 				});
 		
-			
+			console.log(pts_id);
 			
 			visualize({pts: pts, 
 				days: days, 
@@ -97,7 +99,9 @@ function DataLoader() {
 				num : data.length,
 				daysarray: weekday,
 				sevEnum:  sevEnum,
-				rtDom: rtDom});
+				rtDom: rtDom,
+				pts_id:pts_id,
+        rtEnum: rtEnum});
 			});
 	}
 	

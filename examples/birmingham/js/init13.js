@@ -1,5 +1,5 @@
 	
-	
+var pw;
 function init() { 			 
 		initMap();	
 		var data = new DataLoader();
@@ -40,6 +40,15 @@ function visualize(data){
 		 heatmap.setRadius(30);
 
 		var mapdim = WGL.addMapDimension(data.pts, 'themap');
+		mapdim.pointSize = function (zoom) {
+      if (zoom >= 15){
+        return 10
+      }
+      if (zoom < 15 && zoom >= 12){
+        return 5
+      }
+      return 2
+    };
 	
 		WGL.addPolyBrushFilter('themap','polybrush');
 		
@@ -101,6 +110,15 @@ function visualize(data){
 		chd4.setDim(WGL.addOrdinalHistDimension(sl));
 		WGL.addLinearFilter(sl, 13, 'slF');
 		charts['speedlimit'] = new  WGL.ui.StackedBarChart(sl, "ch4", "Speed limit", 'slF');
+
+		//identify
+		var idt = WGL.addIdentifyDimension(data.pts, data.pts_id, 'idt', "data/identify/");
+		idt.onlySelected = false;
+		idt.pointSize = 15;
+		//idt.debug = true;
+
+
+
 		
 	
 		var d =[];
@@ -122,12 +140,36 @@ function visualize(data){
 		WGL.initFilters();
 		//wgl.render();
 	
-		//wgl.render();	
-		
-		//var radius = 12.;		
+    // point selection
+    pw = new WGL.ui.PopupWin("OpenLayers_Layer_Vector_32_svgRoot", "idt", "Accident Details");
+    pw.setProp2html(function (t) {
+      var d =  (new Date(t["timestamp"]*1000));
+      var weekarray = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri","Sat"];
+      var wd = weekarray[d.getDate()];
+      var sev = data.sevEnum[t["accident_severity"]-1];
+      var rt = data.rtEnum[t["road_type"]];
+      //speed_limit
 
-		
-	
+      var s = "<table>";
+      s += "<tr><td width='100px'>Date: </td><td>"+d.toDateString()+"</td></tr>";
+      s += "<tr><td>Time: </td><td>"+d.toLocaleTimeString()+"</td></tr>";
+      s += "<tr><td>Severity: </td><td>"+sev+"</td></tr>";
+      s += "<tr><td>Road Type: </td><td>"+rt+"</td></tr>";
+      s += "<tr><td>Speed Limit: </td><td>"+t["speed_limit"]+"</td></tr>";
+      return s;
+    });
+    pw.setMovemap(function (dx, dy) {
+      var llc = map.getCenter();
+      var pxc = map.getPixelFromLonLat(llc);
+      pxc.x -= dx;
+      pxc.y -= dy;
+      var ll = map.getLonLatFromPixel(pxc);
+      map.setCenter(ll);
+    });
+    map.events.register("move",map,function () {
+      pw.zoommove(map.getZoom(), getTopLeftTC());
+    });
+    // end point selection
 		
 		$("#slider_pc").on("input", function(){			
 			 //mapdim.render2(this.value);	
@@ -137,7 +179,7 @@ function visualize(data){
 		
 		$("#reset").on("click", function(){
 			WGL.resetFilters();
-			var lonlat = new OpenLayers.LonLat(-1.9,52.5).transform(new OpenLayers.Projection("EPSG:4326"),new OpenLayers.Projection("EPSG:900913"));
+			var lonlat = new OpenLayers.LonLat(-1.9, 52.5).transform(new OpenLayers.Projection("EPSG:4326"),new OpenLayers.Projection("EPSG:900913"));
 			map.setCenter(lonlat);
 			map.zoomTo(11);
 		})
@@ -210,7 +252,7 @@ function getTopLeftTC() {
 	return res;
 }
 	
-function onMove() {			
+function onMove() {
 		WGL.mcontroller.zoommove(map.getZoom(), getTopLeftTC(), WGL.filterByExt);
 }
 
@@ -218,7 +260,7 @@ function updateLabel(v){
 	console.log(v);
 }
 
-function addHeatMapControl(hm,divid){
+function addHeatMapControl(hm, divid){
 	
 	
 	$("#"+divid).append(
