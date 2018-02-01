@@ -15,6 +15,7 @@ WGL.dimension.HeatMapRenderer = function(){
   manager.storeUniformLoc(this.glProgram, "colors");
   manager.storeUniformLoc(this.glProgram, "unselcolors");
   manager.storeUniformLoc(this.glProgram, "reduceSelection");
+  manager.storeUniformLoc(this.glProgram, "light_bg");
 
   this.colors =  new Float32Array(16);
 
@@ -73,25 +74,28 @@ WGL.dimension.HeatMapRenderer = function(){
   this.render = function(min, max, min_f, max_f, reduceSelection) {
     //legend.updateMax(max);
 
-    this.colors.set(convertRgbaToMatrix(WGL.colorSchemes.getSchemeMatrixSelected()));
+    this.colors.set(WGL.utils.rgbaToMatrix(WGL.colorSchemes.getSchemeMatrixSelected()));
 
     this.setup();
 
+    gl.uniform1i(this.glProgram.light_bg, WGL.colorSchemes.getSchemeBgSelected() == "light" ? 1 : 0);
     //console.log(max);
       gl.uniform1f(this.glProgram.max, max);
-      gl.uniform1f(this.glProgram.min, min);
-      gl.uniform1f(this.glProgram.max_filter, max_f);
-      gl.uniform1f(this.glProgram.min_filter, min_f);
-      gl.uniform1f(this.glProgram.reduceSelection, reduceSelection);
+    gl.uniform1f(this.glProgram.min, min);
+    gl.uniform1f(this.glProgram.max_filter, max_f);
+    gl.uniform1f(this.glProgram.min_filter, min_f);
+    gl.uniform1f(this.glProgram.reduceSelection, reduceSelection);
 
 
      //console.log("max a min filter " +  min_f + " " +max_f )
      //console.log("max a min        " +  min + " " +max )
 
     gl.drawArrays(gl.TRIANGLES, 0, 6);
-    gl.bindTexture(gl.TEXTURE_2D, null);
-      gl.useProgram(null);
 
+    var texture = gl.createTexture();
+
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+      gl.useProgram(null);
 
   }
 
@@ -108,32 +112,6 @@ WGL.dimension.HeatMapRenderer = function(){
   }
   this.clean = function () {
     gl.deleteBuffer(texCoordBuffer);
-  }
-
-  function convertRgbaToMatrix(m) {
-    var matrix = new Float32Array(16);
-
-    matrix[0] = m[0]/256;
-    matrix[1] = m[1]/256;
-    matrix[2] = m[2]/256;
-    matrix[3] = 1.4;
-
-    matrix[4] = m[3]/256;
-    matrix[5] = m[4]/256;
-    matrix[6] = m[5]/256;
-    matrix[7] = 0.9;
-
-    matrix[8] = m[6]/256;
-    matrix[9] = m[7]/256;
-    matrix[10] = m[8]/256;
-    matrix[11] = 0.05;
-
-    matrix[12] = 0;
-    matrix[13] = 0;
-    matrix[14] = 0;
-    matrix[15] = 1;
-
-    return matrix;
   }
 
 }

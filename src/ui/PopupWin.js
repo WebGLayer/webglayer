@@ -10,7 +10,8 @@ WGL.ui.PopupWin = function (map_win_id, idt_dim, title) {
   var visible = false;
   var posX = 0; // position of window
   var posY = 0;
-  var drag = false;
+  var dragged = 0;
+  var threshold = 2;
   var ex = 0; // position in 0-level
   var ey = 0;
 
@@ -113,14 +114,20 @@ WGL.ui.PopupWin = function (map_win_id, idt_dim, title) {
     var mwid = $("#"+map_win_id);
 
     mwid.mousedown(function (e) {
-      drag = false;
+      dragged = 0;
     });
 
     mwid.mousemove(function (e) {
-      drag = true;
+
+      dragged++;
+
+      var idt = WGL.getDimension(idt_dim);
+      if(!idt.getEnabled()) {
+        return;
+      }
 
       //pointer
-      var num_points = WGL.getDimension(idt_dim).identify(e.pageX, e.pageY)[1];
+      var num_points = idt.identify(e.pageX, e.pageY)[1];
       if(num_points > 0){
         mwid.css("cursor","pointer");
       }
@@ -131,7 +138,13 @@ WGL.ui.PopupWin = function (map_win_id, idt_dim, title) {
     });
 
     mwid.mouseup(function (e) {
-      if (!drag){
+
+      var idt = WGL.getDimension(idt_dim);
+      if(!idt.getEnabled()) {
+        return;
+      }
+
+      if (dragged < threshold){
         setVisibility(false);
 
         WGL.getDimension(idt_dim).getProperties(e.pageX, e.pageY,function (t) {
@@ -175,7 +188,7 @@ WGL.ui.PopupWin = function (map_win_id, idt_dim, title) {
 
         });
       }
-      drag = false;
+      dragged = 0;
     });
 
     // close popup win

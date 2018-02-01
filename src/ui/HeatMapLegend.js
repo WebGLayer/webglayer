@@ -24,7 +24,7 @@ WGL.ui.HeatMapLegend = function(div_id, filterId, useBrush) {
 
   var xAxis = d3.svg.axis()
     .scale(xScale)
-    .orient("bottom").tickFormat(d3.format("s"));
+    .orient("bottom");
 
   /*var yScaleSel = d3.scale.linear().domain([ 0, 200]).range(
     [ height, 0 ]);
@@ -223,6 +223,10 @@ WGL.ui.HeatMapLegend = function(div_id, filterId, useBrush) {
   }
 
   */
+
+  this.reset = function() {
+    
+  };
 
   this.updateMaxAll = function(max){
     var filter =  filterVal ;

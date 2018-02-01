@@ -13,6 +13,7 @@ WGL.dimension.IdentifyDimension = function (id, properties_path) {
   this.pointSize = 5;
   this.debug = false;
   this.onlySelected = true;
+  this.enabled = true;
 
   var framebuffer;
   var texture;
@@ -20,6 +21,14 @@ WGL.dimension.IdentifyDimension = function (id, properties_path) {
   var GLU = WGL.internal.GLUtils;
 
   this.glProgram = GLU.compileShaders('identify_vShader', 'identify_fShader');
+
+  this.setEnabled = function(v) {
+      this.enabled = v;
+  };
+
+  this.getEnabled = function() {
+    return this.enabled;
+  };
 
   this.init = function () {
     // allow FLOT extension
@@ -122,7 +131,7 @@ WGL.dimension.IdentifyDimension = function (id, properties_path) {
    * @returns {Float32Array} RGBA pixel
    */
   this.readPixels = function (x, y) {
-    var readout = new Float32Array(4);
+    var readout = new ArrayBufferView(4);
     gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
     if (gl.checkFramebufferStatus(gl.FRAMEBUFFER) === gl.FRAMEBUFFER_COMPLETE){
         gl.readPixels(x, manager.canvas.height - y, 1, 1, gl.RGBA, gl.FLOAT, readout);

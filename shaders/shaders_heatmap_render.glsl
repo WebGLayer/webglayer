@@ -33,14 +33,20 @@
 	  varying vec4 var_texCoord;
 	// varying vec2 v_texCoord;
 	  uniform mat4 colors;
-	  uniform mat4 unselcolors;		
-	
+	  uniform mat4 unselcolors;
+
+	  uniform int light_bg;
+
 	  vec4 getColor(float val, mat4 colors){
+
+
         	vec4 col1;
   			vec4 col2; 
-  			vec4 col; 
+  			vec4 col;
+  			vec4 black = vec4(0.0,0.0,0.0,0.4);
   			float rangeval;
-  			
+
+
   			if (val >= 0.5){
   				col1 = colors[0];
   				col2 = colors[1];
@@ -52,7 +58,14 @@
   				rangeval = val *2.;
   			
   			}			
-  			col =  col1*rangeval + col2*(1.-rangeval);//vec4(val, 1.-val , 0. , 0.0+val*2.);//vec4(1.,0.,0.,0.);
+  			col =  col1*rangeval + col2*(1.-rangeval);
+
+            if(light_bg == 1) {
+  			    col =  col*rangeval + black*(1.-rangeval);
+  			}
+
+  			//vec4(val, 1.-val , 0. , 0.0+val*2.);//vec4(1.,0.,0.,0.);
+
   			return col;
       	}
       	
