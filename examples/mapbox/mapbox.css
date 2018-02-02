@@ -1,0 +1,12 @@
+body {
+    margin:0;
+    padding:0;
+    height: 700px;
+}
+#map {
+    position:absolute;
+    top:0;
+    bottom:0;
+    width: 700px;
+    height: 700px
+}
