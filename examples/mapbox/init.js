@@ -15,6 +15,8 @@ function visualize(data) {
   WGL.addExtentFilter();
   WGL.colorSchemes.setSchemeSelected('fire');
   onMove();
+  
+  $("#webglayer").css("z-index","1");
 }
 
 /**
