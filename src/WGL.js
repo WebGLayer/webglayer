@@ -142,6 +142,11 @@ var WGL = (function() {
      * @returns {WGL.dimension.IdentifyDimension}
      */
     addIdentifyDimension: function (data, pts_id, id, properties_path) {
+      for (var i = 0; i< pts_id.length; i++){
+        if (pts_id[i] >= 16777216){
+          throw "point ID must be < then 2^24 (3 byte)";
+        }
+      }
       try { // try create pts buffer
           manager.addDataBuffer(u.array2TA(data), 2, 'wPoint');
       } catch (err) {
