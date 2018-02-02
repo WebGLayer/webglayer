@@ -47,7 +47,7 @@ WGL.dimension.IdentifyDimension = function (id, properties_path) {
     // properties of actual texture
     console.log(framebuffer.width, framebuffer.height);
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, framebuffer.width,
-        framebuffer.height, 0, gl.RGBA, gl.UNSIGNED_BYTE, null); //tady je zmena ==========
+        framebuffer.height, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
 
     // attaches a texture to framebuffer
     gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0,
