@@ -47,7 +47,7 @@ WGL.dimension.IdentifyDimension = function (id, properties_path) {
     // properties of actual texture
     console.log(framebuffer.width, framebuffer.height);
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, framebuffer.width,
-        framebuffer.height, 0, gl.RGBA, gl.FLOAT, null);
+        framebuffer.height, 0, gl.RGBA, gl.UNSIGNED_BYTE, null); //tady je zmena ==========
 
     // attaches a texture to framebuffer
     gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0,
@@ -68,6 +68,10 @@ WGL.dimension.IdentifyDimension = function (id, properties_path) {
 
   };
   this.init();
+
+  this.createMapFramebuffer = function () {
+    this.init();
+  };
 
   /**
    *
@@ -122,10 +126,10 @@ WGL.dimension.IdentifyDimension = function (id, properties_path) {
    * @returns {Float32Array} RGBA pixel
    */
   this.readPixels = function (x, y) {
-    var readout = new Float32Array(4);
+    var readout = new Uint8Array(4);
     gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
     if (gl.checkFramebufferStatus(gl.FRAMEBUFFER) === gl.FRAMEBUFFER_COMPLETE){
-        gl.readPixels(x, manager.canvas.height - y, 1, 1, gl.RGBA, gl.FLOAT, readout);
+        gl.readPixels(x, manager.canvas.height - y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, readout);
     }
     else {
         throw "Framebuffer is not complete!";
@@ -142,8 +146,21 @@ WGL.dimension.IdentifyDimension = function (id, properties_path) {
    * @returns {Array} [point ID, number of points on pixel]
    */
   this.identify = function (x, y) {
-    var pix = this.readPixels(x, y);
-    return [pix[0], pix[3]];
+    const pix = this.readPixels(x, y);
+    // convert from 3x unsigned_byte to int
+    var b, num_zero;
+    var final_bin = "";
+    for (var i = 0; i < 3; i++){
+      b = pix[i].toString(2);
+      num_zero = 8 - b.length;
+      var str_zero = "";
+      for (var j = 0; j < num_zero; j++){
+        str_zero += "0";
+      }
+      final_bin += str_zero + b;
+    }
+    const point_id = parseInt(final_bin, 2);
+    return [point_id, pix[3]];
   };
 
   /**
