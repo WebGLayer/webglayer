@@ -345,6 +345,7 @@ var WGL = (function() {
       for (var i in charts) {
         var ch = charts[i];
         ch.brush.clear();
+        ch.clearSelection(ch.brush);
       }
 
       for (var i in legends) {
