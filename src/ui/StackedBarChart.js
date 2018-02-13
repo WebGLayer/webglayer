@@ -192,10 +192,6 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
         return d + " foreground bar ";
       }).datum(dataset);
 
-    if (type == "ordinal") {
-      bars.style("cursor", "'pointer'), auto");
-    }
-
     svg.selectAll(".foreground.bar").attr("clip-path",
       "url(#clip-" + div_id + ")");
 
@@ -467,6 +463,7 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
     if (dataset == null) {dataset = Array.prototype.slice.call(data);
       dataset.max = data.max;
       this.init();
+      d3.select("#"+div_id).selectAll("rect").style("cursor", "pointer")
     }
     dataset = Array.prototype.slice.call(data);
 
