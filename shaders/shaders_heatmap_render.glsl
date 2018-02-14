@@ -60,9 +60,9 @@
   			}			
   			col =  col1*rangeval + col2*(1.-rangeval);
 
-            if(light_bg == 1) {
-  			    col =  col*rangeval + black*(1.-rangeval);
-  			}
+            //if(light_bg == 1) {
+  			  //  col =  col*rangeval + black*(1.-rangeval);
+  			//}
 
   			//vec4(val, 1.-val , 0. , 0.0+val*2.);//vec4(1.,0.,0.,0.);
 
