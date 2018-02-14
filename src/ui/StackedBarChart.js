@@ -40,6 +40,10 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
   var svg;
   var chart;
   var active_group = 2;
+  var of_click = [];
+  var of_selection = [];
+  var dragStart = -1;
+  var dragEnd = -1;
 
   var width = w - margin.left - margin.right;
   var height = h - margin.top - margin.bottom;
@@ -176,15 +180,17 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
     //svg.append("clipPath").attr("id", "clip-" + div_id).append("rect")
     //		.attr("width", width).attr("height", height);
 
-    bars = svg.selectAll(".bar").data([ "selected", "unselected", "out" ])
+    /*$("#" + div_id + " > :not(rect):not(.bar)").on("click", function(e) {
+      e.stopPropagation();
+      e.preventDefault();
+      of = [];
+      WGL.filterDim(m.name,filterId, of);
+    });*/
+
+    bars = svg.selectAll(".bar").data(["selected", "unselected", "out"])
       .enter().append("path").attr("class", function(d) {
         return d + " foreground bar ";
       }).datum(dataset);
-
-    //bars.on("click", function(d)
-    //		{ d.selected = !d.selected;
-    //			console.log(d);
-    //		})
 
     svg.selectAll(".foreground.bar").attr("clip-path",
       "url(#clip-" + div_id + ")");
@@ -220,38 +226,124 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
       //console.log(brush1.extent()[0][0]+' '+brush1.extent()[0][1]);
     }
 
-    function brushOrdinal() {
-      var f = brush1.extent();
-      var of = []
-      var l = xScale.domain().length;
-      for (var i in f){
-        of[i] = [];
-        of[i][0] = f[i][0] /width * l;
-        of[i][1] = f[i][1] /width * l;
+    function mergeSelectionArrays() {
+
+      var merged = of_selection.concat(of_click);
+
+      if (of_selection.length > 0 &&
+        of_click.length > 0) {
+        for (var i = 0; i < merged.length; i++) {
+          for (var j = i + 1; j < merged.length; j++) {
+            if (merged[j][0] == merged[i][0] &&
+              merged[j][1] == merged[i][1]) {
+              merged.splice(j, 1);
+            }
+          }
+        }
       }
-      WGL.filterDim(m.name,filterId, of);
-      //console.log(of[0][0]+' '+of[0][1]);
+      return merged;
+    }
+
+    function brushOrdinal() {
+
+      var f = brush1.extent();
+      var l = xScale.domain().length;
+
+      of_selection = [];
+
+      var current_selection;
+      for (var i in f) {
+        current_selection = f[i];
+
+        var groupStart = Math.floor(current_selection[0] / (width / l));
+        var groupEnd = Math.floor(current_selection[1] / (width / l));
+        if (groupEnd == l) {
+          groupEnd = l - 1;
+        }
+
+        for (var j in of_selection) {
+          if (of_selection[j][0] >= groupStart && of_selection[j][0] <= groupEnd) {
+            of_selection.splice(j, 1);
+          }
+        }
+
+        for (var k = groupStart; k <= groupEnd; k++) {
+          of_selection.push([k, k + 1]);
+        }
+
+        WGL.filterDim(m.name, filterId, mergeSelectionArrays());
+
+      }
 
     }
     var brush;
-    if (type=='linear') {
+    if (type == 'linear') {
       brush = brushLinear;
-    }
-    else if (type=='ordinal'){
+    } else if (type == 'ordinal') {
       brush = brushOrdinal;
     }
 
     var brush1 = d3.svg.multibrush().x(xScale).extentAdaption(resizeExtent)
-      .on("brush", brush).on("brushend", function(d) {
-        if (brush1.extent().length == 0) {
+      .on("brushstart", function() {
+        dragStart = d3.mouse(this);
+      })
+      .on("brush", function() {
+        dragEnd = d3.mouse(this);
+        if (dragEnd[0] != dragStart[0] &&
+          dragEnd[1] != dragStart[1]) {
           brush();
         }
+      })
+      .on("brushend", function() {
 
+        dragEnd = d3.mouse(this);
+
+        if (dragEnd[0] == dragStart[0] &&
+          dragEnd[1] == dragStart[1]) {
+
+          var group = Math.floor(dragEnd[0] / (width / dataset.length));
+
+          var selected = dataset[group].selected;
+          dataset[group].selected = dataset[group].unselected;
+          dataset[group].unselected = selected;
+
+          var found = false;
+
+          for (var i = 0; i < of_click.length; i++) {
+            if (of_click[i][0] == group) {
+              of_click.splice(i, 1);
+              found = true;
+              break;
+            }
+          }
+
+          for (i = 0; i < of_selection.length; i++) {
+            if (of_selection[i][0] == group) {
+              of_selection.splice(i, 1);
+              found = true;
+              break;
+            }
+          }
+
+          if (found) {
+            WGL.filterDim(m.name, filterId, mergeSelectionArrays());
+            return;
+          }
+
+          of_click.push([group, group + 1]);
+          WGL.filterDim(m.name, filterId, mergeSelectionArrays());
+
+          return;
+
+        } else {
+          brush();
+        }
       });
     this.brush = brush1;
 
     var brushNode = svg.append("g").attr("class", "brush").call(brush1)
       .selectAll("rect").attr("height", height);
+
 
     /**
      * legend and scaling
@@ -312,12 +404,18 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
       trigger: 'click',
       interactive: 'true',
       autoClose: 'false',
-      functionReady: function(){
-        $('.wgl-close-tooltip').click(function(){
+      functionReady: function() {
+        $('.wgl-close-tooltip').click(function() {
           $(help).tooltipster('hide');
         });
       }
 
+    });
+
+    $("#" + div_id).on("click", function(e) {
+      if (e.target.tagName != "g") {
+        this.clearSelection(brush1);
+      }
     });
 
     function resizeExtent(selection) {
@@ -365,6 +463,7 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
     if (dataset == null) {dataset = Array.prototype.slice.call(data);
       dataset.max = data.max;
       this.init();
+      d3.select("#"+div_id).selectAll("rect").style("cursor", "pointer")
     }
     dataset = Array.prototype.slice.call(data);
 
@@ -441,29 +540,37 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
   }
 
   function barPathOut(groups) {
-    var path = [], i = -1, n = groups.length, d;
+    var path = [],
+      i = -1,
+      n = groups.length,
+      d;
     while (++i < n) {
       var d = groups[i];
       var start = yScale(d.selected) + yScale(d.unselected) - height;
-      if (start + yScale(d.out) - height < 0 && start > -0.1){
+      if (start + yScale(d.out) - height < 0 && start > -0.1) {
         path.push("M", xScale(d.val), ",", start,
-          "V",0,
-          "L",xScale(d.val) + bw/2, ",",-arrowHeight,
-          "L",xScale(d.val) + bw,",",0,
-          "V",start
+          "V", 0,
+          "L", xScale(d.val) + bw / 2, ",", -arrowHeight,
+          "L", xScale(d.val) + bw, ",", 0,
+          "V", start
         );
         //console.log(aa);
-      }
-      else if (start <= -0.1){
+      } else if (start <= -0.1) {
         path.push("");
-      }
-      else{
-        path.push("M", xScale(d.val), ",", start, "V", start
-          + yScale(d.out) - height, svgbw, start);
+      } else {
+        path.push("M", xScale(d.val), ",", start, "V", start +
+          yScale(d.out) - height, svgbw, start);
       }
 
     }
     return path.join("");
+  }
+
+  this.clearSelection = function(brush) {
+    of_selection = [];
+    of_click = [];
+    brush.clear();
+    WGL.filterDim(m.name, filterId, []);
   }
 
 };
