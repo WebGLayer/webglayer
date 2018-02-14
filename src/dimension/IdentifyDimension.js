@@ -13,6 +13,7 @@ WGL.dimension.IdentifyDimension = function (id, properties_path) {
   this.pointSize = 5;
   this.debug = false;
   this.onlySelected = true;
+  this.enabled = true;
 
   var framebuffer;
   var texture;
@@ -20,6 +21,14 @@ WGL.dimension.IdentifyDimension = function (id, properties_path) {
   var GLU = WGL.internal.GLUtils;
 
   this.glProgram = GLU.compileShaders('identify_vShader', 'identify_fShader');
+
+  this.setEnabled = function(v) {
+      this.enabled = v;
+  };
+
+  this.getEnabled = function() {
+    return this.enabled;
+  };
 
   this.init = function () {
     // allow FLOT extension

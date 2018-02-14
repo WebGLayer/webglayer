@@ -12,11 +12,9 @@ WGL.dimension.ParallelCoordinatesRenderer = function(){
   manager.storeUniformLoc(this.glProgram, "unselcolors");
   manager.storeUniformLoc(this.glProgram, "u_textureSize");
 
-  this.colors =  new Float32Array(16);
-  this.colors.set([ 1, 0, 0, 1,
-                  1, 1, 0, 1,
-                  0, 1, 0, 1,
-                  0, 0, 0, 1 ]);
+  this.colors = new Float32Array(16);
+
+  this.colors.set(WGL.utils.rgbaToMatrix(WGL.colorSchemes.getSchemeMatrixSelected()));
 
   this.unselcolors =  new Float32Array(16);
   this.unselcolors.set([  49/256, 130/256, 189/256, 1,

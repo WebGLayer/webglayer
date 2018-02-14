@@ -239,5 +239,32 @@ WGL.utils = {
       }
   },
 
+  rgbaToMatrix: function(m) {
+
+    var alpha = WGL.colorSchemes.getSchemeAlphaSelected();
+    var matrix = new Float32Array(16);
+
+    matrix[0] = m[0]/256;
+    matrix[1] = m[1]/256;
+    matrix[2] = m[2]/256;
+    matrix[3] = alpha[0];
+
+    matrix[4] = m[3]/256;
+    matrix[5] = m[4]/256;
+    matrix[6] = m[5]/256;
+    matrix[7] = alpha[1];
+
+    matrix[8] = m[6]/256;
+    matrix[9] = m[7]/256;
+    matrix[10] = m[8]/256;
+    matrix[11] = alpha[2];
+
+    matrix[12] = 0;
+    matrix[13] = 0;
+    matrix[14] = 0;
+    matrix[15] = 1;
+
+    return matrix;
+  }
 
 };

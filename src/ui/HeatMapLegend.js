@@ -1,37 +1,37 @@
-WGL.ui.HeatMapLegend = function(div_id, filterId, useBrush, colorScheme) {
+WGL.ui.HeatMapLegend = function(div_id, filterId, useBrush) {
   if (useBrush === undefined){
-    useBrush = true;
+    useBrush = false;
   }
 
   var manager = WGL.getManager();
   var GLU = WGL.internal.GLUtils;
 
-  var w = 190;
-  var h = 200;
+  var w = 250;
+  var h = 100;
   var margin = {
-    top : 10,
+    top : 20,
     right : 0,
-    bottom : 10,
-    left : 45
+    bottom : 0,
+    left : 0
   };
   //var lockscale = false;
   var filterVal = [];
   var width = w - margin.left - margin.right;
   var height = h - margin.top - margin.bottom;
 
-  var yScale = d3.scale.linear().domain([ 0, 200]).range(
-    [ height, 0 ]);
+  var xScale = d3.scale.linear().domain([ 0, 200]).range(
+    [ 0, width ]);
 
-  var yAxis = d3.svg.axis()
-    .scale(yScale)
-    .orient("left").tickFormat(d3.format("s"));
+  var xAxis = d3.svg.axis()
+    .scale(xScale)
+    .orient("bottom");
 
-  var yScaleSel = d3.scale.linear().domain([ 0, 200]).range(
+  /*var yScaleSel = d3.scale.linear().domain([ 0, 200]).range(
     [ height, 0 ]);
 
   var yAxisSel = d3.svg.axis()
     .scale(yScaleSel)
-    .orient("right").tickFormat(d3.format("s"));
+    .orient("right").tickFormat(d3.format("s"));*/
 
 
   var limitByMax = true;
@@ -52,30 +52,33 @@ WGL.ui.HeatMapLegend = function(div_id, filterId, useBrush, colorScheme) {
     svg.select("#grad_b").attr("fill", "url(#legend_blue_gradient)");
   }
 
-  svg = d3.select("#" + div_id).append("svg")
-    .attr("width",  w)
+  svg = d3.select("#" + div_id)
+    .append("svg")
     .attr("height", h)
+    .attr("style", "position: absolute; right: 1em; top: 2.5em;")
     .append("g").attr(
       "transform",
-      "translate(" + margin.left + "," + margin.top + ")");
+      "translate(" + margin.left + "," + margin.bottom + ")")
 
   /** Adding axis**/
 
   svg.append("g")
-    .attr("class", "y axis all")
-    .call(yAxis)
-    .append("text")
-    .attr("transform", "rotate(-90)")
-    .attr("y", -38)
-    .attr("dy", ".71em")
-    .style("text-anchor", "end")
-    .text("Density of records within the radius "); //Magnitude-per-area within the radius
+    .attr("class", "x axis all")
+    .call(xAxis)
+    .attr("y", -100)
+    .attr("dy", ".171em")
+    .attr("transform", "translate(50,30)")
 
-  svg.append("g")
+    /*.append("text")
+    .attr("x", -38)
+    .attr("dy", ".71em")
+    .style("text-anchor", "end");
+
+  /*svg.append("g")
     .attr("class", "y axis sel")
     .call(yAxisSel)
     .attr("transform",
-      "translate(60,0)")
+      "translate(60,0)")*/
 
 
   //this.circleLabel = d3.select("#" + div_id).append("label").style({bottom: "170px", position: "absolute", left: "120px" })
@@ -105,9 +108,9 @@ WGL.ui.HeatMapLegend = function(div_id, filterId, useBrush, colorScheme) {
   var rgbaMatrix = WGL.colorSchemes.getSchemeMatrixSelected();
 
   var colors = [
-    {offset: "0%", color:"rgba(" + rgbaMatrix[0] + ", " + rgbaMatrix[1] + ", " + rgbaMatrix[2] + ", 1)"},
+    {offset: "0%", color:"rgba(" + rgbaMatrix[6] + ", " + rgbaMatrix[7] + ", " + rgbaMatrix[8] + ", 0.3)"},
     {offset: "50%", color:"rgba(" + rgbaMatrix[3] + ", " + rgbaMatrix[4] + ", " + rgbaMatrix[5] + ", 0.6)"},
-    {offset: "100%", color:"rgba(" + rgbaMatrix[6] + ", " + rgbaMatrix[7] + ", " + rgbaMatrix[8] + ", 0.3)"}
+    {offset: "100%", color:"rgba(" + rgbaMatrix[0] + ", " + rgbaMatrix[1] + ", " + rgbaMatrix[2] + ", 1)"}
   ];
 
   var bg_rectangle = (WGL.colorSchemes.getSchemeBgSelected() == 'dark' ? 'black' : 'white');
@@ -116,10 +119,6 @@ WGL.ui.HeatMapLegend = function(div_id, filterId, useBrush, colorScheme) {
 
   svg.append("defs").append("linearGradient")
     .attr("id", "legend_gradient")
-    .attr("x1","0%")
-    .attr("y1","0%")
-    .attr("x2","0%")
-    .attr("y2","100%")
     .selectAll("stop")
     .data(colors)
     .enter().append("stop")
@@ -128,10 +127,6 @@ WGL.ui.HeatMapLegend = function(div_id, filterId, useBrush, colorScheme) {
 
   svg.append("defs").append("linearGradient")
     .attr("id", "legend_blue_gradient")
-    .attr("x1","0%")
-    .attr("y1","0%")
-    .attr("x2","0%")
-    .attr("y2","100%")
     .selectAll("stop")
     .data([
       {offset: "0%", color:"rgba(59, 130, 189,1)"},
@@ -145,19 +140,19 @@ WGL.ui.HeatMapLegend = function(div_id, filterId, useBrush, colorScheme) {
   /*addig color rectangeles*/
   svg.append("rect").attr("fill", bg_rectangle)
     .attr("id", "grad_bacground")
-    .attr("x", 0)
-    .attr("y", 0)
-    .attr("width", 30)
-    .attr("height", height);
+    .attr("x", 50)
+    .attr("y", 0  )
+    .attr("width", width)
+    .attr("height", 30);
 
   svg.append("rect").attr("fill", "url(#legend_blue_gradient)")
     .attr("id","grad_b")
-    .attr("x", 0)
+    .attr("x", 50)
     .attr("y", 0)
-    .attr("width", 30)
-    .attr("height", height);
+    .attr("width", width)
+    .attr("height", 30);
 
-  svg.append("rect").attr("fill", bg_rectangle)
+  /*svg.append("rect").attr("fill", bg_rectangle)
      .attr("class", "grad")
      .attr("x", 30)
      .attr("y", 0)
@@ -169,10 +164,10 @@ WGL.ui.HeatMapLegend = function(div_id, filterId, useBrush, colorScheme) {
     .attr("x", 30)
     .attr("y", 0)
     .attr("width", 30)
-    .attr("height", 0);
+    .attr("height", 0);*/
 
 
-  var brushed = function(){
+  /*var brushed = function(){
     filterVal = brush.extent();
     if (parseFloat(yScale.domain()[1]) <=  parseFloat(brush.extent()[1])){
       //f[1] =9999999;
@@ -196,7 +191,7 @@ WGL.ui.HeatMapLegend = function(div_id, filterId, useBrush, colorScheme) {
 
 
     if (f.length == 2 && f[0]==f[1]){
-      /*pass the filter parameter to the dimension to render to colors properly*/
+      //pass the filter parameter to the dimension to render to colors properly
       f=[];
       heatDimension.setFilter(undefined);
     } else {
@@ -215,6 +210,8 @@ WGL.ui.HeatMapLegend = function(div_id, filterId, useBrush, colorScheme) {
 
   }
 
+
+
   var brush = d3.svg.brush()
     .y(yScale)
     .on("brush", brushed);
@@ -225,13 +222,19 @@ WGL.ui.HeatMapLegend = function(div_id, filterId, useBrush, colorScheme) {
       .selectAll("rect").attr("width", 60);
   }
 
+  */
+
+  this.reset = function() {
+    
+  };
+
   this.updateMaxAll = function(max){
     var filter =  filterVal ;
 
-    yScale.domain([0, max]);
+    xScale.domain([0, max]);
 
-    svg.selectAll('.y.axis.all')
-      .call(yAxis);
+    svg.selectAll('.x.axis.all')
+      .call(xAxis);
     if (filter[0]!=filter[1]){
       this.update(filter);
     } else {
@@ -240,7 +243,9 @@ WGL.ui.HeatMapLegend = function(div_id, filterId, useBrush, colorScheme) {
 
 
   };
-  this.updateMaxMinAll = function(min,max){
+
+
+  /*this.updateMaxMinAll = function(min,max){
     var filter =  filterVal ;
 
     yScale.domain([min, max]);
@@ -261,6 +266,8 @@ WGL.ui.HeatMapLegend = function(div_id, filterId, useBrush, colorScheme) {
       .attr("y",  0)
       .attr("height", yScale(f[0]) - yScale(f[1]) );
   }
+*/
+
 
   this.update = function(filter){
     filterVal = filter;
@@ -269,22 +276,24 @@ WGL.ui.HeatMapLegend = function(div_id, filterId, useBrush, colorScheme) {
     var max =  filterVal [1];
     //this.updateMax(m+ m*0.2);
 
-    var y =  yScale(max);
-    var h =  yScale(min) - yScale(max);
+    var x =  xScale(max);
+    var h =  xScale(min) - xScale(max);
     svg.selectAll(".grad")
-      .attr("y",  y)
-      .attr("height", h );
+      .attr("x",  x)
+      .attr("width", w );
     svg.selectAll(".extent")
-      .attr("y",  y)
-      .attr("height", h );
+      .attr("x",  x)
+      .attr("width", w );
 
-    svg.selectAll('.y.axis.sel').attr("transform",
-      "translate(60,"+y+")");
+    svg.selectAll('.x.axis.sel').attr("transform",
+      "translate(60,"+x+")");
 
-    yScaleSel.domain([0,selectionMax]).range([h, 0 ]);
-    yAxisSel.ticks(h/15);
+    //yScaleSel.domain([0,selectionMax]).range([h, 0 ]);
+
+    /*yAxisSel.ticks(h/15);
     svg.selectAll('.y.axis.sel')
       .call(yAxisSel);
+    */
 
     if (!limitByMax){
       //doBrush([min,m]);

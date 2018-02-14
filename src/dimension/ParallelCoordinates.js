@@ -13,6 +13,8 @@ WGL.dimension.ParallelCoordinates = function(div, data){
       left : 60
       };
 
+  var bg = WGL.colorSchemes.getSchemeBgSelected();
+
   this.setViewport = function(){
     pcdiv =  document.getElementById(div);
     var elRect = pcdiv.getBoundingClientRect();
@@ -124,12 +126,16 @@ WGL.dimension.ParallelCoordinates = function(div, data){
 
       maximum = max;
       renderer.render(viewport, maximum);
-  }
+  };
 
   this.visible = true;
   this.setVisible = function(v){
     this.visible = v;
-  }
+  };
+
+  this.getData = function(){
+    return data;
+  };
 
   this.render = function() {
 
@@ -259,7 +265,7 @@ WGL.dimension.ParallelCoordinates = function(div, data){
     brush.y(yScale).on("brush", brushed);
     yAxis = d3.svg.axis().scale(yScale).orient("left");
 
-    svg.append("g").attr("class", "axis_pc axis_"+i).call(yAxis).attr("transform","translate("+offset*i+")")
+    svg.append("g").attr("class", "axis_pc_"+bg+" axis_"+i).call(yAxis).attr("transform","translate("+offset*i+")")
     .append("text")
       .attr("y", "-2em").attr("x",
           "0em").style("text-anchor", "middle").text(d.label);
