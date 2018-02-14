@@ -49,8 +49,7 @@ function visualize(data){
 		//var mapdim = WGL.addMapDimension(data.pts, 'themap');
 		WGL.addColorFilter('heatmap','colorbrush');
 		WGL.addPolyBrushFilter('heatmap','polybrush');
-		var legend = new  WGL.ui.HeatMapLegend('legend', 'colorbrush');
-		heatmap.addLegend(legend);
+
 		heatmap.renderer.colors.set([ 1, 0, 1, 1, 
 		           		              1, 0, 1, 1, 
 		        		              0, 1, 1, 1,
@@ -125,6 +124,8 @@ function visualize(data){
 		 * Addin all charts
 		 */		
 		WGL.addCharts(charts);
+  	var controlHM = new WGL.ChartDiv("right","chm", "Heat map controls");
+  	addHeatMapControl(heatmap,'chm');
 		//WGL.addLegend(legend);
 		
 		/**
@@ -223,6 +224,67 @@ function getTopLeftTC() {
  */
 function onMove() {			
 		WGL.mcontroller.zoommove(map.getZoom(), getTopLeftTC(), WGL.filterByExt);
+}
+
+function addHeatMapControl(hm,divid){
+
+  $("#"+divid).append(
+    "<div id="+divid+"left style='top:0em; left:0em; width:40%'></div>"+
+    "<div id="+divid+"right style='top:0em; right:0em; width:35%; height:7em;'></div>");
+
+
+  var thediv = $("#"+divid+"right");
+  thediv.append(
+    "<div style='margin:1.2em 0.5em 0.5em 0.5em'>"+
+    "<text>Radius: </text><text id='radius_label'></text>"+
+    "<input style='width: 50%; right:1em; position:absolute' type ='range' max='300' min='1'"+
+    "step='1' name='points' id='slider_radius' value='30'></input> " +
+    "</div>");
+  thediv.append(
+    "<div style='margin:1.2em 0.5em 0.5em 0.5em'>"+
+    "<text>Density of records<br>within the radius: </text><text id='radius_label'></text>"+
+    "<div id='heatmap-legend' style='float: right'></div>"+
+    "</div>"
+  );
+
+
+  WGL.addColorFilter(hm.id,'colorbrush');
+  var legend = new  WGL.ui.HeatMapLegend("heatmap-legend", 'colorbrush', true);
+  hm.addLegend(legend);
+  WGL.addLegend(legend);
+
+  $("#slider_radius").on("input", function(){
+
+    hm.setRadius(this.value);
+
+    $('#radius_label').html(this.value+"m ");
+    //heatmap.reRender();
+    WGL.render();
+  });
+
+  $("#cross").off("click");
+  $("#cross").click(function(e){
+
+      $("#right").toggle();
+      $(this).toggleClass("active");
+      $("#sipka").toggleClass("fa-chevron-right");
+      $("#sipka").toggleClass("fa-chevron-left");
+      $("#map").toggleClass("fullscrean");
+      $("#pc").toggleClass("pc_chart_big");
+
+      WGL.getManager().updateMapSize();
+      WGL.mcontroller.resize();
+      WGL.mcontroller.zoommove(map.getZoom(),getTopLeftTC());
+      map.updateSize();
+
+      $("#info").hide();
+
+      WGL.getDimension("pc_chart").resize();
+
+      WGL.render();
+    }
+
+  )
 }
 	
 	

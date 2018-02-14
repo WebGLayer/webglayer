@@ -1,0 +1,552 @@
+html,body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: Verdana, Arial, sans-serif;
+}
+
+#view {
+    position: relative;
+}
+
+
+#map {
+
+    display: block;
+    position:absolute;
+    height:auto;
+    bottom:0;
+    top:0;
+    left:0;
+    right:0;
+    margin-top:0px;
+    margin-bottom:18em;
+    margin-right:32em;
+    margin-left:0px;
+    z-index:100;
+    opacity: .99;
+    border-bottom-width:1px;
+    border-bottom-style: solid;
+    border-bottom-color:white;
+}
+
+.pc_background_dark{
+    background-color: rgb(14, 14, 14);
+}
+
+.pc_background_light{
+    background-color: rgb(240, 240, 240);}
+
+.pc_chart_div {
+    position:absolute;
+    height: 16.9em;
+    width:100%;
+    bottom:0;
+}
+
+.pc_chart_parent_dark {
+    overflow-y:hidden;
+    overflow-x:hidden;
+    background-color: white;
+    position:absolute;
+    height: 18em;
+    left:0;
+    right:0;
+    border-top-width:1px;
+    border-top-style: solid;
+    border-top-color:white;
+    margin-right:32em;
+    bottom:0;
+    moz-box-shadow: 0px 0px 10px white;
+    webkit-box-shadow: 0px 0px 9px white;
+    box-shadow: -0px 0px 4px white;
+}
+
+.pc_chart_parent_light {
+    overflow-y:hidden;
+    overflow-x:hidden;
+    background-color: black;
+    position:absolute;
+    height: 18em;
+    left:0;
+    right:0;
+    border-top-width:1px;
+    border-top-style: solid;
+    border-top-color:black;
+    margin-right:32em;
+    bottom:0;
+    moz-box-shadow: 0px 0px 10px black;
+    webkit-box-shadow: 0px 0px 9px black;
+    box-shadow: -0px 0px 4px black;
+}
+
+#pc_header{
+    padding-left: 0.5em;
+    margin-top: 0.05em;
+    padding-bottom: 0.1em;
+    height: 1.5em;
+}
+
+.pc_header_dark{
+    color: white;
+}
+
+.pc_header_light{
+    color: black;
+}
+
+#pc_chart {
+    z-index:2000;
+}
+
+#osm {
+    bottom: 0;
+    right: 0;
+    padding: 1.5em;
+    height:0.5em;
+
+    z-index:1001;
+    position:absolute;
+
+    background-color: rgba(255, 255, 255, 0.0);
+    font-size: smaller;
+
+    color: #8d9ba3;
+}
+
+#wgl {
+    bottom: 0;
+    padding: 1.5em;
+    height:0.5em;
+
+    z-index:1001;
+    position:absolute;
+
+    background-color: rgba(255, 255, 255, 0.0);
+    font-size: smaller;
+
+    color: #8d9ba3;
+}
+
+#wgl a, #osm a {
+    color: cornflowerblue;
+    text-decoration: none;
+}
+
+#OpenLayers_Control_Attribution_7 {
+    display: none;
+}
+
+.selectionlabel {
+    color:black;
+}
+
+#legend {
+    position: absolute;
+    top: 5em;
+    left: 0em;
+    height: 250px;
+    width: 150px;
+    padding: 0em;
+    z-index:3000;
+    background-color: rgba(255, 255, 255, 0.8);
+}
+#right {
+    position: fixed;
+    overflow-y:auto;
+    overflow-x:hidden;
+    right: 0;
+    top: 0;
+    width: 32em;
+    height: 100%;
+    font-size: 1em;
+    moz-box-shadow: 0px 0px 10px black;
+    webkit-box-shadow: 0px 0px 9px  black;
+    box-shadow: -1px 0px 4px  black;
+    z-index: 10000;
+}
+
+#controls {
+    position: fixed;
+    top: 0em;
+    left: 3em;
+    z-index:2000;
+    background-color: whitesmoke;
+    width: auto;
+    padding: 0.3em;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+
+#about {
+    margin: 1em;
+}
+
+#controlToggle {
+    padding-left: 1em;
+}
+
+#controlToggle li {
+    list-style: none;
+}
+
+#controlsLabel {
+    font-size: 0.8em;
+    padding-bottom: 0.4em;
+}
+
+#colorSchemeSelector {
+    position: fixed;
+    z-index: 2000;
+    width: auto;
+    top: 0;
+    right: 35em;
+    padding: 0.3em;
+    background-color: whitesmoke;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+
+#colorSchemeLabel {
+    font-size: 0.8em;
+    padding-bottom: 0.4em;
+}
+
+button.btn-selected {
+    background-color: #8699A4 !important;
+}
+
+#test {
+    top: 0;
+    opacity: 1;
+    z-index: 1000;
+    pointer-events: none;
+    position: absolute;
+    top: 0px;
+}
+
+
+
+
+
+
+#chart_container {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+}
+.chart rect {
+    fill: steelblue;
+}
+
+.chart text {
+    fill: white;
+    font: 10px sans-serif;
+    text-anchor: end;
+}
+
+.brush{
+    fill: grey;
+    stroke: #ff8c00;
+    stroke-opacity: 1.;
+    stroke-width: 2;
+}
+
+.selected.bar {
+    fill: #ff8c00;
+}
+
+.unselected.bar {
+    fill: #7b6888;
+}
+
+.out.bar {
+    fill: #98abc5;
+}
+
+.axis text {
+    font: 10px sans-serif;
+}
+.axis_pc_dark text {
+    font: 10px sans-serif;
+    fill: white;
+    stroke: none;
+}
+
+.axis_pc_light text {
+    font: 10px sans-serif;
+    fill: black;
+    stroke: none;
+}
+
+.l text {
+    font: 10px sans-serif;
+}
+
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+
+
+.axis_pc_dark {
+    fill: none;
+    stroke: white;
+    shape-rendering: crispEdges;
+    font: 10px sans-serif;
+}
+
+.axis_pc_light {
+    fill: none;
+    stroke: black;
+    shape-rendering: crispEdges;
+    font: 10px sans-serif;
+}
+
+.text_map_light {
+    color: black;
+}
+
+.text_map_dark {
+    color: white;
+}
+
+.x.axis path {
+    display: none;
+}
+
+.line {
+    fill: none;
+    stroke: steelblue;
+    stroke-width: 2px;
+    shape-rendering: optimizeSpeed ;
+
+}
+
+.point {
+
+    stroke-width: 0.0005px;
+    z-index: 2000;
+    fill: #000;
+    fill-opacity: .8;
+    stroke: #fff;
+}
+
+.l {
+    cursor: pointer;
+    stroke: #000;
+}
+.grid-background {
+    fill: #ddd;
+}
+
+.grid line,
+.grid path {
+    fill: none;
+
+path {
+
+}
+
+}
+
+#cross{
+    position: absolute;
+    top: 0;
+    right: 32em;
+    z-index: 102;
+    cursor: pointer;
+    color: white;
+    /*background-color: white;*/
+}
+#cross.active{
+    position: absolute;
+    top: 0;
+    right: 0px;
+    z-index: 102;
+}
+
+#map.fullscrean{
+    margin-right:0em;
+}
+
+.pc_chart_big{
+    margin-right:0em;
+}
+
+.ii{
+    cursor: pointer;
+    position: absolute;
+    right: 1em;
+    bottom: -4px;
+}
+
+.color-selected{
+    color: #ff8c00;
+}
+.color-unselected{
+    color: #7b6888;
+}
+.color-out{
+    color: #98abc5;
+}
+
+div.olControlAttribution {
+    bottom: 0;
+    padding: 1.5em;
+    height:3em;
+
+    z-index:1001;
+    position:absolute;
+
+    background-color: rgba(255, 255, 255, 0.0);
+    font-size: smaller;
+}
+
+.control {
+    position: relative;
+    margin: 1em;
+    z-index: 2000;
+
+}
+
+.control label {
+    display: block;
+    padding-left: 15px;
+    text-indent: -15px;
+}
+
+.control input {
+    width: 13px;
+    height: 13px;
+    padding: 0;
+    margin:0;
+    vertical-align: bottom;
+    position: relative;
+    top: -1px;
+    *overflow: hidden;
+}
+
+/* div:first-child { */
+/*   opacity: .99; */
+/* } */
+
+.slider {
+    position:absolute;
+    right:0em;
+    top:0em;
+    width: 26em;
+}
+.slider_v {
+    position:absolute;
+    right:-3em;
+    top:6em;
+    width: 10em;
+    height: 1em;
+    -webkit-transform: rotate(270deg);
+    -moz-transform: rotate(270deg);
+    transform: rotate(270deg);
+}
+
+.loading-wgl {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 50%;
+    z-index: 1000;
+    text-align: center;
+}
+
+.hidden {
+    display: none;
+}
+
+.brush .extent {
+
+    fill-opacity: .125;
+    shape-rendering: crispEdges;
+}
+
+.color-scheme-btn, .control-btn {
+    width: 60px;
+    height: 30px;
+}
+
+.std-btn {
+    background-color: whitesmoke; /* Green background */
+    border: 1px solid lightgray; /* Green border */
+    color: black; /* White text */
+    cursor: pointer; /* Pointer/hand icon */
+    float: left; /* Float the buttons side by side */
+    padding: 0.3em 0.3em;
+    width: 100px;
+    height: 30px;
+    font-size: 1.0em;
+}
+
+.std-btn:hover {
+    background-color: darkgray;
+}
+
+.btn-group button {
+    background-color: whitesmoke; /* Green background */
+    border: 1px solid lightgray; /* Green border */
+    color: black; /* White text */
+    cursor: pointer; /* Pointer/hand icon */
+    float: left; /* Float the buttons side by side */
+    padding: 0.3em 0.3em;
+}
+
+.btn-group button:not(:last-child) {
+    border-right: none; /* Prevent double borders */
+}
+
+/* Clear floats (clearfix hack) */
+.btn-group:after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+.intro_logo span{
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+
+.intro_logo img{
+    width: 200px;
+    vertical-align: middle;
+}
+
+/* Add a background color on hover */
+.btn-group button:hover {
+    background-color: darkgray;
+}
+
+.progress-outer {
+    width: 50%;
+    margin: 10px 2%;
+    padding: 3px;
+    text-align: center;
+    background-color: #f4f4f4;
+    border: 1px solid #dcdcdc;
+    color: #fff;
+    border-radius: 20px;
+    display: inline-block;
+}
+
+.progress-inner {
+    min-width: 15%;
+    max-width: 98%;
+    white-space: nowrap;
+    overflow: hidden;
+    padding: 5px;
+    border-radius: 20px;
+    background-color: cornflowerblue;
+}
