@@ -2,90 +2,97 @@
 /**
  * Stores and manage common objects for WebGL such as data buffers, common uniforms and matrixes
  */
-WGL.internal.Manager = function(mapid, mapcontainer) {
+WGL.internal.Manager = function(mapid, small_canvas, mapcontainer) {
 
+  // if true, canvas cover only map window (required for Mapbox)
+  this.canvasOnlyOnMap = small_canvas || false;
   this.trasholds = {allsum: 0, spatsum:0};
-  var filter = null;
+  let filter = null;
 
   this.setFilter = function(f){
     filter = f;
-  }
+  };
 
   this.getFilter = function(){
     return filter;
-  }
+  };
 
   this.updateMapSize = function(){
     this.mapdiv = document.getElementById(mapid);
-    var body = document.getElementsByTagName('body')[0];
+    let z = this.mapdiv.style.zIndex;
+    z == "" ? z = 300 : z = parseInt(z) + 1;
 
-    var mapparentdiv = document.getElementById(mapid).parentElement;
-    this.b = body.offsetHeight - (this.mapdiv.offsetTop +this.mapdiv.offsetHeight); /* lower (bottom)left corner for webgl*/
-    this.l = this.mapdiv.offsetLeft; /* lower left corner for webgl*/
-    this.w = this.mapdiv.offsetWidth;
-    this.h = this.mapdiv.offsetHeight;
+    if (!this.canvasOnlyOnMap) {
+      let body = document.getElementsByTagName('body')[0];
 
+      //var mapparentdiv = document.getElementById(mapid).parentElement;
+      this.b = body.offsetHeight - (this.mapdiv.offsetTop + this.mapdiv.offsetHeight);
+      /* lower (bottom)left corner for webgl*/
+      this.l = this.mapdiv.offsetLeft;
+      /* lower left corner for webgl*/
+      this.w = this.mapdiv.offsetWidth;
+      this.h = this.mapdiv.offsetHeight;
 
+      this.body_width = body.offsetWidth;
+      this.body_height = body.offsetHeight;
 
-    this.body_width  = body.offsetWidth;
-    this.body_height = body.offsetHeight;
+      this.canvas.setAttribute('id', canvasid);
+      this.canvas.setAttribute("width", this.body_width);
+      this.canvas.setAttribute("height", this.body_height);
+      this.canvas.setAttribute("style", "position:fixed ; " +
+        "top:" + 0 + "px ; " +
+        "left:" + 0 + "px; " +
+        "pointer-events: none;" +
+        "z-index: " + z + "; " +
+        "width: " + this.body_width + "px; " +
+        "height: " + this.body_height + "px"
+      )
+    }
+    else{ // this.canvasOnlyOnMap === true
+      this.w = this.mapdiv.offsetWidth;
+      this.h = this.mapdiv.offsetHeight;
+      this.b = 0;
+      this.l = 0;
 
+      this.canvas.setAttribute('id', canvasid);
+      this.canvas.setAttribute("width", this.w);
+      this.canvas.setAttribute("height", this.h);
 
-    var z = this.mapdiv.style.zIndex;
+      this.canvas.setAttribute("style", "position:fixed ; " +
+        "top:" + this.mapdiv.offsetTop + "px ; " +
+        "left:" + this.mapdiv.offsetLeft + "px; " +
+        "pointer-events: none;" +
+        "z-index: " + z + "; " +
+        "width: " + this.w + "px; " +
+        "height: " + this.h + "px"
+      );
+    }
+  };
 
-    z == "" ? z=300 :z = parseInt(z)+1;
-
-    this.canvas.setAttribute('id','webglayer');
-    this.canvas.setAttribute("width",  this.body_width);
-    this.canvas.setAttribute("height",this.body_height);
-    this.canvas.setAttribute("style", "position:fixed ; " +
-            "top:"+0+"px ; " +
-            "left:"+0+"px; " +
-            "pointer-events: none;" +
-            "z-index: " + z + "; " +
-            "width: "+ this.body_width+"px; " +
-            "height: " + this.body_height+"px"
-            )
-
-    /*this.canvas.setAttribute('id','webglayer');
-    this.canvas.setAttribute("width", this.w);
-    this.canvas.setAttribute("height",this.h);
-    this.canvas.setAttribute("style", "position:absolute ; " +
-            "top:"+t+"px ; " +
-            "left:"+l+"px; " +
-            "pointer-events: none;" +
-            "opacity: 1;" +
-            "z-index: " + z);*/
-  }
   /**
    * Global variables
    */
-  //canvas = document.getElementById(canvasid);
-  var canvasid = 'webglayer';
+  const canvasid = 'webglayer';
   this.mapdiv = document.getElementById(mapid);
-  var mapparentdiv = document.getElementById(mapid).parentElement;
+  const mapparentdiv = document.getElementById(mapid).parentElement;
   this.canvas = document.createElement('canvas');
   this.updateMapSize();
 
   if (mapcontainer!= null){
-     var element = document.getElementById(mapcontainer); // -- SSU enable to append into id or object
+     let element = document.getElementById(mapcontainer); // -- SSU enable to append into id or object
           (element ? element : mapcontainer).appendChild(this.canvas);
   } else {
     mapparentdiv.appendChild(this.canvas);
   }
-
-  //this.mapdiv.appendChild(this.canvas);
-  //mapparentdiv.appendChild(this.canvas);
-
 
   gl = this.canvas.getContext('webgl',
       {preserveDrawingBuffer: true}) || this.canvas.getContext('experimental-webgl',
       {preserveDrawingBuffer: true}
       );
 
-    if (!gl) {
-          alert("Could not initialise WebGL, sorry :-(. Are you using Chrome?");
-      }
+  if (!gl) {
+    alert("Could not initialise WebGL");
+  }
 
 
   /**

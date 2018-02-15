@@ -1,7 +1,7 @@
 /**
  * Pupup window
  * require, D3v3 a Jquery
- * @param map_win_id {String} div ID, which covers map window
+ * @param map_win_id {String} selector ('.class' or '#id'), which covers map window
  * @param idt_dim {String} IdentifyDimension
  * @param title {String} tittle for popup window
  * @constructor
@@ -19,7 +19,7 @@ WGL.ui.PopupWin = function (map_win_id, idt_dim, title) {
    * Set visibility
    * @param {boolean} bol
    */
-  var setVisibility = function (bol) {
+  let setVisibility = function (bol) {
     d3.select("#wgl-point-win").classed("wgl-active", bol);
     d3.select("#triangle").classed("wgl-active", bol);
     visible = bol;
@@ -30,14 +30,14 @@ WGL.ui.PopupWin = function (map_win_id, idt_dim, title) {
    * @param {int} x pixels
    * @param {int} y pixels
    */
-  var setPosition = function (x, y) {
+  let setPosition = function (x, y) {
     posX = x;
     posY = y;
-    var win = $("#wgl-point-win");
+    let win = $("#wgl-point-win");
     win.css("bottom",(window.innerHeight - posY + 35)+"px");
     win.css("left",(posX - 50)+"px");
 
-    var tri = $("#triangle");
+    let tri = $("#triangle");
     tri.css("top",(posY - 35)+"px");
     tri.css("left",(posX - 18)+"px");
 
@@ -47,13 +47,13 @@ WGL.ui.PopupWin = function (map_win_id, idt_dim, title) {
    * Add html content to popup window
    * @param {string} s html
    */
-  var addContent = function (s) {
+  let addContent = function (s) {
     $("#wgl-point-win-context").html(s);
   };
 
-  var prop2html = function (t) {
-    var s = "<table>";
-    for (var k in t){
+  let prop2html = function (t) {
+    let s = "<table>";
+    for (let k in t){
       s += "<tr><td>"+k+": </td><td>"+t[k]+"</td></tr>";
     }
     s += "</table>";
@@ -74,7 +74,7 @@ WGL.ui.PopupWin = function (map_win_id, idt_dim, title) {
   };
 
   // move map about pixel
-  var movemap = function (dx, dy) {};
+  let movemap = function (dx, dy) {};
 
   /**
    * Moves the map by dx, dy pixels
@@ -93,12 +93,12 @@ WGL.ui.PopupWin = function (map_win_id, idt_dim, title) {
 
   this.setup = function () {
     // write elements to body
-    var main = d3.select("body")
+    let main = d3.select("body")
       .insert("div")
       .attr("id","wgl-point-win")
       .classed("wgl-point-selection-win", true);
 
-    var head = main.insert("div")
+    let head = main.insert("div")
       .attr("id", "wgl-point-win-head");
 
     head.text(title);
@@ -111,7 +111,7 @@ WGL.ui.PopupWin = function (map_win_id, idt_dim, title) {
     main.insert("div").attr("id","wgl-point-win-context");
 
     // event registration
-    var mwid = $("#"+map_win_id);
+    let mwid = $(map_win_id);
 
     mwid.mousedown(function (e) {
       dragged = 0;
@@ -147,37 +147,36 @@ WGL.ui.PopupWin = function (map_win_id, idt_dim, title) {
       if (dragged < threshold){
         setVisibility(false);
 
-        WGL.getDimension(idt_dim).getProperties(e.pageX, e.pageY,function (t) {
+        WGL.getDimension(idt_dim).getProperties(e.offsetX, e.offsetY,function (t) {
           setVisibility(true);
           addContent(prop2html(t));
-          //setPosition(e.pageX, e.pageY);
+          //setPosition(e.offsetX, e.offsetY);
 
-          var offset = WGL.mcontroller.offset;
-          var zoom = WGL.getManager().zoom;
+          let offset = WGL.mcontroller.offset;
+          let zoom = WGL.getManager().zoom;
           // position in 0-level
           ex = offset.x + e.pageX/Math.pow(2, zoom);
           ey = offset.y + e.pageY/Math.pow(2, zoom);
 
           setPosition(e.pageX, e.pageY);
 
-
           // move window to screen
-          var minOffsetTop = $("#wgl-point-win").height() + 50;
-          var minOffsetLeft = 70;
-          var minOffsetRight = $("#wgl-point-win").width() - 30;
+          let minOffsetTop = $("#wgl-point-win").height() + 50;
+          let minOffsetLeft = 70;
+          let minOffsetRight = $("#wgl-point-win").width() - 30;
 
-          var mx = 0;
-          var my = 0;
-          if (e.pageY < minOffsetTop){
-            my += minOffsetTop - e.pageY;
+          let mx = 0;
+          let my = 0;
+          if (e.offsetY < minOffsetTop){
+            my += minOffsetTop - e.offsetY;
           }
 
-          var curRightOff = $("#"+map_win_id).width() - e.pageX;
+          let curRightOff = $(map_win_id).width() - e.offsetX;
           if ( curRightOff < minOffsetRight){
             mx -=  (minOffsetRight -curRightOff);
           }
-          if (e.pageX < minOffsetLeft){
-            mx += minOffsetLeft - e.pageX;
+          if (e.offsetX < minOffsetLeft){
+            mx += minOffsetLeft - e.offsetX;
           }
           if (mx !== 0 || my !== 0){
             setTimeout(function () {
@@ -201,11 +200,11 @@ WGL.ui.PopupWin = function (map_win_id, idt_dim, title) {
       .insert("div")
       .attr("id","triangle");
 
-    var svg = d3.select('#triangle')
+    let svg = d3.select('#triangle')
       .append('svg')
       .attr({'width':35,'height':35});
 
-    var arc = d3.svg.symbol().type('triangle-down').size(function(d){ return 600; });
+    let arc = d3.svg.symbol().type('triangle-down').size(function(d){ return 600; });
 
     svg.append('g').attr('transform','translate('+ 18 +','+ 15 +')')
       .append('path').attr('d', arc).attr('fill',"#dce2e0")
@@ -218,8 +217,8 @@ WGL.ui.PopupWin = function (map_win_id, idt_dim, title) {
    * @param offset
    */
   this.zoommove = function (zoom, offset) {
-    var nx = (ex - offset.x)*Math.pow(2, zoom);
-    var ny = (ey - offset.y)*Math.pow(2, zoom);
+    let nx = (ex - offset.x)*Math.pow(2, zoom);
+    let ny = (ey - offset.y)*Math.pow(2, zoom);
     setPosition(nx, ny);
   };
 

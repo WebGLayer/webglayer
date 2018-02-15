@@ -4,9 +4,11 @@
     <meta charset='utf-8' />
     <title>Display a map</title>
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
-    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.43.0/mapbox-gl.js'></script>
+    <script src='../libs/mapbox-gl-dev.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.43.0/mapbox-gl.css' rel='stylesheet' />
     <link href="mapbox.css" rel="stylesheet">
+    <link href="../../src/styles/wgl-selection.css" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"/>
 
     <script src="../libs/jquery-1.9.1.min.js"></script>
     <script src="../libs/d3.v3.min.js"></script>
@@ -44,14 +46,17 @@
     <script src="../../src/ui/PopupWin.js"></script>
 
     <script src="map.js"></script>
-    <script src="DataLoader.js"></script>
     <script src="init.js"></script>
-    <script src="../libs/OpenLayers.js"></script>
+    <script src="DataLoader.js"></script>
+
+    <!--<script src="../libs/OpenLayers.js"></script>-->
     <script src="../libs/sphericalmercator.js"></script>
+    <script src="../libs/jquery.csv.js"></script>
 </head>
 <body>
 
 <div id='map'></div>
+
 
 </body>
 </html>

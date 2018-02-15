@@ -62,11 +62,18 @@ var WGL = (function() {
 
     colorSchemes : {},
 
-    /* MAIN INTITAIZATION */
-    init : function(num, url, divid, mapcontainerid) {
+    /**
+     *
+     * @param {number} num number of points
+     * @param {string} url path to directory with shaders
+     * @param {string} divid map div id
+     * @param {boolean=false} small_canvas true => canvas will be cover only map window (required for Mapbox)
+     * @param {string=} mapcontainerid parent element of webglayer canvas
+     */
+    init : function(num, url, divid, small_canvas, mapcontainerid) {
       setVars();
       u = this.utils;
-      manager = new WGL.internal.Manager(divid,  mapcontainerid);
+      manager = new WGL.internal.Manager(divid, small_canvas, mapcontainerid);
       WGL.internal.GLUtils.loadShaders(url);
 
       rasterer = new u.Rasterer(num);
