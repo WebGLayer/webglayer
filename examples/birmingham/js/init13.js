@@ -141,7 +141,7 @@ function visualize(data){
 		//wgl.render();
 	
     // point selection
-    pw = new WGL.ui.PopupWin("OpenLayers_Layer_Vector_32_svgRoot", "idt", "Accident Details");
+    pw = new WGL.ui.PopupWin("#OpenLayers_Layer_Vector_32_svgRoot", "idt", "Accident Details");
     pw.setProp2html(function (t) {
       var d =  (new Date(t["timestamp"]*1000));
       var weekarray = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri","Sat"];

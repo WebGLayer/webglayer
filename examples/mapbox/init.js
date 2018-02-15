@@ -1,22 +1,84 @@
 function visualize(data) {
   console.log(data.num);
-  WGL.init(data.num, '../../', 'map');
+  WGL.init(data.num, '../../','map', true);
 
   // register movezoom event
   map.on("move", onMove);
 
-  var heatmap = WGL.addHeatMapDimension(data.pts, 'heatmap');
+  const heatmap = WGL.addHeatMapDimension(data.pts, 'heatmap');
   heatmap.radiusFunction = function (r, z) {
     return r*(z/10);
   };
-
   heatmap.setRadius(15);
 
   WGL.addExtentFilter();
   WGL.colorSchemes.setSchemeSelected('fire');
-  onMove();
+
+  WGL.addIdentifyDimension(data.pts, data.pts_id, 'idt', '../birmingham/data/identify/');
+  pw = new WGL.ui.PopupWin(".mapboxgl-canvas", "idt", "Accident Details");
+  pw.setProp2html(function (t) {
+    const d =  (new Date(t["timestamp"]*1000));
+    const weekarray = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri","Sat"];
+    const wd = weekarray[d.getDate()];
+    const sev = data.sevEnum[t["accident_severity"]-1];
+    const rt = data.rtEnum[t["road_type"]];
+    //speed_limit
+
+    let s = "<table>";
+    s += "<tr><td width='100px'>Date: </td><td>"+d.toDateString()+"</td></tr>";
+    s += "<tr><td>Time: </td><td>"+d.toLocaleTimeString()+"</td></tr>";
+    s += "<tr><td>Severity: </td><td>"+sev+"</td></tr>";
+    s += "<tr><td>Road Type: </td><td>"+rt+"</td></tr>";
+    s += "<tr><td>Speed Limit: </td><td>"+t["speed_limit"]+"</td></tr>";
+    return s;
+  });
+  pw.setMovemap(function (dx, dy) {
+    let c = map.getCenter();
+    const cpx = map.project(c);
+    cpx.x -= dx;
+    cpx.y -= dy;
+    map.setCenter(map.unproject(cpx));
+  });
+  map.on("move", function () {
+    pw.zoommove(map.getZoom()+1, getTopLeftTC());
+  });
+
   
   $("#webglayer").css("z-index","1");
+  $("#webglayer").css("display","none");
+
+  const layer = {
+    "id": "canvas",
+    "source": "canvas",
+    "type": "raster",
+    "paint": { 'raster-fade-duration': 0 }
+  };
+
+  const layers = map.getStyle().layers;
+  // Find the index of the first symbol layer in the map style
+  let firstSymbolId;
+  for (let i = 0; i < layers.length; i++) {
+    if (layers[i].type === 'symbol') {
+      firstSymbolId = layers[i].id;
+      break;
+    }
+  }
+  map.addSource("canvas",
+    {
+      "type": 'canvas',
+      "canvas": 'webglayer',
+      "coordinates": [
+        [-12, 60],
+        [2, 60],
+        [2, 50],
+        [-12, 50]
+      ],
+      "animate": true
+    }
+  );
+  map.addLayer(layer, firstSymbolId);
+
+  onMove();
 }
 
 /**
@@ -45,8 +107,23 @@ function getTopLeftTC() {
 }
 	
 function onMove() {
-    var z = map.getZoom() + 1;
-		WGL.mcontroller.zoommove(z, getTopLeftTC());
+  const z = map.getZoom() + 1;
+  WGL.mcontroller.zoommove(z, getTopLeftTC());
+  modifyCanvasCor();
+}
+
+function modifyCanvasCor(){
+  const b = map.getBounds();
+  let cor = [];
+  cor[0] = [b._sw.lng, b._ne.lat];
+  cor[1] = [b._ne.lng, b._ne.lat];
+  cor[2] = [b._ne.lng, b._sw.lat];
+  cor[3] = [b._sw.lng, b._sw.lat];
+  let canvas_source = map.getSource('canvas');
+  canvas_source.setCoordinates(cor);
+  canvas_source.play();
+  canvas_source.prepare();
+  canvas_source.pause();
 }
 	
 	

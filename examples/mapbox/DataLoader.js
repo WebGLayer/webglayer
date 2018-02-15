@@ -1,25 +1,17 @@
 function DataLoader() {
-	
-	var that = this;
-
-	/**
-	 * Load text file
-	 */
-	 $("#speed_chart").text("Please wait... data are being loaded. This may take a while.");
-	
 	this.loadPosData = function(file) {
 
-			var pts = [];
-			var days = [];
-			var hours = [];
-			var date = [];
-			var sev = [];
-			var road_type = [];
-			var speed_limit = [];
-			var pts_id = [];
+			let pts = [];
+			let days = [];
+			let hours = [];
+			let date = [];
+			let sev = [];
+			let road_type = [];
+			let speed_limit = [];
+			let pts_id = [];
 			
 			
-			var weekday = new Array(7);
+			let weekday = new Array(7);
 			weekday[0]=  "Sun";
 			weekday[1] = "Mon";
 			weekday[2] = "Tue";
@@ -27,15 +19,15 @@ function DataLoader() {
 			weekday[4] = "Thu";
 			weekday[5] = "Fri";
 			weekday[6] = "Sat";
-			//var weekarray = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri","Sat"];
+			//let weekarray = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri","Sat"];
 	
 		
-			var sevEnum = new Array(3);
+			let sevEnum = new Array(3);
 			sevEnum[0] = "Fatal";
 			sevEnum[1] = "Serious";
 			sevEnum[2] = "Slight";
 
-			var rtEnum = new Array();
+			let rtEnum = new Array();
 			rtEnum[1] = "Roundabout";
 			rtEnum[2] = "One way street";
 			rtEnum[3] = "Dual carriageway";
@@ -46,27 +38,27 @@ function DataLoader() {
 			rtEnum[-1] = "Data missing or out of range";
 			
 			rtDom = new Array();
-			var i = 0;
-			for(var key in rtEnum) {
+			let i = 0;
+			for(let key in rtEnum) {
  			   rtDom[i] = rtEnum[key];
  			   i++;
 			}
 			rtDom[8] = "No data";
 				
-		var j = 0;				
+		let j = 0;
 		/**
 		 * load data
 		 */
 		d3.csv(file, function(error, data) {
 		
-		var dateminmax ;
+		let dateminmax ;
 
 			data.forEach(function(val, i) {
 							
 					pts[j++] = parseFloat(val.x);
 					pts[j++] = parseFloat(val.y);
 									
-					var d =  (new Date(val.timestamp*1000));																				
+					let d =  (new Date(val.timestamp*1000));
 					//index[i] = rasterer.calc(i);	
 					days[i] =  weekday[d.getDay()]; //d.getDay();		
 										
@@ -103,17 +95,24 @@ function DataLoader() {
 				pts_id:pts_id,
         rtEnum: rtEnum});
 			});
-	}
-	
-	
+	};
+
+  /**
+   *
+   * @param {number} val
+   * @param {Object} minmax
+   * @param {number} minmax.min
+   * @param {number} minmax.max
+   * @returns {Object}
+   */
 	function getMinMax(val, minmax){
 		if (typeof(minmax)=='undefined'){
 			minmax = [];
 			minmax.min = Number.MAX_VALUE;
 			minmax.max = Number.MIN_VALUE;
 		}
-		if (val < minmax.min) {minmax.min = val};
-		if (val > minmax.max) {minmax.max = val};
+		if (val < minmax.min) {minmax.min = val}
+		if (val > minmax.max) {minmax.max = val}
 		return minmax;
 		
 	}

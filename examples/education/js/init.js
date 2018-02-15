@@ -19,8 +19,9 @@ function init() {
 
 function visualize(data){	
 
-		//wgl = new WGL(data.num,'http://localhost:9999/js/webglayer/','map');	
-		WGL.init(data.num,'../../','map', 'OpenLayers_Map_2_OpenLayers_Container');	
+		//wgl = new WGL(data.num,'http://localhost:9999/js/webglayer/','map');
+    //WGL.i
+		WGL.init(data.num,'../../','map',false, 'OpenLayers_Map_2_OpenLayers_Container');
 		window.onresize = function(){
 			WGL.resize();
 		}
