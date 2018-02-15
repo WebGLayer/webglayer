@@ -10,8 +10,14 @@ WGL.internal.MapController = function() {
 
 
   this.resize = function(){
-    manager.canvas.setAttribute("width", manager.body_width);
-    manager.canvas.setAttribute("height", manager.body_height);
+    if (manager.canvasOnlyOnMap){
+      manager.canvas.setAttribute("width", manager.w);
+      manager.canvas.setAttribute("height", manager.h);
+    }
+    else{
+      manager.canvas.setAttribute("width", manager.body_width);
+      manager.canvas.setAttribute("height", manager.body_height);
+    }
     this.width = manager.w;
     this.height =  manager.h;
 
