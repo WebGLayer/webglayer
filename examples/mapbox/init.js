@@ -4,17 +4,26 @@ function visualize(data) {
 
   // register movezoom event
   map.on("move", onMove);
+  
+  // resize window
+  window.onresize = function(){
+    WGL.getManager().updateMapSize();
+    WGL.mcontroller.resize();
+    $("#webglayer").css("display","none");
+    onMove();
+  };
 
   const heatmap = WGL.addHeatMapDimension(data.pts, 'heatmap');
   heatmap.radiusFunction = function (r, z) {
     return r*(z/10);
   };
-  heatmap.setRadius(15);
+  heatmap.setRadius(10);
 
   WGL.addExtentFilter();
-  WGL.colorSchemes.setSchemeSelected('fire');
+  WGL.colorSchemes.setSchemeSelected('icy');
 
-  WGL.addIdentifyDimension(data.pts, data.pts_id, 'idt', '../birmingham/data/identify/');
+  let idt = WGL.addIdentifyDimension(data.pts, data.pts_id, 'idt', '../birmingham/data/identify/');
+  idt.enabled = true;
   pw = new WGL.ui.PopupWin(".mapboxgl-canvas", "idt", "Accident Details");
   pw.setProp2html(function (t) {
     const d =  (new Date(t["timestamp"]*1000));
@@ -63,19 +72,18 @@ function visualize(data) {
       break;
     }
   }
-  map.addSource("canvas",
-    {
-      "type": 'canvas',
-      "canvas": 'webglayer',
-      "coordinates": [
-        [-12, 60],
-        [2, 60],
-        [2, 50],
-        [-12, 50]
-      ],
-      "animate": true
-    }
-  );
+  const map_source = {
+    "type": 'canvas',
+    "canvas": 'webglayer',
+    "coordinates": [
+      [-12, 60],
+      [2, 60],
+      [2, 50],
+      [-12, 50]
+    ],
+    "animate": true
+  };
+  map.addSource("canvas", map_source);
   map.addLayer(layer, firstSymbolId);
 
   onMove();
