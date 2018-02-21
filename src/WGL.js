@@ -465,7 +465,7 @@ var WGL = (function() {
 
       // delete extend filter
       try {
-        delete extf;
+        //delete extf;
       } catch (err) {}
 
 
