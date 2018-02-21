@@ -4,3 +4,5 @@
 .idea/workspace.xml
 /examples/birmingham/data/identify/
 /examples/birmingham/data/split_data.py
+/build/main_es5.js
+/build/main_es5.js.map
