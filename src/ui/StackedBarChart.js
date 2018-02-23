@@ -1,5 +1,7 @@
 WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
 
+  var that = this;
+
   var type;
   var div_id;
 
@@ -488,7 +490,7 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
 
     $("#" + div_id).on("click", function(e) {
       if (e.target.tagName != "g") {
-        this.clearSelection(brush1);
+        that.clearSelection();
       }
     });
 
@@ -688,10 +690,10 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
     return path.join("");
   }
 
-  this.clearSelection = function(brush) {
+  this.clearSelection = function() {
     of_selection = [];
     of_click = [];
-    brush.clear();
+    this.brush.clear();
     WGL.filterDim(m.name, filterId, []);
   }
 
