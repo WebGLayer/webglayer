@@ -44,7 +44,8 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
   var of_selection = [];
   var dragStart = -1;
   var dragEnd = -1;
-  var lineHeight = 9;
+  var lineHeight = 9; //minimum number of pixels in height that should be available to show a number label over a bar in the chart
+  var labelsMaxColumns = 12; //maximum allowed number of columns in a chart to show number labels
 
   var width = w - margin.left - margin.right;
   var height = h - margin.top - margin.bottom;
@@ -53,8 +54,13 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
   var svgbw = "";
   var bw = 0.0;
 
+  var showNumberLabels = true;
+
   this.y_label = "detections";
 
+  this.showBarLabel = function(b) {
+    showNumberLabels = b;
+  };
 
   this.setLinearXScale = function(){
     xScale = new d3.scale.linear();
@@ -63,7 +69,7 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
     svgbw= "h"+bw+"V";
     type = 'linear';
     return this;
-  }
+  };
 
   this.setOrdinalXScale = function(){
     xScale = d3.scale.ordinal().domain(m.domain).rangeBands([ 0, width ],0.03,0.015);
@@ -71,7 +77,7 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
     svgbw= "h"+bw+"V";
     type = 'ordinal';
     return this;
-  }
+  };
 
   this.xformat = function(d){
     return d;
@@ -195,7 +201,8 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
         return d + " foreground bar ";
       }).datum(dataset);
 
-    if(dataset.length <=12) {
+    if(dataset.length <= labelsMaxColumns
+      && showNumberLabels) {
 
       svg.selectAll(".text")
         .data(dataset)
@@ -557,6 +564,10 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
 
   };
   function updateLabels() {
+
+    if(!showNumberLabels) {
+      return;
+    }
 
     var selected = $("#" + div_id + " .label.selected");
     var out = $("#" + div_id + " .label.out");
