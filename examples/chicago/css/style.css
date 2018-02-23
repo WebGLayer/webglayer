@@ -550,3 +550,9 @@ div.olControlAttribution {
     border-radius: 20px;
     background-color: cornflowerblue;
 }
+
+svg text.label {
+    fill:navy;
+    font-size: 10px;
+    text-anchor: middle;
+}
