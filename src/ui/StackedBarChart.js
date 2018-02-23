@@ -548,7 +548,6 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
 
     updateLabels();
 
-    // bars.data(dataset).transition().duration(10);
     /*
      * bars.selectAll("rect").data(function(m) { return m.levels;
      * }).transition().duration(10).attr("y", function(d) { return
@@ -560,48 +559,48 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
   function updateLabels() {
 
     var selected = $("#" + div_id + " .label.selected");
-
-    for(var i=0; i<selected.length; i++) {
-      var textContent = yformatBars(dataset[i].selected);
-      var x = xScale(dataset[i].val) + bw / 2;
-      var y = yScale(dataset[i].selected) + 1;
-
-      if (textContent != 0
-        && (height - y > lineHeight)) {
-        $(selected[i])[0].outerHTML = '<text class="label selected" x="' + x + '" y="' + y + '" dy="1em">' + textContent + '</text>'
-      } else {
-        $(selected[i])[0].outerHTML = '<text style="display: none" class="label selected" x="' + x + '" y="' + y + '" dy="1em">' + textContent + '</text>'
-      }
-    }
-
-    var unselected = $("#" + div_id + " .label.unselected");
-    for(var i=0; i<unselected.length; i++) {
-      var textContent = yformatBars(dataset[i].unselected + dataset[i].selected);
-      var x = xScale(dataset[i].val) + bw / 2;
-
-      var y = yScale(dataset[i].unselected + dataset[i].selected) + 1;
-      if (dataset[i].unselected != 0
-        && (height - y > lineHeight)) {
-        $(unselected[i])[0].outerHTML = '<text class="label unselected" x="' + x + '" y="' + y + '" dy="1em">' + textContent + '</text>'
-      } else {
-        $(unselected[i])[0].outerHTML = '<text style="display: none" class="label unselected" x="' + x + '" y="' + y + '" dy="1em">' + textContent + '</text>'
-      }
-
-    }
-
     var out = $("#" + div_id + " .label.out");
+    var unselected = $("#" + div_id + " .label.unselected");
 
-    for(var i=0; i<out.length; i++) {
-      var textContent = yformatBars(dataset[i].out + dataset[i].selected + dataset[i].unselected);
-      var x = xScale(dataset[i].val) + bw / 2;
-      var y = yScale(dataset[i].out+dataset[i].selected+dataset[i].unselected) + 1;
+    for(var i=0; i<unselected.length; i++) {
+
+      var textContentSelected = yformatBars(dataset[i].selected);
+      var xSelected = xScale(dataset[i].val) + bw / 2;
+      var ySelected = yScale(dataset[i].selected) + 1;
+
+      if (textContentSelected != 0
+        && (height - ySelected > lineHeight)) {
+        $(selected[i])[0].outerHTML = '<text class="label selected" x="' + xSelected + '" y="' + ySelected + '" dy="1em">' + textContentSelected + '</text>'
+      } else {
+        $(selected[i])[0].outerHTML = '<text style="display: none" class="label selected" x="' + xSelected + '" y="' + ySelected + '" dy="1em">' + textContentSelected + '</text>'
+      }
+
+      var textContentUnselected = yformatBars(dataset[i].unselected + dataset[i].selected);
+      var xUnselected = xScale(dataset[i].val) + bw / 2;
+      var yUnselected = yScale(dataset[i].unselected + dataset[i].selected) + 1;
+
+      if (dataset[i].unselected != 0
+        && (height - yUnselected > lineHeight)
+        && (ySelected - yUnselected > lineHeight)) {
+        $(unselected[i])[0].outerHTML = '<text class="label unselected" x="' + xUnselected + '" y="' + yUnselected + '" dy="1em">' + textContentUnselected + '</text>'
+      } else {
+        $(unselected[i])[0].outerHTML = '<text style="display: none" class="label unselected" x="' + xUnselected + '" y="' + yUnselected + '" dy="1em">' + textContentUnselected + '</text>'
+
+      }
+
+      var textContentOut = yformatBars(dataset[i].out + dataset[i].selected + dataset[i].unselected);
+      var xOut = xScale(dataset[i].val) + bw / 2;
+      var yOut = yScale(dataset[i].out+dataset[i].selected+dataset[i].unselected) + 1;
 
       if (dataset[i].out != 0
-        && (height - y > lineHeight)) {
-        $(out[i])[0].outerHTML = '<text class="label out" x="' + x + '" y="' + y + '" dy="1em">' + textContent + '</text>'
+        && (height - yOut > lineHeight)
+        && (yUnselected - yOut > lineHeight)
+        && (ySelected - yOut > lineHeight)) {
+        $(out[i])[0].outerHTML = '<text class="label out" x="' + xOut + '" y="' + yOut + '" dy="1em">' + textContentOut + '</text>'
       } else {
-        $(out[i])[0].outerHTML = '<text style="display: none" class="label out" x="' + x + '" y="' + y + '" dy="1em">' + textContent + '</text>'
+        $(out[i])[0].outerHTML = '<text style="display: none" class="label out" x="' + xOut + '" y="' + yOut + '" dy="1em">' + textContentOut + '</text>'
       }
+
     }
   }
   function calcBar(){
