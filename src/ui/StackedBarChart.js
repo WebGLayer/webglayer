@@ -44,9 +44,11 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
   var of_selection = [];
   var dragStart = -1;
   var dragEnd = -1;
+  var lineHeight = 9;
 
   var width = w - margin.left - margin.right;
   var height = h - margin.top - margin.bottom;
+
   var dataset = null;
   var svgbw = "";
   var bw = 0.0;
@@ -76,6 +78,7 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
   };
 
   var yformat = d3.format("s");
+  var yformatBars = d3.format(".3s");
 
   this.setYFormat = function (fuc) {
     yformat = fuc;
@@ -191,6 +194,69 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
       .enter().append("path").attr("class", function(d) {
         return d + " foreground bar ";
       }).datum(dataset);
+
+    if(dataset.length <=12) {
+
+      svg.selectAll(".text")
+        .data(dataset)
+        .enter()
+        .append("text")
+        .attr("class", "label selected")
+        .attr("x", (function (d) {
+          return xScale(d.val) + bw / 2;
+        }))
+        .attr("y", function (d) {
+          return yScale(d.selected) + 1;
+        })
+        .attr("dy", "1em")
+        .text(function (d) {
+          if(d.selected != 0) {
+            return yformatBars(d.selected);
+          } else {
+            return "";
+          }
+        });
+
+      svg.selectAll(".text")
+        .data(dataset)
+        .enter()
+        .append("text")
+        .attr("class", "label unselected")
+        .attr("x", (function (d) {
+          return xScale(d.val) + bw / 2;
+        }))
+        .attr("y", function (d) {
+          return yScale(d.unselected) + 1;
+        })
+        .attr("dy", "1em")
+        .text(function (d) {
+          if(d.unselected != 0) {
+            return yformatBars(d.unselected);
+          } else {
+            return "";
+          }
+        });
+
+      svg.selectAll(".text")
+        .data(dataset)
+        .enter()
+        .append("text")
+        .attr("class", "label out")
+        .attr("x", (function (d) {
+          return xScale(d.val) + bw / 2;
+        }))
+        .attr("y", function (d) {
+          return yScale(d.out+d.selected+d.unselected) + 1;
+        })
+        .attr("dy", "1em")
+        .text(function (d) {
+          if(d.out!= 0) {
+            return yformatBars(d.out);
+          } else {
+            return "";
+          }
+        });
+    }
 
     svg.selectAll(".foreground.bar").attr("clip-path",
       "url(#clip-" + div_id + ")");
@@ -374,6 +440,7 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
           active_group = d[0];
           for (var i = 0; i < classes.length; i++) {
             calcBar();
+            updateLabels();
           }
 
 
@@ -478,6 +545,9 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
     bars.datum(dataset);
 
     calcBar();
+
+    updateLabels();
+
     // bars.data(dataset).transition().duration(10);
     /*
      * bars.selectAll("rect").data(function(m) { return m.levels;
@@ -486,12 +556,54 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
      * yScale(d.y1); });
      */
 
-    /*
-     * yAxis = d3.svg.axis().scale(yScale).orient("left");
-     * svg.selectAll('.y.axis').transition().duration(15).call(yAxis);
-     */
   };
+  function updateLabels() {
 
+    var selected = $("#" + div_id + " .label.selected");
+
+    for(var i=0; i<selected.length; i++) {
+      var textContent = yformatBars(dataset[i].selected);
+      var x = xScale(dataset[i].val) + bw / 2;
+      var y = yScale(dataset[i].selected) + 1;
+
+      if (textContent != 0
+        && (height - y > lineHeight)) {
+        $(selected[i])[0].outerHTML = '<text class="label selected" x="' + x + '" y="' + y + '" dy="1em">' + textContent + '</text>'
+      } else {
+        $(selected[i])[0].outerHTML = '<text style="display: none" class="label selected" x="' + x + '" y="' + y + '" dy="1em">' + textContent + '</text>'
+      }
+    }
+
+    var unselected = $("#" + div_id + " .label.unselected");
+    for(var i=0; i<unselected.length; i++) {
+      var textContent = yformatBars(dataset[i].unselected + dataset[i].selected);
+      var x = xScale(dataset[i].val) + bw / 2;
+
+      var y = yScale(dataset[i].unselected + dataset[i].selected) + 1;
+      if (dataset[i].unselected != 0
+        && (height - y > lineHeight)) {
+        $(unselected[i])[0].outerHTML = '<text class="label unselected" x="' + x + '" y="' + y + '" dy="1em">' + textContent + '</text>'
+      } else {
+        $(unselected[i])[0].outerHTML = '<text style="display: none" class="label unselected" x="' + x + '" y="' + y + '" dy="1em">' + textContent + '</text>'
+      }
+
+    }
+
+    var out = $("#" + div_id + " .label.out");
+
+    for(var i=0; i<out.length; i++) {
+      var textContent = yformatBars(dataset[i].out + dataset[i].selected + dataset[i].unselected);
+      var x = xScale(dataset[i].val) + bw / 2;
+      var y = yScale(dataset[i].out+dataset[i].selected+dataset[i].unselected) + 1;
+
+      if (dataset[i].out != 0
+        && (height - y > lineHeight)) {
+        $(out[i])[0].outerHTML = '<text class="label out" x="' + x + '" y="' + y + '" dy="1em">' + textContent + '</text>'
+      } else {
+        $(out[i])[0].outerHTML = '<text style="display: none" class="label out" x="' + x + '" y="' + y + '" dy="1em">' + textContent + '</text>'
+      }
+    }
+  }
   function calcBar(){
     yScale = d3.scale.linear().domain(
       [ 0, dataset.max[active_group] ]).range(
