@@ -105,7 +105,7 @@ function getTopLeftTC() {
   const TL3857_ZERO = {x: -20037508.34, y: 20037508.34};
   const c = map.getCenter();
 
-  const proj = new SphericalMercator();
+  const proj = new SphericalMercator.SphericalMercator();
   const center_3857 = proj.forward([c.lng, c.lat]);
 
   return {
