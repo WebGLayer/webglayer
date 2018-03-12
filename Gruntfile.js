@@ -5,19 +5,28 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
     
     concat : {
-    	  options : {
-    		 
-    	  },
-    	  dist : {
-    	    src  : ['src/WGL.js','src/**/*.js'],
+    	  dist1 : {
+    	    src  : [
+            'src/WGL.js',
+            'src/**/*.js'
+            ],
     	    dest : 'build/main.js'
-    	  }
+    	  },
+        dist2 : {
+          src  : [
+            'examples/libs/jquery.csv.min.js',
+            'build/uglf.js'
+          ],
+          dest : 'build/<%= pkg.name %>.min.js'
+        }
     	},
 
     babel: {
       options: {
         sourceMap: true,
-        presets: ['env']
+        presets: [
+          ['env', {modules: false}],
+        ]
       },
       dist: {
         files: {
@@ -32,8 +41,10 @@ module.exports = function(grunt) {
         mangle:true
       },
       build: {
-        src: 'build/main_es5.js',
-        dest: 'build/<%= pkg.name %>.min.js'
+        src: [
+          'build/main_es5.js'
+        ],
+        dest: 'build/uglf.js'
       }
     },
     	
@@ -52,6 +63,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-jsdoc');
 
-  grunt.registerTask('default', ['concat','babel', 'uglify']);
+  grunt.registerTask('default', ['concat:dist1','babel','uglify', 'concat:dist2']);
 
 };

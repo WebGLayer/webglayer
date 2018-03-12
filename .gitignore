@@ -1,8 +1,6 @@
 /node_modules
 /doc
-
-.idea/workspace.xml
+.idea/
 /examples/birmingham/data/identify/
 /examples/birmingham/data/split_data.py
-/build/main_es5.js
-/build/main_es5.js.map
+
