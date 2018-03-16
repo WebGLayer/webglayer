@@ -16,20 +16,26 @@
 </script>
     
 <script id="ilumination_renderer_fShader" type="x-shader/x-fragment">
-      precision mediump float;  
+    precision mediump float;
 	  
  	// uniform mat4 rasterMatrix;	
-	  uniform sampler2D heatmap_raster;
+	uniform sampler2D heatmap_raster;
 	  
 	 
-	  uniform float reduceSelection;
-	  uniform vec2 rsize;
+	uniform float reduceSelection;
+	uniform vec2 rsize;
 	  
-	  varying vec4 var_texCoord;
-	// varying vec2 v_texCoord;
-	  uniform mat4 colors;
+	varying vec4 var_texCoord;
+
+	uniform mat4 colors;
+
+	// ph variables
+	uniform float ph_alpha;
+    uniform vec3 ph_lightDir;
+    uniform float ph_materialShininess;
+    uniform float ph_ambient;
 	  
-	const vec3 lightPos = vec3(0.5,0.5,5.);
+	//const vec3 lightPos = vec3(0.5, 0.5, 2.);
 	//const vec4 ambientColor = vec4(.0, .0, .0,1.);
 	//const vec4 diffuseColor = vec4(0.9, 0.9, 0.9,1.);
 	//const vec4 specColor =    vec4(0.0, 0.0, 0.0, 1.);
@@ -100,18 +106,18 @@
   		
   		
   		/*PHONG SHADING here*/
-  		vec3 vertPos = vec3(xc ,yc, fc);
+  		//vec3 vertPos = vec3(xc ,yc, fc);
   		vec3 normal = normalize((norm2 + norm1) /2.);//normalize(-(cross(vec3(xt -xc , yt -yc, ft - fc), vec3(xr - xc , yr - yc, fr - fc) )));
-  		vec3 lightDir = normalize(lightPos - vertPos);
+  		vec3 lightDir = normalize(ph_lightDir);//normalize(vec3(-1.0, 1.0, 5.0));//normalize(lightPos - vertPos);
     	vec3 reflectDir = reflect(-lightDir, normal);
-    	vec3 viewDir = normalize(-vertPos);
+    	vec3 viewDir = normalize(vec3(0.0, 0.0,1.0));//normalize(-vertPos);
   		
   		float lambertian = max(dot(lightDir,normal), 0.0);
   		float specular = 0.0;
   		
   		if(lambertian > 0.0) {
        		float specAngle = max(dot(reflectDir, viewDir), 0.0);
-      		 specular = pow(specAngle, 4.0);
+      		 specular = pow(specAngle, ph_materialShininess);
     	}
    		
   		
@@ -126,9 +132,9 @@
 
 	 if (fc > 0.){
 			 gl_FragColor = vec4(
-			 			0.6 * ambientColor 
-			 		  - lambertian*diffuseColor 
-			 		  + specular*specColor, fc/1.5+0.1);
+			 			ph_ambient * ambientColor
+			 		  + lambertian*diffuseColor
+			 		  + specular*specColor, fc/1.8+ph_alpha); //fc/1.5+0.1
 			 //vec4(ambientColor + lambertian*diffuseColor + specular*specColor, 1.0);
 			//  gl_FragColor[3] = fc*reduceSelection;
 	} else {
@@ -137,9 +143,7 @@
   		
 	}
   		
-  		
-	
-		//gl_FragColor = col;//fdata;//vec4(1.,0.,0.,1.);
+
 		
       }
 </script>

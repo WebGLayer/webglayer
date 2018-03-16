@@ -1,5 +1,10 @@
 
 WGL.dimension.IluminationRenderer = function(){
+  //Phong reflection model variables
+  this.ph_alpha = 0.1;
+  this.ph_lightDir = [-1.0, 1.0, 5.0];
+  this.ph_materialShininess = 1.0;
+  this.ph_ambient = 0.01;
 
   var manager = WGL.getManager();
   var GLU = WGL.internal.GLUtils;
@@ -12,6 +17,13 @@ WGL.dimension.IluminationRenderer = function(){
   manager.storeUniformLoc(this.glProgram, "colors");
   manager.storeUniformLoc(this.glProgram, "reduceSelection");
   manager.storeUniformLoc(this.glProgram, "rsize");
+
+  // uniform loc for ph
+  manager.storeUniformLoc(this.glProgram, "ph_alpha");
+  manager.storeUniformLoc(this.glProgram, "ph_lightDir");
+  manager.storeUniformLoc(this.glProgram, "ph_materialShininess");
+  manager.storeUniformLoc(this.glProgram, "ph_ambient");
+
 
 
   this.colors =  new Float32Array(16);
@@ -45,19 +57,25 @@ WGL.dimension.IluminationRenderer = function(){
 
 
   this.setup = function() {
-     gl.useProgram(this.glProgram);
-     gl.uniformMatrix4fv(this.glProgram.colors, false, this.colors);
-     gl.uniform2f(this.glProgram.rsize,  manager.w, manager.h);
+    gl.useProgram(this.glProgram);
+    gl.uniformMatrix4fv(this.glProgram.colors, false, this.colors);
+    gl.uniform2f(this.glProgram.rsize,  manager.w, manager.h);
 
-     gl.bindBuffer(gl.ARRAY_BUFFER, texCoordBuffer);
-     gl.enableVertexAttribArray(texCoordLocation);
-     gl.vertexAttribPointer(texCoordLocation, 2, gl.FLOAT, false, 0, 0);
+    // ph variables
+    gl.uniform1f(this.glProgram.ph_alpha, this.ph_alpha);
+    gl.uniform3f(this.glProgram.ph_lightDir, this.ph_lightDir[0], this.ph_lightDir[1], this.ph_lightDir[2]);
+    gl.uniform1f(this.glProgram.ph_materialShininess, this.ph_materialShininess);
+    gl.uniform1f(this.glProgram.ph_ambient, this.ph_ambient);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, texCoordBuffer);
+    gl.enableVertexAttribArray(texCoordLocation);
+    gl.vertexAttribPointer(texCoordLocation, 2, gl.FLOAT, false, 0, 0);
     //gl.useProgram(this.glProgram);
     /** add specific buffer and uniforms */
-     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-       gl.uniform1i(rasterLoc , 0);
-     gl.activeTexture(gl.TEXTURE0);
-     gl.bindTexture(gl.TEXTURE_2D, this.heatTexture);
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    gl.uniform1i(rasterLoc , 0);
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, this.heatTexture);
 
 
     gl.bindFramebuffer(gl.FRAMEBUFFER,null);
@@ -75,21 +93,13 @@ WGL.dimension.IluminationRenderer = function(){
 
 
   this.render = function(min, max, min_f, max_f, reduceSelection) {
-    //legend.updateMax(max);
     this.setup();
 
-    //console.log(max);
-      gl.uniform1f(this.glProgram.reduceSelection, reduceSelection);
-
-
-     //console.log("max a min filter " +  min_f + " " +max_f )
-     //console.log("max a min        " +  min + " " +max )
+    gl.uniform1f(this.glProgram.reduceSelection, reduceSelection);
 
     gl.drawArrays(gl.TRIANGLES, 0, 6);
     gl.bindTexture(gl.TEXTURE_2D, null);
-      gl.useProgram(null);
-
-
+    gl.useProgram(null);
   }
 
   this.tearDown = function(){
