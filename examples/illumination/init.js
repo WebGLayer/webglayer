@@ -106,17 +106,40 @@ function visualize(data) {
     heatmap.renderer2.ph_materialShininess = $(this).val()/20.0;
     onMove();
   });
-  $('input#sl_angle').on('input', function () {
-    var rad = $(this).val()/180*3.1415926535;
-    var x = Math.cos(rad);
-    var y = Math.sin(rad);
-    var h = heatmap.renderer2.ph_lightDir[2];
+  function slideAngle(value) {
+    //console.log(value);
+    const rad = (-(value - 90))/180*3.1415926535;
+    const x = Math.cos(rad);
+    const y = Math.sin(rad);
+    const h = heatmap.renderer2.ph_lightDir[2];
     heatmap.renderer2.ph_lightDir = [x, y, h];
     onMove();
-  });
+  }
   $('input#sl_height').on('input', function () {
     heatmap.renderer2.ph_lightDir[2] = $(this).val()/10.0;
     onMove();
+  });
+
+
+
+  $('#slider').CircularSlider({
+    radius: 113, // default radius
+    innerCircleRatio: '0.5',
+    handleDist : 100,
+    min : 0, // min value
+    max: 359, // max value
+    clockwise: true, // false = counterclockwise
+    value : 0, // default vale
+    labelPrefix: "", // label text
+    labelSuffix: "", // label text
+    shape: "Circle", // circle, Half Circle, Half Circle Right, Half Circle Left, KPH
+    touch: true, // enable touch events
+    animate: true, // linear animation support
+    animateDuration: 50, // <a href="https://www.jqueryscript.net/animation/">Animation</a> duration in milliseconds
+    selectable: false,
+    slide : function(value) {slideAngle(parseInt(value[0].textContent))}, // event to be fired on slide w.fn.init.a.fn.CircularSlider
+    onSlideEnd: function(ui, value) {},
+    formLabel: undefined // for image carousel
   });
 }
 

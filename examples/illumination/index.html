@@ -9,11 +9,13 @@
     <link href="mapbox.css" rel="stylesheet">
     <link href="../../src/styles/wgl-selection.css" rel="stylesheet">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"/>
+    <!--<link href="circle/circular-slider.min.css" rel="stylesheet">-->
 
     <script src="../libs/jquery-3.3.1.min.js"></script>
     <script src="../libs/d3.v3.min.js"></script>
     <script src="../libs/sphericalmercator.js"></script>
     <script src="../libs/jquery.csv.js"></script>
+    <script src="circle/circular-slider.min.js"></script>
     <!--<script src="../../build/WebGLayer.min.js"></script>-->
 
     <script src="../../src/WGL.js"></script>
@@ -58,16 +60,27 @@
 
 <div id='map'></div>
 <div id='control'>
-    Alpha
-    <input type="range" min="0" max="100" value="10" class="slider" id="sl_alpha">
-    <br>Ambient
-    <input type="range" min="0" max="100" value="40" class="slider" id="sl_ambient">
-    <br>Shinisess
-    <input type="range" min="0" max="100" value="40" class="slider" id="sl_materialShininess">
-    <br> Angle
-    <input type="range" min="0" max="360" value="135" class="slider" id="sl_angle">
-    <br> Height
-    <input type="range" min="10" max="100" value="50" class="slider" id="sl_height">
+    <table>
+        <tr>
+            <td>Transparency</td>
+            <td><input type="range" min="0" max="100" value="10" class="slider" id="sl_alpha"></td>
+        </tr>
+        <tr>
+            <td>Intensity</td>
+            <td><input type="range" min="0" max="100" value="40" class="slider" id="sl_ambient"></td>
+        </tr>
+        <tr>
+            <td>Shininess</td>
+            <td><input type="range" min="0" max="100" value="40" class="slider" id="sl_materialShininess"></td>
+        </tr>
+        <tr>
+            <td>Shades</td>
+            <td><input type="range" min="10" max="100" value="50" class="slider" id="sl_height"></td>
+        </tr>
+    </table>
+    <center>Light angle</center>
+    <div id="slider"></div>
+
 </div>
 
 
