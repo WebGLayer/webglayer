@@ -134,7 +134,7 @@
 			 gl_FragColor = vec4(
 			 			ph_ambient * ambientColor
 			 		  + lambertian*diffuseColor
-			 		  + specular*specColor, fc/1.8+ph_alpha); //fc/1.5+0.1
+			 		  + specular*specColor, fc/1.5+ph_alpha); //fc/1.5+0.1
 			 //vec4(ambientColor + lambertian*diffuseColor + specular*specColor, 1.0);
 			//  gl_FragColor[3] = fc*reduceSelection;
 	} else {
