@@ -67,8 +67,8 @@ var WGL = (function() {
      * @param {number} num number of points
      * @param {string} url path to directory with shaders
      * @param {string} divid map div id
-     * @param {boolean=false} small_canvas true => canvas will be cover only map window (required for Mapbox)
-     * @param {string=} mapcontainerid parent element of webglayer canvas
+     * @param {boolean} [small_canvas=false] true => canvas will be cover only map window (required for Mapbox)
+     * @param {string} [mapcontainerid=] parent element of webglayer canvas
      */
     init : function(num, url, divid, small_canvas, mapcontainerid) {
       setVars();
@@ -115,6 +115,10 @@ var WGL = (function() {
       manager.addDataBuffer(indexta, 2, 'indexLine');
     },
 
+    /**
+     *
+     * @returns {WGL.internal.Manager}
+     */
     getManager : function() {
       return manager;
     },
@@ -126,7 +130,10 @@ var WGL = (function() {
 
 
     /**
-     * Adding dimensions
+     *
+     * @param {number[]} data array of xy data e.g [x1, y1, x2, y2, ...] in 0 level
+     * @param {string} id ID of dimension
+     * @returns {WGL.dimension.MapDimension}
      */
     addMapDimension : function(data, id) {
       try {
@@ -142,10 +149,10 @@ var WGL = (function() {
 
     /**
      * Add Identify dimension to the WGL.
-     * @param data {Array} array of xy data e.g [x1, y1, x2, y2, ...] in 0 level
-     * @param pts_id {Array} array of ID [id1, id2, id3, ...]
-     * @param id {String} ID of dimension
-     * @param properties_path path to directory with files for identify
+     * @param {number[]} data array of xy data e.g [x1, y1, x2, y2, ...] in 0 level
+     * @param {int[]} pts_id array of ID [id1, id2, id3, ...]
+     * @param {String} id ID of dimension
+     * @param {string} properties_path path to directory with files for identify
      * @returns {WGL.dimension.IdentifyDimension}
      */
     addIdentifyDimension: function (data, pts_id, id, properties_path) {
@@ -212,14 +219,20 @@ var WGL = (function() {
       return dim;
     },
 
-    addHeatMapDimension : function(data, id) {
+    /**
+     * Add heat map
+     * @param data {Array} pts array e.g [x1, y1, x2, y2,...]
+     * @param id {String} ID of dimension
+     * @param  {number}[render_resolution=1] available values are 1 - full, 2 - half, 4 - quarter
+     * @returns {WGL.dimension.HeatMapDimension} heat map dimension
+     */
+    addHeatMapDimension : function(data, id, render_resolution) {
       try {
         manager.addDataBuffer(u.array2TA(data), 2, 'wPoint');
       } catch (err) {
         console.warn(err);
       }
-      ;
-      var dim = new WGL.dimension.HeatMapDimension(id);
+      var dim = new WGL.dimension.HeatMapDimension(id, render_resolution);
       this._dimensions[id] = dim;
       return dim;
     },
@@ -237,6 +250,18 @@ var WGL = (function() {
       return dim;
     },
 
+    /**
+     *
+     * @param {Object} m
+     * @param {Array} m.data data for histogram
+     * @param {number} m.min minimum for data
+     * @param {number} m.max maximum for data
+     * @param {number} m.num_bins number of column in histogram
+     * @param {string} m.name ID of histogram
+     * @param {string} m.type must be 'linear'
+     * @param {string} m.label label for histogram
+     * @returns {WGL.dimension.HistDimension}
+     */
     addLinearHistDimension : function(m) {
       var ta = u.array2TANormLinear(m, m.num_bins);
       manager.addDataBuffer(ta, 1, m.name, m.min, m.max);
@@ -247,6 +272,16 @@ var WGL = (function() {
       return dim;
     },
 
+    /**
+     *
+     * @param {Object} m
+     * @param {Array} m.data data for histogram
+     * @param {Array} m.domain domain for the data (all possible values in data)
+     * @param {string} m.name ID of histogram
+     * @param {string} m.type must be 'ordinal'
+     * @param {string} m.label label for histogram
+     * @returns {WGL.dimension.HistDimension}
+     */
     addOrdinalHistDimension : function(m) {
       var ta = u.array2TANormOrdinal(m);
       manager.addDataBuffer(ta, 1, m.name);

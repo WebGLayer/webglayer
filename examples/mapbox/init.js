@@ -13,14 +13,18 @@ function visualize(data) {
     onMove();
   };
 
-  const heatmap = WGL.addHeatMapDimension(data.pts, 'heatmap');
+  const heatmap = WGL.addHeatMapDimension(data.pts, 'heatmap', 4);
   heatmap.radiusFunction = function (r, z) {
     return r*(z/10);
   };
-  heatmap.setRadius(10);
+  heatmap.setRadius(20);
+  //heatmap.renderIllumination(true);
+
+  // use normal distribution for values around point
+  heatmap.gauss = true;
 
   WGL.addExtentFilter();
-  WGL.colorSchemes.setSchemeSelected('icy');
+  WGL.colorSchemes.setSchemeSelected('gamma');
 
   let idt = WGL.addIdentifyDimension(data.pts, data.pts_id, 'idt', '../birmingham/data/identify/');
   idt.enabled = true;

@@ -1,5 +1,11 @@
-/** @constructor */
-WGL.dimension.HeatMapDimension = function(id) {
+/**
+ *
+ * @param {String} id ID of dimension
+ * @param {number} [render_resolution=1] available values are 1 - full, 2 - half, 4 - quarter
+ * @constructor
+ */
+WGL.dimension.HeatMapDimension = function(id, render_resolution) {
+
 
   var manager = WGL.getManager();
   var GLU = WGL.internal.GLUtils;
@@ -7,10 +13,16 @@ WGL.dimension.HeatMapDimension = function(id) {
 
   /*indicate if the point has a value or just 1 should be used for every point*/
   this.hasValues = false;
-  // this.manager = manager;
-  // Dimension.call(this, manager);
   this.isSpatial = true;
   this.lockScale = false;
+  this.gauss = false;
+
+  // final resolution
+  this.renderResolution = render_resolution || 1.0;
+  if (this.renderResolution !== 1.0 && this.renderResolution !== 2.0 && this.renderResolution !== 4.0){
+    throw 'Render resolution can be 1.0, 2.0 or 4.0 only!'
+  }
+
 
 
   this.maxcal = new WGL.internal.MaxCalculator(Math.floor(manager.w / 5),
@@ -22,15 +34,24 @@ WGL.dimension.HeatMapDimension = function(id) {
   var illumination = false;
   var doGetMax = true;
   var legend;
-
+  /**
+   *
+   * @param {boolean} v
+   */
   this.setVisible = function(v) {
     visible = v;
   };
-
+  /**
+   *
+   * @param {boolean} v
+   */
   this.renderIllumination = function(v) {
     illumination = v;
   };
-
+  /**
+   *
+   * @param {boolean} m
+   */
   this.setDoGetMax = function(m) {
     doGetMax = m;
   };
@@ -63,8 +84,8 @@ WGL.dimension.HeatMapDimension = function(id) {
   };
 
   this.createMapFramebuffer = function() {
-    framebuffer.width = manager.w;
-    framebuffer.height = manager.h;
+    framebuffer.width = manager.w/this.renderResolution;
+    framebuffer.height = manager.h/this.renderResolution;
 
     var renderbuffer = gl.createRenderbuffer();
 
@@ -115,13 +136,15 @@ WGL.dimension.HeatMapDimension = function(id) {
     manager.storeUniformLoc(this.glProgram, drawselect);
     manager.storeUniformLoc(this.glProgram, numfilters);
     manager.storeUniformLoc(this.glProgram, spatsum);
+    // uniform for render resolution variable
+    manager.storeUniformLoc(this.glProgram, "renderResolution");
 
     gl.useProgram(null);
 
   };
   var drawselect = 'drawselect';
   var numfilters = 'numfilters';
-  var spatsum = 'spatsum'
+  var spatsum = 'spatsum';
 
   var radius = 'radius';
 
@@ -135,8 +158,8 @@ WGL.dimension.HeatMapDimension = function(id) {
     this);
 
   this.initProgram();
-  this.renderer2 = new WGL.dimension.IluminationRenderer(manager);
-  this.renderer = new WGL.dimension.HeatMapRenderer(manager);
+  this.renderer2 = new WGL.dimension.IluminationRenderer(this.renderResolution);
+  this.renderer = new WGL.dimension.HeatMapRenderer(this.renderResolution);
   // var maxcal = new
   // MaxCalculator(Math.floor(manager.w/6),Math.floor(manager.h/6));
   var the_filter;
@@ -146,10 +169,18 @@ WGL.dimension.HeatMapDimension = function(id) {
     the_filter = f;
   };
 
+  /**
+   *
+   * @param {number} r
+   */
   this.setRadius = function(r){
     radiusWordVal = r;
   };
 
+  /**
+   * Set weight for every points
+   * @param {number[]} val weight for every point
+   */
   this.setValues = function(val){
     this.glProgram = GLU.compileShaders('heatmap_val_vShader', 'heatmap_val_fShader',
       this);
@@ -158,6 +189,7 @@ WGL.dimension.HeatMapDimension = function(id) {
     this.initProgram();
     this.hasValues = true;
   };
+
   this.setup = function() {
     // this.createFramebuffer();
     // gl.useProgram(this.glProgram);
@@ -196,18 +228,21 @@ WGL.dimension.HeatMapDimension = function(id) {
     gl.uniform1f(this.glProgram[numfilters], manager.trasholds.allsum);
     // console.log(manager.filternum);
 
-    this.radiusValue =  this.radiusFunction(radiusWordVal, manager.zoom);
+    this.radiusValue =  this.radiusFunction(radiusWordVal, manager.zoom)/this.renderResolution;
     //legend.circle.attr("r", this.radiusValue);
 
     gl.uniform1f(this.glProgram[radius], this.radiusValue*2 );
-    gl.uniform1f(this.glProgram[grad], this.gradFunction());
-    gl.uniform1f(this.glProgram[spatsum], manager.trasholds.spatsum);
-    //console.log("spatsum "+manager.trasholds.spatsum) ;
-    //console.log("allsum "+manager.trasholds.allsum) ;
-    // gl.uniform1f(this.glProgram[drawselect], 0);
-    // gl.drawArrays(gl.POINTS, 0, num);
 
-    // gl.uniform1f(this.glProgram[drawselect], 1);
+    if (this.gauss){
+      gl.uniform1f(this.glProgram[grad], -1.0);
+    }
+    else {
+      gl.uniform1f(this.glProgram[grad], this.gradFunction());
+    }
+
+    gl.uniform1f(this.glProgram[spatsum], manager.trasholds.spatsum);
+    gl.uniform1f(this.glProgram.renderResolution, this.renderResolution);
+
     gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
     gl.drawArrays(gl.POINTS, 0, num);
     gl.useProgram(null);
@@ -250,9 +285,6 @@ WGL.dimension.HeatMapDimension = function(id) {
 
     renderMax = this.maxFunction(this.maxVal);
     renderMin = this.minFunction(this.minVal);
-
-
-
 
     // if (typeof(the_filter) !='undefined') {
     if (manager.trasholds.spatsum > 0) {
@@ -323,7 +355,13 @@ WGL.dimension.HeatMapDimension = function(id) {
     manager.matrices.push(matrix);
     manager.mapMatrix = matrix;
   };
-
+  /**
+   *
+   * @param {number} x
+   * @param {number} y
+   * @param {string} [mode='']
+   * @returns {(Float32Array|Uint8Array)}
+   */
   this.readPixels = function(x,y, mode) {
     mode = mode || "";
     var readout;
@@ -344,6 +382,9 @@ WGL.dimension.HeatMapDimension = function(id) {
     return readout;
 
   };
+  /**
+   * Delete all textures, buffers and programs associated with this object.
+   */
   this.clean = function () {
     gl.deleteTexture(this.heatTexture);
     gl.deleteProgram(this.glProgram);
@@ -352,5 +393,4 @@ WGL.dimension.HeatMapDimension = function(id) {
       this.renderer2.clean();
     }
   };
-
 };
