@@ -4,8 +4,12 @@
     <meta charset='utf-8' />
     <title>Display a map</title>
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <!-- MapBox -->
     <script src='../libs/mapbox-gl-dev.js'></script>
-    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.43.0/mapbox-gl.css' rel='stylesheet' />
+    <script src='../libs/mapbox-gl-draw.js'></script>
+    <link href="../libs/mapbox-gl-draw.css" rel="stylesheet">
+    <link href='../libs/mapbox-gl.css' rel='stylesheet' />
+
     <link href="mapbox.css" rel="stylesheet">
     <link href="../../src/styles/wgl-selection.css" rel="stylesheet">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"/>
@@ -14,6 +18,7 @@
     <script src="../libs/d3.v3.min.js"></script>
     <script src="../libs/sphericalmercator.js"></script>
     <script src="../libs/jquery.csv.js"></script>
+    <script src="../libs/poly2tri.js"></script>
     <!--<script src="../../build/WebGLayer.min.js"></script>-->
 
     <script src="../../src/WGL.js"></script>

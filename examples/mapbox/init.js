@@ -23,6 +23,11 @@ function visualize(data) {
   // use normal distribution for values around point
   heatmap.gauss = true;
 
+  const dotmap = WGL.addMapDimension(data.pts, 'themap');
+  dotmap.setVisible(false);
+  WGL.addPolyBrushFilter('themap','polybrush');
+
+
   WGL.addExtentFilter();
   WGL.colorSchemes.setSchemeSelected('gamma');
 
@@ -91,6 +96,35 @@ function visualize(data) {
   map.addLayer(layer, firstSymbolId);
 
   onMove();
+
+  const updatedraw = () => {
+    const features = draw.getAll();
+    if (features.features.length > 0){
+      let polygons = [];
+      features.features.forEach((f)=>{
+        if (validity(f)){
+          try{
+            polygons[f.id] = geometryToPoly(f);
+          }
+          catch(e){
+
+          }
+        }
+      });
+      polygons.length = Object.keys(polygons).length;
+      WGL.filterDim('themap','polybrush', polygons);
+
+    }
+    else{
+      WGL.filterDim('themap','polybrush', []);
+    }
+    onMove();
+  };
+
+  map.on('draw.create', updatedraw);
+  map.on('draw.delete', updatedraw);
+  map.on('draw.update', updatedraw);
+  map.on('draw.render', updatedraw);
 }
 
 /**
@@ -136,6 +170,54 @@ function modifyCanvasCor(){
   canvas_source.play();
   canvas_source.prepare();
   canvas_source.pause();
+}
+
+function wgsToZeroLevel(pos){
+  const proj = new SphericalMercator.SphericalMercator();
+  const point = proj.forward(pos);
+  const x = (point[0] + 20037508.34) / (20037508.34*2)*256;
+  const y = -(point[1] - 20037508.34) / (20037508.34*2)*256;
+  return {x: x, y: y}
+}
+
+function geometryToPoly(feature) {
+  const geom = feature.geometry.coordinates[0];
+
+  let poly_zero = [];
+  for(let i = 0;i < geom.length-1; i++){
+    poly_zero.push(wgsToZeroLevel(geom[i]));
+  }
+  // triangulate
+  const ts = new poly2tri.SweepContext(poly_zero);
+  ts.triangulate();
+  return trianglesToArray(ts.getTriangles());
+}
+
+function trianglesToArray(trig) {
+  let points = [];
+  for ( let i in trig) {
+    for ( let j in trig[i].points_) {
+      points.push(trig[i].points_[j].x);
+      points.push(trig[i].points_[j].y);
+    }
+  }
+  return points;
+}
+
+function validity(feature){
+  if (feature.geometry.coordinates.length === 0){
+    return false;
+  }
+  const geom = feature.geometry.coordinates[0];
+  if (geom.length > 3){
+    for(let i = 1;i < geom.length-1; i++){
+      if (geom[i][0] === geom[i-1][0] && geom[i][1] === geom[i-1][1]){
+        return false;
+      }
+    }
+    return true
+  }
+  return false;
 }
 	
 	
