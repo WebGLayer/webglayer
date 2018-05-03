@@ -56,9 +56,14 @@ WGL.dimension.HeatMapDimension = function(id, render_resolution) {
     doGetMax = m;
   };
 
-  /* default radiusFunc */
+  /**
+   * Return size of point in pixel - default setting holds size across zoom.
+   * @param {number} r size in meters
+   * @param {number} z zoom
+   * @returns {number}
+   */
   this.radiusFunction = function(r, z) {
-    return Math.pow(z, 2) / 10;
+    return r * 6.388019799072483e-06 * Math.pow(2, z);
   };
 
   /* default getMax function */
@@ -171,7 +176,7 @@ WGL.dimension.HeatMapDimension = function(id, render_resolution) {
 
   /**
    *
-   * @param {number} r
+   * @param {number} r point size in meters
    */
   this.setRadius = function(r){
     radiusWordVal = r;
@@ -231,7 +236,7 @@ WGL.dimension.HeatMapDimension = function(id, render_resolution) {
     this.radiusValue =  this.radiusFunction(radiusWordVal, manager.zoom)/this.renderResolution;
     //legend.circle.attr("r", this.radiusValue);
 
-    gl.uniform1f(this.glProgram[radius], this.radiusValue*2 );
+    gl.uniform1f(this.glProgram[radius], this.radiusValue*2);
 
     if (this.gauss){
       gl.uniform1f(this.glProgram[grad], -1.0);
