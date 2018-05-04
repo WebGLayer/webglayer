@@ -73,14 +73,7 @@ WGL.dimension.MapDimension = function(id){
    * @returns {number} point size in px
    */
   this.pointSize = function (zoom) {
-    //console.log(zoom);
-    if (zoom >= 12){
-      return 4
-    }
-    if (zoom < 12 && zoom >= 9){
-      return 2
-    }
-    return 1
+    return Math.pow(2, zoom)/Math.pow(zoom,3);
   };
   this.render = function(num) {
 
