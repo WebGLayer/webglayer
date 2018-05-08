@@ -6,7 +6,10 @@ WGL.ui.HeatMapLegend = function(div_id, filterId, useBrush) {
   var manager = WGL.getManager();
   var GLU = WGL.internal.GLUtils;
 
-  var w = 250;
+  var w = 270;
+  if(window.screen.width < 1366) {
+    w = 190
+  }
   var h = 100;
   var margin = {
     top : 20,
@@ -19,7 +22,7 @@ WGL.ui.HeatMapLegend = function(div_id, filterId, useBrush) {
   var width = w - margin.left - margin.right;
   var height = h - margin.top - margin.bottom;
 
-  var xScale = d3.scale.linear().domain([ 0, 200]).range(
+  var xScale = d3.scale.linear().domain([ 0, 300]).range(
     [ 0, width ]);
 
   var xAxis = d3.svg.axis()
@@ -52,10 +55,18 @@ WGL.ui.HeatMapLegend = function(div_id, filterId, useBrush) {
     svg.select("#grad_b").attr("fill", "url(#legend_blue_gradient)");
   }
 
+  let right = 0.5;
+  let top = 4.0;
+  if(window.screen.width < 1366) {
+    right = -2.5;
+    top = 5.0
+  }
+
   svg = d3.select("#" + div_id)
     .append("svg")
     .attr("height", h)
-    .attr("style", "position: absolute; right: 1em; top: 2.5em;")
+    .attr("style", "position: absolute; top: "+top+"em; right: "+right+"em")
+      .classed("hm-slider", true)
     .append("g").attr(
       "transform",
       "translate(" + margin.left + "," + margin.bottom + ")")
@@ -66,8 +77,8 @@ WGL.ui.HeatMapLegend = function(div_id, filterId, useBrush) {
     .attr("class", "x axis all")
     .call(xAxis)
     .attr("y", -100)
-    .attr("dy", ".171em")
-    .attr("transform", "translate(50,30)")
+    .attr("dy", ".3em")
+    .attr("transform", "translate(25,30)")
 
     /*.append("text")
     .attr("x", -38)
@@ -140,14 +151,14 @@ WGL.ui.HeatMapLegend = function(div_id, filterId, useBrush) {
   /*addig color rectangeles*/
   svg.append("rect").attr("fill", bg_rectangle)
     .attr("id", "grad_bacground")
-    .attr("x", 50)
+    .attr("x", 25)
     .attr("y", 0  )
     .attr("width", width)
     .attr("height", 30);
 
   svg.append("rect").attr("fill", "url(#legend_blue_gradient)")
     .attr("id","grad_b")
-    .attr("x", 50)
+    .attr("x", 25)
     .attr("y", 0)
     .attr("width", width)
     .attr("height", 30);

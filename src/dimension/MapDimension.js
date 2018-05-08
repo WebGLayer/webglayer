@@ -30,6 +30,9 @@ WGL.dimension.MapDimension = function(id){
   this.setVisible = function(v){
     visible = v;
   };
+  this.getVisible = function() {
+    return visible;
+  };
 
   this.setup = function() {
 

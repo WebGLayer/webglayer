@@ -7,7 +7,7 @@ WGL.dimension.ColorSchemes = function(){
       0, 207, 178,
       0, 92, 242
     ],
-    'bg': 'light',
+    'bg': 'light-v9',
       'alpha': [1.0, 0.9, 0.4]
   };
 
@@ -16,7 +16,7 @@ WGL.dimension.ColorSchemes = function(){
       155, 11, 232,
         26, 29, 255
     ],
-    'bg': 'light',
+    'bg': 'light-v9',
       'alpha': [1.4, 0.9, 0.4]
   };
 
@@ -25,7 +25,7 @@ WGL.dimension.ColorSchemes = function(){
       253, 154, 41,
       255, 0, 72
     ],
-    'bg': 'dark',
+    'bg': 'dark-v9',
     'alpha': [1.4, 0.9, 0.1]
   };
 
@@ -34,7 +34,7 @@ WGL.dimension.ColorSchemes = function(){
       120, 187, 236,
       36, 28, 95
     ],
-    'bg': 'dark',
+    'bg': 'dark-v9',
       'alpha': [1.4, 0.9, 0.2]
   };
 
@@ -44,7 +44,7 @@ WGL.dimension.ColorSchemes = function(){
       256, 256, 0,
       0, 256, 0
     ],
-    'bg': 'dark',
+    'bg': 'dark-v9',
       'alpha': [1.4, 0.9, 0.05]
   };
 

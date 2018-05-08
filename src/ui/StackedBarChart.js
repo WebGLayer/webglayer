@@ -15,7 +15,7 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
     h = 215;
     margin = {
       top : 20,
-      right : 20,
+      right : 70,
       bottom : 65,
       left : 60
     };
@@ -25,14 +25,19 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
     h=(params.h ? params.h : 215);
     margin=(params.margin ? params.margin : margin = {
       top : 20,
-      right : 20,
+      right : 70,
       bottom : 65,
       left : 60
     });
     rotate_x=params.rotate_x;
   }
 
+  if(screen.width < 1366) {
+      w = w*0.8;
+  }
+
   var dataset;
+  var dataset_length;
   var xScale;
   var yScale;
   var colorScale;
@@ -48,11 +53,11 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
   var dragEnd = -1;
   var lineHeight = 9; //minimum number of pixels in height that should be available to show a number label over a bar in the chart
   var labelsMaxColumns = 12; //maximum allowed number of columns in a chart to show number labels
+  var selected = 0;
 
   var width = w - margin.left - margin.right;
   var height = h - margin.top - margin.bottom;
 
-  var dataset = null;
   var svgbw = "";
   var bw = 0.0;
 
@@ -60,8 +65,22 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
 
   this.y_label = "detections";
 
+
+
   this.showBarLabel = function(b) {
     showNumberLabels = b;
+  };
+
+  this.getDivId = function() {
+    return div_id;
+  };
+
+  this.getXLabel = function() {
+    return x_label;
+  };
+
+  this.getDatasetLength = function() {
+    return dataset_length;
   };
 
   this.setLinearXScale = function(){
@@ -126,17 +145,24 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
     //set arrow height for first
     this.setArrowHeight(arrowTan);
 
-    var cols = [ "#ff8c00", "#7b6888", "#98abc5" ];
+    var cols = [
+        "#ffa91b",
+        "#8cc5f9",
+        "#e3e4e4"
+    ];
 
-    var classes = [ [ "0", "selected", cols[0] ],
-      [ "1", "unselected", cols[1] ], [ "2", "out", cols[2] ] ];
+    var classes = [
+        [ "2", "out", cols[2] ],
+        [ "1", "unselected", cols[1] ],
+        [ "0", "selected", cols[0] ]
+    ];
 
     colorScale = d3.scale.ordinal().range(cols);
 
     yScale = d3.scale.linear().domain([ 0, dataset.max[2] ]).range(
       [ height, 0 ]);
 
-    colorScale.domain([ "selected", "unselected", "out" ]);
+    colorScale.domain([ "out", "unselected", "selected" ]);
 
 
     //to update label printing
@@ -157,6 +183,10 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
       "transform",
       "translate(" + margin.left + "," + margin.top + ")");
 
+    var title = svg.append("title")
+        .attr("class", "tooltip")
+        .style("opacity", 0);
+
     chart = svg.select('.chart');
 
     if(rotate_x) {
@@ -165,21 +195,24 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
         .attr("transform", "translate(0," + height + ")")
         .call(xAxis)
         .selectAll("text")
-        .attr("y", 0)
-        .attr("x", -10)
+        .attr("y", 6)
+        .attr("x", -7)
         .attr("dy", ".35em")
-        .attr("transform", "rotate(270)")
-        .style("text-anchor", "end");
+        .attr("transform", "rotate(300)")
+        .style("text-anchor", "end")
+        .style("text-transform", "capitalize");
     } else {
       svg.append("g").attr("class", "x axis").attr("transform",
         "translate(0," + height + ")").call(xAxis).append("text")
-        .attr("y", "3.5em").attr("x",
-        width /2 ).style("text-anchor", "end").text(x_label);
+          .attr("y", "3.5em").attr("x",
+          width /2 ).style("text-anchor", "end");
     }
 
     svg.append("g").attr("class", "y axis").call(yAxis).append("text")
       .attr("transform", "rotate(270)").attr("y", "-4.5em").attr("x",
       "-2em").style("text-anchor", "end").text(this.y_label); //changes
+
+      dataset_length = dataset.length;
 
     /*
      * bars = svg.selectAll(".bars").data(dataset).enter()
@@ -198,7 +231,32 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
       WGL.filterDim(m.name,filterId, of);
     });*/
 
-    bars = svg.selectAll(".bar").data(["selected", "unselected", "out"])
+    function onMouseOver(e) {
+
+      // Show tooltip on the bar
+      let xPosition = e.offsetX;
+      if(isChrome()) {
+        xPosition-=margin.left;
+      }
+      const group = Math.floor(xPosition / (width / dataset.length));
+      title.transition()
+          .duration(200)
+           .style("opacity", .9);
+      title.html(dataset[group].val.toString().replace(/\b\w/g, l => l.toUpperCase()))
+          .style("left", (e.pageX) + "px")
+          .style("top", (e.pageY) + "px");
+
+      // Change bar color on mouse hover
+      const d = barPathHover([dataset[group]]);
+      svg.selectAll(".hover.bar").attr("d", d);
+    }
+
+    function onMouseLeave(e) {
+      // Return bar to default color
+      svg.selectAll(".hover.bar").attr("d", null);
+    }
+
+    bars = svg.selectAll(".bar").data(["selected", "unselected", "out", "hover"])
       .enter().append("path").attr("class", function(d) {
         return d + " foreground bar ";
       }).datum(dataset);
@@ -286,15 +344,16 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
       d.total = 0;
     });
 
+    //d3.selectAll("#" + div_id + " rect.background").on("mousemove", onmouseover);
 
-    /*
-     * bars.selectAll("path").data(function(m) { return m.levels;
-     * }).enter().append("rect").attr("y", function(d) { return
-     * yScale(d.y1); }).attr("width", bw).attr("height", function(d) {
-     * return yScale(d.y0) - yScale(d.y1); }).attr("fill", function(d) {
-     * return colorScale(d.name); }).attr("class", function(d){return
-     * div_id+d.name});
-     */
+      /*
+       * bars.selectAll("path").data(function(m) { return m.levels;
+       * }).enter().append("rect").attr("y", function(d) { return
+       * yScale(d.y1); }).attr("width", bw).attr("height", function(d) {
+       * return yScale(d.y0) - yScale(d.y1); }).attr("fill", function(d) {
+       * return colorScale(d.name); }).attr("class", function(d){return
+       * div_id+d.name});
+       */
     function brushLinear() {
       var f = brush1.extent();
       WGL.filterDim(m.name, filterId, f);
@@ -316,6 +375,9 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
           }
         }
       }
+
+      selected = merged.length;
+
       return merged;
     }
 
@@ -347,7 +409,6 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
         }
 
         WGL.filterDim(m.name, filterId, mergeSelectionArrays());
-
       }
 
     }
@@ -373,8 +434,8 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
 
         dragEnd = d3.mouse(this);
 
-        if (dragEnd[0] == dragStart[0] &&
-          dragEnd[1] == dragStart[1]) {
+        if (dragEnd[0] == dragStart[0]
+            && dragEnd[1] == dragStart[1]) {
 
           var group = Math.floor(dragEnd[0] / (width / dataset.length));
 
@@ -407,9 +468,6 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
 
           of_click.push([group, group + 1]);
           WGL.filterDim(m.name, filterId, mergeSelectionArrays());
-
-          return;
-
         } else {
           brush();
         }
@@ -428,51 +486,59 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
 
     //var legend_x = (rotate_x ? -50 : w - 150);
 
-    var legend_x = w - 150;
+    var legend_x = w - 110;
+    //var legend_y = $($("#"+ div_id)[0]).height() / 20;
+    var legend_y = 0;
 
-    legendRect.enter().append("rect").attr("id", function(d) {
-      return div_id+ d[0];
-    }).attr("x", legend_x).attr("y", function(d) {
-      return (h - 63 + d[0] * 15)
-    }).attr("width", 12).attr("height", 12).attr("fill", function(d) {
-      return d[2];
-    }).classed('legend-scale',true)
+    legendRect.enter().append("foreignObject").attr({
+        "x": legend_x,
+        "y": function(d) {return (legend_y + d[0] * 44)},
+        "width": 36,
+        "height": 36
+    }).append("xhtml:div").append("div").attr("id", function(d) {return div_id+ d[0];})
+        .attr("style", function(d) {return "background-color:"+d[2]})
+        .attr("title", function(d) {return "Zoom on '"+d[1]+"' data"})
+        .attr("class", function(d) {return "legend-"+d[1]})
+        .classed('legend-scale',true)
+        .append("i")
+        .classed('material-icons', true)
+        .classed('md-36', true)
+        .text("all_out")
       .on(
         "click",
         function(d) {
           var el = d3.select("#"+div_id + d[0]);
-          d3.select(this.parentNode).selectAll("rect").classed('select-legend-scale', false);
-          //el.attr("stroke-width", "3");
-          //el.attr("stroke", d[2]);
-          el.classed('select-legend-scale', true);
+          var l = this.closest("g.l");
+          if(el.classed('select-legend-scale')) {
+            el.classed('select-legend-scale', false);
+            active_group = 2;
+          } else {
+            d3.select(l).selectAll("div.legend-scale").classed('select-legend-scale', false);
+            el.classed('select-legend-scale', true);
+            active_group = d[0];
+          }
 
-          active_group = d[0];
           for (var i = 0; i < classes.length; i++) {
             calcBar();
             updateLabels();
+            updateFiltersHeader();
           }
-
-
         });
 
-    legendRect.enter().append("text").text(function(d) {
-      return d[1];
-    }).attr("x", legend_x + 20).attr("y", function(d) {
-      return (h - 63 + d[0] * 15 + 12)
-    }).attr("width", 12).attr("height", 12).attr("stroke", "none");
 
-    var help = d3.select("#"+div_id).append("div").classed('ii',true).append("i").classed('fa', true).classed('fa-info', true);
-    var tooltip_content = "<div class='wgl-close-tooltip'><i class='fa fa-times' aria-hidden='true'></i></div><table>"+
-      "<tr>"+
-      '<td><div class="color-selected"><b>selected</b></div></td><td>selected data</td>'+
-      "</tr>"+
-      "<tr>"+
-      '<td><div class="color-unselected"><b>unselected</b></div></td><td>unselected data in the current map view</td>'+
-      "</tr>"+
-      "<tr>"+
-      '<td><div class="color-out"><b>out</b></div></td><td>data out of the current map view</td>'+
-      "</tr>"+
-      "</table><br/> Click on the coloured squares in the legend to adjust <br> the chart scale to the 'selected'/ 'unselected'/ 'out' data.";
+
+    var help = d3.select("#"+div_id).append("div").style("position", "absolute").style("left", (legend_x + margin.left) + "px").style("top", (3*44 + margin.top) + "px").classed('ii',true).append("i").classed('material-icons', true).text("help");
+    var tooltip_content =
+        "<div style='width: 490px'>" +
+        "<div class='tooltipster-header'><div class='tooltipster-title'>Chart legend</div><div class='tooltipster-close'><i class='material-icons'>close</i></div></div>" +
+        "<div class='tooltipster-text'>" +
+        "<div>Select data segments by clicking or dragging directly in the bar charts. Combine multiple filters for deeper insights.</div>" +
+        "<div class='display-table width-100 margin-bottom-5 margin-top-20'><span class='display-table-cell-center tooltipster-legend-out'></span><span class='display-table-cell-center tooltipster-legend-text'>Data <b>outside</b> the current map view</span></div>" +
+        "<div class='display-table width-100 margin-bottom-5'><span class='display-table-cell-center tooltipster-legend-unselected'></span><span class='display-table-cell-center tooltipster-legend-text'><b>Unselected</b> data within the current map view</span></div>" +
+        "<div class='display-table width-100 margin-bottom-5'><span class='display-table-cell-center tooltipster-legend-selected'></span><span class='display-table-cell-center tooltipster-legend-text'><b>Selected</b> data within the current map view</span></div>" +
+        "<div class='display-table width-100 margin-bottom-5 margin-top-20'><span class='display-table-cell-center tooltipster-legend-zoom-to'><i class='material-icons md-40 vertical-allign-middle'>all_out</i></span><span class='display-table-cell-center tooltipster-legend-text'>Click on the 'zoom to' icon to adjust the chart scale to the 'selected', 'unselected' or 'outside' the map data </span></div>" +
+        "</div>" +
+        "</div>";
     $(help).tooltipster({
       content: tooltip_content,
       contentAsHTML: true,
@@ -480,18 +546,39 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
       trigger: 'click',
       interactive: 'true',
       autoClose: 'false',
+        side: 'left',
       functionReady: function() {
-        $('.wgl-close-tooltip').click(function() {
+        $('.tooltipster-close').click(function() {
           $(help).tooltipster('hide');
         });
       }
 
     });
 
-    $("#" + div_id).on("click", function(e) {
-      if (e.target.tagName != "g") {
+    /*$("#" + div_id).on("click", function(e) {
+      if (e.target.tagName != "svg"
+          && e.target.tagName != "g"
+          && !$(e.target).parents(".legend-scale").length
+          && !$(e.target).parents(".ii").length) {
         that.clearSelection();
       }
+    });*/
+
+    $("#" + div_id).on("mousemove", function(e) {
+      if(e.target.tagName == "rect"
+      && e.target.className.baseVal == "background") {
+          onMouseOver(e);
+      }
+    });
+
+    $("#" + div_id + " rect.background").on("mouseleave", function(e) {
+        onMouseLeave(e);
+    });
+
+    $("#chd-container-"+div_id+" .chart-filters-clean").off("click");
+    $("#chd-container-"+div_id+" .chart-filters-clean").on("click", function(e) {
+      e.stopPropagation();
+      that.clearSelection();
     });
 
     function resizeExtent(selection) {
@@ -557,6 +644,8 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
 
     updateLabels();
 
+    updateFiltersHeader();
+
     /*
      * bars.selectAll("rect").data(function(m) { return m.levels;
      * }).transition().duration(10).attr("y", function(d) { return
@@ -565,6 +654,31 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
      */
 
   };
+
+  function updateFiltersHeader() {
+    $("#chd-container-" + div_id + " .chart-filters-selected").html(selected);
+    if(selected > 0) {
+        $("#chd-container-footer-" + div_id + " .chart-filters-selected").html(selected);
+        $("#chd-container-footer-" + div_id).removeClass("hide");
+    } else {
+        $("#chd-container-footer-" + div_id).addClass("hide");
+    }
+
+    if($(".active-filters-container [id^=chd-container-footer]:not(.hide)").length > 0) {
+        $(".close-item-filters").removeClass("hide");
+        $("#active-filters-placeholder").addClass("hide");
+        $(".active-filters-item .bar-item").addClass("bar-item-active");
+        $(".active-filters-container").slideDown();
+    } else {
+        /*$(".close-item-filters").addClass("hide");
+        $(".active-filters-item .bar-item").removeClass("bar-item-active");*/
+        $("#active-filters-placeholder").removeClass("hide");
+        $(".close-item-filters").removeClass("hide");
+    }
+
+
+  }
+
   function updateLabels() {
 
     if(!showNumberLabels) {
@@ -628,9 +742,19 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
     svg.selectAll(".selected.bar").attr("d", barPathSelected);
     svg.selectAll(".unselected.bar").attr("d", barPathUnselected);
     svg.selectAll(".out.bar").attr("d", barPathOut);
-
-
   }
+
+  function barPathHover(groups) {
+      var path = [], i = -1, n = groups.length, d;
+      while (++i < n) {
+          var d = groups[i];
+          var points = (d.selected == 0 ? d.unselected : d.selected);
+          path.push("M", xScale(d.val), ",", height, "V", yScale(points),
+              svgbw, height);
+      }
+      return path.join("");
+  }
+
   function barPathSelected(groups) {
     var path = [], i = -1, n = groups.length, d;
     while (++i < n) {
@@ -693,8 +817,10 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
   this.clearSelection = function() {
     of_selection = [];
     of_click = [];
+    selected = 0;
     this.brush.clear();
     WGL.filterDim(m.name, filterId, []);
+    updateFiltersHeader();
   }
 
 };

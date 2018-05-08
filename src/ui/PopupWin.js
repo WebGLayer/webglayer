@@ -38,7 +38,7 @@ WGL.ui.PopupWin = function (map_win_id, idt_dim, title) {
     win.css("left",(posX - 50)+"px");
 
     let tri = $("#triangle");
-    tri.css("top",(posY - 35)+"px");
+    tri.css("top",(posY - 50)+"px");
     tri.css("left",(posX - 18)+"px");
 
   };
@@ -106,7 +106,7 @@ WGL.ui.PopupWin = function (map_win_id, idt_dim, title) {
       .attr("id","wgl-win-close")
       .insert("i")
       .classed("fa", true)
-      .classed("fa-times-circle", true)
+      .classed("fa-times", true)
       .attr("aria-hidden","true");
     main.insert("div").attr("id","wgl-point-win-context");
 
