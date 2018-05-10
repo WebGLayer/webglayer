@@ -1,3 +1,12 @@
+/**
+ * Div where a chart is to be inserted
+ * @param parentdiv the id of parent's div, where this chart is to be inserted
+ * @param divid the id of the div containing this chart
+ * @param caption the title of the chart, to be shown in the header
+ * @param n_total the number of possible values this chart has, to be shown in the filters box in the header
+ * @constructor
+ */
+
 WGL.ChartDiv = function(parentdiv, divid, caption, n_total) {
 
     var newhtml= "<div class='border-top-white chart-container' id='chd-container-"+divid+"' data-name='"+caption.toLowerCase()+"'>" +
