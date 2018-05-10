@@ -169,8 +169,6 @@ WGL.internal.FloatReaderHistogram = function(raster, width, height) {
 
   this.readPixels = function() {
 
-    console.time("reading filter");
-
     //gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
     var readout_eight = new Uint8Array(this.bin_count * 4 * rows);
     gl.readPixels(0, 0, this.bin_count, rows, gl.RGBA, gl.UNSIGNED_BYTE, readout_eight);

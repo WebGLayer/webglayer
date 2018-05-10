@@ -54,7 +54,6 @@ WGL.dimension.IdentifyDimension = function (id, properties_path) {
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 
     // properties of actual texture
-    console.log(framebuffer.width, framebuffer.height);
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, framebuffer.width,
         framebuffer.height, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
 
@@ -138,7 +137,8 @@ WGL.dimension.IdentifyDimension = function (id, properties_path) {
     var readout = new Uint8Array(4);
     gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
     if (gl.checkFramebufferStatus(gl.FRAMEBUFFER) === gl.FRAMEBUFFER_COMPLETE){
-        gl.readPixels(x, manager.canvas.height - y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, readout);
+      gl.flush();
+      gl.readPixels(x, manager.canvas.height - y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, readout);
     }
     else {
         throw "Framebuffer is not complete!";
