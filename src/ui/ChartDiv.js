@@ -18,7 +18,7 @@ WGL.ChartDiv = function(parentdiv, divid, caption, n_total) {
         "</div>" +
 
 
-        " <div id = "+divid+" class = 'vis-div chart-content' style='position: relative; background: white'></div>" +
+        " <div id = "+divid+" class = 'vis-div chart-content' style='position: relative; background: white'></div>" +da
 
         " </div>";
 
