@@ -507,6 +507,31 @@ var WGL = (function() {
       manager.resetWebGL();
       WGL.render();
 
+    },
+    /**
+     *
+     * @param {Object} m the same object as in addHistDimension
+     * @param {string} div_id div ID for displaying StackBarChart
+     * @param {string} x_label label for X
+     * @param {string} filterId filter ID
+     * @param {Object} [params=]
+     * @returns {WGL.ui.StackedBarChart}
+     */
+    createStackBarChart: function (m, div_id, x_label, filterId, params=null) {
+      return new WGL.ui.StackedBarChart(m, div_id, x_label, filterId, params)
+    },
+    /**
+     *
+     * @param {Object} m the same object as in addHistDimension
+     * @param {string} div_id div ID for displaying StackBarChart
+     * @param {string} x_label label for X
+     * @param {string} filterId filter ID
+     * @param {Array} category category subset
+     * @param {Object} [params=]
+     * @returns {WGL.ui.StackedBarChart}
+     */
+    createStackBarChartSubset: function (m, div_id, x_label, filterId, category, params=null) {
+      return new WGL.ui.StackedBarChart(m, div_id, x_label, filterId, params, category)
     }
 
   };
