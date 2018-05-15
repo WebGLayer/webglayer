@@ -19,7 +19,9 @@ function DataLoader() {
         var hours = [];
         var hours_full = [];
         var months =[];
+        var crimes_per_month = [];
         var date = [];
+        var severity = [];
         var primary_type = [];
         var district = [];
         var description = [];
@@ -147,31 +149,61 @@ function DataLoader() {
 
                 pts_id[i] = i;
 
-  /*              primary_type[i] = val["primary_type"].toLowerCase();
-                arrest[i] = ( val["arrest"] == "true" ? "Arrested" : "Not Arrested" );
-                domestic[i] = ( val["domestic"] == "true" ? "Domestic" : "Not Domestic" );
-                district[i] = districtValues[val["district"]];
-
-                var d =  (new Date(val["date"]));
+                var d =  (new Date(val["od"]));
                 days[i] =  weekday[d.getDay()];
 
                 months[i] = monthsArray[d.getMonth()];
+
+                crimes_per_month[i] = Math.round(d.getTime() / 36e5)
 
                 hours[i] = d.getHours();
                 hours_full[i] = d.getHours() + d.getMinutes()/60;
                 date[i] = Math.round(d.getTime()/(1000*60*60));
                 dateminmax = getMinMax(date[i], dateminmax);
 
-
-
-                if (typeof(days[i]) == 'undefined'
-                    || typeof(hours[i]) == 'undefined'
-                    || typeof(primary_type[i]) == 'undefined'
-                    || typeof(district[i]) == 'undefined')  {
-                    console.error('error id data');
+                if(val["ts_flags"].indexOf("death") != -1) {
+                    severity[i] = "fatal";
+                } else if(val["ts_flags"].indexOf("injury") != -1) {
+                    severity[i] = "injuries";
+                } else {
+                    severity[i] = "no injury";
                 }
-*/
+
+
+
+
+
+                /*              primary_type[i] = val["primary_type"].toLowerCase();
+                              arrest[i] = ( val["arrest"] == "true" ? "Arrested" : "Not Arrested" );
+                              domestic[i] = ( val["domestic"] == "true" ? "Domestic" : "Not Domestic" );
+                              district[i] = districtValues[val["district"]];
+
+                              var d =  (new Date(val["date"]));
+                              days[i] =  weekday[d.getDay()];
+
+                              months[i] = monthsArray[d.getMonth()];
+
+                              hours[i] = d.getHours();
+                              hours_full[i] = d.getHours() + d.getMinutes()/60;
+                              date[i] = Math.round(d.getTime()/(1000*60*60));
+                              dateminmax = getMinMax(date[i], dateminmax);
+
+
+
+                              if (typeof(days[i]) == 'undefined'
+                                  || typeof(hours[i]) == 'undefined'
+                                  || typeof(primary_type[i]) == 'undefined'
+                                  || typeof(district[i]) == 'undefined')  {
+                                  console.error('error id data');
+                              }
+              */
             });
+
+            var start_date = new Date(data[0]['od']).toLocaleDateString('en-US', {year: 'numeric', month: 'long', day: 'numeric'});
+            var end_date = new Date(data[data.length-1]['od']).toLocaleDateString('en-US', {year: 'numeric', month: 'long', day: 'numeric'});
+
+            console.log(crimes_per_month)
+            console.log(dateminmax)
 
   /*          district.filter(function(n){ return typeof n != "undefined" });
 
@@ -204,7 +236,21 @@ function DataLoader() {
 
             visualize({
                 pts: pts,
-                pts_id: pts_id
+                pts_id: pts_id,
+                num: data.length,
+                days: days,
+                hours: hours,
+                hours_full: hours_full,
+                hoursEnum: hoursArray,
+                months: months,
+                date: crimes_per_month,
+                daysarray: weekday,
+                monthsArray: monthsArray,
+                severity: severity,
+                severityEnum: ["no injury", "injuries", "fatal"],
+                start_date: start_date,
+                end_date: end_date,
+                dmm: dateminmax
                 });
 
         }).on("progress", function() {

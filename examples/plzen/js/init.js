@@ -1,6 +1,6 @@
 function init() {
     const data = new DataLoader();
-    data.loadPosData("data/npman.json");
+    data.loadPosData("data/data.json");
 }
 
 function visualize(data){
@@ -11,11 +11,12 @@ function visualize(data){
 
     window.onresize = onResize;
 
-    const heatmap = WGL.addHeatMapDimension(data.pts, 'heatmap', 4);
+    const heatmap = WGL.addHeatMapDimension(data.pts, 'heatmap', 1);
     heatmap.radiusFunction = function (r, z) {
         return r*(z/10);
     };
-    heatmap.setRadius(1);
+    heatmap.setRadius(3);
+    heatmap.setVisible(true);
 
     // use normal distribution for values around point
     heatmap.gauss = true;
@@ -54,10 +55,10 @@ function visualize(data){
         "animate": false
     };*/
 
-    WGL.addExtentFilter();
+    //map.addSource("canvas", map_source);
+    //map.addLayer(layer, firstSymbolId);
 
-    /*map.addSource("canvas", map_source);
-    map.addLayer(layer, firstSymbolId);
+    WGL.addExtentFilter();
     const updatedraw = () => {
         const features = draw.getAll();
         if (features.features.length > 0){
@@ -97,13 +98,13 @@ function visualize(data){
 
     /!*for ordinal dimension from 1-3 use range 0.5-3.5*!/
 
-    //updateIntro(data.start_date, data.end_date, data.num);
+    updateIntro(data.start_date, data.end_date, data.num);
 
-    //buildCharts(data, "red");
+    buildCharts(data, "red");
 
-    //WGL.initFilters();
+    WGL.initFilters();
 
-    //setPointSelection();
+    setPointSelection();
 
     $("#min-about").on("click", function() {
         $("#min-about").toggleClass("btn-plus");
@@ -211,7 +212,7 @@ function visualize(data){
     });
     $(".charts-item").mouseout(function() {
         $(this).children(".bar-item").removeClass("bar-item-hover");
-    });*/
+    });
 
     WGL.render();
 
@@ -240,7 +241,7 @@ function visualize(data){
 
     onMove();
 
-    /*const charts_element = $("#charts");
+    const charts_element = $("#charts");
     charts_element.sortable(
         {
             placeholder: "ui-state-highlight",
@@ -273,7 +274,7 @@ function visualize(data){
     );
     charts_element.disableSelection();
     updateChartsVisibility();
-    $("#right").on("scroll", () => updateChartsVisibility());*/
+    $("#right").on("scroll", () => updateChartsVisibility());
 }
 
 function resize(){
@@ -323,25 +324,29 @@ function buildCharts(data) {
 
     const charts = [];
 
-    /* DAYS*/
-    const days = {data: data.days,  domain: data.daysarray,  name: 'day of the week', type:'ordinal', label: "day of the week"};
-    const chd1 = new WGL.ChartDiv("charts","ch1", "Day of the week", 7);
-    chd1.setDim(WGL.addOrdinalHistDimension(days));
-    WGL.addLinearFilter(days,7, 'daysF');
-    const paramsDays = {
-        w: 500,
-        h: 300,
+    const date = {data: data.date, min: data.dmm.min, max: data.dmm.max, num_bins: 52, name: "date", type: "linear"};
+    const chd6 = new WGL.ChartDiv("charts","ch6","Date", false);
+    chd6.setDim(WGL.addLinearHistDimension(date));
+    WGL.addLinearFilter(date, date.num_bins, "dateF");
+    const dateParams = {
         margin: {
-            top: 30,
+            top: 40,
             right: 70,
-            bottom: 80,
+            bottom: 40,
             left: 60
         },
-        rotate_x: true
+        rotate_x: false,
+        tooltip_format: function(a) {
+            var b = new Date(1e3 * a * 60 * 60);
+            return (b.getMonth() + 1) + " - " + b.getFullYear()
+        }
     };
-    charts['day of the week'] = new  WGL.ui.StackedBarChart(days, "ch1", "Day of the week", 'daysF', paramsDays);
-    new WGL.FooterChartDiv("filters-container", charts['day of the week'], 7);
-
+    charts['date'] = new WGL.ui.StackedBarChart(date,"ch6","Date (month - year)","dateF", dateParams);
+    charts['date'].xformat = function(a) {
+        var b = new Date(1e3 * a * 60 * 60);
+        return (b.getMonth() + 1) + " - " + b.getFullYear()
+    };
+    new WGL.FooterChartDiv("filters-container", charts['date'], false);
 
     /* MONTHS */
     const months = {data: data.months,  domain: data.monthsArray,  name: 'month of the year', type:'ordinal', label: "month of the year"};
@@ -362,6 +367,27 @@ function buildCharts(data) {
     charts['month of the year'] = new  WGL.ui.StackedBarChart(months, "ch5", "Month of the year", 'monthsF', paramsMonths);
     new WGL.FooterChartDiv("filters-container", charts['month of the year'], 12);
 
+    /* DAYS*/
+    const days = {data: data.days,  domain: data.daysarray,  name: 'day of the week', type:'ordinal', label: "day of the week"};
+    const chd1 = new WGL.ChartDiv("charts","ch1", "Day of the week", 7);
+    chd1.setDim(WGL.addOrdinalHistDimension(days));
+    WGL.addLinearFilter(days,7, 'daysF');
+    const paramsDays = {
+    w: 500,
+    h: 300,
+    margin: {
+    top: 30,
+    right: 70,
+    bottom: 80,
+    left: 60
+},
+    rotate_x: true
+};
+    charts['day of the week'] = new  WGL.ui.StackedBarChart(days, "ch1", "Day of the week", 'daysF', paramsDays);
+    new WGL.FooterChartDiv("filters-container", charts['day of the week'], 7);
+
+
+
     /*HOURS*/
     const hours = {data: data.hours,  domain: data.hoursEnum, name: 'hour of the day', type:'ordinal', label :"hour of the day"} ;
     const chd2 = new WGL.ChartDiv("charts","ch2", "Hour of the day", 24);
@@ -370,7 +396,53 @@ function buildCharts(data) {
     charts['hour of the day'] = new  WGL.ui.StackedBarChart(hours, "ch2", "hour of the day", 'hoursF');
     new WGL.FooterChartDiv("filters-container", charts['hour of the day'], 24);
 
-    /* DISTRICTS */
+    const severity = {data: data.severity,  domain: data.severityEnum,  name: 'severity', type:'ordinal', label : "severity"};
+    const chd8 = new WGL.ChartDiv("charts","ch8", "Severity *", 3);
+    chd8.setDim(WGL.addOrdinalHistDimension(severity));
+    WGL.addLinearFilter(severity,3,'severityF');
+    const paramsSeverity = {
+        h: 300,
+        margin: {
+            top: 40,
+            right: 70,
+            bottom: 140,
+            left: 60
+        },
+        rotate_x: false,
+        text: "* The severity has been derived from the Police’s real-time accidents reports, using an automated text analysis. It might thus differ from the official statistics."
+    };
+    charts['severity'] = new WGL.ui.StackedBarChart(severity, "ch8", "Severity",'severityF', paramsSeverity);
+    new WGL.FooterChartDiv("filters-container", charts['severity'], 3);
+
+
+
+
+
+
+
+
+    /*const chd5 = new WGL.ChartDiv("charts", "ch5", "Date of accident", );
+    WGL.addLinearFilter(n, n.num_bins, "dateF");
+    charts['date of accident'] = new WGL.ui.StackedBarChart(n,"ch5","Date (month - year)","dateF"),
+
+    o.setDim(WGL.addLinearHistDimension(n)),
+        WGL.addLinearFilter(n, n.num_bins, "dateF"),
+        e.date = new WGL.ui.StackedBarChart(n,"ch5","Date (month - year)","dateF"),
+        /!*e.date.xformat = function(a) {
+            var b = new Date(1e3 * a * 60 * 60);
+            return b.getMonth() + " - " + b.getFullYear()
+        }
+        ,
+        o.change();*!/
+    var p = {
+        data: a.state,
+        domain: a.stateEnum,
+        name: "state",
+        type: "ordinal",
+        label: "State of the road"
+    }*/
+
+    /*/!* DISTRICTS *!/
     const district   = {data: data.district,  domain: data.districtEnum ,  name: 'districts', type:'ordinal', label : "crime district"};
     const chd3 = new WGL.ChartDiv("charts","ch3", "Districts", 22);
     chd3.setDim(WGL.addOrdinalHistDimension(district));
@@ -389,7 +461,7 @@ function buildCharts(data) {
     charts['districts']   = new  WGL.ui.StackedBarChart(district, "ch3", "Districts",'districtF', paramsDistrict);
     new WGL.FooterChartDiv("filters-container", charts['districts'], 22);
 
-    /* CRIME PRIMARY TYPE */
+    /!* CRIME PRIMARY TYPE *!/
     const primary_type   = {data: data.primary_type,  domain: data.primaryTypeEnum ,  name: 'primary type', type:'ordinal', label : "crime primary type"};
     const chd4 = new WGL.ChartDiv("charts","ch4", "Primary Type", 35);
     chd4.setDim(WGL.addOrdinalHistDimension(primary_type));
@@ -408,7 +480,7 @@ function buildCharts(data) {
     charts['primary type'] = new  WGL.ui.StackedBarChart(primary_type, "ch4", "Primary Type",'primaryTypeF', paramsPType);
     new WGL.FooterChartDiv("filters-container", charts['primary type'], 35);
 
-    /* ARRESTS */
+    /!* ARRESTS *!/
     const arrest = {data: data.arrest,  domain: data.arrestEnum,  name: 'arrest', type:'ordinal', label : "arrest"};
     const chd8 = new WGL.ChartDiv("charts","ch8", "Arrest", 2);
     chd8.setDim(WGL.addOrdinalHistDimension(arrest));
@@ -425,7 +497,7 @@ function buildCharts(data) {
     charts['arrest'] = new WGL.ui.StackedBarChart(arrest, "ch8", "Arrest",'arrestF', paramsArrest);
     new WGL.FooterChartDiv("filters-container", charts['arrest'], 2);
 
-    /* DOMESTIC CRIMES */
+    /!* DOMESTIC CRIMES *!/
     const domestic = {data: data.domestic,  domain: data.domesticEnum, name: 'domestic', type:'ordinal', label : "domestic"};
     const chd9 = new WGL.ChartDiv("charts","ch9", "Domestic", 2);
     chd9.setDim(WGL.addOrdinalHistDimension(domestic));
@@ -441,12 +513,12 @@ function buildCharts(data) {
     };
     charts['domestic'] = new WGL.ui.StackedBarChart(domestic, "ch9", "Domestic",'domesticF', paramsDomestic);
     new WGL.FooterChartDiv("filters-container", charts['domestic'], 2);
-
-    /*//identify pop-up window
+*/
+    //identify pop-up window
     const idt = WGL.addIdentifyDimension(data.pts, data.pts_id, 'idt', "data/identify/");
     idt.onlySelected = false;
     idt.pointSize = 15;
-    idt.setEnabled($("#points_visible").hasClass("layer-selected"));*/
+    idt.setEnabled($("#points_visible").hasClass("layer-selected"));
 
     WGL.addCharts(charts);
 }
@@ -454,58 +526,30 @@ function buildCharts(data) {
 function setPointSelection() {
 
     // point selection
-    const pw = new WGL.ui.PopupWin(".mapboxgl-canvas", "idt", "Crime Details");
+    const pw = new WGL.ui.PopupWin(".mapboxgl-canvas", "idt", "Accident Details");
     pw.setProp2html(function (t) {
 
         const weekarray = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday","Saturday"];
 
-        const districtValues = {};
-
-        // Area Central
-        districtValues["001"] = "1718 S State St";
-        districtValues["002"] = "5101 S Wentworth Ave";
-        districtValues["003"] = "7040 S Cottage Grove Ave";
-        districtValues["008"] = "3420 W 63rd St";
-        districtValues["009"] = "3120 S Halsted St";
-        districtValues["010"] = "3315 W Ogden Ave";
-        districtValues["012"] = "100 S Racine Ave";
-        districtValues["013"] = "937 N Wood St";
-        districtValues["018"] = "1158 N Larrabee St";
-
-        // Area South
-        districtValues["004"] = "2255 E 103rd St";
-        districtValues["005"] = "727 E 111th St";
-        districtValues["006"] = "7808 S Halsted St";
-        districtValues["007"] = "1400 W 63rd St";
-        districtValues["022"] = "1900 W Monterey Ave";
-
-        // Area North
-        districtValues["011"] = "3151 W Harrison St";
-        districtValues["014"] = "2150 N California Ave";
-        districtValues["015"] = "5701 W Madison St";
-        districtValues["016"] = "5151 N Milwaukee Ave";
-        districtValues["017"] = "4650 N Pulaski Rd";
-        districtValues["019"] = "850 W Addison St";
-        districtValues["020"] = "5400 N Lincoln Ave";
-        districtValues["024"] = "6464 N Clark St";
-        districtValues["025"] = "5555 W Grand Ave";
-
-        const d =  (new Date(t["date"]));
+        const d =  (new Date(t["od"]));
         const wd =  weekarray[d.getDay()];
         const hour =  ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
-        const district = districtValues[t["district"]];
-        const primary_type = t["primary_type"];
-        const arrest = ( t["arrest"] == "true" ? "ARRESTED" : "NOT ARRESTED" );
-        const domestic = ( t["domestic"] == "true" ? "DOMESTIC" : "NOT DOMESTIC" );
+        let severity;
+        if(t["ts_flags"].indexOf("death") != -1) {
+            severity = "fatal";
+        } else if(t["ts_flags"].indexOf("injury") != -1) {
+            severity = "injuries";
+        } else {
+            severity = "no injury";
+        }
+        const description = t["popis"];
 
         let s = "<table>";
         s += "<tr><td width='140px'>Date: </td><td>"+d.toLocaleDateString('en-US', {year: 'numeric', month: 'long', day: 'numeric'})+"</td></tr>";
         s += "<tr><td>Weekday: </td><td>"+wd+"</td></tr>";
         s += "<tr><td>Time: </td><td>"+hour+"</td></tr>";
-        s += "<tr><td>District: </td><td>"+district+"</td></tr>";
-        s += "<tr><td>Primary Type: </td><td style='text-transform: capitalize'>"+primary_type.toLowerCase()+"</td></tr>";
-        s += "<tr><td>Arrested: </td><td style='text-transform: capitalize'>"+arrest.toLowerCase()+"</td></tr>";
-        s += "<tr><td>Domestic: </td><td style='text-transform: capitalize'>"+domestic.toLowerCase()+"</td></tr>";
+        s += "<tr><td>Severity: </td><td style='text-transform: capitalize'>"+severity+"</td></tr>";
+        s += "<tr><td>Description: </td><td style='word-wrap: normal; white-space: normal; max-width: 200px'>"+description+"</td></tr>";
 
         return s;
     });
@@ -528,8 +572,8 @@ function addHeatMapControl(hm,divid){
         "<div class='hm-label'>"+
         "<text style='display: table-cell'>Radius </br><span style='font-size: 8pt'>(metres)</span></text><text id='radius_label'></text>"+
         '<div class="range-control">' +
-        '<input id="slider_radius" type="range" min="0.1" max="10" step="0.3" value="1" data-thumbwidth="20">' +
-        '<output name="rangeVal" for="points" style="left: calc(9.699% - -8px)">1</output>' +
+        '<input id="slider_radius" type="range" min="0.1" max="10" step="0.3" value="3" data-thumbwidth="20">' +
+        '<output name="rangeVal" for="points" style="left: calc(29% - -8px)">3</output>' +
         '</div>' +
         "</div>");
     thediv.append(

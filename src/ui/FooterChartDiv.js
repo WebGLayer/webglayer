@@ -6,7 +6,12 @@ WGL.FooterChartDiv = function(parentdiv, chart, n_total) {
     const footerhtml = "<div class='border-top-white width-inherit hide' id='chd-container-footer-"+divid+"'>" +
         "<div class='btn-minimize chart-header-footer'  id=min-footer-"+divid+" > " +
         "<span class='chart-title-footer'><text title='Go to this chart' class='cursor-pointer'>"+caption+"</text></span>" +
-        "<div class='chart-filters chart-filters-footer display-table'><text class='display-table-cell-center chart-filters-text'><span class='chart-filters-selected'>0</span>/"+n_total+"</text><i title='Clear current selection' class='material-icons chart-filters-clean display-table-cell-center cursor-pointer'>close</i></div>" +
+
+        (n_total ?
+                "<div class='chart-filters chart-filters-footer display-table'><text class='display-table-cell-center chart-filters-text'><span class='chart-filters-selected'>0</span>/"+n_total+"</text><i title='Clear current selection' class='material-icons chart-filters-clean display-table-cell-center cursor-pointer'>close</i></div>"
+                :
+                "<div class='chart-filters chart-filters-footer display-table'><text class='display-table-cell-center chart-filters-text'><i title='Clear current selection' class='material-icons chart-filters-clean display-table-cell-center cursor-pointer'>close</i></div>"
+        ) +
         "</div>" +
 
         " </div>";

@@ -137,7 +137,7 @@
 		<div class="layers-container" style="display: none">
 			<div class="layers-list">
 				<button class="layers-btn layer-selected" id="heatmap_visible" name="heatmap">Heatmap</button>
-				<button class="layers-btn" id="points_visible" name="themap">Crimes</button>
+				<button class="layers-btn" id="points_visible" name="themap">Accidents</button>
 			</div>
 			<div class="close-item-filters close-item-btn hide"><div class="close-item-icon fa fa-chevron-up"></div></div>
 		</div>
@@ -196,22 +196,26 @@
 			<div class='btn-minimize chart-header' id="min-about">
 				<div class='chart-chevron'><i id="about-chevron" title='Open/close this' class='material-icons'>keyboard_arrow_up</i></div>
 				<div class='chart-drag-handle cursor-grab'><i title='Click and drag to change order' class='material-icons'>drag_handle</i></div>
-				<span class='chart-title' style='position: absolute; left: 50%'><text style='position: relative; left: -50%; top: -1px;' title='Open/close this chart' class='cursor-pointer'>CRIMES IN CHICAGO</text></span>
+				<span class='chart-title' style='position: absolute; left: 50%'><text style='position: relative; left: -50%; top: -1px;' title='Open/close this chart' class='cursor-pointer'>TRAFFIC ACCIDENTS IN Plzeň</text></span>
 			</div>
 
 
 			<div id = "about" class = 'vis-div chart-content' style='position: relative; background: white; padding: 10px'>
 
-				Visualization of reported incidents of crime that occurred in the City of Chicago from <span id="start_date"><b>-</b></span> to <span id="end_date"><b>-</b></span>
+				Visualization of traffic accidents reported by the Police to 'Jednotný systém dopravních informací ČR' from <span id="start_date"><b>-</b></span> to <span id="end_date"><b>-</b></span>
+				in the districts of Plzeň-město, Plzeň-jih and Plzeň-sever
 				</br>
 				</br>
-				No. of Data Records: <span id="no_crimes"><b>-</b></span> crimes
+				No. of Data Records: <span id="no_crimes"><b>-</b></span>
 				</br>
 				</br>
-				Data source: <a target="_blank" href="https://data.cityofchicago.org/Public-Safety/Crimes-2001-to-present/ijzp-q8t2">Chicago data portal</a>
+				Data source: <a target="_blank" href="http://www.dopravniinfo.cz/">JSDI</a> and <a target="_blank" href="https://opendata.plzen.eu/">SITMP</a>
 				</br>
 				</br>
 				Data analysis: play with the data by selecting data segments in barcharts or ‘Select Area’ directly in the map.
+				</br>
+				</br>
+				Supported by <a target="_blank" href="https://www.polivisu.eu">PoliVisu</a>
 			</div>
 
 		</div>

@@ -1,0 +1,11 @@
+ID,id,od,do,mesto,lokalita,popis,objizdka,smer,upresneni,casotyp,ulice,okres,typ,x,y,ts_flags
+12850,25474,2017-07-14 21:00:00,2017-07-14 23:05:00,Plzeň,v ulici Nad Úslavou v obci Plzeň,'Od 14.7.2017 22:00 do 15.7.2017 00:05; v ulici Nad Úslavou v obci Plzeň; nehoda; havárie OA do stromu, bez zranění. PČR na místo.',nedoporučení objížďky,jeden směr,'nehoda; havárie OA do stromu, ',krátkodobá,Nad Úslavou,Plzeň-město,Nehody,137.534631823549,87.1019590040874,'{accindet,injury,personal_cars}'
+12851,25475,2017-07-14 21:50:00,2017-07-14 23:55:00,Plasy,na silnici 204 u obce Plasy okres Plzeň-sever,'Od 14.7.2017 22:50 do 15.7.2017 00:55; na silnici 204 u obce Plasy okres Plzeň-sever; nehoda; střet OA se zvěří, bez zranění osob. PČR na místo.',nedoporučení objížďky,oba směry,'nehoda; střet OA se zvěří, bez',krátkodobá,'',Plzeň-sever,Nehody,137.491433245766,86.9326045200812,'{accindet,injury,personal_cars,animal_hit}'
+12852,25482,2017-07-15 19:30:00,2017-07-24 22:59:00,Plzeň,'silnice I/26 (ulice U Prazdroje), Plzeň 4, Plzeň','silnice I/26 (ulice U Prazdroje), Plzeň 4, Plzeň, práce na údržbě mostu, zúžené jízdní pruhy, Od 15.07.2017 20:30 Do 24.07.2017 23:59, Částečná uzavírka:
+12853,- od 16.7.2017, od 4:30 hod. do 20.7.2017, do 0:30 hod.
+12854,- od 20.7.2017, od 4:30 hod. do 21.7.2017, do 0:30 hod.
+12855,- 21.7.2017, od 4:30 hod. do 23:30 hod.
+12856,- 22.7.2017, od 4:30 hod. do 18:00 hod.
+12857,- od 23.7.2017, od 4:30 hod. do 24.7.2017, do 0:30 hod.
+12858,; Úplná uzavírka: 
+12859,

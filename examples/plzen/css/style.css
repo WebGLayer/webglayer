@@ -992,6 +992,7 @@ div#wgl-win-close {
     background-color: #ffa91b;
     color: black;
     padding: 0 5px;
+    width: 100px;
 }
 
 .chart-filters-footer .chart-filters-text {
@@ -1209,6 +1210,11 @@ div.tooltipster-content {
 
 .chart-container {
     z-index: 9999;
+}
+
+.myLabel {
+    word-wrap: normal;
+    white-space: normal;
 }
 
 

@@ -1,0 +1,11 @@
+ID,id,od,do,mesto,lokalita,popis,objizdka,smer,upresneni,casotyp,ulice,okres,typ,x,y,ts_flags
+12860,Mimo vozidel stavby, MHD a IZS:
+12861,- od 15.7.2017, od 20:30 hod. do 16.7.2017, do 4:30 hod.
+12862,- 20.7.2017, od 0,30 hod. do 4:30 hod.
+12863,- 21.7.2017, od 0,30 hod. do 4:30 hod. 
+12864,
+12865,Mimo vozidel stavby:
+12866,- od 21.7.2017, od 23:30 hod. do 22.7.2017, do 4:30 hod.
+12867,- od 22.7.2017, od 18:00 hod. do 23.7.2017, 4:30 hod.
+12868,- 24.7.2017, od 0:30 hod. do 4:30 hod. 
+12869,
