@@ -366,24 +366,63 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
          * div_id+d.name});
          */
         function brushLinear() {
+
             var f = brush1.extent();
-            console.log(f);
-            WGL.filterDim(m.name, filterId, f);
-            selected = 1;
-            //console.log(brush1.extent()[0][0]+' '+brush1.extent()[0][1]);
+            var l = dataset.length;
+
+            var data_per_bar = (dataset[l-1].val - dataset[0].val) / (l);
+
+            of_selection = [];
+
+            var current_selection;
+            for (var i in f) {
+                current_selection = f[i];
+
+                var groupStart = Math.floor((current_selection[0] - dataset[0].val) / data_per_bar);
+                var groupEnd = Math.floor((current_selection[1] - dataset[0].val) / data_per_bar);
+
+                if (groupEnd == l) {
+
+                    groupEnd = l - 2;
+                }
+
+                for (var j in of_selection) {
+                    if (of_selection[j][0] >= dataset[groupStart].val && of_selection[j][0] <= dataset[groupEnd].val) {
+                        of_selection.splice(j, 1);
+                    }
+                }
+
+                for (var k = groupStart; k <= groupEnd; k++) {
+                    if(typeof dataset[k+1] === "undefined") {
+                        of_selection.push([dataset[l-1].val, dataset[l - 1].val + (dataset[1].val - dataset[0].val)]);
+                    } else {
+                        of_selection.push([dataset[k].val, dataset[k + 1].val]);
+                    }
+                }
+
+                WGL.filterDim(m.name, filterId, mergeSelectionArrays());
+            }
+
+
+            /*console.log(dataset);
+            var f = brush1.extent();
+            of_selection = of_selection.concat(f);
+            WGL.filterDim(m.name, filterId, mergeSelectionArrays());*/
         }
 
         function mergeSelectionArrays() {
 
             var merged = of_selection.concat(of_click);
 
-            if (of_selection.length > 0 &&
-                of_click.length > 0) {
-                for (var i = 0; i < merged.length; i++) {
-                    for (var j = i + 1; j < merged.length; j++) {
-                        if (merged[j][0] == merged[i][0] &&
-                            merged[j][1] == merged[i][1]) {
-                            merged.splice(j, 1);
+            if(type == "ordinal") {
+                if (of_selection.length > 0 &&
+                    of_click.length > 0) {
+                    for (var i = 0; i < merged.length; i++) {
+                        for (var j = i + 1; j < merged.length; j++) {
+                            if (merged[j][0] == merged[i][0] &&
+                                merged[j][1] == merged[i][1]) {
+                                merged.splice(j, 1);
+                            }
                         }
                     }
                 }
@@ -445,12 +484,18 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
             })
             .on("brushend", function() {
 
+                /*if(type == 'linear') {
+                    return;
+                }*/
+
                 dragEnd = d3.mouse(this);
 
                 if (dragEnd[0] == dragStart[0]
                     && dragEnd[1] == dragStart[1]) {
 
-                    var group = Math.floor(dragEnd[0] / (width / dataset.length));
+                    var l = dataset.length;
+
+                    var group = Math.floor(dragEnd[0] / (width / l));
 
                     var selected = dataset[group].selected;
                     dataset[group].selected = dataset[group].unselected;
@@ -458,29 +503,64 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
 
                     var found = false;
 
-                    for (var i = 0; i < of_click.length; i++) {
-                        if (of_click[i][0] == group) {
-                            of_click.splice(i, 1);
-                            found = true;
-                            break;
+                    if(type == "ordinal") {
+                        for (var i = 0; i < of_click.length; i++) {
+                            if (of_click[i][0] == group) {
+                                of_click.splice(i, 1);
+                                found = true;
+                                break;
+                            }
                         }
-                    }
 
-                    for (i = 0; i < of_selection.length; i++) {
-                        if (of_selection[i][0] == group) {
-                            of_selection.splice(i, 1);
-                            found = true;
-                            break;
+                        for (i = 0; i < of_selection.length; i++) {
+                            if (of_selection[i][0] == group) {
+                                of_selection.splice(i, 1);
+                                found = true;
+                                break;
+                            }
                         }
-                    }
 
-                    if (found) {
+                        if (found) {
+                            WGL.filterDim(m.name, filterId, mergeSelectionArrays());
+                            return;
+                        }
+
+                        of_click.push([group, group + 1]);
                         WGL.filterDim(m.name, filterId, mergeSelectionArrays());
-                        return;
                     }
 
-                    of_click.push([group, group + 1]);
-                    WGL.filterDim(m.name, filterId, mergeSelectionArrays());
+                    if(type == "linear") {
+                        for (var i = 0; i < of_click.length; i++) {
+                            if (of_click[i][0] == dataset[group].val) {
+                                of_click.splice(i, 1);
+                                found = true;
+                                break;
+                            }
+                        }
+
+                        for (i = 0; i < of_selection.length; i++) {
+                            if (of_selection[i][0] == dataset[group].val) {
+                                of_selection.splice(i, 1);
+                                found = true;
+                                break;
+                            }
+                        }
+
+                        if (found) {
+                            WGL.filterDim(m.name, filterId, mergeSelectionArrays());
+                            return;
+                        }
+
+                        if(typeof dataset[group + 1] === "undefined") {
+                            of_click.push([dataset[l-1].val, dataset[l-1].val + (dataset[1].val - dataset[0].val)]);
+                        } else {
+                            of_click.push([dataset[group].val, dataset[group + 1].val]);
+                        }
+
+                        WGL.filterDim(m.name, filterId, mergeSelectionArrays());
+                    }
+
+
                 } else {
                     brush();
                 }
