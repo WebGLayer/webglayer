@@ -9,6 +9,8 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
   var h;
   var margin;
   var rotate_x;
+  var tooltip_format; // function to format the tooltips showed when hovering over the chart
+  var text; // text to be exhibited below the chart, as a note about the data for example
 
   if (typeof(params)=='undefined'){
     w = 500;
@@ -20,6 +22,8 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
       left : 60
     };
     rotate_x = false;
+    tooltip_format = function(val) {return val;}
+    text = "";
   } else {
     w=(params.w ? params.w : 500);
     h=(params.h ? params.h : 215);
@@ -30,7 +34,10 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
       left : 60
     });
     rotate_x=params.rotate_x;
+    tooltip_format = (params.tooltip_format ? params.tooltip_format : function(val) {return val});
+    text = (params.text ? params.text : "");
   }
+
 
   if(screen.width < 1366) {
       w = w*0.8;
@@ -105,11 +112,9 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
   };
 
   var yformat = d3.format("s");
+
   var yformatBars = d3.format(".3s");
 
-  this.setYFormat = function (fuc) {
-    yformat = fuc;
-  };
   var arrowTan = 0.6;
   var arrowHeight = 0.0;
   /**
@@ -240,11 +245,12 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
       }
       const group = Math.floor(xPosition / (width / dataset.length));
       title.transition()
-          .duration(200)
-           .style("opacity", .9);
-      title.html(dataset[group].val.toString().replace(/\b\w/g, l => l.toUpperCase()))
-          .style("left", (e.pageX) + "px")
-          .style("top", (e.pageY) + "px");
+        .duration(200)
+        .style("opacity", .9);
+      let value = tooltip_format(dataset[group].val.toString().replace(/\b\w/g, l => l.toUpperCase()));
+      title.html(value)
+        .style("left", (e.pageX) + "px")
+        .style("top", (e.pageY) + "px");
 
       // Change bar color on mouse hover
       const d = barPathHover([dataset[group]]);
@@ -346,31 +352,72 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
 
     //d3.selectAll("#" + div_id + " rect.background").on("mousemove", onmouseover);
 
-      /*
-       * bars.selectAll("path").data(function(m) { return m.levels;
-       * }).enter().append("rect").attr("y", function(d) { return
-       * yScale(d.y1); }).attr("width", bw).attr("height", function(d) {
-       * return yScale(d.y0) - yScale(d.y1); }).attr("fill", function(d) {
-       * return colorScale(d.name); }).attr("class", function(d){return
-       * div_id+d.name});
-       */
+    /*
+     * bars.selectAll("path").data(function(m) { return m.levels;
+     * }).enter().append("rect").attr("y", function(d) { return
+     * yScale(d.y1); }).attr("width", bw).attr("height", function(d) {
+     * return yScale(d.y0) - yScale(d.y1); }).attr("fill", function(d) {
+     * return colorScale(d.name); }).attr("class", function(d){return
+     * div_id+d.name});
+     */
     function brushLinear() {
+
       var f = brush1.extent();
-      WGL.filterDim(m.name, filterId, f);
-      //console.log(brush1.extent()[0][0]+' '+brush1.extent()[0][1]);
+      var l = dataset.length;
+
+      var data_per_bar = (dataset[l-1].val - dataset[0].val) / (l);
+
+      of_selection = [];
+
+      var current_selection;
+      for (var i in f) {
+        current_selection = f[i];
+
+        var groupStart = Math.floor((current_selection[0] - dataset[0].val) / data_per_bar);
+        var groupEnd = Math.floor((current_selection[1] - dataset[0].val) / data_per_bar);
+
+        if (groupEnd == l) {
+
+          groupEnd = l - 2;
+        }
+
+        for (var j in of_selection) {
+          if (of_selection[j][0] >= dataset[groupStart].val && of_selection[j][0] <= dataset[groupEnd].val) {
+            of_selection.splice(j, 1);
+          }
+        }
+
+        for (var k = groupStart; k <= groupEnd; k++) {
+          if(typeof dataset[k+1] === "undefined") {
+            of_selection.push([dataset[l-1].val, dataset[l - 1].val + (dataset[1].val - dataset[0].val)]);
+          } else {
+            of_selection.push([dataset[k].val, dataset[k + 1].val]);
+          }
+        }
+
+        WGL.filterDim(m.name, filterId, mergeSelectionArrays());
+      }
+
+
+      /*console.log(dataset);
+      var f = brush1.extent();
+      of_selection = of_selection.concat(f);
+      WGL.filterDim(m.name, filterId, mergeSelectionArrays());*/
     }
 
     function mergeSelectionArrays() {
 
       var merged = of_selection.concat(of_click);
 
-      if (of_selection.length > 0 &&
-        of_click.length > 0) {
-        for (var i = 0; i < merged.length; i++) {
-          for (var j = i + 1; j < merged.length; j++) {
-            if (merged[j][0] == merged[i][0] &&
-              merged[j][1] == merged[i][1]) {
-              merged.splice(j, 1);
+      if(type == "ordinal") {
+        if (of_selection.length > 0 &&
+          of_click.length > 0) {
+          for (var i = 0; i < merged.length; i++) {
+            for (var j = i + 1; j < merged.length; j++) {
+              if (merged[j][0] == merged[i][0] &&
+                merged[j][1] == merged[i][1]) {
+                merged.splice(j, 1);
+              }
             }
           }
         }
@@ -432,12 +479,18 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
       })
       .on("brushend", function() {
 
+        /*if(type == 'linear') {
+            return;
+        }*/
+
         dragEnd = d3.mouse(this);
 
         if (dragEnd[0] == dragStart[0]
-            && dragEnd[1] == dragStart[1]) {
+          && dragEnd[1] == dragStart[1]) {
 
-          var group = Math.floor(dragEnd[0] / (width / dataset.length));
+          var l = dataset.length;
+
+          var group = Math.floor(dragEnd[0] / (width / l));
 
           var selected = dataset[group].selected;
           dataset[group].selected = dataset[group].unselected;
@@ -445,29 +498,64 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
 
           var found = false;
 
-          for (var i = 0; i < of_click.length; i++) {
-            if (of_click[i][0] == group) {
-              of_click.splice(i, 1);
-              found = true;
-              break;
+          if(type == "ordinal") {
+            for (var i = 0; i < of_click.length; i++) {
+              if (of_click[i][0] == group) {
+                of_click.splice(i, 1);
+                found = true;
+                break;
+              }
             }
-          }
 
-          for (i = 0; i < of_selection.length; i++) {
-            if (of_selection[i][0] == group) {
-              of_selection.splice(i, 1);
-              found = true;
-              break;
+            for (i = 0; i < of_selection.length; i++) {
+              if (of_selection[i][0] == group) {
+                of_selection.splice(i, 1);
+                found = true;
+                break;
+              }
             }
-          }
 
-          if (found) {
+            if (found) {
+              WGL.filterDim(m.name, filterId, mergeSelectionArrays());
+              return;
+            }
+
+            of_click.push([group, group + 1]);
             WGL.filterDim(m.name, filterId, mergeSelectionArrays());
-            return;
           }
 
-          of_click.push([group, group + 1]);
-          WGL.filterDim(m.name, filterId, mergeSelectionArrays());
+          if(type == "linear") {
+            for (var i = 0; i < of_click.length; i++) {
+              if (of_click[i][0] == dataset[group].val) {
+                of_click.splice(i, 1);
+                found = true;
+                break;
+              }
+            }
+
+            for (i = 0; i < of_selection.length; i++) {
+              if (of_selection[i][0] == dataset[group].val) {
+                of_selection.splice(i, 1);
+                found = true;
+                break;
+              }
+            }
+
+            if (found) {
+              WGL.filterDim(m.name, filterId, mergeSelectionArrays());
+              return;
+            }
+
+            if(typeof dataset[group + 1] === "undefined") {
+              of_click.push([dataset[l-1].val, dataset[l-1].val + (dataset[1].val - dataset[0].val)]);
+            } else {
+              of_click.push([dataset[group].val, dataset[group + 1].val]);
+            }
+
+            WGL.filterDim(m.name, filterId, mergeSelectionArrays());
+          }
+
+
         } else {
           brush();
         }
@@ -476,6 +564,17 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
 
     var brushNode = svg.append("g").attr("class", "brush").call(brush1)
       .selectAll("rect").attr("height", height);
+
+
+    if(text.length > 0) {
+      svg.append("foreignObject").attr({
+        "x": 0,
+        "y": height + 40,
+        "width": 400,
+        "height": 50
+      }).append("xhtml:div").append("div")
+        .html(text);
+    }
 
 
     /**
