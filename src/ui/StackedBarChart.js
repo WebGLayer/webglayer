@@ -1,4 +1,4 @@
-WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
+WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params, category = m.domain) {
 
   var that = this;
 
@@ -9,10 +9,14 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
   var h;
   var margin;
   var rotate_x;
+  // variables to subcategory
+  var subcategory_mask;
+  var new_to_old;
+  var isCategory = false;
   var tooltip_format; // function to format the tooltips showed when hovering over the chart
   var text; // text to be exhibited below the chart, as a note about the data for example
 
-  if (typeof(params)=='undefined'){
+  if (params === null){
     w = 500;
     h = 215;
     margin = {
@@ -42,6 +46,21 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
   if(screen.width < 1366) {
       w = w*0.8;
   }
+
+  if (typeof m.domain === 'undefined'){
+    type = 'linear';
+  } else {
+    type = 'ordinal';
+  }
+  if (type === 'ordinal' && m.domain !== category){
+    isCategory = true;
+  }
+
+  if (type === 'ordinal' && m.domain !== category){
+    isCategory = true;
+
+  }
+
 
   var dataset;
   var dataset_length;
@@ -100,7 +119,7 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
   };
 
   this.setOrdinalXScale = function(){
-    xScale = d3.scale.ordinal().domain(m.domain).rangeBands([ 0, width ],0.03,0.015);
+    xScale = d3.scale.ordinal().domain(category).rangeBands([ 0, width ],0.03,0.015);
     bw =xScale.rangeBand();
     svgbw= "h"+bw+"V";
     type = 'ordinal';
@@ -395,7 +414,7 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
           }
         }
 
-        WGL.filterDim(m.name, filterId, mergeSelectionArrays());
+        WGL.filterDim(m.name, filterId, filterSubcategory(mergeSelectionArrays()));
       }
 
 
@@ -455,7 +474,8 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
           of_selection.push([k, k + 1]);
         }
 
-        WGL.filterDim(m.name, filterId, mergeSelectionArrays());
+        //WGL.filterDim(m.name, filterId, mergeSelectionArrays());
+        WGL.filterDim(m.name, filterId, filterSubcategory(mergeSelectionArrays()));
       }
 
     }
@@ -515,13 +535,21 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
               }
             }
 
+          if (found) {
+            //WGL.filterDim(m.name, filterId, mergeSelectionArrays());
+            WGL.filterDim(m.name, filterId, filterSubcategory(mergeSelectionArrays()));
+            return;
+          }
             if (found) {
-              WGL.filterDim(m.name, filterId, mergeSelectionArrays());
+              WGL.filterDim(m.name, filterId, filterSubcategory(mergeSelectionArrays()));
               return;
             }
 
+          of_click.push([group, group + 1]);
+          //WGL.filterDim(m.name, filterId, mergeSelectionArrays());
+          WGL.filterDim(m.name, filterId, filterSubcategory(mergeSelectionArrays()));
             of_click.push([group, group + 1]);
-            WGL.filterDim(m.name, filterId, mergeSelectionArrays());
+            WGL.filterDim(m.name, filterId, filterSubcategory(mergeSelectionArrays()));
           }
 
           if(type == "linear") {
@@ -542,7 +570,7 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
             }
 
             if (found) {
-              WGL.filterDim(m.name, filterId, mergeSelectionArrays());
+              WGL.filterDim(m.name, filterId, filterSubcategory(mergeSelectionArrays()));
               return;
             }
 
@@ -552,7 +580,7 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
               of_click.push([dataset[group].val, dataset[group + 1].val]);
             }
 
-            WGL.filterDim(m.name, filterId, mergeSelectionArrays());
+            WGL.filterDim(m.name, filterId, filterSubcategory(mergeSelectionArrays()));
           }
 
 
@@ -684,28 +712,6 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
       selection.attr("height", height);
     }
 
-
-
-    function brushO() {
-
-      var f = brush1.extent();
-      var leftEdges = xScale.range();
-      var width = xScale.rangeBand();
-      var l;
-      var r;
-      var left = brush1.extent()[0][0];
-      var right = brush1.extent()[0][1]
-      for(l=0; left > (leftEdges[l] + width); l++) {}
-      for(r=0; right > (leftEdges[r] + width); r++) {}
-      //do nothing, just increment j until case fails
-      console.log("Clicked on " + xScale.domain()[l]+ " "+xScale.domain()[r]);
-
-      var f = [];
-      f[0] = [ xScale.domain()[l],  xScale.domain()[r]];
-      WGL.filterDim(id, filterId, f);
-      //console.log(xScale.domain()[j]+' '+brush1.extent()[0][1]);
-
-    }
   };
 
   this.clean = function (cleanChartDiv) {
@@ -722,6 +728,33 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
   // Create bars
 
   this.update = function(data) {
+    // filtration for category subset
+    if (isCategory){
+      var fdata = [];
+      for(var i = 0; i<data.length; i++){
+        if (subcategory_mask[i]){
+          fdata.push(data[i]);
+        }
+      }
+      // compute new maximum value
+      var max0 = 0;
+      var max1 = 0;
+      var max2 = 0;
+      fdata.forEach((d) => {
+        if (d.selected > max0){
+          max0 = d.selected;
+        }
+        if (d.selected + d.unselected > max1){
+          max1 = d.selected + d.unselected;
+        }
+        if (d.selected + d.unselected + d.out > max2){
+          max2 = d.selected + d.unselected + d.out;
+        }
+      });
+      fdata.max = {0: max0, 1: max1, 2: max2, 3: 0};
+      data = fdata;
+    }
+
     if (dataset == null) {dataset = Array.prototype.slice.call(data);
       dataset.max = data.max;
       this.init();
@@ -882,7 +915,6 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
           yScale(d.selected));
       }
     }
-    //console.log(path.join(""));
     return path.join("");
   }
 
@@ -920,6 +952,43 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params) {
     this.brush.clear();
     WGL.filterDim(m.name, filterId, []);
     updateFiltersHeader();
+  };
+
+  var filterSubcategory = (f) => {
+    if (isCategory){
+      var ff = f.slice();
+      for(var i = 0; i < f.length; i++) {
+        ff[i] = [new_to_old[ff[i][0]], 0];
+        ff[i][1] = ff[i][0] + 1;
+      }
+      return ff;
+    }
+    return f;
+  };
+
+  this.createSubcategoryMask = function () {
+    subcategory_mask = new Array(m.domain.length);
+    new_to_old = new Array(category.length);
+
+    var j = 0;
+    for(var i = 0; i<m.domain.length; i++){
+      var pp = true;
+      category.forEach((v) => {
+        if (v === m.domain[i]){
+          subcategory_mask[i] = true;
+          new_to_old[j] = i;
+          j++;
+          pp = false;
+        }
+      });
+      if (pp){
+        subcategory_mask[i] = false;
+      }
+    }
+  };
+  if (isCategory){
+    this.createSubcategoryMask();
   }
+
 
 };

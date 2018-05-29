@@ -70,7 +70,7 @@ function visualize(data){
 		//wgl.addLinearHistDimension(dayes);
 		chd1.setDim(WGL.addOrdinalHistDimension(days));
 		WGL.addLinearFilter(days,7, 'daysF');		
-		charts['days'] = new  WGL.ui.StackedBarChart(days, "ch1", "day of the week", 'daysF');
+		charts['days'] = WGL.createStackBarChartSubset(days, "ch1", "day of the week", 'daysF',['Sun','Mon','Thu']);
 		
 		/*HOURS*/
 		
@@ -78,21 +78,21 @@ function visualize(data){
 		var chd2 = new WGL.ChartDiv("right","ch2", "Hour of the day");
 		chd2.setDim(WGL.addLinearHistDimension(hours));		
 		WGL.addLinearFilter(hours, 24*10, 'hoursF');		
-		charts['hours'] = new  WGL.ui.StackedBarChart(hours, "ch2", "hour of the day", 'hoursF');
+		charts['hours'] = WGL.createStackBarChart(hours, "ch2", "hour of the day", 'hoursF');
 		
 		/*SERVELITY*/
 		var sev   = {data: data.sev,  domain: data.sevEnum ,  name: 'sev', type:'ordinal', label : "accident servelity"};	
 		var chd3 = new WGL.ChartDiv("right","ch3", "Accident severity");
 		chd3.setDim(WGL.addOrdinalHistDimension(sev));
 		WGL.addLinearFilter(sev,3, 'sevF');
-		charts['sev']   = new  WGL.ui.StackedBarChart(sev, "ch3", "accident severity",'sevF');
+		charts['sev']   = WGL.createStackBarChart(sev, "ch3", "accident severity",'sevF');
 	
 		/*Date*/
 		var date =  {data: data.date,   min:data.dmm.min, max:data.dmm.max, num_bins: 365, name: 'date', type:'linear'} ;
 		var chd5 = new WGL.ChartDiv("right","ch5", "Date");
 		chd5.setDim(WGL.addLinearHistDimension(date));
 		WGL.addLinearFilter(date,date.num_bins, 'dateF');
-		charts['date']  = new WGL.ui.StackedBarChart(date, "ch5", "Date ", 'dateF');
+		charts['date']  = WGL.createStackBarChart(date, "ch5", "Date ", 'dateF');
 		charts['date'].xformat = function(d){
 			var data =  new Date(d*1000*60*60);
 			return (data.getDay()+1)+". "+ (data.getMonth()+1);
@@ -109,7 +109,7 @@ function visualize(data){
 		var chd4 = new WGL.ChartDiv("right","ch4", "Speed Limit");	
 		chd4.setDim(WGL.addOrdinalHistDimension(sl));
 		WGL.addLinearFilter(sl, 13, 'slF');
-		charts['speedlimit'] = new  WGL.ui.StackedBarChart(sl, "ch4", "Speed limit", 'slF');
+		charts['speedlimit'] = WGL.createStackBarChart(sl, "ch4", "Speed limit", 'slF');
 
 		//identify
 		var idt = WGL.addIdentifyDimension(data.pts, data.pts_id, 'idt', "data/identify/");
