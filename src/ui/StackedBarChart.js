@@ -52,6 +52,9 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params, category
   } else {
     type = 'ordinal';
   }
+  if (type === 'ordinal' && m.domain !== category){
+    isCategory = true;
+  }
 
   if (type === 'ordinal' && m.domain !== category){
     isCategory = true;
