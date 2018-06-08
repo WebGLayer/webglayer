@@ -125,6 +125,15 @@ WGL.internal.GLUtils = {
     $.get(domain+'shaders/shaders_identify.glsl', function(data) {
         $("head").append(data);
     });
+    $.get(domain+'shaders/shaders_flags.glsl', function(data) {
+      $("head").append(data);
+    });
+    $.get(domain+'shaders/shaders_filterflags.glsl', function(data) {
+      $("head").append(data);
+    });
+    $.get(domain+'shaders/shaders_filterflags2.glsl', function(data) {
+      $("head").append(data);
+    });
 
 
     $.ajaxSetup({

@@ -144,7 +144,13 @@ WGL.filterDim = function(id, filterId, filter, dorendering){
   //f.readPixels();
 
   //logFilterStatus();
-  mainFilter.applyFilterDim(dimensions[id],filterId);
+  if (dimensions[id].filters[filterId].isspatial === 2.0){
+    mainFilter.applyFilterAll(dimensions);
+  }
+  else{
+    mainFilter.applyFilterDim(dimensions[id],filterId);
+  }
+
   //console.log("filtering...:"+filter);
 
   if (dorendering==undefined || dorendering==true){
@@ -165,7 +171,7 @@ WGL.filterDim = function(id, filterId, filter, dorendering){
       top.push(data.hours[sel[i]]);
   }
   console.log(top);*/
-}
+};
 
 WGL.filterChanged = function(id, newf){
   var dimensions = this._dimensions;
