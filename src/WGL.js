@@ -3,8 +3,6 @@
  */
 var WGL = (function() {
 
-
-
   /** private part* */
 
   var manager, rasterer;
@@ -292,6 +290,19 @@ var WGL = (function() {
       manager.dimnum = Object.keys(oneDDim).length;
       return dim;
     },
+    /**
+     *
+     * @param {Object} m
+     * @param {String} m.name ID od dimension
+     * @param {array[]} m.data e.g [["a", "b"], ["a"], [], ["b"]]
+     * @param {string[]} m.flags all flags for displaying e.g ["a", "b"]
+     * @returns {WGL.dimension.FlagsDimension}
+     */
+    addFlagsDimension: function (m) {
+      var dim = new WGL.dimension.FlagsDimension(m.name, m.data, m.flags);
+      this._dimensions[m.name] = dim;
+      return dim
+    },
 
     addMultiDim : function(d){
        var ta = [];
@@ -384,6 +395,21 @@ var WGL = (function() {
         throw "Can not set spatial filter without spatial dimension"
       }
       extf = new WGL.filter.ExtentFilter();
+    },
+
+    /**
+     * @param {string} dim_name
+     * @param {string} filter_name
+     * @return {WGL.filter.FlagsFilter}
+     */
+    addFlagsFilter: function (dim_name, filter_name) {
+      var d = this._dimensions[dim_name];
+      if (d === null){
+        console.error('Cant set fitler to undefined dimension ' +dim_name);
+      }
+      var f = new WGL.filter.FlagsFilter(dim_name, filter_name);
+      addFilter(dim_name, filter_name, f);
+      return f;
     },
 
     resetFilters : function() {

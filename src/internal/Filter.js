@@ -14,15 +14,21 @@ WGL.internal.Filter = function() {
   this.filterProgram2d = GLU.compileShaders("filter2d_vShader", "filter2d_fShader",
       this);
 
+  // for Flags Dimension
+  this.filterProgramFT = GLU.compileShaders("filterflags_vShader", "filterflags_fShader", this);
+  this.filterProgramFT.name ="FlagsFilter";
+
 
 
   var filterid = 'filterid';
   manager.storeUniformLoc(this.filterProgram1d, filterid);
   manager.storeUniformLoc(this.filterProgram2d, filterid);
+  manager.storeUniformLoc(this.filterProgramFT, filterid);
 
   var indexText = 'indexText';
   manager.storeUniformLoc(this.filterProgram1d, indexText);
   manager.storeUniformLoc(this.filterProgram2d, indexText);
+  manager.storeUniformLoc(this.filterProgramFT, indexText);
 
 
   //var isspatial = 'isspatial';
@@ -96,64 +102,66 @@ WGL.internal.Filter = function() {
 
   }
 
-
-
-
-
   /*evaluate all filters*/
   this.applyFilterAll = function(dimensions) {
-
-    /*update filtering data (important for polybrush filter)*/
-    /*for (var i in dimensions) {
-      for (var f in dimensions[i].filters) {
-      var d = dimensions[i].filters[f];
-          if(d.isActive){
-            //d.updateFilter(); // update filering texture if needed;
-          }
-
-      }
-    }*/
-
-
 
     gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer[thatID]);
     gl.viewport(0, 0, framebuffer.width,framebuffer.height);
     gl.clearColor(0.0, 0.0, 0.0, 0.0);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    //console.log("binding framebuffer to "+activeID);
     gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer[activeID]);
     gl.viewport(0, 0, framebuffer.width,framebuffer.height);
     gl.clearColor(0.0, 0.0, 0.0, 0.0);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-
-      //this.readPixels(activeID, 'active');
-      //this.readPixels(thatID, 'pasive');
-
     gl.disable(gl.DEPTH_TEST);
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.ONE, gl.ONE);
-
-  //	this.manager.enableBuffersAndCommonUniforms(this.filterProgram);
-
-
-
 
     for (var i in dimensions) {
 
 
 
       for (var f in dimensions[i].filters) {
-      /* traverse all filters and evaluate them */
-      var d = dimensions[i].filters[f];
-      /*Filter texture*/
-      if(d.isActive){
-        /* Activate filter texture*/
-          if (d.isspatial == 0.0){
+        /* traverse all filters and evaluate them */
+        var d = dimensions[i].filters[f];
+        /*Filter texture*/
+        if(d.isActive){
+          /* Activate filter texture*/
+          if (d.isspatial === 2.0){
+            d.writeToThatTexture(dimensions[i], framebuffer[thatID]);
+            // enable back Active ID
+            gl.useProgram(this.filterProgramFT);
+            gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer[activeID]);
+
+            // enable buffer for index
+            manager.enableBufferForName(this.filterProgramFT,  "index", "index");
+
+            /*Activate index texture*/
+            gl.activeTexture(gl.TEXTURE1);
+            gl.bindTexture(gl.TEXTURE_2D, filterTexture[thatID]);
+            gl.uniform1i(this.filterProgramFT.indexText, 1);
+
+            // filter ID
+            gl.uniform1f(this.filterProgramFT.filterid, d.index);
+
+            gl.drawArrays(gl.POINTS, 0, manager.num_rec);
+
+            // clear thatID
+            gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer[thatID]);
+            gl.viewport(0, 0, framebuffer.width,framebuffer.height);
+            gl.clearColor(0.0, 0.0, 0.0, 0.0);
+            gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+            // enable back activeID
+            gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer[activeID]);
+            continue;
+          }
+          else if (d.isspatial === 0.0){
             this.filterProgram=this.filterProgram1d;
             gl.useProgram(this.filterProgram);
-          } else {
+          }
+          else {
             this.filterProgram=this.filterProgram2d;
             gl.useProgram(this.filterProgram);
             manager.bindMapMatrix(this.filterProgram);
@@ -169,18 +177,19 @@ WGL.internal.Filter = function() {
           gl.uniform1i(this.filterProgram.indexText, 1);
 
           gl.uniform1f(this.filterProgram.filterid, d.index);
-            gl.uniform1f(this.filterProgram.isspatial, d.isspatial);
-         //  	console.log("filter num "+manager.filternum);
-
-          if (d.isspatial == 0.0){
+          gl.uniform1f(this.filterProgram.isspatial, d.isspatial);
+          //console.log("filter num "+manager.filternum);
+          if (d.isspatial === 0.0){
             /*this fitler is not spatial - bind 1d attribute*/
             manager.enableBufferForName(this.filterProgram, dimensions[i].name, "attr1");
+            gl.drawArrays(gl.POINTS, 0, manager.num_rec);
           } else {
             /*this filter is spatial - bind the wPoint*/
             manager.enableBufferForName(this.filterProgram, "wPoint", "wPoint");
+            gl.drawArrays(gl.POINTS, 0, manager.num_rec);
+
           }
-          gl.drawArrays(gl.POINTS, 0, manager.num_rec);
-          }
+        }
       }
     }
     //this.readPixels(activeID, 'active');
@@ -194,14 +203,17 @@ WGL.internal.Filter = function() {
 
     gl.useProgram(null);
     gl.bindRenderbuffer(gl.RENDERBUFFER, null);
-      gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-  }
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+  };
 
 /*Render filter for particular dimension*/
-  this.applyFilterDim = function(dim,filterId) {
+  this.applyFilterDim = function(dim, filterId) {
 
-
-    if (dim.filters[filterId].isspatial == 0.0){
+    if (dim.filters[filterId].isspatial === 2.0){
+      console.error('This operation in not supported for FlagsFilter');
+      return;
+    }
+    else if (dim.filters[filterId].isspatial === 0.0){
       this.filterProgram=this.filterProgram1d;
       gl.useProgram(this.filterProgram);
       manager.enableBufferForName(this.filterProgram, dim.name, "attr1");
@@ -221,7 +233,7 @@ WGL.internal.Filter = function() {
 
     gl.disable(gl.DEPTH_TEST);
     gl.enable(gl.BLEND);
-    gl.blendFuncSeparate(gl.ONE, gl.ZERO, gl.ONE, gl.ONE)
+    gl.blendFuncSeparate(gl.ONE, gl.ZERO, gl.ONE, gl.ONE);
   //	gl.blendFunc(gl.ONE, gl.ONE);
 
   //	this.manager.enableBuffersAndCommonUniforms(this.filterProgram);
@@ -246,10 +258,8 @@ WGL.internal.Filter = function() {
 
     gl.useProgram(null);
     gl.bindRenderbuffer(gl.RENDERBUFFER, null);
-      gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-
-      //this.readPixelsAll();
-  }
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+  };
 
   this.getActiveTexture = function(){
     return filterTexture[activeID];
