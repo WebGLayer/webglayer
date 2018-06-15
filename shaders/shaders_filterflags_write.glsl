@@ -1,4 +1,5 @@
 <script id="filterflags2_vShader" type="x-shader/x-vertex">
+  // this shader render all flags (sub-dimension) to the raster (THAT)
   attribute vec2 index;
   attribute vec2 attr1;
 

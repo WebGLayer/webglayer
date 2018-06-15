@@ -128,10 +128,10 @@ WGL.internal.GLUtils = {
     $.get(domain+'shaders/shaders_flags.glsl', function(data) {
       $("head").append(data);
     });
-    $.get(domain+'shaders/shaders_filterflags.glsl', function(data) {
+    $.get(domain+'shaders/shaders_filterflags_prepare.glsl', function(data) {
       $("head").append(data);
     });
-    $.get(domain+'shaders/shaders_filterflags2.glsl', function(data) {
+    $.get(domain+'shaders/shaders_filterflags_write.glsl', function(data) {
       $("head").append(data);
     });
 

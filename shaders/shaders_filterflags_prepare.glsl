@@ -1,4 +1,5 @@
 <script id="filterflags_vShader" type="x-shader/x-vertex">
+// this shader takes values (> 1) from indexText (THAT) and add filter to the indexText (ACTIVE)
 attribute vec2 index;
 
 uniform float filterid;
