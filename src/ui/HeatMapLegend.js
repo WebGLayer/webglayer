@@ -7,7 +7,7 @@ WGL.ui.HeatMapLegend = function(div_id, filterId, useBrush) {
   var GLU = WGL.internal.GLUtils;
 
   var w = 270;
-  if(window.screen.width < 1366) {
+  if(window.screen.width <= 1366) {
     w = 190
   }
   var h = 100;
