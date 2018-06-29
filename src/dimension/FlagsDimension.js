@@ -14,6 +14,11 @@ WGL.dimension.FlagsDimension = function (name, data, flags){
   this.filters = [];
   this.filtersids = [];
 
+  this.visible = true;
+  this.setVisible = function(v){
+      this.visible = v;
+  }
+
   // manager and GLU
   var manager = WGL.getManager();
   var GLU = WGL.internal.GLUtils;

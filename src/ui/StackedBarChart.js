@@ -15,6 +15,7 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params, category
   var isCategory = false;
   var tooltip_format; // function to format the tooltips showed when hovering over the chart
   var text; // text to be exhibited below the chart, as a note about the data for example
+  var numbers_formating;
 
   if (params === null){
     w = 500;
@@ -28,6 +29,7 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params, category
     rotate_x = false;
     tooltip_format = function(val) {return val;}
     text = "";
+    numbers_formating = "s";
   } else {
     w=(params.w ? params.w : 500);
     h=(params.h ? params.h : 215);
@@ -40,6 +42,7 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params, category
     rotate_x=params.rotate_x;
     tooltip_format = (params.tooltip_format ? params.tooltip_format : function(val) {return val});
     text = (params.text ? params.text : "");
+    numbers_formating = (params.numbers_formatting ? params.numbers_formatting : "s");
   }
 
 
@@ -129,8 +132,8 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params, category
   this.xformat = function(d){
     return d;
   };
-
-  var yformat = d3.format("s");
+  
+  var yformat = d3.format(numbers_formating);
 
   var yformatBars = d3.format(".3s");
 
@@ -170,16 +173,18 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params, category
     this.setArrowHeight(arrowTan);
 
     var cols = [
-        "#ffa91b",
-        "#8cc5f9",
-        "#e3e4e4"
+      "#ffa91b",
+      "#8cc5f9",
+      "#666666"
     ];
 
     var classes = [
-        [ "2", "out", cols[2] ],
-        [ "1", "unselected", cols[1] ],
-        [ "0", "selected", cols[0] ]
+      [ "2", "out", cols[2] ],
+      [ "1", "unselected", cols[1] ],
+      [ "0", "selected", cols[0] ]
     ];
+
+    var zoom_button_bg = "#e3e4e4";
 
     colorScale = d3.scale.ordinal().range(cols);
 
@@ -228,15 +233,15 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params, category
     } else {
       svg.append("g").attr("class", "x axis").attr("transform",
         "translate(0," + height + ")").call(xAxis).append("text")
-          .attr("y", "3.5em").attr("x",
-          width /2 ).style("text-anchor", "end");
+        .attr("y", "3.5em").attr("x",
+        width /2 ).style("text-anchor", "end");
     }
 
     svg.append("g").attr("class", "y axis").call(yAxis).append("text")
       .attr("transform", "rotate(270)").attr("y", "-4.5em").attr("x",
-      "-2em").style("text-anchor", "end").text(this.y_label); //changes
+      "-2em").attr("class", "y-axis-label").style("text-anchor", "end").text(this.y_label); //changes
 
-      dataset_length = dataset.length;
+    dataset_length = dataset.length;
 
     /*
      * bars = svg.selectAll(".bars").data(dataset).enter()
@@ -266,7 +271,17 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params, category
       title.transition()
         .duration(200)
         .style("opacity", .9);
-      let value = tooltip_format(dataset[group].val.toString().replace(/\b\w/g, l => l.toUpperCase()));
+
+      let x_labels = $("#"+div_id).find(".x.axis text");
+
+      let label = ($(x_labels[group]).text() !== '' ? $(x_labels[group]).text() : dataset[group].val);
+
+      let value = tooltip_format(label.toString().replace(/[^\s]+/g, function(word) {
+        return word.replace(/^./, function(first) {
+          return first.toUpperCase();
+        })
+      }));
+
       title.html(value)
         .style("left", (e.pageX) + "px")
         .style("top", (e.pageY) + "px");
@@ -600,7 +615,7 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params, category
         "y": height + 40,
         "width": 400,
         "height": 50
-      }).append("xhtml:div").append("div")
+      }).append("xhtml:div").append("div").attr("id", "text-"+m.name)
         .html(text);
     }
 
@@ -618,19 +633,20 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params, category
     var legend_y = 0;
 
     legendRect.enter().append("foreignObject").attr({
-        "x": legend_x,
-        "y": function(d) {return (legend_y + d[0] * 44)},
-        "width": 36,
-        "height": 36
+      "x": legend_x,
+      "y": function(d) {return (legend_y + d[0] * 44)},
+      "width": 36,
+      "height": 36
     }).append("xhtml:div").append("div").attr("id", function(d) {return div_id+ d[0];})
-        .attr("style", function(d) {return "background-color:"+d[2]})
-        .attr("title", function(d) {return "Zoom on '"+d[1]+"' data"})
-        .attr("class", function(d) {return "legend-"+d[1]})
-        .classed('legend-scale',true)
-        .append("i")
-        .classed('material-icons', true)
-        .classed('md-36', true)
-        .text("all_out")
+      .attr("style", function(d) {return "background-color:" + zoom_button_bg})
+      .attr("title", function(d) {return "Zoom on '"+d[1]+"' data"})
+      .attr("class", function(d) {return "legend-"+d[1]})
+      .classed('legend-scale',true)
+      .append("i")
+      .classed('material-icons', true)
+      .classed('md-36', true)
+      .attr("style", function(d) {return "color:"+d[2]})
+      .text("all_out")
       .on(
         "click",
         function(d) {
