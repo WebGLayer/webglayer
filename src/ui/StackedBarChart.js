@@ -17,7 +17,7 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params, category
   var text; // text to be exhibited below the chart, as a note about the data for example
   var numbers_formating;
 
-  if (params === null){
+  if (params === null || typeof params === "undefined"){
     w = 500;
     h = 215;
     margin = {
@@ -551,18 +551,10 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params, category
             }
 
           if (found) {
-            //WGL.filterDim(m.name, filterId, mergeSelectionArrays());
             WGL.filterDim(m.name, filterId, filterSubcategory(mergeSelectionArrays()));
             return;
           }
-            if (found) {
-              WGL.filterDim(m.name, filterId, filterSubcategory(mergeSelectionArrays()));
-              return;
-            }
-
-          of_click.push([group, group + 1]);
-          //WGL.filterDim(m.name, filterId, mergeSelectionArrays());
-          WGL.filterDim(m.name, filterId, filterSubcategory(mergeSelectionArrays()));
+          
             of_click.push([group, group + 1]);
             WGL.filterDim(m.name, filterId, filterSubcategory(mergeSelectionArrays()));
           }
