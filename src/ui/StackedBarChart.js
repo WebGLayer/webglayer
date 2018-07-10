@@ -17,7 +17,7 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params, category
   var text; // text to be exhibited below the chart, as a note about the data for example
   var numbers_formating;
 
-  if (params === null){
+  if (params === null || typeof params === "undefined"){
     w = 500;
     h = 215;
     margin = {
@@ -260,14 +260,9 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params, category
       WGL.filterDim(m.name,filterId, of);
     });*/
 
-    function onMouseOver(e) {
+    function onMouseOver() {
 
-      // Show tooltip on the bar
-      let xPosition = e.offsetX;
-      if(isChrome()) {
-        xPosition-=margin.left;
-      }
-      const group = Math.floor(xPosition / (width / dataset.length));
+      const group = Math.floor(d3.mouse(this)[0] / (width / dataset.length));
       title.transition()
         .duration(200)
         .style("opacity", .9);
@@ -283,8 +278,8 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params, category
       }));
 
       title.html(value)
-        .style("left", (e.pageX) + "px")
-        .style("top", (e.pageY) + "px");
+        .style("left", (d3.event.pageX) + "px")
+        .style("top", (d3.event.pageY) + "px");
 
       // Change bar color on mouse hover
       const d = barPathHover([dataset[group]]);
@@ -551,18 +546,10 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params, category
             }
 
           if (found) {
-            //WGL.filterDim(m.name, filterId, mergeSelectionArrays());
             WGL.filterDim(m.name, filterId, filterSubcategory(mergeSelectionArrays()));
             return;
           }
-            if (found) {
-              WGL.filterDim(m.name, filterId, filterSubcategory(mergeSelectionArrays()));
-              return;
-            }
-
-          of_click.push([group, group + 1]);
-          //WGL.filterDim(m.name, filterId, mergeSelectionArrays());
-          WGL.filterDim(m.name, filterId, filterSubcategory(mergeSelectionArrays()));
+          
             of_click.push([group, group + 1]);
             WGL.filterDim(m.name, filterId, filterSubcategory(mergeSelectionArrays()));
           }
@@ -698,28 +685,13 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params, category
 
     });
 
-    /*$("#" + div_id).on("click", function(e) {
-      if (e.target.tagName != "svg"
-          && e.target.tagName != "g"
-          && !$(e.target).parents(".legend-scale").length
-          && !$(e.target).parents(".ii").length) {
-        that.clearSelection();
-      }
-    });*/
+    d3.select("#"+div_id+" rect.background")
+        .on("mousemove", onMouseOver)
+        .on("mouseleave", onMouseLeave);
 
-    $("#" + div_id).on("mousemove", function(e) {
-      if(e.target.tagName == "rect"
-      && e.target.className.baseVal == "background") {
-          onMouseOver(e);
-      }
-    });
-
-    $("#" + div_id + " rect.background").on("mouseleave", function(e) {
-        onMouseLeave(e);
-    });
-
-    $("#chd-container-"+div_id+" .chart-filters-clean").off("click");
-    $("#chd-container-"+div_id+" .chart-filters-clean").on("click", function(e) {
+    $("#chd-container-"+div_id+" .chart-filters-clean")
+        .off("click")
+        .on("click", function(e) {
       e.stopPropagation();
       that.clearSelection();
     });
