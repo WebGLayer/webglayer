@@ -700,6 +700,12 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params, category
       selection.attr("height", height);
     }
 
+
+    let activeFilters = getUrlParameter(encodeURIComponent(m.name));
+    if(activeFilters !== "") {
+      of_click = of_click.concat(JSON.parse(activeFilters));
+      WGL.filterDim(m.name, filterId, filterSubcategory(mergeSelectionArrays()));
+    }
   };
 
   this.clean = function (cleanChartDiv) {
@@ -765,6 +771,8 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params, category
     updateLabels();
 
     updateFiltersHeader();
+
+    updatePermalinkBarChart();
 
     /*
      * bars.selectAll("rect").data(function(m) { return m.levels;
@@ -1028,5 +1036,18 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params, category
     this.createSubcategoryMask();
   }
 
+  const updatePermalinkBarChart = () => {
+      if(WGL._dimensions[m.name].filters[filterId].isActive) {
+          let newURL = updateURLParameter(window.location.href, encodeURIComponent(m.name), "[[" + WGL._dimensions[m.name].filters[filterId].actual_filtres.join("],[") + "]]");
+          if(window.location.href !== newURL) {
+              window.history.replaceState('', '', newURL);
+          }
+      } else if(window.location.href.indexOf(encodeURIComponent(m.name)) !== -1) {
+          let newURL = updateURLParameter(window.location.href, encodeURIComponent(m.name), "");
+          if(window.location.href !== newURL) {
+              window.history.replaceState('', '', newURL);
+          }
+      }
+  }
 
 };
