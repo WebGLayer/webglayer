@@ -7,12 +7,12 @@
  * @constructor
  */
 
-WGL.ChartDiv = function(parentdiv, divid, dimension, caption, n_total) {
-    
+WGL.ChartDiv = function(parentdiv, divid, dimension_name, caption, n_total) {
+
     let newhtml;
 
     if(typeof n_total === "undefined") {
-        newhtml = "<div class='border-top-white chart-container' id='chd-container-" + divid + "' data-name='" + dimension.toLowerCase() + "'>" +
+        newhtml = "<div class='border-top-white chart-container' id='chd-container-" + divid + "' data-name='" + dimension_name.toLowerCase() + "'>" +
             "<div class='btn-minimize chart-header'  id=min" + divid + " > " +
             "<div class='chart-chevron'><i id='but" + divid + "' class='material-icons'>keyboard_arrow_up</i></div>" +
             "<div class='chart-drag-handle cursor-grab'><i title='Click and drag to change order' class='material-icons'>drag_handle</i></div>" +
@@ -22,7 +22,7 @@ WGL.ChartDiv = function(parentdiv, divid, dimension, caption, n_total) {
             " <div id = " + divid + " class = 'vis-div chart-content' style='position: relative; background: white'></div>" +
             " </div>";
     } else if(n_total == null) {
-        newhtml = "<div class='border-top-white chart-container' id='chd-container-" + divid + "' data-name='" + dimension.toLowerCase() + "'>" +
+        newhtml = "<div class='border-top-white chart-container' id='chd-container-" + divid + "' data-name='" + dimension_name.toLowerCase() + "'>" +
             "<div class='btn-minimize chart-header'  id=min" + divid + " > " +
             "<div class='chart-chevron'><i id='but" + divid + "' class='material-icons'>keyboard_arrow_up</i></div>" +
             "<div class='chart-drag-handle cursor-grab'><i title='Click and drag to change order' class='material-icons'>drag_handle</i></div>" +
@@ -31,7 +31,7 @@ WGL.ChartDiv = function(parentdiv, divid, dimension, caption, n_total) {
             " <div id = " + divid + " class = 'vis-div chart-content' style='position: relative; background: white'></div>" +
             " </div>";
     } else {
-        newhtml = "<div class='border-top-white chart-container' id='chd-container-" + divid + "' data-name='" + dimension.toLowerCase() + "'>" +
+        newhtml = "<div class='border-top-white chart-container' id='chd-container-" + divid + "' data-name='" + dimension_name.toLowerCase() + "'>" +
             "<div class='btn-minimize chart-header'  id=min" + divid + " > " +
             "<div class='chart-chevron'><i id='but" + divid + "' class='material-icons'>keyboard_arrow_up</i></div>" +
             "<div class='chart-drag-handle cursor-grab'><i title='Click and drag to change order' class='material-icons'>drag_handle</i></div>" +
@@ -41,36 +41,36 @@ WGL.ChartDiv = function(parentdiv, divid, dimension, caption, n_total) {
             " <div id = " + divid + " class = 'vis-div chart-content' style='position: relative; background: white'></div>" +
             " </div>";
     }
-    
+
     $("#"+parentdiv).append(newhtml);
 
-    var dimension;
+    let dimension;
     this.setDim = function(d){
-
         dimension = d;
     };
-
-
 
     this.change = function () {
         $(this).toggleClass('btn-plus');
         $("#" + divid).slideToggle();
-        var el = $("#but" + divid);
-        if (el.text() == "keyboard_arrow_down") {
+        const el = $("#but" + divid);
+        if (el.text() === "keyboard_arrow_down") {
             /*activate*/
-            el.text("keyboard_arrow_up")
-            if (dimension != undefined) {
+            el.text("keyboard_arrow_up");
+            if (dimension !== undefined) {
                 dimension.setVisible(true);
             }
         }
         else {
             /*deactivate*/
-            el.text("keyboard_arrow_down")
-            if (dimension != undefined) {
+            el.text("keyboard_arrow_down");
+            if (dimension !== undefined) {
                 dimension.setVisible(false);
-                //dimension.render(WGL.getManager().num_rec);
                 WGL.render();
             }
+        }
+
+        if($(".link-permalink").length > 0) {
+            $(".link-permalink").trigger("permalink:change");
         }
     };
 
@@ -82,23 +82,25 @@ WGL.ChartDiv = function(parentdiv, divid, dimension, caption, n_total) {
 
         $(this).toggleClass('btn-plus');
         $("#" + divid).slideToggle();
-        var el = $("#but" + divid);
-        if (el.text() == "keyboard_arrow_down") {
+        const el = $("#but" + divid);
+        if (el.text() === "keyboard_arrow_down") {
             /*activate*/
-            el.text("keyboard_arrow_up")
-            if (dimension != undefined) {
+            el.text("keyboard_arrow_up");
+            if (dimension !== undefined) {
                 dimension.setVisible(true);
             }
-            el.closest("[id^=min]").addClass("min-open");
         }
         else {
             /*deactivate*/
-            el.text("keyboard_arrow_down")
-            if (dimension != undefined) {
+            el.text("keyboard_arrow_down");
+            if (dimension !== undefined) {
                 dimension.setVisible(false);
-                //dimension.render(WGL.getManager().num_rec);
                 WGL.render();
             }
+        }
+
+        if($(".link-permalink").length > 0) {
+            $(".link-permalink").trigger("permalink:change");
         }
     });
 };

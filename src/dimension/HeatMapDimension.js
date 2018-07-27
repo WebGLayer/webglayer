@@ -41,6 +41,9 @@ WGL.dimension.HeatMapDimension = function(id, render_resolution) {
   this.setVisible = function(v) {
     visible = v;
   };
+  this.getVisible = function() {
+    return visible;
+  };
   /**
    *
    * @param {boolean} v

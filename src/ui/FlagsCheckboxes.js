@@ -3,11 +3,14 @@ WGL.ui.FlagsCheckboxes = function(m, div_id, filterId, flags_list, flags_names, 
     let that = this;
 
     let h;
+    let permalink_input;
 
     if (typeof params === "undefined") {
         h = 150;
+        permalink_input = null;
     } else {
         h = (params.h ? params.h : 180);
+        permalink_input = (params.permalink_input ? params.permalink_input : null);
     }
 
     this.getDivId = function () {
@@ -71,6 +74,26 @@ WGL.ui.FlagsCheckboxes = function(m, div_id, filterId, flags_list, flags_names, 
             onMove();
         }
 
+        if(permalink_input != null) {
+            $("#" + div_id).on("chart:update-permalink", (e) => {
+                e.stopPropagation();
+
+                let oldURL = $("#"+permalink_input).val();
+
+                if (WGL._dimensions[m.name].filters[filterId].isActive) {
+                    let newURL = updateURLParameter(oldURL, m.name, WGL._dimensions[m.name].filters[filterId].selected_flags);
+                    if (oldURL !== newURL) {
+                        $("#" + permalink_input).val(newURL);
+                    }
+                } else if (window.location.href.indexOf(m.name) !== -1) {
+                    let newURL = updateURLParameter(oldURL, m.name, "");
+                    if (oldURL !== newURL) {
+                        $("#" + permalink_input).val(newURL);
+                    }
+                }
+            });
+        }
+
     };
 
     this.update = function () {
@@ -102,8 +125,6 @@ WGL.ui.FlagsCheckboxes = function(m, div_id, filterId, flags_list, flags_names, 
                 }
             }
         }
-
-        updatePermalinkFlags();
     };
 
     this.clean = function () {
@@ -169,19 +190,8 @@ WGL.ui.FlagsCheckboxes = function(m, div_id, filterId, flags_list, flags_names, 
             $(".close-item-filters").removeClass("hide");
         }
 
-    };
-
-    const updatePermalinkFlags = () => {
-        if(WGL._dimensions[m.name].filters[filterId].isActive) {
-            let newURL = updateURLParameter(window.location.href, m.name, WGL._dimensions[m.name].filters[filterId].selected_flags);
-            if(window.location.href !== newURL) {
-                window.history.replaceState('', '', newURL);
-            }
-        } else if(window.location.href.indexOf(m.name) !== -1) {
-            let newURL = updateURLParameter(window.location.href, m.name, "");
-            if(window.location.href !== newURL) {
-                window.history.replaceState('', '', newURL);
-            }
+        if($(".link-permalink").length > 0) {
+            $(".link-permalink").trigger("permalink:change");
         }
-    }
+    };
 };

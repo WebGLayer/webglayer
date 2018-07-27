@@ -2,23 +2,25 @@ WGL.dimension.ColorSchemes = function(){
 
   var schemes = {};
 
-  schemes['blue'] = {
-    'rgba': [44, 0, 222,
-      0, 207, 178,
-      0, 92, 242
+    schemes['blue'] = {
+   'rgba': [
+        171, 3, 208,
+        0, 92, 255,
+        81, 255, 155
     ],
     'bg': 'light-v9',
-      'alpha': [1.0, 0.9, 0.4]
+    'alpha': [1.0, 0.9, 0.4]
   };
 
-  schemes['red'] = {
-    'rgba': [251, 48, 41,
-      155, 11, 232,
-        26, 29, 255
+    schemes['red'] = {
+    'rgba': [
+        255, 134, 0,
+        182, 0, 125,
+        0, 120, 255
     ],
     'bg': 'light-v9',
-      'alpha': [1.4, 0.9, 0.4]
-  };
+    'alpha': [1.0, 0.9, 0.4]
+    };
 
   schemes['fire'] = {
     'rgba': [256, 256, 228,
