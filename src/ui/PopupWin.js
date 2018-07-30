@@ -16,6 +16,7 @@ WGL.ui.PopupWin = function (map_win_id, idt_dim, title) {
   var ey = 0;
   var permalink_input = null;
   var last_position = null;
+  var lngLat = null;
 
   /**
    * Set visibility
@@ -34,18 +35,24 @@ WGL.ui.PopupWin = function (map_win_id, idt_dim, title) {
    */
   let setPosition = function (x, y) {
 
+      console.log(x)
+      console.log(y)
+
       if(x < 0 || y < 0) {
+          setVisibility(false);
           return
+      } else {
+          setVisibility(true);
       }
 
       posX = x;
     posY = y;
     let win = $("#wgl-point-win");
-    win.css("bottom",(window.innerHeight - posY + 35)+"px");
+    win.css("bottom",(window.innerHeight - posY)+"px");
     win.css("left",(posX - 50)+"px");
 
     let tri = $("#triangle");
-    tri.css("top",(posY - 50)+"px");
+    tri.css("top",(posY)+"px");
     tri.css("left",(posX - 18)+"px");
 
   };
@@ -176,48 +183,45 @@ WGL.ui.PopupWin = function (map_win_id, idt_dim, title) {
       }
 
       if (dragged < threshold){
-        //setVisibility(false);
 
         WGL.getDimension(idt_dim).getProperties(e.offsetX, e.offsetY, function (t) {
-          setVisibility(true);
 
-          last_position = [t['ID'], t['webgl_num_pts'], e.offsetX, e.offsetY, e.pageX, e.pageY];
+            setVisibility(false);
+
+            lngLat = map.unproject([e.offsetX, e.offsetY]);
+
+            last_position = [t['ID'], t['webgl_num_pts'], lngLat.lng, lngLat.lat];
 
           addContent(prop2html(t));
-          //setPosition(e.offsetX, e.offsetY);
 
-          let offset = WGL.mcontroller.offset;
-          let zoom = WGL.getManager().zoom;
-          // position in 0-level
-          ex = offset.x + e.pageX/Math.pow(2, zoom);
-          ey = offset.y + e.pageY/Math.pow(2, zoom);
+          setPosition(e.offsetX, e.offsetY);
 
-          setPosition(e.pageX, e.pageY);
+            setVisibility(true);
 
-          // move window to screen
-          let minOffsetTop = $("#wgl-point-win").height() + 50;
-          let minOffsetLeft = 70;
-          let minOffsetRight = $("#wgl-point-win").width() - 30;
+            // move window to screen
+            let minOffsetTop = $("#wgl-point-win").height() + 50;
+            let minOffsetLeft = 70;
+            let minOffsetRight = $("#wgl-point-win").width() - 30;
 
-          let mx = 0;
-          let my = 0;
-          if (e.offsetY < minOffsetTop){
-            my += minOffsetTop - e.offsetY;
-          }
+            let mx = 0;
+            let my = 0;
+            if (e.offsetY < minOffsetTop){
+                my += minOffsetTop - e.offsetY;
+            }
 
-          let curRightOff = $(map_win_id).width() - e.offsetX;
-          if ( curRightOff < minOffsetRight){
-            mx -=  (minOffsetRight -curRightOff);
-          }
-          if (e.offsetX < minOffsetLeft){
-            mx += minOffsetLeft - e.offsetX;
-          }
-          if (mx !== 0 || my !== 0){
-            setTimeout(function () {
-              setPosition(posX + mx, posY + my);
-              movemap(mx, my);
-            }, 200);
-          }
+            let curRightOff = $(map_win_id).width() - e.offsetX;
+            if ( curRightOff < minOffsetRight){
+                mx -=  (minOffsetRight -curRightOff);
+            }
+            if (e.offsetX < minOffsetLeft){
+                mx += minOffsetLeft - e.offsetX;
+            }
+            if (mx !== 0 || my !== 0){
+              setTimeout(function () {
+                setPosition(posX + mx, posY + my);
+                movemap(mx, my);
+              }, 200);
+            }
 
         });
 
@@ -258,10 +262,9 @@ WGL.ui.PopupWin = function (map_win_id, idt_dim, title) {
    * @param {int} zoom
    * @param offset
    */
-  this.zoommove = function (zoom, offset) {
-    let nx = (ex - offset.x)*Math.pow(2, zoom);
-    let ny = (ey - offset.y)*Math.pow(2, zoom);
-    setPosition(nx, ny);
+  this.zoommove = function () {
+      let point = map.project(lngLat);
+      setPosition(point.x, point.y);
   };
 
   this.loadFilters = () => {
@@ -269,20 +272,17 @@ WGL.ui.PopupWin = function (map_win_id, idt_dim, title) {
       if(activeFilters !== "") {
           let position = activeFilters.split(",");
 
+          lngLat = [position[2], position[3]];
+
+          let point = map.project(lngLat);
+
           WGL.getDimension(idt_dim).getPropertiesById(position[0], position[1], function (t) {
 
-              setVisibility(true);
-
               addContent(prop2html(t));
-              //setPosition(e.offsetX, e.offsetY);
 
-              let offset = WGL.mcontroller.offset;
-              let zoom = WGL.getManager().zoom;
-              // position in 0-level
-              ex = offset.x + position[4]/Math.pow(2, zoom);
-              ey = offset.y + position[5]/Math.pow(2, zoom);
+              setPosition(point.x, point.y);
 
-              setPosition(position[4], position[5]);
+              setVisibility(true);
 
               // move window to screen
               let minOffsetTop = $("#wgl-point-win").height() + 50;
@@ -291,16 +291,16 @@ WGL.ui.PopupWin = function (map_win_id, idt_dim, title) {
 
               let mx = 0;
               let my = 0;
-              if (position[3] < minOffsetTop){
-                  my += minOffsetTop - position[3];
+              if (point.y < minOffsetTop){
+                  my += minOffsetTop - point.y;
               }
 
-              let curRightOff = $(map_win_id).width() - position[2];
+              let curRightOff = $(map_win_id).width() - point.x;
               if ( curRightOff < minOffsetRight){
                   mx -=  (minOffsetRight -curRightOff);
               }
-              if (position[2] < minOffsetLeft){
-                  mx += minOffsetLeft - position[2];
+              if (point.x < minOffsetLeft){
+                  mx += minOffsetLeft - point.x;
               }
               if (mx !== 0 || my !== 0){
                   setTimeout(function () {
@@ -308,7 +308,6 @@ WGL.ui.PopupWin = function (map_win_id, idt_dim, title) {
                       movemap(mx, my);
                   }, 200);
               }
-
           });
       }
   };
