@@ -1,7 +1,7 @@
 .wgl-point-selection-win{
     position: absolute;
     visibility: hidden;
-    z-index: 10000;
+    z-index: 1001;
     background-color: white;
     color: black;
     border-radius: 4px;
@@ -37,7 +37,7 @@
     position: absolute;
     width: 35px;
     height: 35px;
-    z-index: 9999;
+    z-index: 1000;
     visibility: hidden;
 }
 #triangle.wgl-active{

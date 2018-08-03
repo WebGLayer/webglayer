@@ -7,311 +7,310 @@
  * @constructor
  */
 WGL.ui.PopupWin = function (map_win_id, idt_dim, title) {
-  var visible = false;
-  var posX = 0; // position of window
-  var posY = 0;
-  var dragged = 0;
-  var threshold = 2;
-  var ex = 0; // position in 0-level
-  var ey = 0;
-  var permalink_input = null;
-  var last_position = null;
+    var visible = false;
+    var posX = 0; // position of window
+    var posY = 0;
+    var dragged = 0;
+    var threshold = 2;
+    var ex = 0; // position in 0-level
+    var ey = 0;
+    var permalink_input = null;
+    var last_position = null;
+    var lngLat = null;
 
-  /**
-   * Set visibility
-   * @param {boolean} bol
-   */
-  let setVisibility = function (bol) {
-    d3.select("#wgl-point-win").classed("wgl-active", bol);
-    d3.select("#triangle").classed("wgl-active", bol);
-    visible = bol;
-  };
+    /**
+     * Set visibility
+     * @param {boolean} bol
+     */
+    let setVisibility = function (bol) {
+        d3.select("#wgl-point-win").classed("wgl-active", bol);
+        d3.select("#triangle").classed("wgl-active", bol);
+        visible = bol;
+    };
 
-  /**
-   * Sets position of popup window
-   * @param {int} x pixels
-   * @param {int} y pixels
-   */
-  let setPosition = function (x, y) {
+    /**
+     * Sets position of popup window
+     * @param {int} x pixels
+     * @param {int} y pixels
+     */
+    let setPosition = function (x, y) {
 
-      if(x < 0 || y < 0) {
-          return
-      }
+        console.log(x)
+        console.log(y)
 
-      posX = x;
-    posY = y;
-    let win = $("#wgl-point-win");
-    win.css("bottom",(window.innerHeight - posY + 35)+"px");
-    win.css("left",(posX - 50)+"px");
+        if(x < 0 || y < 0) {
+            setVisibility(false);
+            return
+        } else {
+            setVisibility(true);
+        }
 
-    let tri = $("#triangle");
-    tri.css("top",(posY - 50)+"px");
-    tri.css("left",(posX - 18)+"px");
+        posX = x;
+        posY = y;
+        let win = $("#wgl-point-win");
+        win.css("bottom",(window.innerHeight - posY)+"px");
+        win.css("left",(posX - 50)+"px");
 
-  };
+        let tri = $("#triangle");
+        tri.css("top",(posY)+"px");
+        tri.css("left",(posX - 18)+"px");
 
-  /**
-   * Add html content to popup window
-   * @param {string} s html
-   */
-  let addContent = function (s) {
-    $("#wgl-point-win-context").html(s);
-  };
+    };
 
-  let prop2html = function (t) {
-    let s = "<table>";
-    for (let k in t){
-      s += "<tr><td>"+k+": </td><td>"+t[k]+"</td></tr>";
-    }
-    s += "</table>";
-    return s
-  };
+    /**
+     * Add html content to popup window
+     * @param {string} s html
+     */
+    let addContent = function (s) {
+        $("#wgl-point-win-context").html(s);
+    };
 
-  /**
-   * @callback prop2htmlConversion
-   * @param t
-   */
+    let prop2html = function (t) {
+        let s = "<table>";
+        for (let k in t){
+            s += "<tr><td>"+k+": </td><td>"+t[k]+"</td></tr>";
+        }
+        s += "</table>";
+        return s
+    };
 
-  /**
-   * Setting function for conversion from properties object to html
-   * @param {prop2htmlConversion} func conversion function
-   */
-  this.setProp2html = function (func) {
-    prop2html = func;
-  };
+    /**
+     * @callback prop2htmlConversion
+     * @param t
+     */
 
-  // move map about pixel
-  let movemap = function (dx, dy) {};
+    /**
+     * Setting function for conversion from properties object to html
+     * @param {prop2htmlConversion} func conversion function
+     */
+    this.setProp2html = function (func) {
+        prop2html = func;
+    };
 
-  /**
-   * Moves the map by dx, dy pixels
-   * @callback moveMapCallBack
-   * @param {int} dx
-   * @param {int} dy
-   */
+    // move map about pixel
+    let movemap = function (dx, dy) {};
 
-  /**
-   * Set function for fo moving.
-   * @param {moveMapCallBack} mmf
-   */
-  this.setMovemap = function (mmf) {
-    movemap = mmf;
-  };
+    /**
+     * Moves the map by dx, dy pixels
+     * @callback moveMapCallBack
+     * @param {int} dx
+     * @param {int} dy
+     */
 
-  this.configurePermalinkInput = function(p) {
-    permalink_input = p;
+    /**
+     * Set function for fo moving.
+     * @param {moveMapCallBack} mmf
+     */
+    this.setMovemap = function (mmf) {
+        movemap = mmf;
+    };
 
-      if(permalink_input != null) {
+    this.configurePermalinkInput = function(p) {
+        permalink_input = p;
 
-        $(map_win_id).off("popup:update-permalink").on("popup:update-permalink", () => {
+        if(permalink_input != null) {
 
-              let oldURL = $("#" + permalink_input).val();
+            $(map_win_id).off("popup:update-permalink").on("popup:update-permalink", () => {
 
-              if (visible && last_position != null) {
-                  let newURL = updateURLParameter(oldURL, encodeURIComponent(idt_dim), last_position.toString());
-                  if (oldURL !== newURL) {
-                      $("#" + permalink_input).val(newURL);
-                  }
-              } else {
-                  let newURL = updateURLParameter(oldURL, encodeURIComponent(idt_dim), "");
-                  if (oldURL !== newURL) {
-                      $("#" + permalink_input).val(newURL);
-                  }
-              }
-          });
-      }
-  };
+                let oldURL = $("#" + permalink_input).val();
 
-  this.setup = function () {
-    // write elements to body
-    let main = d3.select("body")
-      .insert("div")
-      .attr("id","wgl-point-win")
-      .classed("wgl-point-selection-win", true);
+                if (visible && last_position != null) {
+                    let newURL = updateURLParameter(oldURL, encodeURIComponent(idt_dim), last_position.toString());
+                    if (oldURL !== newURL) {
+                        $("#" + permalink_input).val(newURL);
+                    }
+                } else {
+                    let newURL = updateURLParameter(oldURL, encodeURIComponent(idt_dim), "");
+                    if (oldURL !== newURL) {
+                        $("#" + permalink_input).val(newURL);
+                    }
+                }
+            });
+        }
+    };
 
-    let head = main.insert("div")
-      .attr("id", "wgl-point-win-head");
+    this.setup = function () {
+        // write elements to body
+        let main = d3.select("body")
+            .insert("div")
+            .attr("id","wgl-point-win")
+            .classed("wgl-point-selection-win", true);
 
-    head.text(title);
-    head.insert("div")
-      .attr("id","wgl-win-close")
-      .insert("i")
-      .classed("fa", true)
-      .classed("fa-times", true)
-      .attr("aria-hidden","true");
-    main.insert("div").attr("id","wgl-point-win-context");
+        let head = main.insert("div")
+            .attr("id", "wgl-point-win-head");
 
-    // event registration
-    let mwid = $(map_win_id);
+        head.text(title);
+        head.insert("div")
+            .attr("id","wgl-win-close")
+            .insert("i")
+            .classed("fa", true)
+            .classed("fa-times", true)
+            .attr("aria-hidden","true");
+        main.insert("div").attr("id","wgl-point-win-context");
 
-    mwid.mousedown(function (e) {
-      dragged = 0;
-    });
+        // event registration
+        let mwid = $(map_win_id);
 
-    mwid.mousemove(function (e) {
+        mwid.mousedown(function (e) {
+            dragged = 0;
+        });
 
-      dragged++;
+        mwid.mousemove(function (e) {
 
-      var idt = WGL.getDimension(idt_dim);
-      if(!idt.getEnabled()) {
-        return;
-      }
+            dragged++;
 
-      //pointer
-      var num_points = idt.identify(e.pageX, e.pageY)[1];
-      if(num_points > 0){
-        mwid.css("cursor","pointer");
-      }
-      else{
-        mwid.css("cursor","default");
-      }
+            var idt = WGL.getDimension(idt_dim);
+            if(!idt.getEnabled()) {
+                return;
+            }
 
-    });
-
-    mwid.mouseup(function (e) {
-
-      var idt = WGL.getDimension(idt_dim);
-      if(!idt.getEnabled()) {
-        return;
-      }
-
-      if (dragged < threshold){
-        //setVisibility(false);
-
-        WGL.getDimension(idt_dim).getProperties(e.offsetX, e.offsetY, function (t) {
-          setVisibility(true);
-
-          last_position = [t['ID'], t['webgl_num_pts'], e.offsetX, e.offsetY, e.pageX, e.pageY];
-
-          addContent(prop2html(t));
-          //setPosition(e.offsetX, e.offsetY);
-
-          let offset = WGL.mcontroller.offset;
-          let zoom = WGL.getManager().zoom;
-          // position in 0-level
-          ex = offset.x + e.pageX/Math.pow(2, zoom);
-          ey = offset.y + e.pageY/Math.pow(2, zoom);
-
-          setPosition(e.pageX, e.pageY);
-
-          // move window to screen
-          let minOffsetTop = $("#wgl-point-win").height() + 50;
-          let minOffsetLeft = 70;
-          let minOffsetRight = $("#wgl-point-win").width() - 30;
-
-          let mx = 0;
-          let my = 0;
-          if (e.offsetY < minOffsetTop){
-            my += minOffsetTop - e.offsetY;
-          }
-
-          let curRightOff = $(map_win_id).width() - e.offsetX;
-          if ( curRightOff < minOffsetRight){
-            mx -=  (minOffsetRight -curRightOff);
-          }
-          if (e.offsetX < minOffsetLeft){
-            mx += minOffsetLeft - e.offsetX;
-          }
-          if (mx !== 0 || my !== 0){
-            setTimeout(function () {
-              setPosition(posX + mx, posY + my);
-              movemap(mx, my);
-            }, 200);
-          }
+            //pointer
+            var num_points = idt.identify(e.pageX, e.pageY)[1];
+            if(num_points > 0){
+                mwid.css("cursor","pointer");
+            }
+            else{
+                mwid.css("cursor","default");
+            }
 
         });
 
-        if($(".link-permalink").length > 0) {
-            $(".link-permalink").trigger("permalink:change");
+        mwid.mouseup(function (e) {
+
+            var idt = WGL.getDimension(idt_dim);
+            if(!idt.getEnabled()) {
+                return;
+            }
+
+            if (dragged < threshold){
+
+                WGL.getDimension(idt_dim).getProperties(e.offsetX, e.offsetY, function (t) {
+
+                    setVisibility(false);
+
+                    lngLat = map.unproject([e.offsetX, e.offsetY]);
+
+                    last_position = [t['ID'], t['webgl_num_pts'], lngLat.lng, lngLat.lat];
+
+                    addContent(prop2html(t));
+
+                    setPosition(e.offsetX, e.offsetY);
+
+                    setVisibility(true);
+
+                    // move window to screen
+                    let minOffsetTop = $("#wgl-point-win").height() + 50;
+                    let minOffsetLeft = 70;
+                    let minOffsetRight = $("#wgl-point-win").width() - 30;
+
+                    let mx = 0;
+                    let my = 0;
+                    if (e.offsetY < minOffsetTop){
+                        my += minOffsetTop - e.offsetY;
+                    }
+
+                    let curRightOff = $(map_win_id).width() - e.offsetX;
+                    if ( curRightOff < minOffsetRight){
+                        mx -=  (minOffsetRight -curRightOff);
+                    }
+                    if (e.offsetX < minOffsetLeft){
+                        mx += minOffsetLeft - e.offsetX;
+                    }
+                    if (mx !== 0 || my !== 0){
+                        setTimeout(function () {
+                            setPosition(posX + mx, posY + my);
+                            movemap(mx, my);
+                        }, 200);
+                    }
+
+                });
+
+                if($(".link-permalink").length > 0) {
+                    $(".link-permalink").trigger("permalink:change");
+                }
+            }
+            dragged = 0;
+        });
+
+        // close popup win
+        $("#wgl-win-close").click( () => {
+            setVisibility(false);
+            last_position = null;
+            if($(".link-permalink").length > 0) {
+                $(".link-permalink").trigger("permalink:change");
+            }
+        });
+
+        // draw triangle
+        d3.select("body")
+            .insert("div")
+            .attr("id","triangle");
+
+        let svg = d3.select('#triangle')
+            .append('svg')
+            .attr({'width':35,'height':35});
+
+        let arc = d3.svg.symbol().type('triangle-down').size(function(d){ return 600; });
+
+        svg.append('g').attr('transform','translate('+ 18 +','+ 15 +')')
+            .append('path').attr('d', arc).attr('fill',"#dce2e0")
+
+    };
+
+    /**
+     * Must be call after every zoom or move event
+     * @param {int} zoom
+     * @param offset
+     */
+    this.zoommove = function () {
+        let point = map.project(lngLat);
+        setPosition(point.x, point.y);
+    };
+
+    this.loadFilters = () => {
+        let activeFilters = getUrlParameter(encodeURIComponent(idt_dim));
+        if(activeFilters !== "") {
+            let position = activeFilters.split(",");
+
+            lngLat = [position[2], position[3]];
+
+            let point = map.project(lngLat);
+
+            WGL.getDimension(idt_dim).getPropertiesById(position[0], position[1], function (t) {
+
+                addContent(prop2html(t));
+
+                setPosition(point.x, point.y);
+
+                setVisibility(true);
+
+                // move window to screen
+                let minOffsetTop = $("#wgl-point-win").height() + 50;
+                let minOffsetLeft = 70;
+                let minOffsetRight = $("#wgl-point-win").width() - 30;
+
+                let mx = 0;
+                let my = 0;
+                if (point.y < minOffsetTop){
+                    my += minOffsetTop - point.y;
+                }
+
+                let curRightOff = $(map_win_id).width() - point.x;
+                if ( curRightOff < minOffsetRight){
+                    mx -=  (minOffsetRight -curRightOff);
+                }
+                if (point.x < minOffsetLeft){
+                    mx += minOffsetLeft - point.x;
+                }
+                if (mx !== 0 || my !== 0){
+                    setTimeout(function () {
+                        setPosition(posX + mx, posY + my);
+                        movemap(mx, my);
+                    }, 200);
+                }
+            });
         }
-      }
-      dragged = 0;
-    });
+    };
 
-    // close popup win
-    $("#wgl-win-close").click( () => {
-      setVisibility(false);
-      last_position = null;
-        if($(".link-permalink").length > 0) {
-            $(".link-permalink").trigger("permalink:change");
-        }
-    });
-
-    // draw triangle
-    d3.select("body")
-      .insert("div")
-      .attr("id","triangle");
-
-    let svg = d3.select('#triangle')
-      .append('svg')
-      .attr({'width':35,'height':35});
-
-    let arc = d3.svg.symbol().type('triangle-down').size(function(d){ return 600; });
-
-    svg.append('g').attr('transform','translate('+ 18 +','+ 15 +')')
-      .append('path').attr('d', arc).attr('fill',"#dce2e0")
-
-  };
-
-  /**
-   * Must be call after every zoom or move event
-   * @param {int} zoom
-   * @param offset
-   */
-  this.zoommove = function (zoom, offset) {
-    let nx = (ex - offset.x)*Math.pow(2, zoom);
-    let ny = (ey - offset.y)*Math.pow(2, zoom);
-    setPosition(nx, ny);
-  };
-
-  this.loadFilters = () => {
-      let activeFilters = getUrlParameter(encodeURIComponent(idt_dim));
-      if(activeFilters !== "") {
-          let position = activeFilters.split(",");
-
-          WGL.getDimension(idt_dim).getPropertiesById(position[0], position[1], function (t) {
-
-              setVisibility(true);
-
-              addContent(prop2html(t));
-              //setPosition(e.offsetX, e.offsetY);
-
-              let offset = WGL.mcontroller.offset;
-              let zoom = WGL.getManager().zoom;
-              // position in 0-level
-              ex = offset.x + position[4]/Math.pow(2, zoom);
-              ey = offset.y + position[5]/Math.pow(2, zoom);
-
-              setPosition(position[4], position[5]);
-
-              // move window to screen
-              let minOffsetTop = $("#wgl-point-win").height() + 50;
-              let minOffsetLeft = 70;
-              let minOffsetRight = $("#wgl-point-win").width() - 30;
-
-              let mx = 0;
-              let my = 0;
-              if (position[3] < minOffsetTop){
-                  my += minOffsetTop - position[3];
-              }
-
-              let curRightOff = $(map_win_id).width() - position[2];
-              if ( curRightOff < minOffsetRight){
-                  mx -=  (minOffsetRight -curRightOff);
-              }
-              if (position[2] < minOffsetLeft){
-                  mx += minOffsetLeft - position[2];
-              }
-              if (mx !== 0 || my !== 0){
-                  setTimeout(function () {
-                      setPosition(posX + mx, posY + my);
-                      movemap(mx, my);
-                  }, 200);
-              }
-
-          });
-      }
-  };
-
-  this.setup();
+    this.setup();
 };
