@@ -16,6 +16,7 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params, category
   var tooltip_format; // function to format the tooltips showed when hovering over the chart
   var text; // text to be exhibited below the chart, as a note about the data for example
   var numbers_formating;
+  var permalink_input;
 
   if (params === null || typeof params === "undefined"){
     w = 500;
@@ -30,6 +31,7 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params, category
     tooltip_format = function(val) {return val;}
     text = "";
     numbers_formating = "s";
+    permalink_input = null;
   } else {
     w=(params.w ? params.w : 500);
     h=(params.h ? params.h : 215);
@@ -43,6 +45,7 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params, category
     tooltip_format = (params.tooltip_format ? params.tooltip_format : function(val) {return val});
     text = (params.text ? params.text : "");
     numbers_formating = (params.numbers_formatting ? params.numbers_formatting : "s");
+    permalink_input = (params.permalink_input ? params.permalink_input : null);
   }
 
 
@@ -700,6 +703,32 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params, category
       selection.attr("height", height);
     }
 
+
+    let activeFilters = getUrlParameter(encodeURIComponent(m.name));
+    if(activeFilters !== "") {
+      of_click = of_click.concat(JSON.parse(activeFilters));
+      WGL.filterDim(m.name, filterId, filterSubcategory(mergeSelectionArrays()));
+    }
+
+    if(permalink_input != null) {
+        $("#" + div_id).on("chart:update-permalink", (e) => {
+            e.stopPropagation();
+
+            let oldURL = $("#"+permalink_input).val();
+
+            if (WGL._dimensions[m.name].filters[filterId].isActive) {
+                let newURL = updateURLParameter(oldURL, encodeURIComponent(m.name), "[[" + WGL._dimensions[m.name].filters[filterId].actual_filtres.join("],[") + "]]");
+                if (oldURL !== newURL) {
+                    $("#" + permalink_input).val(newURL);
+                }
+            } else if (window.location.href.indexOf(encodeURIComponent(m.name)) !== -1) {
+                let newURL = updateURLParameter(oldURL, encodeURIComponent(m.name), "");
+                if (oldURL !== newURL) {
+                    $("#" + permalink_input).val(newURL);
+                }
+            }
+        });
+    }
   };
 
   this.clean = function (cleanChartDiv) {
@@ -790,13 +819,13 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params, category
         $(".active-filters-item .bar-item").addClass("bar-item-active");
         $(".active-filters-container").slideDown();
     } else {
-        /*$(".close-item-filters").addClass("hide");
-        $(".active-filters-item .bar-item").removeClass("bar-item-active");*/
         $("#active-filters-placeholder").removeClass("hide");
         $(".close-item-filters").removeClass("hide");
     }
 
-
+      if($(".link-permalink").length > 0) {
+          $(".link-permalink").trigger("permalink:change");
+      }
   }
 
     function updateLabels() {
@@ -1027,6 +1056,5 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params, category
   if (isCategory){
     this.createSubcategoryMask();
   }
-
 
 };

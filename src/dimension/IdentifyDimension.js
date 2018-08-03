@@ -206,5 +206,23 @@ WGL.dimension.IdentifyDimension = function (id, properties_path) {
         })
       });
     }
-  }
+  };
+
+  this.getPropertiesById = function (id, num, callback) {
+      if (num != 0){
+          var file = Math.floor(id/10) + '.txt';
+          $.get(this.dataPath + file, function (data) {
+              var dataArray = $.csv.toObjects(data,{
+                  delimiter:"'",
+                  separator:','
+              });
+              dataArray.forEach(function (t) {
+                  if (t['ID'] == id){
+                      t['webgl_num_pts'] = num;
+                      callback(t)
+                  }
+              })
+          });
+      }
+  };
 };

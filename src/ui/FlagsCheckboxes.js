@@ -3,11 +3,14 @@ WGL.ui.FlagsCheckboxes = function(m, div_id, filterId, flags_list, flags_names, 
     let that = this;
 
     let h;
+    let permalink_input;
 
     if (typeof params === "undefined") {
         h = 150;
+        permalink_input = null;
     } else {
         h = (params.h ? params.h : 180);
+        permalink_input = (params.permalink_input ? params.permalink_input : null);
     }
 
     this.getDivId = function () {
@@ -16,6 +19,14 @@ WGL.ui.FlagsCheckboxes = function(m, div_id, filterId, flags_list, flags_names, 
 
     this.init = function () {
 
+        let loadedFlags = getUrlParameter(m.name);
+        if(loadedFlags !== "") {
+            loadedFlags = loadedFlags.split(",");
+            loadedFlags = loadedFlags.map(a => parseInt(a));
+        } else {
+            loadedFlags = [];
+        }
+
         let new_div = $("<div id='checkboxes-parent' style='height: " + h + "px'></div>");
         $("#" + div_id).append(new_div);
 
@@ -23,15 +34,26 @@ WGL.ui.FlagsCheckboxes = function(m, div_id, filterId, flags_list, flags_names, 
 
         new_div.append(inner_div);
 
+        let new_checkbox;
+
         for (let i = 0; i < flags_names.length; i++) {
 
             let count = numberWithSpaces(WGL._dimensions[m.name].getCounts()[flags_list[i]]['selected'] + WGL._dimensions[m.name].getCounts()[flags_list[i]]['unselected']);
 
             if (i % 2 === 0) {
-                let new_checkbox = $("<div class='flag_checkbox' style='cursor: pointer; width: 48%; float: left;' ><span data-flag='" + i + "' id='flag_" + i + "' class='left' ><i style='font-size: 31px' class='material-icons'>check_box_outline_blank</i></span><label style='line-height: 28px; font-size: 12pt; cursor: pointer; vertical-align: top' for='flag_" + i + "'>" + flags_names[i] + "</label><span class='count flag_" + i + "' style='line-height: 28px; font-size: 12pt; cursor: pointer; vertical-align: top'> (" + count + ")</span></span></div>");
+
+                if(loadedFlags.indexOf(i) !== -1) {
+                    new_checkbox = $("<div class='flag_checkbox' style='cursor: pointer; width: 48%; float: left;' ><span data-flag='" + i + "' id='flag_" + i + "' class='left' ><i style='font-size: 31px' class='material-icons'>check_box</i></span><label style='line-height: 28px; font-size: 12pt; cursor: pointer; vertical-align: top' for='flag_" + i + "'>" + flags_names[i] + "</label><span class='count flag_" + i + "' style='line-height: 28px; font-size: 12pt; cursor: pointer; vertical-align: top'> (" + count + ")</span></span></div>");
+                } else {
+                    new_checkbox = $("<div class='flag_checkbox' style='cursor: pointer; width: 48%; float: left;' ><span data-flag='" + i + "' id='flag_" + i + "' class='left' ><i style='font-size: 31px' class='material-icons'>check_box_outline_blank</i></span><label style='line-height: 28px; font-size: 12pt; cursor: pointer; vertical-align: top' for='flag_" + i + "'>" + flags_names[i] + "</label><span class='count flag_" + i + "' style='line-height: 28px; font-size: 12pt; cursor: pointer; vertical-align: top'> (" + count + ")</span></span></div>");
+                }
                 inner_div.append(new_checkbox);
             } else {
-                let new_checkbox = $("<div class='flag_checkbox' style='cursor: pointer; width: 48%; float: right;' ><span data-flag='" + i + "' id='flag_" + i + "' class='right' ><i style='font-size: 31px' class='material-icons'>check_box_outline_blank</i></span><label style='line-height: 28px; font-size: 12pt; cursor: pointer; vertical-align: top' for='flag_" + i + "'>" + flags_names[i] + "</label><span class='count flag_" + i + "' style='line-height: 28px; font-size: 12pt; cursor: pointer; vertical-align: top'> (" + count + ")</span></div>");
+                if(loadedFlags.indexOf(i) !== -1) {
+                    new_checkbox = $("<div class='flag_checkbox' style='cursor: pointer; width: 48%; float: right;' ><span data-flag='" + i + "' id='flag_" + i + "' class='right' ><i style='font-size: 31px' class='material-icons'>check_box</i></span><label style='line-height: 28px; font-size: 12pt; cursor: pointer; vertical-align: top' for='flag_" + i + "'>" + flags_names[i] + "</label><span class='count flag_" + i + "' style='line-height: 28px; font-size: 12pt; cursor: pointer; vertical-align: top'> (" + count + ")</span></div>");
+                } else {
+                    new_checkbox = $("<div class='flag_checkbox' style='cursor: pointer; width: 48%; float: right;' ><span data-flag='" + i + "' id='flag_" + i + "' class='right' ><i style='font-size: 31px' class='material-icons'>check_box_outline_blank</i></span><label style='line-height: 28px; font-size: 12pt; cursor: pointer; vertical-align: top' for='flag_" + i + "'>" + flags_names[i] + "</label><span class='count flag_" + i + "' style='line-height: 28px; font-size: 12pt; cursor: pointer; vertical-align: top'> (" + count + ")</span></div>");
+                }
                 inner_div.append(new_checkbox);
             }
 
@@ -45,6 +67,32 @@ WGL.ui.FlagsCheckboxes = function(m, div_id, filterId, flags_list, flags_names, 
             e.stopPropagation();
             that.clearSelection();
         });
+
+        WGL.filterDim(m.name, filterId, loadedFlags);
+        updateFiltersHeader(loadedFlags.length);
+        if (typeof onMove !== "undefined") {
+            onMove();
+        }
+
+        if(permalink_input != null) {
+            $("#" + div_id).on("chart:update-permalink", (e) => {
+                e.stopPropagation();
+
+                let oldURL = $("#"+permalink_input).val();
+
+                if (WGL._dimensions[m.name].filters[filterId].isActive) {
+                    let newURL = updateURLParameter(oldURL, m.name, WGL._dimensions[m.name].filters[filterId].selected_flags);
+                    if (oldURL !== newURL) {
+                        $("#" + permalink_input).val(newURL);
+                    }
+                } else if (window.location.href.indexOf(m.name) !== -1) {
+                    let newURL = updateURLParameter(oldURL, m.name, "");
+                    if (oldURL !== newURL) {
+                        $("#" + permalink_input).val(newURL);
+                    }
+                }
+            });
+        }
 
     };
 
@@ -138,12 +186,12 @@ WGL.ui.FlagsCheckboxes = function(m, div_id, filterId, flags_list, flags_names, 
             $(".active-filters-item .bar-item").addClass("bar-item-active");
             $(".active-filters-container").slideDown();
         } else {
-            /*$(".close-item-filters").addClass("hide");
-            $(".active-filters-item .bar-item").removeClass("bar-item-active");*/
             $("#active-filters-placeholder").removeClass("hide");
             $(".close-item-filters").removeClass("hide");
         }
 
+        if($(".link-permalink").length > 0) {
+            $(".link-permalink").trigger("permalink:change");
+        }
     };
-
 };
