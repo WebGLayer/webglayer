@@ -7,6 +7,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <title>Birmingham Accidents</title>
 
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <link rel="stylesheet" href="../libs/tooltipster.bundle.min.css"/>
 <link rel="stylesheet" href="../libs/tooltipster-sideTip-light.min.css"/>
 
@@ -15,6 +17,7 @@
 
 <script src="../libs/OpenLayers.js"></script>
 <script src="../libs/jquery-1.9.1.min.js"></script>
+	<script src="../libs/jquery-ui.min.js"></script>
 <script src="../libs/poly2tri.js"></script>
 
 <script src="../libs/d3.v3.min.js"></script>
@@ -54,7 +57,8 @@
 <script src="../../src/ui/StackedBarChart.js"></script>
 <script src="../../src/ui/HeatMapLegend.js"></script>
 <script src="../../src/ui/d3.svg.multibrush.js"></script>
-
+	<script src="../../src/ui/ChartDiv.js"></script>
+	<script src="../../src/ui/FilterListChartDiv.js"></script>
 
  <!-- 
 <script src="http://localhost:9999/js/webglayer/js/WGL.js"></script>
@@ -118,18 +122,6 @@
 		
 	
 	<div id="wgl">Visualization made by <a href="http://webglayer.org/"> WebGLayer </a></div>
-	</div>
-
-	<div id ="pc" class ="pc_chart_parent_dark pc_background_dark" >
-
-		<div id = "pc_header" class='btn-minimize pc_background_dark pc_header_dark'  id=minPC >
-			<i id=butPC class='fa fa-chevron-down'></i> Parallel Coordinates</div>
-
-		<div class ="pc_chart_div pc_background_dark" ></div>
-		<div id ="pc_chart" class = "pc_chart_div">
-			<input class="slider_v" id="slider_pc" type="range"  name="points" min="1" max="5000"/>
-		</div>
-	</div>
 
 	<div id="right">
 				
@@ -143,11 +135,14 @@
 					<label><input id="heatmap_visible" type="checkbox" name="heatmap" checked="true"/>heatmap</label>
 				</div>
 			</div>
-			<div id = "chart1"></div>
+
+		<div id="charts"></div>
+
+			<!--<div id = "chart1"></div>
 			<div id = "chart2"></div>
 			<div id = "chart3"></div>
 			<div id = "chart4"></div>
-			<div id = "chart5"></div>
+			<div id = "chart5"></div>-->
 			
 		<div class="control">
 			<div id="heatlegend"></div>					

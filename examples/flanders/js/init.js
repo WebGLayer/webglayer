@@ -66,7 +66,9 @@ function visualize(data){
 			
 		
 		WGL.addExtentFilter();
-		
+
+    var controlHM = new WGL.ChartDiv("charts","chm", "heat map controls", "Heat map controls");
+    addHeatMapControl(heatmap,'chm');
 	
 		/**
 		 * Configuring the histograms and charts
@@ -90,22 +92,22 @@ function visualize(data){
 		
 		/** Histogram for hours*/
 		var hours = {data: data.departure_hour,  min:0, max:24, num_bins: 24, name: 'hours',type:'linear', label : "Hour of departure"} ;
-		var chd2 = new WGL.ChartDiv("right","ch2", "Hour of departure");
-		WGL.addLinearHistDimension(hours);			
+		var chd2 = new WGL.ChartDiv("right","ch2", "hour of departure", "Hour of departure", 24);
+		chd2.setDim(WGL.addLinearHistDimension(hours));
 		WGL.addLinearFilter(hours, 24, 'hoursF');
 		charts['hours'] = new  WGL.ui.StackedBarChart(hours, "ch2", "hour of the day","hoursF");
 		
 		/** buildup area*/
 		var bup_area = {data: data.built_up_buffer,  min:0, max:100, num_bins: 50, name: 'bua',type:'linear', label : "Built up area (%)"} ;
-		var chd3 = new WGL.ChartDiv("right","ch3", "Built up area (%)");
-		WGL.addLinearHistDimension(bup_area);			
+		var chd3 = new WGL.ChartDiv("right","ch3", "built up area (%)", "Built up area (%)", 100);
+		chd3.setDim(WGL.addLinearHistDimension(bup_area));
 		WGL.addLinearFilter(bup_area, 100, 'buaF');
 		charts['bua'] = new  WGL.ui.StackedBarChart(bup_area, "ch3", "built up area [%]","buaF");
 		
 		/** Histogram for ids */
 		var links   = {data: data.route_short_name,  domain:  link_ids ,  name: 'links', type:'ordinal', label : "Link id" };	
-		var chd4 = new WGL.ChartDiv("right","ch4", "Link id");
-		WGL.addOrdinalHistDimension( links );
+		var chd4 = new WGL.ChartDiv("right","ch4", "link id", "Link id", 14);
+		chd4.setDim(WGL.addOrdinalHistDimension( links ));
 		WGL.addLinearFilter(links , 14 , 'linkf');
 		charts['links']   = new  WGL.ui.StackedBarChart(links, "ch4", "Link id","linkf");
 		
@@ -124,8 +126,6 @@ function visualize(data){
 		 * Addin all charts
 		 */		
 		WGL.addCharts(charts);
-  	var controlHM = new WGL.ChartDiv("right","chm", "Heat map controls");
-  	addHeatMapControl(heatmap,'chm');
 		//WGL.addLegend(legend);
 		
 		/**
@@ -196,6 +196,26 @@ function visualize(data){
 				setTimeout( function() { map.updateSize();}, 200);
 			}
 	});
+
+    const charts_element = $("#charts");
+    charts_element.sortable(
+        {
+            placeholder: "ui-state-highlight",
+            handle: '.chart-header',
+            zIndex: 9999,
+            helper: 'clone',
+            cursor: "move",
+            start: function() {
+                $(this).find(".chart-header").addClass('grabbing');
+            },
+            stop: function() {
+                $(this).find(".chart-header").removeClass('grabbing');
+            },
+            update: ( event, ui ) => {
+                $("#chd-container-"+$($(ui.item[0]).children(".chart-content")[0]).attr("id") +" .chart-content").css("visibility", "visible");
+            }
+        }
+    );
 }
 
 

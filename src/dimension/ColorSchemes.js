@@ -9,6 +9,7 @@ WGL.dimension.ColorSchemes = function(){
         81, 255, 155
     ],
     'bg': 'light-v9',
+        'bg-color': 'light',
     'alpha': [1.0, 0.9, 0.4]
   };
 
@@ -19,6 +20,7 @@ WGL.dimension.ColorSchemes = function(){
         0, 120, 255
     ],
     'bg': 'light-v9',
+        'bg-color': 'light',
     'alpha': [1.0, 0.9, 0.4]
     };
 
@@ -28,6 +30,7 @@ WGL.dimension.ColorSchemes = function(){
       255, 0, 72
     ],
     'bg': 'dark-v9',
+      'bg-color': 'dark',
     'alpha': [1.4, 0.9, 0.1]
   };
 
@@ -37,6 +40,7 @@ WGL.dimension.ColorSchemes = function(){
       36, 28, 95
     ],
     'bg': 'dark-v9',
+      'bg-color': 'dark',
       'alpha': [1.4, 0.9, 0.2]
   };
 
@@ -47,6 +51,7 @@ WGL.dimension.ColorSchemes = function(){
       0, 256, 0
     ],
     'bg': 'dark-v9',
+      'bg-color': 'dark',
       'alpha': [1.4, 0.9, 0.05]
   };
 
@@ -54,6 +59,7 @@ WGL.dimension.ColorSchemes = function(){
   var matrixSelected = schemes[schemeSelected]['rgba'];
   var alphaSelected = schemes[schemeSelected]['alpha'];
   var bgSelected = schemes[schemeSelected]['bg'];
+  var bgColorSelected = schemes[schemeSelected]['bg-color'];
 
   this.setSchemeSelected = function(s) {
     schemeSelected = s;
@@ -80,6 +86,10 @@ WGL.dimension.ColorSchemes = function(){
   this.getSchemeBgSelected = function () {
     return bgSelected;
   };
+
+    this.getSchemeBgColorSelected = function () {
+        return bgColorSelected;
+    };
 
   this.getSchemeAlphaSelected = function() {
     return alphaSelected;
