@@ -27,7 +27,7 @@ function visualize(data){
 		
 		map.events.register("move", map, onMove);							
 
-		var controlHM = new WGL.ChartDiv("right","chm", "Heat map controls");
+		var controlHM = new WGL.ChartDiv("charts","chm", "heat map controls", "Heat map controls");
 		var heatmap = WGL.addHeatMapDimension(data.pts, 'heatmap');
 		heatmap.radiusFunction = function(r, z){			
 			var res = r/20000 * Math.pow(2,z);
@@ -66,7 +66,7 @@ function visualize(data){
 		/* DAYS*/
 		//var days = {data: data.dayes,  min:0, max: 7, num_bins: 7,  name: 'dayes'};	
 		var days = {data: data.days,  domain: data.daysarray,  name: 'days', type:'ordinal', label: "day of the week"};
-		var chd1 = new WGL.ChartDiv("right","ch1", "Day of the week");
+		var chd1 = new WGL.ChartDiv("charts","ch1", "day of the week", "Day of the week", 3);
 		//wgl.addLinearHistDimension(dayes);
 		chd1.setDim(WGL.addOrdinalHistDimension(days));
 		WGL.addLinearFilter(days,7, 'daysF');		
@@ -75,21 +75,21 @@ function visualize(data){
 		/*HOURS*/
 		
 		var hours = {data: data.hours,  min:0, max:24, num_bins: 24*5, name: 'hours',type:'linear', label :"hour of the day"} ;
-		var chd2 = new WGL.ChartDiv("right","ch2", "Hour of the day");
+		var chd2 = new WGL.ChartDiv("charts","ch2", "hour of the day", "Hour of the day", 24);
 		chd2.setDim(WGL.addLinearHistDimension(hours));		
 		WGL.addLinearFilter(hours, 24*10, 'hoursF');		
 		charts['hours'] = WGL.createStackBarChart(hours, "ch2", "hour of the day", 'hoursF');
 		
 		/*SERVELITY*/
 		var sev   = {data: data.sev,  domain: data.sevEnum ,  name: 'sev', type:'ordinal', label : "accident servelity"};	
-		var chd3 = new WGL.ChartDiv("right","ch3", "Accident severity");
+		var chd3 = new WGL.ChartDiv("charts","ch3", "accident severity", "Accident severity", 3);
 		chd3.setDim(WGL.addOrdinalHistDimension(sev));
 		WGL.addLinearFilter(sev,3, 'sevF');
 		charts['sev']   = WGL.createStackBarChart(sev, "ch3", "accident severity",'sevF');
 	
 		/*Date*/
 		var date =  {data: data.date,   min:data.dmm.min, max:data.dmm.max, num_bins: 365, name: 'date', type:'linear'} ;
-		var chd5 = new WGL.ChartDiv("right","ch5", "Date");
+		var chd5 = new WGL.ChartDiv("charts","ch5", "date", "Date", 365);
 		chd5.setDim(WGL.addLinearHistDimension(date));
 		WGL.addLinearFilter(date,date.num_bins, 'dateF');
 		charts['date']  = WGL.createStackBarChart(date, "ch5", "Date ", 'dateF');
@@ -106,7 +106,7 @@ function visualize(data){
 
 		var sl = {data: data.speed_limit, domain: ['20','30','40','50','60','70'], 
 				name:'speedlimit', type:'ordinal', label : "Speed limit"};
-		var chd4 = new WGL.ChartDiv("right","ch4", "Speed Limit");	
+		var chd4 = new WGL.ChartDiv("charts","ch4", "speed limit", "Speed Limit", 6);
 		chd4.setDim(WGL.addOrdinalHistDimension(sl));
 		WGL.addLinearFilter(sl, 13, 'slF');
 		charts['speedlimit'] = WGL.createStackBarChart(sl, "ch4", "Speed limit", 'slF');
@@ -233,6 +233,26 @@ function visualize(data){
 		});
 
 		WGL.mcontroller.zoommove(map.getZoom(), getTopLeftTC());
+
+    const charts_element = $("#charts");
+    charts_element.sortable(
+        {
+            placeholder: "ui-state-highlight",
+            handle: '.chart-header',
+            zIndex: 9999,
+            helper: 'clone',
+            cursor: "move",
+            start: function() {
+                $(this).find(".chart-header").addClass('grabbing');
+            },
+            stop: function() {
+                $(this).find(".chart-header").removeClass('grabbing');
+            },
+            update: ( event, ui ) => {
+                $("#chd-container-"+$($(ui.item[0]).children(".chart-content")[0]).attr("id") +" .chart-content").css("visibility", "visible");
+            }
+        }
+    );
 	}
 			
 	

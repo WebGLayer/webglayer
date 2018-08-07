@@ -106,26 +106,29 @@ function visualize(data){
 		 */
 		var charts = [];
 		var params = [];
-		params.w = 640;
-		params.h = 180;
+		params.w = 500;
+		params.h = 300;
 		params.margin = {
 			top : 20,
-			right : 20,
+			right : 70,
 			bottom : 50,
 			left : 60
 			};
+		params.rotate_x = true;
 		/** Histogram for severity */
-		var routenum   = {data: data.routenum,  domain:  datnums ,  name: 'sev', type:'ordinal' };	
-		WGL.addOrdinalHistDimension(routenum);
+		var routenum   = {data: data.routenum,  domain:  datnums ,  name: 'sev', type:'ordinal' };
+    	const chd1 = new WGL.ChartDiv("charts", "ch1", "route number", "Route Number", 12);
+    	chd1.setDim(WGL.addOrdinalHistDimension(routenum));
 		WGL.addLinearFilter(routenum,datnums.length, 'sevF');
-		charts['sev']   = new  WGL.ui.StackedBarChart(routenum, "chart1", "route number","sevF");
+		charts['sev']   = new  WGL.ui.StackedBarChart(routenum, "ch1", "route number","sevF", params);
 		
 		
 		/** Histogram for hours*/
 		var hours = {data: data.hours,  min:0, max:24, num_bins: 24, name: 'hours',type:'linear'} ;
-		WGL.addLinearHistDimension(hours);			
-		WGL.addLinearFilter(hours, 24*10, 'hoursF');
-		charts['hours'] = new  WGL.ui.StackedBarChart(hours, "chart3", "hour of the day","hoursF");
+    	const chd2 = new WGL.ChartDiv("charts", "ch2", "hours", "Hours", 24);
+    	chd2.setDim(WGL.addLinearHistDimension(hours));
+    	WGL.addLinearFilter(hours, 24*10, 'hoursF');
+		charts['hours'] = new  WGL.ui.StackedBarChart(hours, "ch2", "hour of the day","hoursF");
 		
 		
 		//var legend = new WGL.ui.HeatMapLegend('heatlegend','colorbrush');
@@ -171,6 +174,26 @@ function visualize(data){
 			// heatmap.reRender();
 			WGL.render();			
 		});
+
+    const charts_element = $("#charts");
+    charts_element.sortable(
+        {
+            placeholder: "ui-state-highlight",
+            handle: '.chart-header',
+            zIndex: 9999,
+            helper: 'clone',
+            cursor: "move",
+            start: function() {
+                $(this).find(".chart-header").addClass('grabbing');
+            },
+            stop: function() {
+                $(this).find(".chart-header").removeClass('grabbing');
+            },
+            update: ( event, ui ) => {
+                $("#chd-container-"+$($(ui.item[0]).children(".chart-content")[0]).attr("id") +" .chart-content").css("visibility", "visible");
+            }
+        }
+    );
 	}
 
 

@@ -13,7 +13,7 @@ WGL.dimension.ParallelCoordinates = function(div, data){
       left : 60
       };
 
-  var bg = WGL.colorSchemes.getSchemeBgSelected();
+  var bg = WGL.colorSchemes.getSchemeBgColorSelected();
 
   this.setViewport = function(){
     pcdiv =  document.getElementById(div);

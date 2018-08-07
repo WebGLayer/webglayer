@@ -703,14 +703,14 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params, category
       selection.attr("height", height);
     }
 
-
-    let activeFilters = getUrlParameter(encodeURIComponent(m.name));
-    if(activeFilters !== "") {
-      of_click = of_click.concat(JSON.parse(activeFilters));
-      WGL.filterDim(m.name, filterId, filterSubcategory(mergeSelectionArrays()));
-    }
-
     if(permalink_input != null) {
+
+        let activeFilters = getUrlParameter(encodeURIComponent(m.name));
+        if(activeFilters !== "") {
+            of_click = of_click.concat(JSON.parse(activeFilters));
+            WGL.filterDim(m.name, filterId, filterSubcategory(mergeSelectionArrays()));
+        }
+
         $("#" + div_id).on("chart:update-permalink", (e) => {
             e.stopPropagation();
 
