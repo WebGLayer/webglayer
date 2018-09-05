@@ -263,8 +263,10 @@ WGL.ui.PopupWin = function (map_win_id, idt_dim, title) {
      * @param offset
      */
     this.zoommove = function () {
-        let point = map.project(lngLat);
-        setPosition(point.x, point.y);
+        if(lngLat != null) {
+            let point = map.project(lngLat);
+            setPosition(point.x, point.y);
+        }
     };
 
     this.loadFilters = () => {
