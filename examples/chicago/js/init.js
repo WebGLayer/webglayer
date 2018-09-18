@@ -176,6 +176,8 @@ function visualize(data){
         updateChartsVisibility();
     });
 
+    $(".export-pdf").click(toCanvas);
+
     $(".active-filters-item").mouseover(function(){
         $(this).children(".bar-item").addClass("bar-item-hover");
     });
