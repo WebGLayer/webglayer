@@ -327,7 +327,8 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params, category
         .enter()
         .append("text")
         .attr("class", "label unselected")
-        .attr("x", (function (d) {
+          .style('text-anchor', 'middle')
+          .attr("x", (function (d) {
           return xScale(d.val) + bw / 2;
         }))
         .attr("y", function (d) {
@@ -381,6 +382,11 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params, category
       });
       d.total = 0;
     });
+
+      svg.selectAll("path.domain")
+          .style('fill', 'none')
+          .style('stroke', '#000')
+          .style('shape-rendering', 'crispEdges');
 
     //d3.selectAll("#" + div_id + " rect.background").on("mousemove", onmouseover);
 
@@ -552,7 +558,7 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params, category
             WGL.filterDim(m.name, filterId, filterSubcategory(mergeSelectionArrays()));
             return;
           }
-          
+
             of_click.push([group, group + 1]);
             WGL.filterDim(m.name, filterId, filterSubcategory(mergeSelectionArrays()));
           }
@@ -854,6 +860,10 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params, category
 
                 parent.append("text")
                     .attr("class", "label selected")
+                    .style('text-anchor', 'middle')
+                    .style('fill', 'navy')
+                    .style('font-size','11px')
+                    .style('font-family', '\'Ubuntu\', sans-serif')
                     .attr("x", xSelected)
                     .attr("y", ySelected)
                     .attr("dy", "1em")
@@ -862,6 +872,10 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params, category
             } else {
                 parent.append("text")
                     .attr("class", "label selected")
+                    .style('text-anchor', 'middle')
+                    .style('fill', 'navy')
+                    .style('font-size','11px')
+                    .style('font-family', '\'Ubuntu\', sans-serif')
                     .attr({ "display": "none" })
                     .attr("x", xSelected)
                     .attr("y", ySelected)
@@ -882,6 +896,11 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params, category
 
                 parent.append("text")
                     .attr("class", "label unselected")
+                    .style('text-anchor', 'middle')
+                    .style('fill', 'navy')
+                    .style('font-size','11px')
+                    .style('font-family', '\'Ubuntu\', sans-serif')
+                    .style('padding-left', '10px')
                     .attr("x", xUnselected)
                     .attr("y", yUnselected)
                     .attr("dy", "1em")
@@ -890,6 +909,11 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params, category
             } else {
                 parent.append("text")
                     .attr("class", "label unselected")
+                    .style('text-anchor', 'middle')
+                    .style('fill', 'navy')
+                    .style('font-size','11px')
+                    .style('font-family', '\'Ubuntu\', sans-serif')
+                    .style('padding-left', '10px')
                     .attr({ "display": "none" })
                     .attr("x", xUnselected)
                     .attr("y", yUnselected)
@@ -911,6 +935,10 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params, category
 
                 parent.append("text")
                     .attr("class", "label out")
+                    .style('text-anchor', 'middle')
+                    .style('fill', 'navy')
+                    .style('font-size','11px')
+                    .style('font-family', '\'Ubuntu\', sans-serif')
                     .attr("x", xOut)
                     .attr("y", yOut)
                     .attr("dy", "1em")
@@ -919,6 +947,10 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params, category
             } else {
                 parent.append("text")
                     .attr("class", "label out")
+                    .style('text-anchor', 'middle')
+                    .style('fill', 'navy')
+                    .style('font-size','11px')
+                    .style('font-family', '\'Ubuntu\', sans-serif')
                     .attr({ "display": "none" })
                     .attr("x", xOut)
                     .attr("y", yOut)
@@ -938,9 +970,9 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params, category
     svg.selectAll('.y.axis').transition().duration(30)
       .call(yAxis);
 
-    svg.selectAll(".selected.bar").attr("d", barPathSelected);
-    svg.selectAll(".unselected.bar").attr("d", barPathUnselected);
-    svg.selectAll(".out.bar").attr("d", barPathOut);
+    svg.selectAll(".selected.bar").attr("d", barPathSelected).attr("fill", "#ffa91b");
+    svg.selectAll(".unselected.bar").attr("d", barPathUnselected).attr("fill", "#8CC5F9");
+    svg.selectAll(".out.bar").attr("d", barPathOut).attr("fill", "#e3e4e4");
   }
 
   function barPathHover(groups) {

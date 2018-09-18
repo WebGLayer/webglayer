@@ -26,6 +26,12 @@
 	<script src="../libs/jquery-ui.min.js"></script>
 	<script src="../libs/poly2tri.js"></script>
 
+	<script src="../libs/pdfmake.min.js"></script>
+	<script src="../libs/vfs_fonts.js"></script>
+	<script src="../libs/html2canvas.min.js"></script>
+	<script src="../libs/rgbcolor.min.js"></script>
+	<script src="../libs/canvg.js"></script>
+
 	<script src="../libs/d3.v3.min.js"></script>
 	<script src="../libs/tooltipster.bundle.min.js"></script>
 	<script src="../libs/jquery.csv.js"></script>
@@ -85,7 +91,7 @@
 <body onload="init()">
 <!-- <div id="legend"></div> -->
 
-<div class="navbar" id="navbar" role="navbar">
+<div class="navbar" id="navbar" role="navbar" data-html2canvas-ignore>
 
 	<div class="active-filters">
 		<div class="active-filters-item navbar-item">
@@ -172,7 +178,7 @@
 <div id="map">
 
 
-	<div id="wgl">
+	<div id="wgl" data-html2canvas-ignore>
 		<a href="http://innoconnect.net/" target="_blank">© InnoConnect 2018 | </a><a href="http://webglayer.org/" target="_blank">WebGLayer | </a><a href="https://www.mapbox.com/" target="_blank">© MapBox | </a><a href="https://www.openstreetmap.org/" target="_blank">© OpenStreetMap</a>
 	</div>
 	<div id="loading" class="loading-wgl">
@@ -184,6 +190,8 @@
 	</div>
 
 	<div id="OpenLayers_Control_Attribution_7" class="olControlAttribution olControlNoSelect text_map_dark" unselectable="on" style="position: absolute; z-index: 1004;">© <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors</div>
+
+	<div class="export-pdf" data-html2canvas-ignore><i class="export-pdf-icon material-icons" title="Click to export map and charts to PDF">picture_as_pdf</i><i class="fa fa-spinner fa-spin spinner-export-pdf hide" title="Wait... Generating PDF..."></i></div>
 
 </div>
 
