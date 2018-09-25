@@ -17,6 +17,7 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params, category
   var text; // text to be exhibited below the chart, as a note about the data for example
   var numbers_formating;
   var permalink_input;
+  var classes_mask;
 
   if (params === null || typeof params === "undefined"){
     w = 500;
@@ -32,6 +33,7 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params, category
     text = "";
     numbers_formating = "s";
     permalink_input = null;
+    classes_mask = null;
   } else {
     w=(params.w ? params.w : 500);
     h=(params.h ? params.h : 215);
@@ -46,6 +48,7 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params, category
     text = (params.text ? params.text : "");
     numbers_formating = (params.numbers_formatting ? params.numbers_formatting : "s");
     permalink_input = (params.permalink_input ? params.permalink_input : null);
+    classes_mask = (params.classes_mask ? params.classes_mask : null);
   }
 
 
@@ -186,6 +189,12 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params, category
       [ "1", "unselected", cols[1] ],
       [ "0", "selected", cols[0] ]
     ];
+
+    if(classes_mask) {
+      classes = classes.filter( a => {
+        return classes_mask.indexOf(a[1]) !== -1;
+      });
+    }
 
     var zoom_button_bg = "#e3e4e4";
 
@@ -672,9 +681,13 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params, category
         "<div class='tooltipster-header'><div class='tooltipster-title'>Chart legend</div><div class='tooltipster-close'><i class='material-icons'>close</i></div></div>" +
         "<div class='tooltipster-text'>" +
         "<div>Select data segments by clicking or dragging directly in the bar charts. Combine multiple filters for deeper insights.</div>" +
-        "<div class='display-table width-100 margin-bottom-5 margin-top-20'><span class='display-table-cell-center tooltipster-legend-out'></span><span class='display-table-cell-center tooltipster-legend-text'>Data <b>outside</b> the current map view</span></div>" +
-        "<div class='display-table width-100 margin-bottom-5'><span class='display-table-cell-center tooltipster-legend-unselected'></span><span class='display-table-cell-center tooltipster-legend-text'><b>Unselected</b> data within the current map view</span></div>" +
-        "<div class='display-table width-100 margin-bottom-5'><span class='display-table-cell-center tooltipster-legend-selected'></span><span class='display-table-cell-center tooltipster-legend-text'><b>Selected</b> data within the current map view</span></div>" +
+
+        (classes_mask && classes_mask.indexOf("out") !== -1 ? "<div class='display-table width-100 margin-bottom-5 margin-top-20'><span class='display-table-cell-center tooltipster-legend-out'></span><span class='display-table-cell-center tooltipster-legend-text'>Data <b>outside</b> the current map view</span></div>" : "") +
+
+        (classes_mask && classes_mask.indexOf("unselected") !== -1 ? "<div class='display-table width-100 margin-bottom-5'><span class='display-table-cell-center tooltipster-legend-unselected'></span><span class='display-table-cell-center tooltipster-legend-text'><b>Unselected</b> data within the current map view</span></div>" : "") +
+
+        (classes_mask && classes_mask.indexOf("selected") !== -1 ? "<div class='display-table width-100 margin-bottom-5'><span class='display-table-cell-center tooltipster-legend-selected'></span><span class='display-table-cell-center tooltipster-legend-text'><b>Selected</b> data within the current map view</span></div>" : "") +
+
         "<div class='display-table width-100 margin-bottom-5 margin-top-20'><span class='display-table-cell-center tooltipster-legend-zoom-to'><i class='material-icons md-40 vertical-allign-middle'>all_out</i></span><span class='display-table-cell-center tooltipster-legend-text'>Click on the 'zoom to' icon to adjust the chart scale to the 'selected', 'unselected' or 'outside' the map data </span></div>" +
         "</div>" +
         "</div>";
@@ -987,6 +1000,12 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params, category
   }
 
   function barPathSelected(groups) {
+
+      if(classes_mask
+          && classes_mask.indexOf("selected") === -1) {
+          return;
+      }
+
     var path = [], i = -1, n = groups.length, d;
     while (++i < n) {
       var d = groups[i];
@@ -997,6 +1016,12 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params, category
   }
 
   function barPathUnselected(groups) {
+
+      if(classes_mask
+          && classes_mask.indexOf("unselected") === -1) {
+          return;
+      }
+
     var path = [], i = -1, n = groups.length, d;
     while (++i < n) {
       var d = groups[i];
@@ -1018,6 +1043,12 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params, category
   }
 
   function barPathOut(groups) {
+
+    if(classes_mask
+        && classes_mask.indexOf("out") === -1) {
+      return;
+    }
+
     var path = [],
       i = -1,
       n = groups.length,
