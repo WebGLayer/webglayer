@@ -174,8 +174,8 @@ html,body {
 }
 
 .legend-scale {
-    height: 36px;
-    width: 36px;
+    height: 40px;
+    width: 40px;
     border: 2px solid transparent;
     display: table;
     text-align: center;
@@ -224,13 +224,12 @@ html,body {
     position: absolute;
     left: 44.8em;
     text-align: center;
-    width: 120px;
+    width: 105px;
 }
 
 .controls-container {
     position: relative;
     margin-top: 7px;
-    text-align: center;
 }
 
 #controls {
@@ -238,8 +237,7 @@ html,body {
     top: 0;
     z-index:2000;
     background-color: white;
-    width: 104px;
-    display: inline-block;
+    width: auto;
     //-webkit-border-radius: 4px;
     //-moz-border-radius: 4px;
     //border-radius: 4px;
@@ -305,7 +303,7 @@ button.btn-selected {
 .brush{
     fill: grey;
     stroke: #ff8c00;
-    stroke-opacity: 1.;
+    stroke-opacity: 1;
     stroke-width: 2;
 }
 
@@ -313,9 +311,9 @@ button.btn-selected {
     fill: #f9cb9c;
 }
 
-/*.selected.bar {
+.selected.bar {
     fill: #ffa91b;
-}*/
+}
 
 .unselected.bar {
     fill: #8CC5F9;
@@ -326,18 +324,13 @@ button.btn-selected {
 }
 
 .axis text {
-    font: 8pt sans-serif;
+    font: 10px sans-serif;
     font-family: 'Ubuntu';
 }
 
 #heatmap-legend .axis text {
     font: 9px sans-serif;
     font-family: 'Ubuntu';
-}
-
-.hm-density-title {
-    position: relative;
-    top: 10px;
 }
 
 .axis_pc_dark text {
@@ -358,8 +351,12 @@ button.btn-selected {
     font: 10px sans-serif;
 }
 
-.select-legend-scale.legend-out, .select-legend-scale.legend-unselected, .select-legend-scale.legend-selected {
+.select-legend-scale.legend-out, .select-legend-scale.legend-unselected {
     border: 2px solid #ffa91b;
+}
+
+.select-legend-scale.legend-selected {
+    border: 2px solid #cccccc;
 }
 
 .axis path,
@@ -420,10 +417,9 @@ button.btn-selected {
 .grid line,
 .grid path {
     fill: none;
+}
 
 path {
-
-}
 
 }
 
@@ -569,10 +565,6 @@ div.olControlAttribution {
     height: 30px;
 }
 
-#controlsToggle {
-    display: inline-block;
-}
-
 .std-btn {
     background-color: whitesmoke; /* Green background */
     border: 1px solid lightgray; /* Green border */
@@ -594,6 +586,7 @@ div.olControlAttribution {
     border: 0px;
     color: black;
     cursor: pointer;
+    float: left;
     padding: 0.3em 0.3em;
 }
 
@@ -647,7 +640,9 @@ div.olControlAttribution {
 }
 
 svg text.label {
-    font-size: 10px !important;
+    fill:navy;
+    font-size: 10px;
+    text-anchor: middle;
 }
 
 .navbar{
@@ -681,10 +676,9 @@ svg text.label {
 }
 
 .bar-item {
-    height: 2px;
+    height: 3px;
     display: block;
     border-radius: 2px;
-    margin-bottom: 1px;
 }
 
 .bar-item.bar-item-hover {
@@ -974,7 +968,6 @@ div#wgl-win-close {
     top: 7px;
     right: 10.5em;
     width: 100%;
-    font-title: 11pt;
 }
 
 .chart-title-footer {
@@ -983,12 +976,6 @@ div#wgl-win-close {
     left: 10px;
     float: left;
     text-transform: capitalize;
-    font-size: 8pt;
-    width: 65%;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    text-align: left;
 }
 
 .chart-filters {
@@ -1229,81 +1216,6 @@ div.tooltipster-content {
     white-space: normal;
 }
 
-.language-select-div {
-    padding: 5px;
-    float: right;
-}
-
-.language-select {
-    background-color: #122330;
-    color: white;
-    border: 1px solid #ffa91b;
-}
-
-.map-permalink {
-    position: absolute;
-    bottom: 0.3em;
-    right: 14.5em;
-    color: whitesmoke;
-    z-index: 9999;
-    cursor: pointer;
-}
-
-.export-pdf {
-    position: absolute;
-    bottom: 0.1em;
-    right: 12em;
-    color: darkgrey;
-    z-index: 9999;
-    cursor: pointer;
-}
-
-.text-permalink {
-    margin-bottom: 0.1em;
-    margin-right: 0.5em;
-    border: 2px solid lightgray;
-    -webkit-border-radius: 6px;
-    -moz-border-radius: 6px;
-    border-radius: 6px;
-    padding: 3px 20px 3px 3px;
-}
-
-.copy-permalink {
-    position: absolute;
-    right: 2.5em;
-    font-size: 11pt;
-    top: 6px;
-    font-weight: 800;
-    color: cadetblue;
-}
-
-.spinner-permalink {
-    position: absolute;
-    left:0.5em;
-    font-size: 11pt;
-    top: 7px;
-    font-weight: 800;
-    color: cadetblue;
-}
-
-.spinner-export-pdf {
-    font-size: 15pt;
-}
-
-.link-permalink {
-    text-shadow: 0px 0px 3px #000;
-    color: darkgray;
-}
-
-.unselectable {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    -o-user-select: none;
-    user-select: none;
-}
 
 @media screen and (max-width: 1366px) {
     .navbar {
@@ -1367,15 +1279,17 @@ div.tooltipster-content {
 
     .area-selection {
         left: 47.25em;
-        width: 84px;
+        width: 80px;
     }
 
     .control-btn {
-        width: 35px;
+        width: 40px;
     }
 
     .charts-item {
-        right: 18em;
+        width: 39em;
+        margin: 2px auto;
+        right: 0;
     }
 
     /*.close-item-filters {
@@ -1432,12 +1346,14 @@ div.tooltipster-content {
     }
 
     .axis text {
-        font: 7pt sans-serif;
+        font: 9px sans-serif;
         font-family: 'Ubuntu';
     }
 
     svg text.label {
-        font-size: 9px !important;
+        font-size: 9px;
+        fill: navy;
+        text-anchor: middle;
     }
 
     #heatmap-legend .axis text {
@@ -1454,23 +1370,6 @@ div.tooltipster-content {
     }
 
     .chart-title-footer {
-        font-size: 7pt;
-        width: 90px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        text-align: left;
-    }
-
-    #controls {
-        width: 73px;
-    }
-
-    .map-permalink {
-        right: 5em;
-    }
-
-    .export-pdf {
-        right: 3em;
+        font-size: 10px;
     }
 }

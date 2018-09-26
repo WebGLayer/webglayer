@@ -10,7 +10,7 @@ $(document).ready(function () {
         style: 'mapbox://styles/mapbox/dark-v9', // stylesheet location 'mapbox://styles/mapbox/dark-v9'
         center: [-87.6,41.9], // starting position [lng, lat]
         zoom: 10, // starting zoom
-        ratchety: true
+        preserveDrawingBuffer: true
     });
 
     draw = new MapboxDraw({

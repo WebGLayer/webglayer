@@ -2,6 +2,12 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params, category
 
   var that = this;
 
+  var barColors = [
+      "#ffa91b",
+      "#8cc5f9",
+      "#e3e4e4"
+  ];
+
   var type;
   var div_id;
 
@@ -17,6 +23,7 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params, category
   var text; // text to be exhibited below the chart, as a note about the data for example
   var numbers_formating;
   var permalink_input;
+  var classes_mask;
 
   if (params === null || typeof params === "undefined"){
     w = 500;
@@ -32,6 +39,7 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params, category
     text = "";
     numbers_formating = "s";
     permalink_input = null;
+    classes_mask = null;
   } else {
     w=(params.w ? params.w : 500);
     h=(params.h ? params.h : 215);
@@ -46,6 +54,7 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params, category
     text = (params.text ? params.text : "");
     numbers_formating = (params.numbers_formatting ? params.numbers_formatting : "s");
     permalink_input = (params.permalink_input ? params.permalink_input : null);
+    classes_mask = (params.classes_mask ? params.classes_mask : null);
   }
 
 
@@ -187,6 +196,12 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params, category
       [ "0", "selected", cols[0] ]
     ];
 
+    if(classes_mask) {
+      classes = classes.filter( a => {
+        return classes_mask.indexOf(a[1]) !== -1;
+      });
+    }
+
     var zoom_button_bg = "#e3e4e4";
 
     colorScale = d3.scale.ordinal().range(cols);
@@ -327,7 +342,8 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params, category
         .enter()
         .append("text")
         .attr("class", "label unselected")
-        .attr("x", (function (d) {
+          .style('text-anchor', 'middle')
+          .attr("x", (function (d) {
           return xScale(d.val) + bw / 2;
         }))
         .attr("y", function (d) {
@@ -381,6 +397,11 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params, category
       });
       d.total = 0;
     });
+
+      svg.selectAll("path.domain")
+          .style('fill', 'none')
+          .style('stroke', '#000')
+          .style('shape-rendering', 'crispEdges');
 
     //d3.selectAll("#" + div_id + " rect.background").on("mousemove", onmouseover);
 
@@ -552,7 +573,7 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params, category
             WGL.filterDim(m.name, filterId, filterSubcategory(mergeSelectionArrays()));
             return;
           }
-          
+
             of_click.push([group, group + 1]);
             WGL.filterDim(m.name, filterId, filterSubcategory(mergeSelectionArrays()));
           }
@@ -666,9 +687,13 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params, category
         "<div class='tooltipster-header'><div class='tooltipster-title'>Chart legend</div><div class='tooltipster-close'><i class='material-icons'>close</i></div></div>" +
         "<div class='tooltipster-text'>" +
         "<div>Select data segments by clicking or dragging directly in the bar charts. Combine multiple filters for deeper insights.</div>" +
-        "<div class='display-table width-100 margin-bottom-5 margin-top-20'><span class='display-table-cell-center tooltipster-legend-out'></span><span class='display-table-cell-center tooltipster-legend-text'>Data <b>outside</b> the current map view</span></div>" +
-        "<div class='display-table width-100 margin-bottom-5'><span class='display-table-cell-center tooltipster-legend-unselected'></span><span class='display-table-cell-center tooltipster-legend-text'><b>Unselected</b> data within the current map view</span></div>" +
-        "<div class='display-table width-100 margin-bottom-5'><span class='display-table-cell-center tooltipster-legend-selected'></span><span class='display-table-cell-center tooltipster-legend-text'><b>Selected</b> data within the current map view</span></div>" +
+
+        (classes_mask && classes_mask.indexOf("out") !== -1 ? "<div class='display-table width-100 margin-bottom-5 margin-top-20'><span class='display-table-cell-center tooltipster-legend-out'></span><span class='display-table-cell-center tooltipster-legend-text'>Data <b>outside</b> the current map view</span></div>" : "") +
+
+        (classes_mask && classes_mask.indexOf("unselected") !== -1 ? "<div class='display-table width-100 margin-bottom-5'><span class='display-table-cell-center tooltipster-legend-unselected'></span><span class='display-table-cell-center tooltipster-legend-text'><b>Unselected</b> data within the current map view</span></div>" : "") +
+
+        (classes_mask && classes_mask.indexOf("selected") !== -1 ? "<div class='display-table width-100 margin-bottom-5'><span class='display-table-cell-center tooltipster-legend-selected'></span><span class='display-table-cell-center tooltipster-legend-text'><b>Selected</b> data within the current map view</span></div>" : "") +
+
         "<div class='display-table width-100 margin-bottom-5 margin-top-20'><span class='display-table-cell-center tooltipster-legend-zoom-to'><i class='material-icons md-40 vertical-allign-middle'>all_out</i></span><span class='display-table-cell-center tooltipster-legend-text'>Click on the 'zoom to' icon to adjust the chart scale to the 'selected', 'unselected' or 'outside' the map data </span></div>" +
         "</div>" +
         "</div>";
@@ -882,6 +907,7 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params, category
 
                 parent.append("text")
                     .attr("class", "label unselected")
+                    .style('padding-left', '10px')
                     .attr("x", xUnselected)
                     .attr("y", yUnselected)
                     .attr("dy", "1em")
@@ -890,6 +916,7 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params, category
             } else {
                 parent.append("text")
                     .attr("class", "label unselected")
+                    .style('padding-left', '10px')
                     .attr({ "display": "none" })
                     .attr("x", xUnselected)
                     .attr("y", yUnselected)
@@ -927,7 +954,14 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params, category
             }
 
         }
-    }
+
+        $("#" + div_id + " .label")
+            .css("text-anchor", "middle")
+            .css("fill", "navy")
+            .css("font-size", "11px")
+            .css("font-family", "\'Ubuntu\', sans-serif");
+
+  }
 
   function calcBar(){
     yScale = d3.scale.linear().domain(
@@ -938,9 +972,9 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params, category
     svg.selectAll('.y.axis').transition().duration(30)
       .call(yAxis);
 
-    svg.selectAll(".selected.bar").attr("d", barPathSelected);
-    svg.selectAll(".unselected.bar").attr("d", barPathUnselected);
-    svg.selectAll(".out.bar").attr("d", barPathOut);
+    svg.selectAll(".selected.bar").attr("d", barPathSelected).attr("fill", barColors[0]);
+    svg.selectAll(".unselected.bar").attr("d", barPathUnselected).attr("fill", barColors[1]);
+    svg.selectAll(".out.bar").attr("d", barPathOut).attr("fill", barColors[2]);
   }
 
   function barPathHover(groups) {
@@ -955,6 +989,12 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params, category
   }
 
   function barPathSelected(groups) {
+
+      if(classes_mask
+          && classes_mask.indexOf("selected") === -1) {
+          return;
+      }
+
     var path = [], i = -1, n = groups.length, d;
     while (++i < n) {
       var d = groups[i];
@@ -965,6 +1005,12 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params, category
   }
 
   function barPathUnselected(groups) {
+
+      if(classes_mask
+          && classes_mask.indexOf("unselected") === -1) {
+          return;
+      }
+
     var path = [], i = -1, n = groups.length, d;
     while (++i < n) {
       var d = groups[i];
@@ -986,6 +1032,12 @@ WGL.ui.StackedBarChart = function(m, div_id, x_label, filterId, params, category
   }
 
   function barPathOut(groups) {
+
+    if(classes_mask
+        && classes_mask.indexOf("out") === -1) {
+      return;
+    }
+
     var path = [],
       i = -1,
       n = groups.length,
