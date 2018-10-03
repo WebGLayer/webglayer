@@ -1,0 +1,54 @@
+{
+  "appName": "Birmingham car accidents",
+  "dataFileName": "data/data.json",
+  "description": "bla bla bla bla ...",
+  "dimensions": [
+    {
+      "column": "timestamp",
+      "type": "hour",
+      "name": "hours",
+      "numBins": 24,
+      "filter": true,
+      "chart": {
+        "label": "Hours",
+        "xLabel": "Hours",
+        "yLabel": "detections"
+      }
+    },
+    {
+      "column": "timestamp",
+      "type": "day",
+      "name": "days",
+      "filter": true,
+      "chart":{
+        "label": "Days in week",
+        "xLabel": "Day",
+        "yLabel": "detections"
+      }
+    },
+    {
+      "xColumn": "x",
+      "yColumn": "y",
+      "type": "heatmap",
+      "filter": false,
+      "radius": 500
+    },
+    {
+      "xColumn": "x",
+      "yColumn": "y",
+      "type": "dotmap",
+      "filter": false
+    },
+    {
+      "column": "speed_limit",
+      "type": "ordinal",
+      "name": "speed_limit",
+      "filter": true,
+      "chart":{
+        "label": "Speed limit",
+        "xLabel": "Speed limit",
+        "yLabel": "detections"
+      }
+    }
+  ]
+}
