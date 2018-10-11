@@ -9,6 +9,7 @@
 WGL.ui.Config = function (config_filename, shaders_url, map_div_id, chard_div_id) {
   const weekday = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri","Sat"];
   const months = ["Jan", "Feb", "Mar","Apr","May","June","July","Aug","Sept","Oct","Nov", "Dec"];
+  this.types = ["ordinal", "linear", "day", "hour", "date", "heatmap", "dotmap", "inetify"];
 
   /**
    *
@@ -93,6 +94,17 @@ WGL.ui.Config = function (config_filename, shaders_url, map_div_id, chard_div_id
     }
   };
 
+  /**
+   * Function is called after the data are loaded
+   */
+  let afterLoad = function () {};
+  /**
+   * Set afterLoad property
+   * @param f callback function
+   */
+  this.setAfterLoadFunction = function (f) {
+    afterLoad = f;
+  };
 
   /**
    * Build the application
@@ -110,7 +122,7 @@ WGL.ui.Config = function (config_filename, shaders_url, map_div_id, chard_div_id
           let dim_data = [];
 
           // all dimensions except spatial dimension
-          if (dim.type !== "heatmap" && dim.type !== "dotmap"){
+          if (dim.type !== "heatmap" && dim.type !== "dotmap" && dim.type !== "identify"){
             let tf = getTransformFunction(dim.type);
             data.forEach(function (val, i) {
               dim_data[i] = tf(val[dim.column]);
@@ -119,11 +131,13 @@ WGL.ui.Config = function (config_filename, shaders_url, map_div_id, chard_div_id
             // for linear
             if (dim.type in {hour: '', date: '', linear: ''}){
               let label = dim.chart.label || "";
-              let dim_conf = {data: dim_data,  min: Math.min(...dim_data), max:Math.max(...dim_data), num_bins: dim.numBins,
+              let dim_conf = {data: dim_data,  min: Math.min(...dim_data), max: Math.max(...dim_data), num_bins: dim.numBins,
                 name: dim.name, type:'linear', label : label};
               let dimension = WGL.addLinearHistDimension(dim_conf);
-              if (dim.filter){
-                WGL.addLinearFilter(dim_conf, dim.numBins, dim.name + "F");
+              if ("filter" in dim){
+                if ("numBins" in dim.filter){
+                  WGL.addLinearFilter(dim_conf, dim.filter.numBins, dim.name + "F");
+                }
               }
               if ("chart" in dim){
                 let chd = new WGL.ChartDiv(chard_div_id,"ch-"+k, dim.name, dim.chart.label, dim.numBins);
@@ -143,8 +157,8 @@ WGL.ui.Config = function (config_filename, shaders_url, map_div_id, chard_div_id
               const label = dim.chart.label || "";
               let dim_conf = {data: dim_data,  domain: domain ,  name: dim.name, type:'ordinal', label : label};
               let dimension = WGL.addOrdinalHistDimension(dim_conf);
-              if (dim.filter){
-                WGL.addLinearFilter(dim_conf,domain.length, dim.name + "F");
+              if ("filter" in dim){
+                WGL.addLinearFilter(dim_conf, domain.length, dim.name + "F");
               }
               if ("chart" in dim) {
                 let chd = new WGL.ChartDiv(chard_div_id, "ch-" + k, dim.name, dim.chart.label, domain.length);
@@ -159,20 +173,38 @@ WGL.ui.Config = function (config_filename, shaders_url, map_div_id, chard_div_id
           else{
             existSpatial = true;
             let j = 0;
+            let index = [];
             data.forEach(function (val, i) {
               dim_data[j++] = parseFloat(val[dim.xColumn]);
               dim_data[j++] = parseFloat(val[dim.yColumn]);
+              index[i] = i;
             });
             let dimension;
             if (dim.type === "dotmap"){
               dimension = WGL.addMapDimension(dim_data, "dotmap");
+              if ("radius" in dim){
+                dimension.setRadius(dim.radius);
+              }
             }
-            else {
+            else if (dim.type === "heatmap") {
               dimension = WGL.addHeatMapDimension(dim_data, "heatmap");
               if ("radius" in dim){
                 dimension.setRadius(dim.radius);
               }
-
+            }
+            else if (dim.type === "identify"){
+              if ("identifyFileURL" in dim){
+                dimension = WGL.addIdentifyDimension(dim_data, index, "identify", dim.identifyFileURL);
+                if ("radius" in dim){
+                  dimension.pointSize = dim.radius;
+                }
+              }
+              else{
+                console.log("please add identifyFileURL properties")
+              }
+            }
+            else{
+              console.error("bad type of spatial dimension")
             }
 
 
@@ -184,6 +216,7 @@ WGL.ui.Config = function (config_filename, shaders_url, map_div_id, chard_div_id
             WGL.addExtentFilter();
           }
         });
+        afterLoad();
       })
     })
   }

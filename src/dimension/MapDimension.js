@@ -15,6 +15,7 @@ WGL.dimension.MapDimension = function(id){
   var select_psk = 'select_psk';
   // coeficient for selected point size
   this.selectPointSizeCoef = 1.0;
+  var radiusWordVal = 10;
 
   gl.useProgram(this.glProgram);
   manager.storeUniformLoc(this.glProgram, drawselect);
@@ -67,17 +68,29 @@ WGL.dimension.MapDimension = function(id){
       }
     }
     /*set point size and selected point size*/
-    gl.uniform1f(this.glProgram[point_size], this.pointSize(manager.zoom));
+    gl.uniform1f(this.glProgram[point_size], this.pointSize(radiusWordVal, manager.zoom));
     gl.uniform1f(this.glProgram[select_psk], this.selectPointSizeCoef);
   };
+
   /**
    * Compute point size from zoom level
-   * @param zoom zoom level (1 to 19)
+   * @param r radius in meters
+   * @param z zoom level (1 to 19)
    * @returns {number} point size in px
    */
-  this.pointSize = function (zoom) {
-    return Math.pow(2, zoom)/Math.pow(zoom,3);
+  this.pointSize = function (r, z) {
+    //return Math.pow(2, zoom)/Math.pow(zoom,3);
+    return r * 6.388019799072483e-06 * Math.pow(2, z);
   };
+
+    /**
+     *
+     * @param r radius in meters
+     */
+  this.setRadius = function(r){
+    radiusWordVal = r;
+  };
+
   this.render = function(num) {
 
     if (visible == false){

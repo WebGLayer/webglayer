@@ -8,7 +8,9 @@
       "type": "hour",
       "name": "hours",
       "numBins": 24,
-      "filter": true,
+      "filter": {
+        "numBins": 48
+      },
       "chart": {
         "label": "Hours",
         "xLabel": "Hours",
@@ -19,7 +21,7 @@
       "column": "timestamp",
       "type": "day",
       "name": "days",
-      "filter": true,
+      "filter": {},
       "chart":{
         "label": "Days in week",
         "xLabel": "Day",
@@ -37,13 +39,14 @@
       "xColumn": "x",
       "yColumn": "y",
       "type": "dotmap",
-      "filter": false
+      "filter": false,
+      "radius": 30
     },
     {
       "column": "speed_limit",
       "type": "ordinal",
       "name": "speed_limit",
-      "filter": true,
+      "filter": {},
       "chart":{
         "label": "Speed limit",
         "xLabel": "Speed limit",

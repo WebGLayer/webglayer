@@ -1,9 +1,11 @@
 function init() {
-  initMap();
- const conf = new WGL.ui.Config("app.json", '../../', 'map', "right");
- conf.load();
-  map.events.register("move", map, onMove);
-  WGL.mcontroller.zoommove(map.getZoom(), getTopLeftTC());
+	initMap();
+	const conf = new WGL.ui.Config("app.json", '../../', 'map', "right");
+	conf.setAfterLoadFunction(function () {
+    map.events.register("move", map, onMove);
+    WGL.mcontroller.zoommove(map.getZoom(), getTopLeftTC());
+  });
+	conf.load();
 }
 	
 function getTopLeftTC() {

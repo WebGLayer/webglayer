@@ -23,8 +23,10 @@ Structure
   "domain": [], // optional
   "type": "day",
   "name": "days", // KEY
-  "num_bins": 12, // // only for type: linear, date, hour
-  "filter": true,
+  "numBins": 12, // only for type: linear, date, hour
+  "filter": {
+    "numBins": 12 // filter granuality, only for type: linear, date, hour
+  },
   "chart":{}  // optional
 }
 ```
