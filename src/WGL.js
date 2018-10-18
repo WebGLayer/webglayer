@@ -400,14 +400,15 @@ var WGL = (function() {
     /**
      * @param {string} dim_name
      * @param {string} filter_name
+     * @param {string} [operator=OR] logical operator for flags, "OR" or "AND", (e.g animal ON/AND flower)
      * @return {WGL.filter.FlagsFilter}
      */
-    addFlagsFilter: function (dim_name, filter_name) {
+    addFlagsFilter: function (dim_name, filter_name, operator) {
       var d = this._dimensions[dim_name];
       if (d === null){
         console.error('Cant set fitler to undefined dimension ' +dim_name);
       }
-      var f = new WGL.filter.FlagsFilter(dim_name, filter_name);
+      var f = new WGL.filter.FlagsFilter(dim_name, filter_name, operator);
       addFilter(dim_name, filter_name, f);
       return f;
     },

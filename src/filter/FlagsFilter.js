@@ -2,13 +2,15 @@
  *
  * @param {string} dimension_id dimension ID
  * @param {string} filter_id filter ID
+ * @param {string} [operator=OR] logical operator for flags, "OR" or "AND". (e.g animal OR/AND flower)
  * @constructor
  */
-WGL.filter.FlagsFilter = function(dimension_id, filter_id){
+WGL.filter.FlagsFilter = function(dimension_id, filter_id, operator){
   var manager = WGL.getManager();
   var GLU = WGL.internal.GLUtils;
   this.isspatial = 2.0;
   this.id = filter_id;
+  this.operator = operator || "OR";
 
   var filters_fa;
   var height = WGL.getDimension(dimension_id).flags.length;
