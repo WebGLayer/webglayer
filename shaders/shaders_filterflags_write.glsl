@@ -19,7 +19,7 @@
         // if data are selected
         if ( at1[0] > 0. ){
             //calculates final value, third number indicates if it is selected by spatial filter or not
-            col = vec4(1, 0., 0., 0.);
+            col = vec4(1./256., 0., 0., 0.);
         } else {
             // data are not selected by this filter
             col = vec4(0, 0., 0., 0.);

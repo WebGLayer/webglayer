@@ -30,6 +30,9 @@ WGL.internal.Filter = function() {
   manager.storeUniformLoc(this.filterProgram2d, indexText);
   manager.storeUniformLoc(this.filterProgramFT, indexText);
 
+  manager.storeUniformLoc(this.filterProgramFT, 'isand');
+  manager.storeUniformLoc(this.filterProgramFT, 'num_selected');
+
 
   //var isspatial = 'isspatial';
   //manager.storeUniformLoc(this.filterProgram, isspatial);
@@ -145,6 +148,15 @@ WGL.internal.Filter = function() {
 
             // filter ID
             gl.uniform1f(this.filterProgramFT.filterid, d.index);
+            // if 1.0 use AND operator 0.0 use OR operator
+            if (d.operator === "OR"){
+              gl.uniform1f(this.filterProgramFT.isand, 0.);
+            }
+            else{
+              gl.uniform1f(this.filterProgramFT.isand, 1.);
+            }
+            // number of selected flags
+            gl.uniform1f(this.filterProgramFT.num_selected, d.selected_flags.length);
 
             gl.drawArrays(gl.POINTS, 0, manager.num_rec);
 
