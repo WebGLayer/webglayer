@@ -1,5 +1,4 @@
 /node_modules
-/doc
 .idea/
 /examples/birmingham/data/identify/
 /examples/birmingham/data/split_data.py
