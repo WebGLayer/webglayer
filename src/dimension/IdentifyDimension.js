@@ -86,6 +86,9 @@ WGL.dimension.IdentifyDimension = function (id, properties_path) {
    * @param {int} num number of item in WGL
    */
   this.render = function (num) {
+    if(!this.enabled){
+      return;
+    }
     gl.useProgram(this.glProgram);
     manager.bindMapMatrix(this.glProgram);
     gl.uniform1f(this.glProgram['numfilters'], manager.trasholds.allsum);
