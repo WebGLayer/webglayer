@@ -81,6 +81,9 @@ WGL.dimension.FlagsDimension = function (name, data, flags){
 
   // methods
   this.render = function (num_rec) {
+    if (!this.visible){
+      return;
+    }
     //console.log("flags render");
     gl.useProgram(this.program);
     gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
