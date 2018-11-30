@@ -26,7 +26,10 @@ initMap = function() {
 			  }) ;
 	 
 	  
-	var layer2 = new  OpenLayers.Layer.OSM('osm', 'http://${s}.basemaps.cartocdn.com/dark_all/${z}/${x}/${y}.png', {});
+	var layer2 = new  OpenLayers.Layer.OSM('osm', ['http://a.basemaps.cartocdn.com/dark_all/${z}/${x}/${y}.png',
+						       'http://b.basemaps.cartocdn.com/dark_all/${z}/${x}/${y}.png',
+						       'http://c.basemaps.cartocdn.com/dark_all/${z}/${x}/${y}.png',
+						       'http://d.basemaps.cartocdn.com/dark_all/${z}/${x}/${y}.png'], {});
 	       
 	        
     var layer = new OpenLayers.Layer.OSM('', null, {
