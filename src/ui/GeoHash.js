@@ -17,6 +17,12 @@ WGL.ui.GeoHash = function () {
    * @returns {string} geohash
    */
   this.encode = function (lon, lat, level) {
+    if (lon < lon_min || lon > lon_max){
+      throw new Error('Lon coordinate is ou of range: '+lon)
+    }
+    if (lat < lat_min || lat > lat_max){
+      throw new Error('Lat coordinate is ou of range: '+lat)
+    }
     let a_lon = lon_min;
     let b_lon = lon_max;
 
