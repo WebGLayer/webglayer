@@ -195,19 +195,32 @@ WGL.dimension.IdentifyDimension = function (id, properties_path) {
     var id = idt[0];
     var num =idt[1];
     if (num != 0){
-      var file = Math.floor(id/10) + '.txt';
-      $.get(this.dataPath + file, function (data) {
-        var dataArray = $.csv.toObjects(data,{
-          delimiter:"'",
-          separator:','
-        });
-        dataArray.forEach(function (t) {
-          if (t['ID'] == id){
-            t['webgl_num_pts'] = num;
-            callback(t)
-          }
-        })
-      });
+        var file = Math.floor(id/10) + '.txt';
+        var url = this.dataPath + file
+        if (this.dataPath == null) { // internal data popup only
+            var t = [];
+            Object.keys(data).forEach(function(key,index) {
+                t[key] = data[key][id];
+            });
+            callback(t);
+        }
+        else { // additional external data download
+	        $.get(url, function (data) {
+    	        var dataArray = $.csv.toObjects(data,{
+    	            delimiter:"'",
+    	            separator:','
+    	        });
+    	        dataArray.forEach(function (t) {
+    	            if (t['ID'] == id){
+    	                t['webgl_num_pts'] = num;
+	                    callback(t)
+    	            } 
+    	        })
+	      })
+	      .fail(function() { // error log for HTTP 404
+		      console.log( "!Data file download failed: " + url + ".");
+	      })
+      }
     }
   };
 
