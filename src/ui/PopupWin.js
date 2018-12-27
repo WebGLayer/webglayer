@@ -188,7 +188,15 @@ WGL.ui.PopupWin = function (map_win_id, idt_dim, title) {
 
                     setVisibility(false);
 
-                    lngLat = map.unproject([e.offsetX, e.offsetY]);
+                    if (typeof map.unproject === "function") { //mapbox lib
+                       lngLat = map.unproject([e.offsetX, e.offsetY]); 
+                    }
+                    else { //openlayers native
+                       var px = new OpenLayers.Pixel(e.offsetX, e.offsetY);
+                       np = map.getLonLatFromPixel(px);
+                       lngLat = np.transform(merc, wgs); 
+                    }
+
 
                     last_position = [t['ID'], t['webgl_num_pts'], lngLat.lng, lngLat.lat];
 
@@ -264,7 +272,14 @@ WGL.ui.PopupWin = function (map_win_id, idt_dim, title) {
      */
     this.zoommove = function () {
         if(lngLat != null) {
-            let point = map.project(lngLat);
+            if (typeof map.project === "function") { //mapbox lib
+                point = map.project(lngLat);
+	        } else { // openlayers native
+                var ll = new OpenLayers.LonLat(lngLat.lon, lngLat.lat);
+                np = ll.transform(wgs, merc);
+                point =  map.getPixelFromLonLat(np);
+            }
+
             setPosition(point.x, point.y);
         }
     };
@@ -276,7 +291,14 @@ WGL.ui.PopupWin = function (map_win_id, idt_dim, title) {
 
             lngLat = [position[2], position[3]];
 
-            let point = map.project(lngLat);
+            if (typeof map.project === "function") { //mapbox lib
+                point = map.project(lngLat);
+            } else { //openlayers native
+                var ll = new OpenLayers.LonLat(lngLat.lon, lngLat.lat);
+                np = ll.transform(wgs, merc);
+                point =  map.getPixelFromLonLat(np);
+            }
+
 
             WGL.getDimension(idt_dim).getPropertiesById(position[0], position[1], function (t) {
 
