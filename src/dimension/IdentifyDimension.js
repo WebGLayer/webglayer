@@ -2,6 +2,7 @@
  * Class identify objects in the map
  * @param id {String} ID of the dimension
  * @param properties_path {String} path to folder with files for identify
+ * @param {Object} data array of all pts
  * @constructor
  */
 WGL.dimension.IdentifyDimension = function (id, properties_path) {
