@@ -151,7 +151,7 @@ var WGL = (function() {
      * @param {int[]} pts_id array of ID [id1, id2, id3, ...]
      * @param {String} id ID of dimension
      * @param {string} properties_path path to directory with files for identify
-     * @param {string} data array of all pts
+     * @param {Object} data array of all pts
      * @returns {WGL.dimension.IdentifyDimension}
      */
     addIdentifyDimension: function (pts, pts_id, id, properties_path, data) {
