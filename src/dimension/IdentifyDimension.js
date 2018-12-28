@@ -196,7 +196,6 @@ WGL.dimension.IdentifyDimension = function (id, properties_path, data) {
     var id = idt[0];
     var num =idt[1];
     this.getPropertiesById (id, num, callback)
-    }
   };
 
   this.getPropertiesById = function (id, num, callback) {
@@ -228,7 +227,7 @@ WGL.dimension.IdentifyDimension = function (id, properties_path, data) {
 		      console.log( "!Data file download failed: " + url + ".");
 
               });
-	  })
+	})
 	}
       }
   };
