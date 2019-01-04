@@ -2,9 +2,10 @@
  * Class identify objects in the map
  * @param id {String} ID of the dimension
  * @param properties_path {String} path to folder with files for identify
+ * @param {Object} data array of all pts
  * @constructor
  */
-WGL.dimension.IdentifyDimension = function (id, properties_path) {
+WGL.dimension.IdentifyDimension = function (id, properties_path, data) {
   // ID of dim
   this.id = id;
   this.isSpatial = true;
@@ -194,25 +195,22 @@ WGL.dimension.IdentifyDimension = function (id, properties_path) {
     var idt = this.identify(x, y);
     var id = idt[0];
     var num =idt[1];
-    if (num != 0){
-      var file = Math.floor(id/10) + '.txt';
-      $.get(this.dataPath + file, function (data) {
-        var dataArray = $.csv.toObjects(data,{
-          delimiter:"'",
-          separator:','
-        });
-        dataArray.forEach(function (t) {
-          if (t['ID'] == id){
-            t['webgl_num_pts'] = num;
-            callback(t)
-          }
-        })
-      });
-    }
+    this.getPropertiesById (id, num, callback)
   };
 
   this.getPropertiesById = function (id, num, callback) {
       if (num != 0){
+      	if (this.dataPath == null) {
+            var t = [];
+            Object.keys(data).forEach(function(key,index) {
+                t[key] = data[key][id];
+            });
+            t["ID"]=id;
+	    t['webgl_num_pts'] = num;
+            callback(t);
+        }
+        else {
+
           var file = Math.floor(id/10) + '.txt';
           $.get(this.dataPath + file, function (data) {
               var dataArray = $.csv.toObjects(data,{
@@ -225,7 +223,12 @@ WGL.dimension.IdentifyDimension = function (id, properties_path) {
                       callback(t)
                   }
               })
-          });
+	      .fail(function() {
+		      console.log( "!Data file download failed: " + url + ".");
+
+              });
+	})
+	}
       }
   };
 };

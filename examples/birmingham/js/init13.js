@@ -112,7 +112,7 @@ function visualize(data){
 		charts['speedlimit'] = WGL.createStackBarChart(sl, "ch4", "Speed limit", 'slF');
 
 		//identify
-		var idt = WGL.addIdentifyDimension(data.pts, data.pts_id, 'idt', "data/identify/");
+		var idt = WGL.addIdentifyDimension(data.pts, data.pts_id, 'idt', null, data);
 		idt.onlySelected = false;
 		idt.pointSize = 15;
 		//idt.debug = true;
@@ -140,22 +140,17 @@ function visualize(data){
 		WGL.initFilters();
 		//wgl.render();
 	
-    // point selection
+// point selection
     pw = new WGL.ui.PopupWin("#OpenLayers_Layer_Vector_32_svgRoot", "idt", "Accident Details");
     pw.setProp2html(function (t) {
-      var d =  (new Date(t["timestamp"]*1000));
-      var weekarray = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri","Sat"];
-      var wd = weekarray[d.getDate()];
-      var sev = data.sevEnum[t["accident_severity"]-1];
-      var rt = data.rtEnum[t["road_type"]];
-      //speed_limit
+      var d =  (new Date(t.date*1000*60*60));
 
       var s = "<table>";
       s += "<tr><td width='100px'>Date: </td><td>"+d.toDateString()+"</td></tr>";
       s += "<tr><td>Time: </td><td>"+d.toLocaleTimeString()+"</td></tr>";
-      s += "<tr><td>Severity: </td><td>"+sev+"</td></tr>";
-      s += "<tr><td>Road Type: </td><td>"+rt+"</td></tr>";
-      s += "<tr><td>Speed Limit: </td><td>"+t["speed_limit"]+"</td></tr>";
+      s += "<tr><td>Severity: </td><td>"+t.sev+"</td></tr>";
+      s += "<tr><td>Road Type: </td><td>"+t.road_type+"</td></tr>";
+      s += "<tr><td>Speed Limit: </td><td>"+t.speed_limit+"</td></tr>";
       return s;
     });
     pw.setMovemap(function (dx, dy) {
@@ -167,7 +162,11 @@ function visualize(data){
       map.setCenter(ll);
     });
     map.events.register("move",map,function () {
-      pw.zoommove(map.getZoom(), getTopLeftTC());
+	var testElement = document.getElementById('wgl-point-win');
+	if( testElement.classList.contains("wgl-active") ) {
+		pw.zoommove(map.getZoom(), getTopLeftTC());
+        }
+
     });
     // end point selection
 		

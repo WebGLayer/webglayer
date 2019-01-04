@@ -151,16 +151,17 @@ var WGL = (function() {
      * @param {int[]} pts_id array of ID [id1, id2, id3, ...]
      * @param {String} id ID of dimension
      * @param {string} properties_path path to directory with files for identify
+     * @param {Object} data array of all pts
      * @returns {WGL.dimension.IdentifyDimension}
      */
-    addIdentifyDimension: function (data, pts_id, id, properties_path) {
+    addIdentifyDimension: function (pts, pts_id, id, properties_path, data) {
       for (var i = 0; i< pts_id.length; i++){
         if (pts_id[i] >= 16777216){
           throw "point ID must be < then 2^24 (3 byte)";
         }
       }
       try { // try create pts buffer
-          manager.addDataBuffer(u.array2TA(data), 2, 'wPoint');
+          manager.addDataBuffer(u.array2TA(pts), 2, 'wPoint');
       } catch (err) {
           console.warn(err);
       }
@@ -170,7 +171,7 @@ var WGL = (function() {
       } catch (err) {
           console.warn(err);
       }
-      var dim = new WGL.dimension.IdentifyDimension(id, properties_path);
+      var dim = new WGL.dimension.IdentifyDimension(id, properties_path, data);
       this._dimensions[id] = dim;
       return dim;
     },
