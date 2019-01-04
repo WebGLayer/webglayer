@@ -267,8 +267,6 @@ WGL.ui.PopupWin = function (map_win_id, idt_dim, title) {
 
     /**
      * Must be call after every zoom or move event
-     * @param {int} zoom
-     * @param offset
      */
     this.zoommove = function () {
         if(lngLat != null) {
