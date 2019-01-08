@@ -25,7 +25,7 @@ module.exports = function(grunt) {
       options: {
         sourceMap: true,
         presets: [
-          ['env', {modules: false}],
+          ['@babel/preset-env', {modules: false}],
         ]
       },
       dist: {
@@ -55,6 +55,18 @@ module.exports = function(grunt) {
             destination: 'doc'
         }
       }
+    },
+    umd : {
+      all : {
+        options : {
+          src : 'build/main.js',
+          objectToExport : 'WGL',
+          deps : {
+            'default' : ['d3', {jquery : '$'}, 'tooltipster'],
+            'global' : ['d3', {jQuery : '$'}, 'tooltipster']
+          }
+        }
+      }
     }
   });
 
@@ -62,7 +74,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-babel');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-jsdoc');
+  grunt.loadNpmTasks('grunt-umd');
 
-  grunt.registerTask('default', ['concat:dist1','babel','uglify', 'concat:dist2']);
+  grunt.registerTask('default', ['concat:dist1','babel', 'umd', 'uglify', 'concat:dist2']);
 
 };
