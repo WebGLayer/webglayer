@@ -250,7 +250,7 @@ button.btn-selected {
 .brush{
     fill: grey;
     stroke: #ff8c00;
-    stroke-opacity: 1.;
+    stroke-opacity: 1;
     stroke-width: 2;
 }
 
@@ -358,11 +358,6 @@ svg text.label {
 .grid line,
 .grid path {
     fill: none;
-
-path {
-
-}
-
 }
 
 #cross{
