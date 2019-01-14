@@ -4,9 +4,10 @@
  * @param map_win_id {String} selector ('.class' or '#id'), which covers map window
  * @param idt_dim {String} IdentifyDimension
  * @param title {String} tittle for popup window
+ * @param pts {Array} coords of pts [x1, y1, x2, y2, ...]
  * @constructor
  */
-WGL.ui.PopupWin = function (map_win_id, idt_dim, title) {
+WGL.ui.PopupWin = function (map_win_id, idt_dim, title, pts=null) {
     var visible = false;
     var posX = 0; // position of window
     var posY = 0;
@@ -188,15 +189,30 @@ WGL.ui.PopupWin = function (map_win_id, idt_dim, title) {
 
                     setVisibility(false);
 
-                    if (typeof map.unproject === "function") { //mapbox lib
-                       lngLat = map.unproject([e.offsetX, e.offsetY]); 
-                    }
-                    else { //openlayers native
-                       var px = new OpenLayers.Pixel(e.offsetX, e.offsetY);
-                       np = map.getLonLatFromPixel(px);
-                       lngLat = np.transform(merc, wgs); 
-                    }
+                    if (pts != null) { //get real coord of pt
+                        fMercZero=[]
+                        fMerc = [] 
+                        fMercZero[0]=pts[ t.ID*2 ];
+                        fMercZero[1]=pts[ t.ID*2 +1];
 
+                        fMerc[0]= (fMercZero[0]*(20037508.34*2/256)-20037508.34)
+                        fMerc[1]= -((fMercZero[1]-256)*(20037508.34*2/256)+20037508.34)
+
+                        var fWgs = new OpenLayers.LonLat(fMerc);
+                        lngLat = fWgs.transform(merc, wgs);
+                        console.log(lngLat)
+                    }
+                    else { //get coord of click
+
+                        if (typeof map.unproject === "function") { //mapbox lib
+                        lngLat = map.unproject([e.offsetX, e.offsetY]); 
+                        }
+                        else { //openlayers native
+                        var px = new OpenLayers.Pixel(e.offsetX, e.offsetY);
+                        np = map.getLonLatFromPixel(px);
+                        lngLat = np.transform(merc, wgs); 
+                        }
+                    }
 
                     last_position = [t['ID'], t['webgl_num_pts'], lngLat.lng, lngLat.lat];
 
@@ -298,7 +314,7 @@ WGL.ui.PopupWin = function (map_win_id, idt_dim, title) {
                 np = ll.transform(wgs, merc);
                 point =  map.getPixelFromLonLat(np);
             }
-
+            setPosition(point.x, point.y);
 
             WGL.getDimension(idt_dim).getPropertiesById(position[0], position[1], function (t) {
 
