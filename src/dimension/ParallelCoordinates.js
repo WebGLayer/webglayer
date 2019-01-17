@@ -64,8 +64,9 @@ WGL.dimension.ParallelCoordinates = function(div, data){
     this.pcTexture = gl.createTexture();
     this.pcTexture.name = "pc texture";
 
-    if (!gl.getExtension("OES_texture_float")) {
-      console.log("OES_texture_float not availble -- this is legal");
+    var half_ext = gl.getExtension("OES_texture_half_float");
+    if (!half_ext) {
+      throw "OES_texture_half_float not availble -- this is legal";
     }
 
 
@@ -75,7 +76,7 @@ WGL.dimension.ParallelCoordinates = function(div, data){
     /** Texture */
     gl.bindTexture(gl.TEXTURE_2D, this.pcTexture);
 
-    if (!gl.getExtension("OES_texture_float_linear")) {
+    if (!gl.getExtension("OES_texture_half_float_linear")) {
       console.log("OES_texture_float not availble -- this is legal");
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
@@ -89,7 +90,7 @@ WGL.dimension.ParallelCoordinates = function(div, data){
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, framebuffer.width,
-      framebuffer.height, 0, gl.RGBA, gl.FLOAT, null);
+      framebuffer.height, 0, gl.RGBA, half_ext.HALF_FLOAT_OES, null);
 
     /** Render buffer */
     gl.bindRenderbuffer(gl.RENDERBUFFER, renderbuffer);
