@@ -222,11 +222,10 @@ WGL.dimension.IdentifyDimension = function (id, properties_path, data) {
                   callback(t)
               }
           })
-          .fail(function() {
+q        })
+        .fail(function() {
           console.log( "!Data file download failed: " + url + ".");
-
-          });
-        })
+        });
       }
     }
   };

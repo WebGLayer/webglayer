@@ -35,17 +35,6 @@ WGL.ui.PopupWin = function (map_win_id, idt_dim, title, pts=null) {
      * @param {int} y pixels
      */
     let setPosition = function (x, y) {
-
-        console.log(x)
-        console.log(y)
-
-        if(x < 0 || y < 0) {
-            setVisibility(false);
-            return
-        } else {
-            setVisibility(true);
-        }
-
         posX = x;
         posY = y;
         let win = $("#wgl-point-win");
