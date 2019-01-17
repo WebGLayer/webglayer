@@ -141,7 +141,7 @@ function visualize(data){
 		//wgl.render();
 	
 // point selection
-    pw = new WGL.ui.PopupWin("#OpenLayers_Layer_Vector_32_svgRoot", "idt", "Accident Details");
+    pw = new WGL.ui.PopupWin("#OpenLayers_Layer_Vector_32_svgRoot", "idt", "Accident Details", data.pts);
     pw.setProp2html(function (t) {
       var d =  (new Date(t.date*1000*60*60));
 
