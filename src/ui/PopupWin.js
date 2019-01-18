@@ -1,14 +1,16 @@
 /**
- * Pupup window
+ * PopupWin, a dialog component used to display details when a user clicks on a point in the map
  * require, D3v3 a Jquery
  * @param map_win_id {String} selector ('.class' or '#id'), which covers map window
  * @param idt_dim {String} IdentifyDimension
  * @param title {String} tittle for popup window
  * @param pts {Array} coords of pts [x1, y1, x2, y2, ...]
- * @param options {Object} formatting options to be passed to the IdentifyDimension when retrieving details about a point (Example: { delimiter:"'", separator:',' } )
+ * @param options {Object} formatting options to be passed to the IdentifyDimension when retrieving data about a point
+ * @param options.delimiter {String} either a double quote """ or a single quote "'", used to correctly read fields from the CSV files containing points' data
+ * @param options.separator {String} either a comma "," or a semicolon ";", used to correctly read fields from the CSV files containing points' data
  * @constructor
  */
-WGL.ui.PopupWin = function (map_win_id, idt_dim, title, options, pts=null) {
+WGL.ui.PopupWin = function (map_win_id, idt_dim, title, pts=null, options) {
 
     if(typeof WGL.ui.PopupWin.instance === "object") {
         return WGL.ui.PopupWin.instance;
@@ -29,7 +31,7 @@ WGL.ui.PopupWin = function (map_win_id, idt_dim, title, options, pts=null) {
     var priority = null;
     var timeout = 0;
 
-    this.options = (typeof options === "object" ? options : {});
+    this.options = options;
 
     /**
      * Set visibility
@@ -242,7 +244,9 @@ WGL.ui.PopupWin = function (map_win_id, idt_dim, title, options, pts=null) {
                         }
                     }
 
-                    delete this.options['start'];
+                    if(typeof this.options === "object") {
+                        delete this.options['start'];
+                    }
 
                     WGL.getDimension(idt_dim).getProperties(e.offsetX, e.offsetY, (t) => {
                         setVisibility(false);
@@ -256,8 +260,7 @@ WGL.ui.PopupWin = function (map_win_id, idt_dim, title, options, pts=null) {
                             fMerc[0]= (fMercZero[0]*(20037508.34*2/256)-20037508.34);
                             fMerc[1]= -((fMercZero[1]-256)*(20037508.34*2/256)+20037508.34);
 
-                            let fWgs = new OpenLayers.LonLat(fMerc);
-                            lngLat = fWgs.transform(merc, wgs);
+                            lngLat = new OpenLayers.LonLat(fMerc);
                         } else {
                             lngLat = translatePointToCoordinates({x: e.offsetX, y: e.offsetY});
                         }
