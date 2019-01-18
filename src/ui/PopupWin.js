@@ -4,7 +4,8 @@
  * @param map_win_id {String} selector ('.class' or '#id'), which covers map window
  * @param idt_dim {String} IdentifyDimension
  * @param title {String} tittle for popup window
- * @param options options to be passed to the constructor
+ * @param pts {Array} coords of pts [x1, y1, x2, y2, ...]
+ * @param options {Object} formatting options to be passed to the IdentifyDimension when retrieving details about a point (Example: { delimiter:"'", separator:',' } )
  * @constructor
  */
 WGL.ui.PopupWin = function (map_win_id, idt_dim, title, options, pts=null) {
@@ -28,7 +29,7 @@ WGL.ui.PopupWin = function (map_win_id, idt_dim, title, options, pts=null) {
     var priority = null;
     var timeout = 0;
 
-    this.options = (typeof options !== "undefined" ? options : {});
+    this.options = (typeof options === "object" ? options : {});
 
     /**
      * Set visibility
