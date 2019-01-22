@@ -1,23 +1,37 @@
 /**
- * Pupup window
+ * PopupWin, a dialog component used to display details when a user clicks on a point in the map
  * require, D3v3 a Jquery
  * @param map_win_id {String} selector ('.class' or '#id'), which covers map window
  * @param idt_dim {String} IdentifyDimension
  * @param title {String} tittle for popup window
  * @param pts {Array} coords of pts [x1, y1, x2, y2, ...]
+ * @param options {Object} formatting options to be passed to the IdentifyDimension when retrieving data about a point
+ * @param options.delimiter {String} either a double quote """ or a single quote "'", used to correctly read fields from the CSV files containing points' data
+ * @param options.separator {String} either a comma "," or a semicolon ";", used to correctly read fields from the CSV files containing points' data
  * @constructor
  */
-WGL.ui.PopupWin = function (map_win_id, idt_dim, title, pts=null) {
-    var visible = false;
+WGL.ui.PopupWin = function (map_win_id, idt_dim, title, pts=null, options) {
+
+    if(typeof WGL.ui.PopupWin.instance === "object") {
+        return WGL.ui.PopupWin.instance;
+    }
+
+    let visible = false;
+
+    let enabled = true;
+
     var posX = 0; // position of window
     var posY = 0;
     var dragged = 0;
     var threshold = 2;
-    var ex = 0; // position in 0-level
-    var ey = 0;
     var permalink_input = null;
     var last_position = null;
+    var last_content = null;
     var lngLat = null;
+    var priority = null;
+    var timeout = 0;
+
+    this.options = options;
 
     /**
      * Set visibility
@@ -29,6 +43,28 @@ WGL.ui.PopupWin = function (map_win_id, idt_dim, title, pts=null) {
         visible = bol;
     };
 
+    this.setEnabled = function(b) {
+        enabled = b;
+    };
+
+    /**
+     * Set an array of CSS selectors for dialogs with higher priority on screen.
+     * If one of these is currently visible on screen, the PopupWin won't be displayed
+     * @param p list of selectors
+     */
+    this.setPriority = function(p) {
+        if(p instanceof Array) {
+            priority = p;
+            timeout = (priority.length > 0 ? 200 : 0);
+        }
+    };
+
+    this.getInstance = function() {
+        if(typeof WGL.ui.PopupWin.instance === "object") {
+            return WGL.ui.PopupWin.instance;
+        }
+    };
+
     /**
      * Sets position of popup window
      * @param {int} x pixels
@@ -36,24 +72,25 @@ WGL.ui.PopupWin = function (map_win_id, idt_dim, title, pts=null) {
      */
     let setPosition = function (x, y) {
 
-        console.log(x)
-        console.log(y)
-
         if(x < 0 || y < 0) {
             setVisibility(false);
-            return
+            return;
         } else {
             setVisibility(true);
         }
 
+        // IN CASE OF OPENLAYERS A CORRECTION FOR THE NEW POSITION INCLUDING THE TRIANGLE HEIGHT IS NECESSARY
+        // MapBox-GL supports only WGS-84, so there is no API to get or set the current projection system
+        const shouldIncludeTriangleHeight = (typeof map.projection !== "undefined");
+
         posX = x;
         posY = y;
         let win = $("#wgl-point-win");
-        win.css("bottom",(window.innerHeight - posY)+"px");
+        win.css("bottom",(window.innerHeight - posY + (shouldIncludeTriangleHeight ? 35 : 0))+"px");
         win.css("left",(posX - 50)+"px");
 
         let tri = $("#triangle");
-        tri.css("top",(posY)+"px");
+        tri.css("top",(posY - (shouldIncludeTriangleHeight ? 35 : 0))+"px");
         tri.css("left",(posX - 18)+"px");
 
     };
@@ -141,7 +178,7 @@ WGL.ui.PopupWin = function (map_win_id, idt_dim, title, pts=null) {
             .attr("id", "wgl-point-win-head");
 
         head.text(title);
-        head.insert("div")
+        main.append("div")
             .attr("id","wgl-win-close")
             .insert("i")
             .classed("fa", true)
@@ -152,21 +189,21 @@ WGL.ui.PopupWin = function (map_win_id, idt_dim, title, pts=null) {
         // event registration
         let mwid = $(map_win_id);
 
-        mwid.mousedown(function (e) {
+        mwid.off("mousedown").on("mousedown", () => {
             dragged = 0;
         });
 
-        mwid.mousemove(function (e) {
+        mwid.off("mousemove").on("mousemove", (e) => {
 
             dragged++;
 
-            var idt = WGL.getDimension(idt_dim);
+            const idt = WGL.getDimension(idt_dim);
             if(!idt.getEnabled()) {
                 return;
             }
 
             //pointer
-            var num_points = idt.identify(e.pageX, e.pageY)[1];
+            const num_points = idt.identify(e.offsetX, e.offsetY)[0];
             if(num_points > 0){
                 mwid.css("cursor","pointer");
             }
@@ -176,94 +213,77 @@ WGL.ui.PopupWin = function (map_win_id, idt_dim, title, pts=null) {
 
         });
 
-        mwid.mouseup(function (e) {
+        mwid.off("mouseup").on("mouseup", (e) => {
 
-            var idt = WGL.getDimension(idt_dim);
+            const idt = WGL.getDimension(idt_dim);
             if(!idt.getEnabled()) {
+                return;
+            }
+
+            if(!enabled) {
                 return;
             }
 
             if (dragged < threshold){
 
-                WGL.getDimension(idt_dim).getProperties(e.offsetX, e.offsetY, function (t) {
-
-                    setVisibility(false);
-
-                    if (pts != null) { //get real coord of pt
-                        fMercZero=[]
-                        fMerc = [] 
-                        fMercZero[0]=pts[ t.ID*2 ];
-                        fMercZero[1]=pts[ t.ID*2 +1];
-
-                        fMerc[0]= (fMercZero[0]*(20037508.34*2/256)-20037508.34)
-                        fMerc[1]= -((fMercZero[1]-256)*(20037508.34*2/256)+20037508.34)
-
-                        var fWgs = new OpenLayers.LonLat(fMerc);
-                        lngLat = fWgs.transform(merc, wgs);
-                        console.log(lngLat)
-                    }
-                    else { //get coord of click
-
-                        if (typeof map.unproject === "function") { //mapbox lib
-                        lngLat = map.unproject([e.offsetX, e.offsetY]); 
-                        }
-                        else { //openlayers native
-                        var px = new OpenLayers.Pixel(e.offsetX, e.offsetY);
-                        np = map.getLonLatFromPixel(px);
-                        lngLat = np.transform(merc, wgs); 
-                        }
-                    }
-
-                    last_position = [t['ID'], t['webgl_num_pts'], lngLat.lng, lngLat.lat];
-
-                    addContent(prop2html(t));
-
-                    setPosition(e.offsetX, e.offsetY);
-
-                    setVisibility(true);
-
-                    // move window to screen
-                    let minOffsetTop = $("#wgl-point-win").height() + 50;
-                    let minOffsetLeft = 70;
-                    let minOffsetRight = $("#wgl-point-win").width() - 30;
-
-                    let mx = 0;
-                    let my = 0;
-                    if (e.offsetY < minOffsetTop){
-                        my += minOffsetTop - e.offsetY;
-                    }
-
-                    let curRightOff = $(map_win_id).width() - e.offsetX;
-                    if ( curRightOff < minOffsetRight){
-                        mx -=  (minOffsetRight -curRightOff);
-                    }
-                    if (e.offsetX < minOffsetLeft){
-                        mx += minOffsetLeft - e.offsetX;
-                    }
-                    if (mx !== 0 || my !== 0){
-                        setTimeout(function () {
-                            setPosition(posX + mx, posY + my);
-                            movemap(mx, my);
-                        }, 200);
-                    }
-
-                });
-
-                if($(".link-permalink").length > 0) {
-                    $(".link-permalink").trigger("permalink:change");
+                const num_points = idt.identify(e.offsetX, e.offsetY)[0];
+                if(num_points === 0) {
+                    this.close();
+                    return;
                 }
+
+                setTimeout(() => {
+                    if(priority != null) {
+                        let s = 0, priorityLength = priority.length;
+                        while(s !== priorityLength) {
+                            if ($(priority[s]).length > 0 && $(priority[s]).css("display") !== "none") {
+                                this.close();
+                                return;
+                            }
+                            s++;
+                        }
+                    }
+
+                    if(typeof this.options === "object") {
+                        delete this.options['start'];
+                    }
+
+                    WGL.getDimension(idt_dim).getProperties(e.offsetX, e.offsetY, (t) => {
+                        setVisibility(false);
+
+                        if (pts != null) { //get real coord of pt
+                            let fMercZero = [];
+                            let fMerc = [];
+                            fMercZero[0]=pts[ t.ID*2 ];
+                            fMercZero[1]=pts[ t.ID*2 +1];
+
+                            fMerc[0]= (fMercZero[0]*(20037508.34*2/256)-20037508.34);
+                            fMerc[1]= -((fMercZero[1]-256)*(20037508.34*2/256)+20037508.34);
+
+                            lngLat = new OpenLayers.LonLat(fMerc);
+                        } else {
+                            lngLat = translatePointToCoordinates({x: e.offsetX, y: e.offsetY});
+                        }
+
+                        last_position = [t['ID'], t['webgl_num_pts'], lngLat.lng, lngLat.lat];
+                        last_content = t;
+                        addContent(prop2html(t));
+                        setVisibility(true);
+                        flyTo(lngLat);
+                        const point = translateCoordinatesToPoint(lngLat);
+                        setPosition(point.x, point.y);
+                    }, this.options);
+
+                    if ($(".link-permalink").length > 0) {
+                        $(".link-permalink").trigger("permalink:change");
+                    }
+                }, timeout);
             }
             dragged = 0;
         });
 
         // close popup win
-        $("#wgl-win-close").click( () => {
-            setVisibility(false);
-            last_position = null;
-            if($(".link-permalink").length > 0) {
-                $(".link-permalink").trigger("permalink:change");
-            }
-        });
+        $("#wgl-win-close").off("click").on("click", this.close);
 
         // draw triangle
         d3.select("body")
@@ -281,19 +301,32 @@ WGL.ui.PopupWin = function (map_win_id, idt_dim, title, pts=null) {
 
     };
 
+    this.close = function(){
+        setVisibility(false);
+        last_position = null;
+        last_content = null;
+        if($(".link-permalink").length > 0) {
+            $(".link-permalink").trigger("permalink:change");
+        }
+    };
+
+    this.reloadContent = function() {
+        if(enabled
+            && visible
+            && last_content) {
+            addContent(prop2html(last_content));
+        }
+    };
+
     /**
      * Must be call after every zoom or move event
      */
     this.zoommove = function () {
-        if(lngLat != null) {
-            if (typeof map.project === "function") { //mapbox lib
-                point = map.project(lngLat);
-	        } else { // openlayers native
-                var ll = new OpenLayers.LonLat(lngLat.lon, lngLat.lat);
-                np = ll.transform(wgs, merc);
-                point =  map.getPixelFromLonLat(np);
-            }
 
+        if(!visible) return;
+
+        if(lngLat != null) {
+            let point = translateCoordinatesToPoint(lngLat);
             setPosition(point.x, point.y);
         }
     };
@@ -305,14 +338,7 @@ WGL.ui.PopupWin = function (map_win_id, idt_dim, title, pts=null) {
 
             lngLat = [position[2], position[3]];
 
-            if (typeof map.project === "function") { //mapbox lib
-                point = map.project(lngLat);
-            } else { //openlayers native
-                var ll = new OpenLayers.LonLat(lngLat.lon, lngLat.lat);
-                np = ll.transform(wgs, merc);
-                point =  map.getPixelFromLonLat(np);
-            }
-            setPosition(point.x, point.y);
+            let point = translateCoordinatesToPoint(lngLat);
 
             WGL.getDimension(idt_dim).getPropertiesById(position[0], position[1], function (t) {
 
@@ -350,5 +376,48 @@ WGL.ui.PopupWin = function (map_win_id, idt_dim, title, pts=null) {
         }
     };
 
+    /**
+     * Private function for translating a pixel point to map coordinates
+     * Compatible with both OpenLayers and Mapbox maps
+     * Special thanks to user @ehanoj contribution on Github for his code and idea
+     **/
+    const translatePointToCoordinates = (point) => {
+        let coordinates;
+        if (typeof map.unproject === "function") { //mapbox lib
+            coordinates = map.unproject(point);
+        } else { // openlayers native*/
+            coordinates = map.getLonLatFromPixel(point);
+        }
+
+        return coordinates;
+    };
+
+    /**
+     * Private function for translating map coordinates to a pixel point in the map
+     * Compatible with both OpenLayers and Mapbox maps
+     * Special thanks to user @ehanoj contribution on Github for his code and idea
+     **/
+    const translateCoordinatesToPoint = (coordinates) => {
+        let point;
+        let np;
+        if (typeof map.project === "function") { //mapbox lib
+            point = map.project(coordinates);
+        } else { // openlayers native*/
+            point =  map.getPixelFromLonLat(coordinates);
+        }
+
+        return point;
+    };
+
+    const flyTo = (location) => {
+        if(typeof map.flyTo !== "undefined") {
+            map.flyTo({center: location}); //mapbox api
+        } else {
+            map.setCenter([location.lon, location.lat]); //openlayers api
+        }
+    };
+
     this.setup();
+
+    WGL.ui.PopupWin.instance = this;
 };

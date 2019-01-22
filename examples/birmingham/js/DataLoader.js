@@ -85,8 +85,6 @@ function DataLoader() {
 					}
 				
 				});
-		
-			console.log(pts_id);
 			
 			visualize({pts: pts, 
 				days: days, 
