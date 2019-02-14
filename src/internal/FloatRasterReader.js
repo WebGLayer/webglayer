@@ -14,9 +14,8 @@ WGL.internal.FloatRasterReader = function(w, h) {
   this.maxTexture = gl.createTexture();
   this.maxTexture.name = "max";
 
-  var half_ext = gl.getExtension("OES_texture_half_float");
-  if (!half_ext) {
-    throw "OES_texture_half_float not availble -- this is legal";
+  if (!gl.getExtension("OES_texture_float")) {
+    console.log("OES_texture_float not availble -- this is legal");
   }
   /** Framebuffer */
   gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
