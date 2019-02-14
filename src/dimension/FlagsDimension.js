@@ -44,9 +44,8 @@ WGL.dimension.FlagsDimension = function (name, data, flags){
   this.texture.name = "flags_texture";
 
   // get extension for float
-  var half_ext = gl.getExtension("OES_texture_half_float");
-  if (!half_ext) {
-    throw "OES_texture_half_float not availble";
+  if (!gl.getExtension("OES_texture_float")) {
+    throw "OES_texture_float not availble";
   }
 
   /** bind Framebuffer */
@@ -63,7 +62,7 @@ WGL.dimension.FlagsDimension = function (name, data, flags){
 
   // merge texture with framebuffer
   gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, framebuffer.width,
-    framebuffer.height, 0, gl.RGBA, half_ext.HALF_FLOAT_OES, null);
+    framebuffer.height, 0, gl.RGBA, gl.FLOAT, null);
 
 
   /** Render buffer */

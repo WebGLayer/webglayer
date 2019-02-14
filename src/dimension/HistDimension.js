@@ -60,9 +60,8 @@ WGL.dimension.HistDimension = function(meta){
   this.histTexture = gl.createTexture();
   this.histTexture.name = "histogram texture";
 
-  var half_ext = gl.getExtension("OES_texture_half_float");
-  if (!half_ext) {
-    throw "OES_texture_half_float not availble -- this is legal";
+  if (!gl.getExtension("OES_texture_float")) {
+    console.log("OES_texture_float not availble -- this is legal");
   }
   /** Framebuffer */
   gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
@@ -78,7 +77,7 @@ WGL.dimension.HistDimension = function(meta){
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 
   gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, framebuffer.width,
-      framebuffer.height, 0, gl.RGBA, half_ext.HALF_FLOAT_OES, null);
+      framebuffer.height, 0, gl.RGBA, gl.FLOAT, null);
 
   /** Render buffer */
   gl.bindRenderbuffer(gl.RENDERBUFFER, renderbuffer);
