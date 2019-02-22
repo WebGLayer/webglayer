@@ -68,10 +68,10 @@ WGL.ui.FlagsCheckboxes = function(m, div_id, filterId, flags_list, flags_names, 
             that.clearSelection();
         });
 
-        WGL.filterDim(m.name, filterId, loadedFlags);
+        //WGL.filterDim(m.name, filterId, loadedFlags);
         updateFiltersHeader(loadedFlags.length);
         if (typeof onMove !== "undefined") {
-            onMove();
+            //onMove();
         }
 
         if(permalink_input != null) {
