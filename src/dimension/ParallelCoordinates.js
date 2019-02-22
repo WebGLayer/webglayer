@@ -2,6 +2,10 @@ WGL.dimension.ParallelCoordinates = function(div, data){
   var manager = WGL.getManager();
   var GLU = WGL.internal.GLUtils;
 
+  this.renderOnFilter = true;
+  this.renderOnMove = true;
+  this.renderOnMoveEnd = true;
+
   var pcdiv =  document.getElementById(div);
   var maximum = 500;
 

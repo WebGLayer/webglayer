@@ -16,6 +16,10 @@ WGL.dimension.IdentifyDimension = function (id, properties_path, data) {
   this.onlySelected = true;
   this.enabled = true;
 
+  this.renderOnFilter = true;
+  this.renderOnMove = true;
+  this.renderOnMoveEnd = true;
+
   var framebuffer;
   var texture;
   var manager = WGL.getManager();

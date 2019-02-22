@@ -6,6 +6,10 @@ WGL.dimension.HistDimension = function(meta){
 
   this.isSpatial = false;
 
+  this.renderOnFilter = true;
+  this.renderOnMove = true;
+  this.renderOnMoveEnd = true;
+
   var valcalc = function(i){
     return meta.min + i * (meta.max -meta.min) / (meta.num_bins);
     };

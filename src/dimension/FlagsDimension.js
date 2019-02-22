@@ -14,6 +14,10 @@ WGL.dimension.FlagsDimension = function (name, data, flags){
   this.filters = [];
   this.filtersids = [];
 
+  this.renderOnFilter = true;
+  this.renderOnMove = true;
+  this.renderOnMoveEnd = true;
+
   this.visible = true;
   this.setVisible = function(v){
       this.visible = v;
