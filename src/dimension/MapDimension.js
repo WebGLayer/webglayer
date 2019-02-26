@@ -9,6 +9,10 @@ WGL.dimension.MapDimension = function(id){
 
   this.name = "map";
 
+  this.renderOnFilter = true;
+  this.renderOnMove = true;
+  this.renderOnMoveEnd = true;
+
   var drawselect = 'drawselect';
   var numfilters = 'numfilters';
   var point_size = 'pointsize';

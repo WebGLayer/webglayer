@@ -17,6 +17,10 @@ WGL.dimension.HeatMapDimension = function(id, render_resolution) {
   this.lockScale = false;
   this.gauss = false;
 
+  this.renderOnFilter = true;
+  this.renderOnMove = true;
+  this.renderOnMoveEnd = true;
+
   // final resolution
   this.renderResolution = render_resolution || 1.0;
   if (this.renderResolution !== 1.0 && this.renderResolution !== 2.0 && this.renderResolution !== 4.0){

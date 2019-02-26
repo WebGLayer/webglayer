@@ -25,9 +25,12 @@ function visualize(data){
 			WGL.resize();
 		}
 		
-		map.events.register("move", map, onMove);							
+		map.events.register("move", map, onMove);
+  	map.events.register("moveend", map, function () {
+			WGL.render([true, true, false]);
+    });
 
-		var controlHM = new WGL.ChartDiv("charts","chm", "heat map controls", "Heat map controls");
+  var controlHM = new WGL.ChartDiv("charts","chm", "heat map controls", "Heat map controls");
 		var heatmap = WGL.addHeatMapDimension(data.pts, 'heatmap');
 		heatmap.radiusFunction = function(r, z){			
 			var res = r/20000 * Math.pow(2,z);
