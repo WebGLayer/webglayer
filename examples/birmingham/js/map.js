@@ -167,10 +167,10 @@ initMap = function() {
 		}
 
 	}
-	function startDraw(event) {
-		vectors.removeFeatures([vectors.features[0]]);
-		report(event);
-	}
+	//function startDraw(event) {
+	//	vectors.removeFeatures([vectors.features[0]]);
+	//	report(event);
+	//}
 	
 	vectors.events.on({
 		"beforefeaturemodified" : report,
