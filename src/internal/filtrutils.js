@@ -86,12 +86,14 @@ WGL.filterByExt = function() {
     // thisfilter = undefined;
   }
 
-  this.render();
+  this.render([true, false, false]);
   // this.updateLegends();
 
 }
 
-WGL.render = function() {
+WGL.render = function(event_type) {
+  // [move, moveEnd, filter]
+  event_type = event_type || [true, true, true];
   var dimensions = this._dimensions;
   var manager = this.getManager();
 
@@ -103,9 +105,18 @@ WGL.render = function() {
   // mainFilter.readPixelsAll();
   // logFilterStatus();
   for ( var i in dimensions) {
-    dimensions[i].render(manager.num_rec);
+    var dim = dimensions[i];
+
+    var isRender =
+      (event_type[0] && dim.renderOnMove) ||
+      (event_type[1] && dim.renderOnMoveEnd) ||
+      (event_type[2] && dim.renderOnFilter);
+
+    if (isRender){
+      dim.render(manager.num_rec);
+    }
+
   }
-  ;
   this.updateCharts();
   // this.updateLegends();
 
@@ -154,7 +165,7 @@ WGL.filterDim = function(id, filterId, filter, dorendering){
   //console.log("filtering...:"+filter);
 
   if (dorendering==undefined || dorendering==true){
-    this.render();
+    this.render([false, false, true]);
     this.updateCharts();
     // call all update function
     WGL._updatefuc.forEach(function (f) {
@@ -217,8 +228,8 @@ WGL.filterDeleted = function(id, newf){
   }
 
   //this.filterByExt();
-  this.render();
-  this.updateCharts();
+  this.render([false, false, true]);
+  //this.updateCharts();
   //mainFilter.switchTextures();
 }
 
